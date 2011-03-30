@@ -1,0 +1,9 @@
+<qry source="SELECT * FROM aplicacion" columnas="2" >
+    <registro id="1" >
+        <clave_aplicacion tipo_dato="integer"><![CDATA[1]]>
+            <alias_campo><![CDATA[Clave]]></alias_campo>
+            <evento></evento>
+            <ayuda></ayuda>
+        </clave_aplicacion>
+     </registro>
+</qry>

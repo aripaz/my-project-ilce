@@ -24,11 +24,28 @@ $(document).ready(function() {
     
     //Debe recuperarse el valor de perfil a partir de una cookie o un bean
     nPerfil=1;
+    //Crea menú de aplicaciones de acuerdo al perfil  
 
-    //Carga estructura JSON a través de ajax, tomando el webservice con el perfil como parámetro
     $("#apps_menu").appmenu({
-        xmlUrl:"xml_tests/widget.accordion.xml?perfil="+nPerfil,
         perfil:nPerfil
     });
+
+    //Crea el menú de sesión
+    $("#session_menu").sessionmenu();
+
+    //Crea el formulario de búsqueda avanzada de la última aplicación abierta
+    nUltimaApp=1;
+    $("#advanced_search").hide();
+    $("#advanced_search").form({
+        forma:nUltimaApp,
+        modo:"busqueda_avanzada"
+    });
+
+    //Habilita mecanismo para expandir / colapsar el formulario de búsqueda avanzada
+    $("#lnkBusqueda").click(function(){
+        $("#simple_search").slideToggle();
+        $("#advanced_search").slideToggle();
+    });
+
 
 }); //close $(

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<qry source="select alias_tab, orden_tab from forma where clave_aplicacion=1 and clave_forma=1 union
+select alias_tab, orden_tab from forma where clave_aplicacion=1 and clave_forma_padre=1 order by orden_tab">
+</qry>

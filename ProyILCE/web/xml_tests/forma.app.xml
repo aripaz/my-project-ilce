@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<qry source="SELECT * FROM aplicacion" >
+    <registro id="1" >
+        <clave_aplicacion tipo_dato="integer">  <![CDATA[1]]>
+            <alias_campo><![CDATA[Clave]]></alias_campo>
+            <evento></evento>
+            <ayuda></ayuda>
+        </clave_aplicacion>
+        <aplicacion tipo_dato="string" ><![CDATA[BackEnd]]>
+            <alias_campo><![CDATA[Aplicaci&oacute;n]]></alias_campo>
+            <evento><![CDATA[ onClick="alert('Ejecuta evento on blur');"]]></evento>
+            <tipo_control></tipo_control>
+            <ayuda></ayuda>
+        </aplicacion>
+        <forma_principal tipo_dato="integer"><![CDATA[2]]>
+            <alias_campo><![CDATA[Entidad principal]]></alias_campo>
+            <tipo_control></tipo_control>
+            <foraneo clave_forma="x" ></foraneo>
+            <evento></evento>
+            <ayuda></ayuda>
+        </forma_principal>
+        <descripcion tipo_dato="text"><![CDATA[]]>
+            <alias_campo><![CDATA[Descripci&oacute;n]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </descripcion>
+        <clave_menu_perfil tipo_dato="integer"><![CDATA[]]>
+            <alias_campo><![CDATA[Men&uacute; del perfil]]></alias_campo>
+            <tipo_control></tipo_control>
+            <foraneo agrega_registro="true" clave_forma="x" >
+                <qry_clave_menu_perfil source="SELECT clave_menu, menu FROM menu WHERE clave_forma=x" >
+                    <registro_clave_menu_perfil id="1">
+                        <clave_menu tipo_dato="integer"><![CDATA[1]]></clave_menu>
+                        <menu tipo_dato="string"><![CDATA[men&uacute; 1]]></menu>
+                    </registro_clave_menu_perfil>
+                    <registro_clave_menu_perfil id="2">
+                        <clave_menu tipo_dato="integer"><![CDATA[2]]></clave_menu>
+                        <menu tipo_dato="string"><![CDATA[men&uacute; 2]]></menu>
+                    </registro_clave_menu_perfil>
+                </qry_clave_menu_perfil>
+            </foraneo>
+            <evento></evento>
+            <ayuda></ayuda>
+        </clave_menu_perfil>
+        <clave_menu_lateral tipo_dato="integer"><![CDATA[]]>
+            <alias_campo><![CDATA[Men&uacute; lateral]]></alias_campo>
+            <control></control>
+            <foraneo></foraneo>
+            <evento></evento>
+            <ayuda></ayuda>
+        </clave_menu_lateral>
+        <icono tipo_dato="string"><![CDATA[]]>
+            <alias_campo><![CDATA[Icono de la aplicaci&oacute;n]]></alias_campo>
+            <control>file</control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </icono>
+        <logo tipo_dato="string"><![CDATA[]]>
+            <alias_campo><![CDATA[Logo de la aplicaci&oacute;n]]></alias_campo>
+            <control>file</control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </logo>
+        <autor tipo_dato="string"><![CDATA[]]>
+            <alias_campo><![CDATA[Autor]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </autor>
+        <version tipo_dato="string"><![CDATA[1]]>
+            <alias_campo><![CDATA[Versi&oacute;n]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </version>
+        <clave_estatus tipo_dato="string"><![CDATA[1]]>
+            <alias_campo><![CDATA[Estatus]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </clave_estatus>
+        <app_url tipo_dato="string"><![CDATA[1]]>
+            <alias_campo><![CDATA[Url de la aplicaci&oacute;n]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </app_url>
+        <ayuda_url tipo_dato="string"><![CDATA[1]]>
+            <alias_campo><![CDATA[Url de la ayuda]]></alias_campo>
+            <tipo_control></tipo_control>
+            <evento></evento>
+            <ayuda></ayuda>
+        </ayuda_url>
+    </registro>
+</qry>
