@@ -21,7 +21,7 @@
             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/wait30.gif' /></div>")
             $.fn.form.ajax(obj);
         });
-
+ 
     };
 
     $.fn.form.ajax = function(obj){
