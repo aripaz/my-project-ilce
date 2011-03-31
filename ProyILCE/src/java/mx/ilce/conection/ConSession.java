@@ -8,6 +8,7 @@ package mx.ilce.conection;
 import java.sql.SQLException;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.component.ListHash;
 
 /**
  *
@@ -35,7 +36,6 @@ public class ConSession {
             ConQuery connQ = new ConQuery();
             //validamos user y password
             HashCampo hsCmp = connQ.getData(4, strData);
-
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
@@ -48,10 +48,12 @@ public class ConSession {
                     usr.setMessage("No coincide la password con la del usuario");
                 }
             }else{
+                //introducimos en el Bean los datos obtenidos
+                ListHash lst = new ListHash();
+                usr = (User) lst.getBean(User.class ,hsCmp);
                 usr.setIsLogged(true);
                 usr.setLogin(user);
                 usr.setPassword(password);
-                usr.setNombre("Nombre prueba");
             }
         }catch(Exception ex){
             ex.printStackTrace();
@@ -82,7 +84,6 @@ public class ConSession {
             ConQuery connQ = new ConQuery();
             //validamos user y password
             HashCampo hsCmp = connQ.getData(4, strData);
-
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
@@ -95,7 +96,12 @@ public class ConSession {
                     usr.setMessage("No coincide la password con la del usuario");
                 }
             }else{
+                //introducimos en el Bean los datos obtenidos
+                ListHash lst = new ListHash();
+                usr = (User) lst.getBean(User.class ,hsCmp);
                 usr.setIsLogged(true);
+                usr.setLogin(usuario.getLogin());
+                usr.setPassword(usuario.getPassword());
             }
         }catch(Exception ex){
             ex.printStackTrace();
