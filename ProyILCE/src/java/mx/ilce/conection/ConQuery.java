@@ -83,8 +83,9 @@ public class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i), Integer.valueOf(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toUpperCase(), Integer.valueOf(i),
                                         rstm.getColumnTypeName(i).toUpperCase());
+                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
                     hsCmp.addCampo(cmp);
                 }
                 while (rs.next()){
@@ -135,8 +136,9 @@ public class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i), Integer.valueOf(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toUpperCase(), Integer.valueOf(i),
                                         rstm.getColumnTypeName(i).toUpperCase());
+                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
                     hsCmp.addCampo(cmp);
                 }
                 while (rs.next()){
@@ -287,13 +289,13 @@ public class ConQuery {
     private String castTypeDataDBtoAPL(String strType){
         String sld = new String();
         if (strType.equals("VARCHAR")){
-            sld = "String";
+            sld = "java.lang.String";
         }else if(strType.equals("INT") ){
-            sld = "Integer";
+            sld = "java.lang.Integer";
         }else if(strType.equals("DATETIME") ){
-            sld = "Date";
+            sld = "java.sql.Date";
         }else if(strType.equals("BIT") ){
-            sld = "Integer";
+            sld = "java.lang.Integer";
         }
         return sld;
     }
