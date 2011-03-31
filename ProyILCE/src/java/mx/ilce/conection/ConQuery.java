@@ -103,7 +103,7 @@ public class ConQuery {
                         cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
                         lstData.add(cmp);
                     }
-                    hsCmp.addListData(lstData,i);
+                    hsCmp.addListData(lstData,i++);
                 }
             }
         }catch(SQLException e){
