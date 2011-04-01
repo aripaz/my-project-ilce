@@ -30,8 +30,8 @@ public class HashCampo implements Serializable  {
      * @param codigo
      */
     public void addListData(List lst, Integer codigo){
-        listData.put(codigo, lst);
-        setLengthData(listData.size());
+        this.listData.put(codigo, lst);
+        setLengthData(this.listData.size());
     }
 
     /**
