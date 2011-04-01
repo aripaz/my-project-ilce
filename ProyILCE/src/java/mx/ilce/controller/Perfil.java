@@ -11,7 +11,7 @@ import mx.ilce.bean.User;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
-
+     
 /**
  *
  * @author ccatrilef
@@ -78,7 +78,7 @@ public class Perfil extends Entidad{
         return lg;
     }
 
-        public LoginHandler login(User usuario) {
+    public LoginHandler login(User usuario) {
         LoginHandler lg = new LoginHandler();
         try{
             String user = usuario.getLogin();
