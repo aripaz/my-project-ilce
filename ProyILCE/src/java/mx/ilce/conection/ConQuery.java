@@ -27,6 +27,9 @@ import mx.ilce.bean.HashCampo;
  */
 public class ConQuery {
 
+    public ConQuery() {
+    }
+
     private Connection conn;
     /**
      * Realiza la conexion a la base de datos. Los parametros de conexion se
@@ -88,8 +91,8 @@ public class ConQuery {
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
                     hsCmp.addCampo(cmp);
                 }
+                int i=0;
                 while (rs.next()){
-                    int i=0;
                     List lstData = new ArrayList();
                     List lstCampo = hsCmp.getListCampos();
                     Iterator it = lstCampo.iterator();
@@ -116,7 +119,7 @@ public class ConQuery {
         return hsCmp;
     }
 
-    
+
      /**
      * Obtiene la data aplicando la query seleccionada mediante el idQuery.
      * Esta query no posee parametros de entrada.
@@ -141,8 +144,8 @@ public class ConQuery {
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
                     hsCmp.addCampo(cmp);
                 }
+                int i=0;
                 while (rs.next()){
-                    int i=0;
                     List lstData = new ArrayList();
                     List lstCampo = hsCmp.getListCampos();
                     Iterator it = lstCampo.iterator();
@@ -156,7 +159,7 @@ public class ConQuery {
                         cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
                         lstData.add(cmp);
                     }
-                    hsCmp.addListData(lstData,i);
+                    hsCmp.addListData(lstData,i++);
                 }
             }
         }catch(SQLException e){
@@ -204,8 +207,8 @@ public class ConQuery {
                                         rstm.getColumnTypeName(i).toUpperCase());
                     hsCmp.addCampo(cmp);
                 }
+                int i=0;
                 while (rs.next()){
-                    int i=0;
                     List lstData = new ArrayList();
                     List lstCampo = hsCmp.getListCampos();
                     Iterator it = lstCampo.iterator();
@@ -219,7 +222,7 @@ public class ConQuery {
                         cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
                         lstData.add(cmp);
                     }
-                    hsCmp.addListData(lstData,i);
+                    hsCmp.addListData(lstData,i++);
                 }
             }
         }catch(SQLException e){
@@ -276,6 +279,8 @@ public class ConQuery {
             sld = String.valueOf(rs.getDate(codigo.intValue()));
         }else if(strType.equals("BIT") ){
             sld = String.valueOf(rs.getString(codigo.intValue()));
+        }else if (strType.equals("TEXT")){
+            sld = rs.getString(codigo.intValue());
         }
         return sld;
     }
@@ -296,6 +301,8 @@ public class ConQuery {
             sld = "java.sql.Date";
         }else if(strType.equals("BIT") ){
             sld = "java.lang.Integer";
+        }else if(strType.equals("TEXT") ){
+            sld = "java.lang.String";
         }
         return sld;
     }
