@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import mx.ilce.bean.Campo;
@@ -43,15 +44,15 @@ public class ListHash {
         return str;
     }
 
-        /**
-     * Tenemos un metodo donde en una clase "nombre", se introducen los
-     * datos del objeto hsCmp, colocandolos en los campos que correspondan,
-     * segun la definicion del Bean
+     /**
+     * Tenemos un metodo donde en una clase "nameClass", se introducen los
+     * datos del objeto "hsCmp", colocandolos en los campos que correspondan,
+     * segun la definicion de la clase entregada. Se necesita que la clase
+     * poseea los metodos getter y setter para asociar los campos.
+     *
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
      */
     public Object getBean(Class nameClass, HashCampo hsCmp){
         Object sld = null;
@@ -115,6 +116,81 @@ public class ListHash {
     }
 
     /**
+     * Tenemos un metodo donde se entrega un ArrayList, compuesta de elementos
+     * que son de la clase "nameClass", en ella se introducen los datos de los
+     * registros contenidos en el objeto "hsCmp", colocandolos en los campos
+     * que correspondan, segun la definicion de la clase entregada. Se necesita
+     * que la clase poseea los metodos getter y setter para asociar los campos.
+     *
+     * @param nameClass    Clase a la que deben introducirse los datos
+     * @param hsCmp     Objeto que contiene la data estructurada que debe ser
+     *                  introducida en la clase señalada
+     * @return
+     */
+    public ArrayList getListBean(Class nameClass, HashCampo hsCmp){
+        ArrayList arr = new ArrayList();
+        try{
+            Class clase = Class.forName(nameClass.getName());
+            Object objeto=null;
+            Campo cmp;
+            Method[] met = clase.getDeclaredMethods();
+            //Vemos cuantos datos tenemos
+            if (met.length>0){
+                //obtenemos el listado de datos
+                HashMap data = hsCmp.getListData();
+                for (int lData=0;lData<hsCmp.getLengthData();lData++){
+                    objeto = clase.newInstance();
+                    for(int i=0;i<met.length;i++){  //get
+                        //buscamos solo los metodos set
+                        String strIni = met[i].getName().substring(0,3);
+                        if ("set".equals(strIni)){
+                            // obtenemos el campo por el nombre del metodo a aplicar
+                            cmp = hsCmp.getCampoByName(met[i].getName().substring(3).toUpperCase());
+                            if (cmp != null){
+                                //entregamos el tipo de datos Java que le corresponde al dato
+                                //asociado al metodo
+                                Class tipoDato = Class.forName(cmp.getTypeDataAPL());
+                                //obtenemos el metodo en un objeto
+                                Method mtd = clase.getMethod(met[i].getName(), tipoDato);
+                                Object[] paramDato = new Object[1];
+                                if (hsCmp.getLengthData()>0){
+                                    //obtenemos el listado de datos del registro
+                                    List lstData =(List) data.get(lData);
+                                    boolean bool = true;
+                                    for (int j=0;j<lstData.size() && bool;j++){
+                                        Campo obj = (Campo)lstData.get(j);
+                                        if (obj.getNombre().equals(mtd.getName().substring(3).toUpperCase()) ){
+                                            paramDato[0] = getTypeValueCampo(tipoDato, obj.getValor());
+                                            mtd.invoke(objeto, paramDato);
+                                            bool = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    arr.add(objeto);
+                }
+            }
+        }catch(NullPointerException e0){
+            e0.printStackTrace();
+        }catch(ClassNotFoundException e1){
+            e1.printStackTrace();
+        }catch(NoSuchMethodException e2 ){
+            e2.printStackTrace();
+        }catch(InstantiationException e3){
+            e3.printStackTrace();
+        }catch(IllegalAccessException e4){
+            e4.printStackTrace();
+        }catch(IllegalArgumentException e5){
+            e5.printStackTrace();
+        }catch(InvocationTargetException e6){
+            e6.printStackTrace();
+        }
+        return arr;
+    }
+
+    /**
      * Convierte un tipo String(obj) en el tipo entregado (type)
      * @param type  Tipo al cual debe ser convertirse un dato
      * @param obj   String que contiene el valor que debe ser convertido
@@ -129,12 +205,16 @@ public class ListHash {
                 sld = null;
             }
         }else if(type.getSimpleName().equals("Integer") ){
-            sld = Integer.valueOf(obj);
+            if ((obj != null) && (!"null".equals(obj))){
+                sld = Integer.valueOf(obj);
+            }else{
+                sld = null;
+            }
         }else if(type.getSimpleName().equals("Date") ){
-            sld = Date.valueOf(obj) ;
+            if ((obj != null) && (!"null".equals(obj))){
+                sld = Date.valueOf(obj) ;
+            }
         }
-
         return sld;
     }
-
 }
