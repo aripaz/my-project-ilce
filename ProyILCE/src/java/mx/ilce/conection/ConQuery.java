@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
@@ -41,12 +42,13 @@ public class ConQuery {
         StringBuffer strConexion = new StringBuffer("");
         try {
             AdminFile admFile = new AdminFile();
+            Properties prop = admFile.leerConfig();
 
-            String server = admFile.getKey("SERVER"); //"172.16.1.28";
-            String base = admFile.getKey("BASE"); //"ILCE_frmwrk";
-            String port = admFile.getKey("PORT");
-            String user = admFile.getKey("USR");
-            String psw = admFile.getKey("PSW");
+            String server = admFile.getKey(prop,"SERVER"); //"172.16.1.28";
+            String base = admFile.getKey(prop,"BASE"); //"ILCE_frmwrk";
+            String port = admFile.getKey(prop,"PORT");
+            String user = admFile.getKey(prop,"USR");
+            String psw = admFile.getKey(prop,"PSW");
 
             strConexion.append("jdbc:sqlserver://");
             strConexion.append(server);
@@ -61,6 +63,8 @@ public class ConQuery {
             Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, sqlex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
