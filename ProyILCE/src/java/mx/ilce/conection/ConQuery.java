@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.component.AdminFile;
 
 /**
  *
@@ -39,18 +40,23 @@ public class ConQuery {
     private void getConexion() throws SQLException{
         StringBuffer strConexion = new StringBuffer("");
         try {
-            String server = "172.16.1.28";
-            String base = "ILCE_frmwrk";
+            AdminFile admFile = new AdminFile();
+
+            String server = admFile.getKey("SERVER"); //"172.16.1.28";
+            String base = admFile.getKey("BASE"); //"ILCE_frmwrk";
+            String port = admFile.getKey("PORT");
+            String user = admFile.getKey("USR");
+            String psw = admFile.getKey("PSW");
 
             strConexion.append("jdbc:sqlserver://");
             strConexion.append(server);
-            strConexion.append(":1433");
+            strConexion.append(":"+port);
             strConexion.append(";databasename=");
             strConexion.append(base);
             strConexion.append(";selectMethod=cursor;");
 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection(strConexion.toString(),"javaws","ikaro75");
+            conn = DriverManager.getConnection(strConexion.toString(),user,psw);//"javaws","ikaro75");
         }catch (SQLException sqlex){
             Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, sqlex);
         } catch (ClassNotFoundException ex) {
