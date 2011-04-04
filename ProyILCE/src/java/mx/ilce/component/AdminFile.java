@@ -18,45 +18,62 @@ import java.util.Properties;
  * @author ccatrilef
  */
 public class AdminFile {
-	private static File WORKING_DIRECTORY;
-	private static Properties leerConfig() throws Exception{
-		Properties prop = new Properties();
-		InputStream is = null;
-		File f = null;
-		String separador = String.valueOf(File.separator);
-		try {
-			URL url = AdminFile.class.getResource("AdminFile.class");
+    private static File WORKING_DIRECTORY;
 
-			if(url.getProtocol().equals("file")) {
-				f = new File(url.toURI());
-				//QUITAR LA LINEA SIGUIENTE DEL CODIGO (ubicar el archivo de properties en el directorio WEB-INF)
-				//f = f.getParentFile();
-				f = f.getParentFile().getParentFile();
-				f = f.getParentFile().getParentFile();
-				WORKING_DIRECTORY = f.getParentFile();
-			}
-			File fichero = new File(WORKING_DIRECTORY + separador + "ProyILCE.properties");
-			if (fichero.exists()){
-				is=new FileInputStream(fichero.getAbsolutePath());
-				prop.load(is);
-			}
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		return prop;
-	}
+    /**
+     * Lee la configuracion de la base de datos a utilizar presente en el
+     * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la
+     * aplicacion
+     * @return
+     * @throws Exception
+     */
+    public static Properties leerConfig() throws Exception{
+        Properties prop = new Properties();
+	InputStream is = null;
+	File f = null;
+        File fichero = null;
+	try {
+            String separador = String.valueOf(File.separator);
+            URL url = AdminFile.class.getResource("AdminFile.class");
 
-	public static String getKey(String strKey){
-		String sld = "";
-		try{
-			Properties prop = leerConfig();
-			Enumeration e = prop.keys();
-			if (e.hasMoreElements()){
-				sld = prop.getProperty(strKey);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return sld;
+            if(url.getProtocol().equals("file")) {
+		f = new File(url.toURI());
+		f = f.getParentFile().getParentFile();
+		f = f.getParentFile().getParentFile();
+		WORKING_DIRECTORY = f.getParentFile();
+            }
+            fichero = new File(WORKING_DIRECTORY + separador + "ProyILCE.properties");
+            if (fichero.exists()){
+                is=new FileInputStream(fichero.getAbsolutePath());
+                prop.load(is);
+            }
+	} catch(IOException e) {
+            e.printStackTrace();
+	}finally{
+            if (is != null){
+                is.close();
+            }
+        }
+	return prop;
+    }
+
+    /**
+     * Obtiene el valor de una palabra clave (key), desde un arreglo de
+     * properties
+     * @param prop
+     * @param strKey
+     * @return
+     */
+    public String getKey(Properties prop, String key){
+        String sld = "";
+	try{
+            Enumeration e = prop.keys();
+            if (e.hasMoreElements()){
+                sld = prop.getProperty(key);
+            }
+	}catch(Exception e){
+            e.printStackTrace();
 	}
+            return sld;
+    }
 }
