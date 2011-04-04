@@ -65,7 +65,7 @@ public class ConSession {
     }
 
         /**
-     * Obetiene los datos de Usuario, mediante los parametros ingresados de
+     * Obtiene los datos de Usuario, mediante los parametros ingresados de
      * User y password, si no corresponde la dupla entregada, se hace una
      * segunda validacion para ver si al menos existe el usuario y solo hubo
      * error en la password
