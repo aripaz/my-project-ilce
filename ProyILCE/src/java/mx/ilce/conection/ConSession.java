@@ -138,6 +138,29 @@ public class ConSession {
         return hsCmp;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
+    public HashCampo getMenuXML(User usuario){
+        HashCampo hsCmp = new HashCampo();
+        try{
+            String[] strData = new String[1];
+            ConQuery connQ = new ConQuery();
+            strData[0] = usuario.getClavePerfil().toString();
+            hsCmp = connQ.getData(7, strData);
+            hsCmp.setObjData(usuario);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+            usuario.setIsLogged(false);
+        }finally{
+
+        }
+        return hsCmp;
+    }
+
     public boolean insertUser(User user){
         return true;
     }
