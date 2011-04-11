@@ -78,7 +78,7 @@ public class ConSession {
         try{
             //String user, String password
             String[] strData = new String[2];
-            strData[0] = usuario.getNombre();
+            strData[0] = usuario.getLogin();
             strData[1] = usuario.getPassword();
 
             ConQuery connQ = new ConQuery();
