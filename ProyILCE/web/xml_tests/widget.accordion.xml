@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<qry source="select a.aplicacion, pa.*,p.clave_permiso, p.clave_forma, p.mostrar, p.insertar, p.actualizar, p.eliminar, p.mostrar_informacion_sensible  from perfil_aplicacion pa, aplicacion a, permiso p where a.clave_aplicacion=pa.clave_aplicacion and a.clave_forma_principal=p.clave_forma and a.clave_aplicacion=p.clave_aplicacion and pa.clave_perfil=X" >
+<qry source="select a.clave_aplicacion, a.aplicacion, pa.*,p.clave_permiso, p.clave_forma, p.mostrar, p.insertar, p.actualizar, p.eliminar, p.mostrar_informacion_sensible  from perfil_aplicacion pa, aplicacion a, permiso p where a.clave_aplicacion=pa.clave_aplicacion and a.clave_forma_principal=p.clave_forma and a.clave_aplicacion=p.clave_aplicacion and pa.clave_perfil=X" >
     <registro id="1">
         <aplicacion tipo_dato="string"><![CDATA[BackEnd]]></aplicacion>
         <clave_perfil tipo_dato="integer"><![CDATA[1]]></clave_perfil>

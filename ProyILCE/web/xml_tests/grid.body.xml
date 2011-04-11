@@ -3,6 +3,20 @@
     <page>1</page>
     <total>1</total>
     <records>5</records>
+    <column_definition>
+        <clave_aplicacion>
+            <alias_campo><![CDATA[Clave]]></alias_campo>
+            <tamano>5</tamano>
+        </clave_aplicacion>
+        <aplicacion>
+            <alias_campo><![CDATA[Aplicaci&oacute;n]]></alias_campo>
+            <tamano>15</tamano>
+        </aplicacion>
+        <clave_estatus>
+            <alias_campo><![CDATA[Estatus]]></alias_campo>
+            <tamano>80</tamano>
+        </clave_estatus>
+    </column_definition>
     <row id='1'>
         <cell>1</cell>
         <cell>Back End</cell>
