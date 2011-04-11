@@ -24,6 +24,11 @@ public class HashCampo implements Serializable  {
     private HashMap listCampoByName;
     private HashMap listAlias;
 
+    private Object objData;
+
+
+
+
     /**
      * Agregamos un registro (linea) al listado de Data
      * @param lst
@@ -172,6 +177,31 @@ public class HashCampo implements Serializable  {
     public void setListCampos(List listCampos) {
         this.listCampos = listCampos;
     }
+
+    /**
+     * Obtiene un dato del tipo Object, se usara para anexar algun dato de clase
+     * indefinida, ademas del resultado obtenido desde la query que se invoco.
+     * El metodo que la utilice debe indicar que clase es la que contiene en
+     * su descripcion
+     * @return
+     */
+    public Object getObjData() {
+        return objData;
+    }
+
+    /**
+     * Asigna un dato del tipo Object, se usara para anexar algun dato de clase
+     * indefinida, ademas del resultado obtenido desde la query que se invoco.
+     * El metodo que la utilice debe indicar que clase es la que contiene en
+     * su descripcion
+     * @param objData
+     */
+    public void setObjData(Object objData) {
+        this.objData = objData;
+    }
+
+
+//CONSTRUCTORES
 
     /**
      * Constructor de la clase, donde se le entregan los distintos elementos
