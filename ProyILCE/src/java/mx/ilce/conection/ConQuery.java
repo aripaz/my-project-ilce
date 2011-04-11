@@ -281,7 +281,9 @@ class ConQuery {
      */
     private String getValueCampo(String strType, ResultSet rs, Integer codigo) throws SQLException{
         String sld = new String();
-        if (strType.equals("VARCHAR")){
+        if (strType.equals("CHAR")){
+            sld = rs.getString(codigo.intValue());
+        }else if (strType.equals("VARCHAR")){
             sld = rs.getString(codigo.intValue());
         }else if(strType.equals("INT") ){
             sld = String.valueOf(rs.getBigDecimal(codigo.intValue()));
@@ -303,7 +305,9 @@ class ConQuery {
      */
     private String castTypeDataDBtoAPL(String strType){
         String sld = new String();
-        if (strType.equals("VARCHAR")){
+        if (strType.equals("CHAR")){
+            sld = "java.lang.String";
+        }else if (strType.equals("VARCHAR")){
             sld = "java.lang.String";
         }else if(strType.equals("INT") ){
             sld = "java.lang.Integer";
