@@ -6,6 +6,7 @@
     $.fn.form = function(opc){
 
         $.fn.form.settings = {
+            titulo:"",
             forma:"",
             xmlUrl : "xml_tests/forma.app.xml?forma=",
             columnas: 2,
@@ -18,7 +19,7 @@
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
             obj = $(this);
-            obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/wait30.gif' /></div>")
+            obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
             $.fn.form.ajax(obj);
         });
  
@@ -138,35 +139,49 @@
             sForm+="</tr>";
         }
 
-        if ($.fn.form.options.modo=="busqueda_avanzada") {
-            var sEncabezado="";
-            var sPie="";
-            //Se multiplican las columnas por dos por que se agrega una columna separadora
-            //para cada columna existente
-            nCols=(nCols*2)+1
-            for (i=1; i<=nCols; i++) {
-                sEncabezado+="<td>";
-                if (i==1) {
-                     sEncabezado+="<h3 class='searchtitle'>Busqueda avanzada</h3>";
-                }
-                else {
-                    sEncabezado+="&nbsp;";
-                }
-                sEncabezado+="</td>";
-                sPie+="<td>";
-                if (i==nCols) {
-                     sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='busqueda_avanzada'><button id='advancedSearch'>Buscar</button><button id='closeAdvancedSearch'>Cerrar</button></div>";
-                }
-                else {
-                    sPie+="&nbsp;";
-                }
-
-                sPie+="</td>";
+        
+        var sEncabezado="";
+        var sPie="";
+        //Se multiplican las columnas por dos por que se agrega una columna separadora
+        //para cada columna existente
+        nCols=(nCols*2)+1
+        for (i=1; i<=nCols; i++) {
+            
+            if (i==1) {
+                sEncabezado+="<td colspan='2'>";
+                sPie+="<td colspan='2'>";
+                if ($.fn.form.options.modo=="busqueda_avanzada") {
+                    sEncabezado+="<h3 class='searchtitle'>Busqueda avanzada</h3>";     }
+                else  {
+                    sEncabezado+="<h3 class='searchtitle'>" + $.fn.form.options.titulo + "</h3>"; }
             }
-            
-            sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
-            
+            else {
+                sEncabezado+="<td>&nbsp;";
+                sPie+="<td>";
+            }
+            sEncabezado+="</td>";
+
+
+            if (i==nCols) {
+                if ($.fn.form.options.modo=="busqueda_avanzada") {
+                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='busqueda_avanzada'><button id='advancedSearch'>Buscar</button><button id='closeAdvancedSearch'>Cerrar</button></div>";
+                }
+                else if ($.fn.form.options.modo=="inserta_entidad") {
+                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='nuevo_registro'><button id='newRecord'>Guardar</button></div>";
+                }
+                else {
+
+                }
+            }
+            else {
+                sPie+="&nbsp;";
+            }
+
+            sPie+="</td>";
+            if (i==1) {i++}
         }
+
+        sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
 
         //Llena la primer pestaña con la forma de la entidad principal
         return "<table class='forma'>" + sForm + "</table>";

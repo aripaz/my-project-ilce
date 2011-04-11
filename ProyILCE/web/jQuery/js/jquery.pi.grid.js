@@ -11,7 +11,8 @@
             entidad:"",
             colNames: [],
             colModel: [{}],
-            sortname:""
+            sortname:"",
+            tab:""
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -20,7 +21,26 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
-             obj.html('<div id="divGrid' + $.fn.appgrid.options.entidad +'"><table width="365" id="grid' +  $.fn.appgrid.options.entidad + '"></table><div id="pager' + $.fn.appgrid.options.entidad +'"></div></div>');
+             obj.append('<div id="gridContainer' + obj.id + '"><table width="100%" id="grid' + obj.id + '">' +
+                        '</table><div id="pager' + obj.id +'"></div></div>');
+
+             $("#grid" +  obj.id).jqGrid(
+                     {url:"xml_tests/grid.body.xml?entidad=" + this.id.split("_")[1],
+                      datatype: "xml",
+                      /* Parte dinámica */
+                      colNames:oColNames,
+                      colModel:oColModel,
+                      rowNum:20,
+                      autowidth: true,
+                      rowList:[10,20,30],
+                      pager: jQuery('#pager' + nEntidad),
+                      sortname:  oSortName,
+                      viewrecords: true,
+                      sortorder: "desc",
+                      ondblClickRow: function(id){
+                          $tabs.tabs( "add", "#tabEditEntity"+id, this.childNodes[0].data);
+                        },
+                        caption:sTitulo}).navGrid('#pager' + this.id,{edit:false,add:false,del:false});
 
              $.fn.appgrid.ajax(obj);
         });

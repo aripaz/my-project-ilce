@@ -23,7 +23,7 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
-             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/wait30.gif' /></div>")
+             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
              $.fn.sessionmenu.ajax(obj);
         });
 
