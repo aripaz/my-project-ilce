@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<registro id="1">
+    <aplicacion tipo_dato="string"></aplicacion>
+    <clave_perfil tipo_dato="integer"></clave_perfil>
+    <clave_aplicacion tipo_dato="integer"></clave_aplicacion>
+    <activo tipo_dato="integer"></activo>
+    <clave_permiso tipo_dato="integer"></clave_permiso>
+    <clave_forma tipo_dato="integer"></clave_forma>
+    <mostrar tipo_dato="integer"></mostrar>
+    <insertar tipo_dato="integer"></insertar>
+    <actualizar tipo_dato="integer"></actualizar>
+    <eliminar tipo_dato="integer"></eliminar>
+    <mostrar_informacion_sensible tipo_dato="integer"></mostrar_informacion_sensible>
+    <forma tipo_dato="string"></forma>
+    <alias_menu_nueva_entidad tipo_dato="string"></alias_menu_nueva_entidad>
+    <alias_menu_mostrar_entidad tipo_dato="string"></alias_menu_mostrar_entidad>
+</registro>
