@@ -63,7 +63,6 @@ public class AdminXML {
      */
     public StringBuffer getSessionXML(User user) throws SQLException{
         ConSession con = new ConSession();
-        user = con.getUser(user);
 
         StringBuffer str = new StringBuffer("");
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
@@ -74,6 +73,25 @@ public class AdminXML {
 
         str.append(listNode(document,0,hsCmp));
         System.out.println("====== XML ======");
+        System.out.println(str);
+
+        return str;
+    }
+
+    public StringBuffer getMenuXML(User user){
+        ConSession con = new ConSession();
+
+        StringBuffer str = new StringBuffer("");
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+
+        HashCampo hsCmp = con.getMenuXML(user);
+
+        Document document = getDocumentXML("widget.accordion.xml");
+
+        for (int i=0;i<hsCmp.getLengthData();i++){
+            str.append(listNode(document,0,hsCmp,i));
+        }
+        System.out.println("====== XML LARGO ======");
         System.out.println(str);
 
         return str;
@@ -185,6 +203,77 @@ public class AdminXML {
         }
         return str;
     }
+
+    /**
+     * Recorre un archivo XML y va reemplazando los datos del XML por el que le
+     * corresponde segun el resultado de la query entregada en el objeto hsCmp.
+     * @param e
+     * @param level
+     * @param hsCmp
+     * @return
+     */
+    private StringBuffer listNode(Node e, int level, HashCampo hsCmp, int register){
+        StringBuffer str = new StringBuffer("");
+        ArrayList lst = (ArrayList) hsCmp.getListCampos();
+        Campo cmp = null;
+        String strPadre = "";
+        boolean endRow = false;
+
+        if (!(e instanceof Element && ((Element) e).getLocalName()!= null)){
+            if ((e.getNodeName() != null)
+                    &&(!"#text".equals(e.getNodeName()))
+                    &&(!"#cdata-section".equals(e.getNodeName()))
+                    &&(!"#document".equals(e.getNodeName()))
+                    &&(!"qry".equals(e.getNodeName()))) {
+                //print("NODO:"+ e.getNodeName(),level);
+                str.append(("\n<"+e.getNodeName()+" "));
+                strPadre = e.getNodeName();
+                cmp = hsCmp.getCampoByName(e.getNodeName().toUpperCase());
+            }
+        }
+        if (cmp != null){
+            HashMap hs = hsCmp.getListData();
+            ArrayList arr = (ArrayList) hs.get(register);
+            Campo cmpR = (Campo) arr.get(cmp.getCodigo()-1);
+            level++;
+            if (e.hasAttributes()){
+                NamedNodeMap attributes = e.getAttributes();
+                int length = attributes.getLength();
+                Attr attr = null;
+                for (int i=0; i<length; i++){
+                    attr = (Attr)attributes.item(i);
+                    //print("ATRIBUTO:"+attr.getNodeName(),level);
+                    //print("VALOR:\""+attr.getNodeValue()+"\"",level);
+                    str.append((attr.getNodeName()+"=\""));
+                    str.append((attr.getNodeValue()+"\">"));
+                    str.append(("![CDATA["+replaceAccent(cmpR.getValor())+"]]"));
+                    str.append(("<"+strPadre+"/>"));
+                }
+            }
+        }else{
+            if (e.hasAttributes()){
+                NamedNodeMap attributes = e.getAttributes();
+                int length = attributes.getLength();
+                Attr attr = null;
+                for (int i=0; i<length; i++){
+                    attr = (Attr)attributes.item(i);
+                    //print("ATRIBUTO:"+attr.getNodeName(),level);
+                    //print("VALOR:\""+(++numRow)+"\"",level);
+                    str.append((attr.getNodeName()+"=\""));
+                    str.append((numRow+"\">"));
+                    endRow = true;
+                }
+            }
+        }
+        for (Node node = e.getFirstChild();node != null; node = node.getNextSibling()){
+            str.append(listNode(node, level,hsCmp));
+        }
+        if (endRow){
+            str.append(("\n<"+strPadre+"/>"));
+        }
+        return str;
+    }
+
 
     /**
      * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
