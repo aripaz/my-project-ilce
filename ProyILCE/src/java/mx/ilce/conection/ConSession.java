@@ -112,6 +112,32 @@ public class ConSession {
         return usr;
     }
 
+    /**
+     * Revisa si existe el usuario en la BD y completa su data, ademas de obtener
+     * los datos que se ingresaran al XML de Session.
+     * En ObjectData se coloca un objeto Bean del tipo User, con los datos que
+     * se poseen de el.
+     * @param usuario
+     * @return
+     */
+    public HashCampo getUserXML(User usuario){
+        HashCampo hsCmp = new HashCampo();
+        try{
+            String[] strData = new String[1];
+            ConQuery connQ = new ConQuery();
+            strData[0] = usuario.getClaveEmpleado().toString();
+            hsCmp = connQ.getData(6, strData);
+            hsCmp.setObjData(usuario);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+            usuario.setIsLogged(false);
+        }finally{
+
+        }
+        return hsCmp;
+    }
+
     public boolean insertUser(User user){
         return true;
     }
