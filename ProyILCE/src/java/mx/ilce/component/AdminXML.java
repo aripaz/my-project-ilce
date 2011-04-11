@@ -260,13 +260,13 @@ public class AdminXML {
                     //print("ATRIBUTO:"+attr.getNodeName(),level);
                     //print("VALOR:\""+(++numRow)+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
-                    str.append((numRow+"\">"));
+                    str.append(((register+1)+"\">"));
                     endRow = true;
                 }
             }
         }
         for (Node node = e.getFirstChild();node != null; node = node.getNextSibling()){
-            str.append(listNode(node, level,hsCmp));
+            str.append(listNode(node, level,hsCmp,register));
         }
         if (endRow){
             str.append(("\n<"+strPadre+"/>"));
