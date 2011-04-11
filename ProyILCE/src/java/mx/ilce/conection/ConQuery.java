@@ -27,7 +27,7 @@ import mx.ilce.component.AdminFile;
  *
  * @author ccatrilef
  */
-public class ConQuery {
+class ConQuery {
 
     public ConQuery() {
     }
