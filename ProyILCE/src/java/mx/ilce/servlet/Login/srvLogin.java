@@ -7,11 +7,13 @@ package mx.ilce.servlet.Login;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
+import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.LoginHandler;
 
@@ -42,16 +44,28 @@ public class srvLogin extends HttpServlet {
             Perfil perfil = new Perfil();
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()){
+                user = (User) lg.getObjectData();
+                if (user != null){
+                    AdminXML adm = new AdminXML();
+                    StringBuffer xmlSession = adm.getSessionXML(user);
+                    StringBuffer xmlMenu = adm.getMenuXML(user);
 
-                if (lg.getObjectData()!=null){
-                    request.getSession().setAttribute("user", lg.getObjectData());
+                    request.getSession().setAttribute("xmlSession", xmlSession );
+                    request.getSession().setAttribute("xmlMenu",xmlMenu);
+                    request.getSession().setAttribute("user",user);
+
+                    request.getRequestDispatcher("/vista.jsp").forward(request, response);
+                }else{
+                    lg.setTextExecution("Error en obtención de datos del Usuario, aunque se logro Login");
+                    request.getSession().setAttribute("loginHand",lg);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
-                request.getRequestDispatcher("/Login/getterLogin.jsp").forward(request, response);
-
             }else{
                 request.getSession().setAttribute("loginHand",lg);
-                request.getRequestDispatcher("/error/LoginHandler.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
+        }catch(SQLException e){
+            e.printStackTrace();
         } finally { 
             out.close();
         }
