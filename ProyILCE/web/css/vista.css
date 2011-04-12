@@ -8,6 +8,7 @@ table { font-size: 1em; }
 table.forma {font-size: 1em; width: 90%; margin:5px; font-size:120% }
 h3.searchtitle {font-size: 1.2em; font-weight: bold}
 td.etiqueta_forma {width: 20%; font-size: 1em; margin:5px; }
+div.etiqueta_forma { font-size:12px ; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
 input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%}
 select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%}
 input.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif}
@@ -94,4 +95,6 @@ ui-jqgrid-view {width:100%}
 .ui-widget-content {
     background: url("cupertino/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png") repeat-x scroll 50% top #F2F5F7 !important;
 }
+
+.ui-state-error { font-size: 0.75em;}
 
