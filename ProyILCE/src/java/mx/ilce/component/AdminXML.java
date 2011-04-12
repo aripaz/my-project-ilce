@@ -87,10 +87,11 @@ public class AdminXML {
         HashCampo hsCmp = con.getMenuXML(user);
 
         Document document = getDocumentXML("widget.accordion.xml");
-
+        str.append("<qry>");
         for (int i=0;i<hsCmp.getLengthData();i++){
             str.append(listNode(document,0,hsCmp,i));
         }
+        str.append("</qry>");
         System.out.println("====== XML LARGO ======");
         System.out.println(str);
 
@@ -176,8 +177,8 @@ public class AdminXML {
                     //print("VALOR:\""+attr.getNodeValue()+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append((attr.getNodeValue()+"\">"));
-                    str.append(("![CDATA["+replaceAccent(cmpR.getValor())+"]]"));
-                    str.append(("<"+strPadre+"/>"));
+                    str.append(("<![CDATA["+replaceAccent(cmpR.getValor())+"]]>"));
+                    str.append(("</"+strPadre+">"));
                 }
             }
         }else{
@@ -199,7 +200,7 @@ public class AdminXML {
             str.append(listNode(node, level,hsCmp));
         }
         if (endRow){
-            str.append(("\n<"+strPadre+"/>"));
+            str.append(("\n</"+strPadre+">"));
         }
         return str;
     }
@@ -246,8 +247,8 @@ public class AdminXML {
                     //print("VALOR:\""+attr.getNodeValue()+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append((attr.getNodeValue()+"\">"));
-                    str.append(("![CDATA["+replaceAccent(cmpR.getValor())+"]]"));
-                    str.append(("<"+strPadre+"/>"));
+                    str.append(("<![CDATA["+replaceAccent(cmpR.getValor())+"]]>"));
+                    str.append(("</"+strPadre+">"));
                 }
             }
         }else{
@@ -269,7 +270,7 @@ public class AdminXML {
             str.append(listNode(node, level,hsCmp,register));
         }
         if (endRow){
-            str.append(("\n<"+strPadre+"/>"));
+            str.append(("\n</"+strPadre+">"));
         }
         return str;
     }
