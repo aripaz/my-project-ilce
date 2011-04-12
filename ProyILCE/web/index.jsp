@@ -20,22 +20,26 @@
         <style type="text/css">
             <!--
             .Estilo1 {font-family: sylfaen}
+            .Estilo2 {color: red}
             -->
         </style>
     </head>
     <%
-    ExecutionHandler execHand = (ExecutionHandler) request.getSession().getAttribute("execHand");
+    ExecutionHandler execHand = (ExecutionHandler) request.getSession().getAttribute("loginHand");
+    if (execHand == null){
+        execHand = new ExecutionHandler();
+    }
     %>
 
     <script type="text/javascript" >
-    function validaForma(forma){
+    function focus(forma){
     var lgn = forma.lgn;
         lgn.focus();
         lgn.select();
     }
     </script>
 
-    <body bgcolor="#F4F9FF" onLoad="validaForma(frmLogin);">
+    <body bgcolor="#F4F9FF" onLoad="focus(frmLogin);">
 
         <div>
             <table width="1000" height="129" border="0" align="center" >
@@ -95,7 +99,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td></td>
+                                    <td class ="Estilo2"><%= execHand.getTextExecution()%></td>
                                 </tr>
                                 <tr>
                                     <td></td>
