@@ -24,8 +24,8 @@ public class ExecutionHandler implements Serializable{
 
     public ExecutionHandler() {
         this.idExecution = new BigDecimal(0);
-        this.titleExecution = "Title";
-        this.textExecution = "Text";
+        this.titleExecution = "";
+        this.textExecution = "";
         this.executionOK = true;
     }
 
