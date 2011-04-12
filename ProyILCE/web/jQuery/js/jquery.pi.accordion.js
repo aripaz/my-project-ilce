@@ -6,7 +6,7 @@
     $.fn.appmenu = function(opc){
 
         $.fn.appmenu.settings = {
-            xmlUrl : "xml_tests/widget.accordion.xml?perfil=",
+            xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp",
             perfil : 1,
             menu: [/*{aplicacion:"", elementos_menu:[{etiqueta:"", entidad:"", funcion:""}]}*/]
         };
