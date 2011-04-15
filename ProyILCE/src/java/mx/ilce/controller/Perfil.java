@@ -13,10 +13,42 @@ import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
      
 /**
- *
+ *  Clase para la implementacion de los metodos usados para el manejo de Perfil
  * @author ccatrilef
  */
 public class Perfil extends Entidad{
+
+    private Integer clavePerfil;
+    private String perfil;
+    private List lstAplicacion;
+
+/******** GETTER Y SETTER ********/
+
+    public Integer getClavePerfil() {
+        return clavePerfil;
+    }
+
+    public void setClavePerfil(Integer clavePerfil) {
+        this.clavePerfil = clavePerfil;
+    }
+
+    public List getLstAplicacion() {
+        return lstAplicacion;
+    }
+
+    public void setLstAplicacion(List lstAplicacion) {
+        this.lstAplicacion = lstAplicacion;
+    }
+
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
+
+/******* OPERACIONES DE ENTIDAD ******/
 
     public Perfil() {
     }
@@ -61,6 +93,7 @@ public class Perfil extends Entidad{
 
             if (usr.isLogged()){
                 lg.setIsLogin(true);
+
                 //completar los datos del perfil
                 //this.setXmlEntidad(usr.getXmlPermiso());
                 lg.setObjectData(usr);
