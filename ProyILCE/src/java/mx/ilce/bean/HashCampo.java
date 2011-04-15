@@ -8,6 +8,7 @@ package mx.ilce.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,6 +38,31 @@ public class HashCampo implements Serializable  {
     public void addListData(List lst, Integer codigo){
         this.listData.put(codigo, lst);
         setLengthData(this.listData.size());
+    }
+
+    /**
+     * Agregamos un conjunto de registros (varias lineas) al listado de Data 
+     * existente, proveniente de otro HashCampo. Si los campos no son 
+     * equivalentes, se rechaza el ingreso. Si la lista es vacia, siendo los
+     * campos correctos, se retorna true.
+     * Se asume que los registros vienen ordenados con codigo index de 0 a n.
+     * @param lst
+     */
+    public boolean addListToListData(HashCampo hsCmp){
+        boolean ingresado = false;
+        if (equalsCampos(hsCmp.getListCampos(), this.getListCampos())){
+            Integer lenData = this.getLengthData();
+            //listado de datos a agregar
+            HashMap hs = hsCmp.getListData();
+            for (int i=0; i<hsCmp.getLengthData(); i++){
+               //obtenemos la linea
+               List lst = (List)hs.get(Integer.valueOf(i));
+               //la agregamos al listado
+               this.addListData(lst, lenData);
+               lenData++;
+            }
+        }
+        return ingresado;
     }
 
     /**
@@ -83,7 +109,7 @@ public class HashCampo implements Serializable  {
      */
     public Campo getCampoByName(String name){
         HashMap hm = this.listCampoByName;
-        Integer codigo = (Integer) hm.get(name);
+        Integer codigo = (Integer) hm.get(name.toUpperCase());
         return (Campo) listCampoByCod.get(codigo);
     }
 
@@ -93,6 +119,18 @@ public class HashCampo implements Serializable  {
      */
     private void addCampoByName(Campo cmp){
         this.listCampoByName.put(cmp.getNombre(), cmp.getCodigo());
+    }
+
+    /**
+     * Obtenemos un campo por su nombre
+     * @param name
+     * @return
+     */
+    public Campo getCampoByNameDB(String nameDB){
+        HashMap hm = this.listCampoByName;
+        String name = nameDB.replaceAll("_", "").toUpperCase();
+        Integer codigo = (Integer) hm.get(name);
+        return (Campo) listCampoByCod.get(codigo);
     }
 
     /**
@@ -176,6 +214,18 @@ public class HashCampo implements Serializable  {
      */
     public void setListCampos(List listCampos) {
         this.listCampos = listCampos;
+        if (!listCampos.isEmpty()){
+            Iterator it = listCampos.iterator();
+            while (it.hasNext()){
+                Campo cmp = (Campo) it.next();
+                addCampoByCod(cmp);
+                addCampoByName(cmp);
+                if (cmp.getAlias()!=null){
+                    addCampoByAlias(cmp);
+                }
+                setLengthCampo(this.listCampos.size());
+            }
+        }
     }
 
     /**
@@ -240,5 +290,18 @@ public class HashCampo implements Serializable  {
         this.listCampoByName = new HashMap();
         this.listAlias = new HashMap();
     }
+
+    /**
+     * Compara si dos listas de campos son iguales, retorna true si los son,
+     * retorna false si no es asi
+     * @param lst1
+     * @param lst2
+     * @return
+     */
+    private boolean equalsCampos(List lst1, List lst2){
+
+        return lst1.equals(lst2);
+    }
+
 
 }
