@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
+ * Clase implementada para el manejo de los campos que se obtienen al ejecutar
+ * una query en la base de datos
  * @author ccatrilef
  */
 public class Campo implements Serializable {
 
     private String nombre;
+    private String nombreDB;
     private String valor;
     private Integer codigo;
     private String alias;
@@ -23,6 +25,7 @@ public class Campo implements Serializable {
     private String typeControl;
     private String event;
     private String help;
+    private Integer tamano;
 
     /**
      * Constructor de la clase donde se entregan los distintos elementos que
@@ -40,15 +43,19 @@ public class Campo implements Serializable {
      * a una funcion javascript
      * @param help      Texto de ayuda que va asociado al campo
      */
-    public Campo(String nombre, String valor, Integer codigo, String alias, String typeDataDB, String typeControl, String event, String help) {
-        this.nombre = nombre;
+    public Campo(String nombre, String valor, Integer codigo, String alias,
+                 String typeDataDB, String typeControl, String event, 
+                 String help, Integer tamano) {
+        this.nombre = nombre.replaceAll("_","").toUpperCase();
+        this.nombreDB = nombre;
         this.valor = valor;
         this.codigo = codigo;
         this.alias = alias;
-        this.typeDataDB = typeDataDB;
+        this.typeDataDB = typeDataDB.toUpperCase();
         this.typeControl = typeControl;
         this.event = event;
         this.help = help;
+        this.tamano = tamano;
     }
 
     /**
@@ -60,9 +67,28 @@ public class Campo implements Serializable {
      * @param typeDataDB    tipo de dato que posee el campo en la base de datos
      */
     public Campo(String nombre, Integer codigo, String typeDataDB) {
-        this.nombre = nombre;
+        this.nombre = nombre.replaceAll("_","").toUpperCase();
+        this.nombreDB = nombre;
         this.codigo = codigo;
-        this.typeDataDB = typeDataDB;
+        this.typeDataDB = typeDataDB.toUpperCase();
+    }
+
+    /**
+     * Constructor de la clase donde se entregan los distintos elementos que
+     * componen la clase
+     * @param nombre  nombre del campo, generalmente asociado a los campos
+     * obtenidos mediante una query
+     * @param codigo  codigo que posee el campo
+     * @param typeDataDB  tipo de dato que posee el campo en la base de datos
+     * @param valor  valor que posee el campo
+     */
+    public Campo(String nombre, String nombreDB, Integer codigo, String typeDataDB, String typeAPL, String valor) {
+        this.nombre = nombre.replaceAll("_","").toUpperCase();
+        this.nombreDB = nombreDB;
+        this.codigo = codigo;
+        this.typeDataDB = typeDataDB.toUpperCase();
+        this.typeDataAPL = typeAPL;
+        this.valor=valor;
     }
 
     /**
@@ -138,8 +164,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Obtiene el nombre del campo, este se debe obtener desde el campo
-     * asociado en la query
+     * Obtiene el nombre del campo sin el caracter _, este se debe obtener
+     * desde el campo asociado en la query
      * @return
      */
     public String getNombre() {
@@ -147,13 +173,30 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna el nombre del campo, este se obtiene del campo asociado a la
-     * query
-     * Asigna el
+     * Asigna el nombre del campo sin el caracter _, este se obtiene del campo
+     * asociado a la query
      * @param nombre
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    /**
+     * Obtiene el nombre del campo con el caracter _, este se debe obtener 
+     * desde el campo asociado en la query
+     * @return
+     */
+    public String getNombreDB() {
+        return nombreDB;
+    }
+
+    /**
+     * Asigna el nombre del campo con el caracter _, este se obtiene del campo
+     * asociado a la query
+     * @param nombre
+     */
+    public void setNombreDB(String nombreDB) {
+        this.nombreDB = nombreDB;
     }
 
     /**
@@ -219,6 +262,22 @@ public class Campo implements Serializable {
      */
     public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    /**
+     * Obtiene el tamano de un campo
+     * @return
+     */
+    public Integer getTamano() {
+        return tamano;
+    }
+
+    /**
+     * Asigna el tamano que debe poseer un campo
+     * @param tamano
+     */
+    public void setTamano(Integer tamano) {
+        this.tamano = tamano;
     }
 
     @Override
