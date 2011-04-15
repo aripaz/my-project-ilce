@@ -5,16 +5,65 @@
 
 package mx.ilce.controller;
 
-import java.math.BigDecimal;
 import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
+ *  Clase para la implementacion de los metodos asociados a Forma
  *
  * @author ccatrilef
  */
 public class Forma extends Entidad{ 
 
+    private String aliasTab; 
+    private Integer ordenTab; 
+    private Integer claveAplicacion;
+    private Integer claveForma;
+    private Integer claveFormaPadre;
+
+/************** GETTER Y SETTER ***************/
+
+    public String getAliasTab() {
+        return aliasTab;
+    }
+
+    public void setAliasTab(String aliasTab) {
+        this.aliasTab = aliasTab;
+    }
+
+    public Integer getClaveAplicacion() {
+        return claveAplicacion;
+    }
+
+    public void setClaveAplicacion(Integer claveAplicacion) {
+        this.claveAplicacion = claveAplicacion;
+    }
+
+    public Integer getClaveForma() {
+        return claveForma;
+    }
+
+    public void setClaveForma(Integer claveForma) {
+        this.claveForma = claveForma;
+    }
+
+    public Integer getClaveFormaPadre() {
+        return claveFormaPadre;
+    }
+
+    public void setClaveFormaPadre(Integer claveFormaPadre) {
+        this.claveFormaPadre = claveFormaPadre;
+    }
+
+    public Integer getOrdenTab() {
+        return ordenTab;
+    }
+
+    public void setOrdenTab(Integer ordenTab) {
+        this.ordenTab = ordenTab;
+    }
+
+/************** METODOS ENTIDAD ****************/
     /**
      * Se ingresa una entidad del tipo Forma, para que quede disponible
      * para la aplicacion.
@@ -92,7 +141,7 @@ public class Forma extends Entidad{
             
             this.setXmlEntidad(str);
             AdminXML admXml = new AdminXML();
-            this.setData(admXml.getDataByXML(this.getXmlEntidad()));
+            //this.setData(admXml.getDataByXML(this.getXmlEntidad()));
 
         }catch(Exception e){
             e.printStackTrace();
