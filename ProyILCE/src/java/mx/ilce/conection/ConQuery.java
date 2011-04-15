@@ -24,7 +24,9 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 
 /**
- *
+ *  Clase para la implementacion de los metodos que se conectan a la Base de
+ * Datos y manejan la construccion de las estructuras para contener los datos
+ * de las queries que se desean ejecutar
  * @author ccatrilef
  */
 class ConQuery {
@@ -35,7 +37,7 @@ class ConQuery {
     private Connection conn;
     /**
      * Realiza la conexion a la base de datos. Los parametros de conexion se
-     * deben cambiar a un properties para una facil mantencion sin compilar.
+     * obtienen de un properties para una facil mantencion sin compilar.
      * @throws SQLException
      */
     private void getConexion() throws SQLException{
@@ -90,15 +92,18 @@ class ConQuery {
                 Statement ps = conn.createStatement();
                 for(int i=1;i<=arrData.length;i++){
                     String strData = arrData[i-1];
-                    query = query.replaceFirst("%"+i, strData);
+                    if (strData != null){
+                        query = query.replaceFirst("%"+i, strData);
+                    }
                 }
                 ResultSet rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i).toUpperCase(), Integer.valueOf(i),
-                                        rstm.getColumnTypeName(i).toUpperCase());
-                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
+                    Campo cmp = new Campo(rstm.getColumnName(i),
+                                          Integer.valueOf(i),
+                                          rstm.getColumnTypeName(i));
+                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
                 }
                 int i=0;
@@ -108,12 +113,12 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo();
-                        cmp.setNombre(itCmp.getNombre());
-                        cmp.setCodigo(itCmp.getCodigo());
-                        cmp.setTypeDataDB(itCmp.getTypeDataDB());
-                        cmp.setTypeDataAPL(castTypeDataDBtoAPL(itCmp.getTypeDataDB()));
-                        cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
+                        Campo cmp = new Campo(itCmp.getNombre(),
+                                              itCmp.getNombreDB(),
+                                              itCmp.getCodigo(),
+                                              itCmp.getTypeDataDB(),
+                                              castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
+                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -149,9 +154,10 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i).toUpperCase(), Integer.valueOf(i),
-                                        rstm.getColumnTypeName(i).toUpperCase());
-                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i).toUpperCase()));
+                    Campo cmp = new Campo(rstm.getColumnName(i),
+                                          Integer.valueOf(i),
+                                          rstm.getColumnTypeName(i));
+                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
                 }
                 int i=0;
@@ -161,12 +167,12 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo();
-                        cmp.setNombre(itCmp.getNombre());
-                        cmp.setCodigo(itCmp.getCodigo());
-                        cmp.setTypeDataDB(itCmp.getTypeDataDB());
-                        cmp.setTypeDataAPL(castTypeDataDBtoAPL(itCmp.getTypeDataDB()));
-                        cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
+                        Campo cmp = new Campo(itCmp.getNombre(),
+                                              itCmp.getNombreDB(),
+                                              itCmp.getCodigo(),
+                                              itCmp.getTypeDataDB(),
+                                              castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
+                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -213,8 +219,9 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i), Integer.valueOf(i),
-                                        rstm.getColumnTypeName(i).toUpperCase());
+                    Campo cmp = new Campo(rstm.getColumnName(i),
+                                          Integer.valueOf(i),
+                                          rstm.getColumnTypeName(i));
                     hsCmp.addCampo(cmp);
                 }
                 int i=0;
@@ -281,17 +288,17 @@ class ConQuery {
      */
     private String getValueCampo(String strType, ResultSet rs, Integer codigo) throws SQLException{
         String sld = new String();
-        if (strType.equals("CHAR")){
+        if (strType.toUpperCase().equals("CHAR")){
             sld = rs.getString(codigo.intValue());
-        }else if (strType.equals("VARCHAR")){
+        }else if (strType.toUpperCase().equals("VARCHAR")){
             sld = rs.getString(codigo.intValue());
-        }else if(strType.equals("INT") ){
+        }else if(strType.toUpperCase().equals("INT") ){
             sld = String.valueOf(rs.getBigDecimal(codigo.intValue()));
-        }else if(strType.equals("DATETIME") ){
+        }else if(strType.toUpperCase().equals("DATETIME") ){
             sld = String.valueOf(rs.getDate(codigo.intValue()));
-        }else if(strType.equals("BIT") ){
+        }else if(strType.toUpperCase().equals("BIT") ){
             sld = String.valueOf(rs.getString(codigo.intValue()));
-        }else if (strType.equals("TEXT")){
+        }else if (strType.toUpperCase().equals("TEXT")){
             sld = rs.getString(codigo.intValue());
         }
         return sld;
@@ -305,17 +312,17 @@ class ConQuery {
      */
     private String castTypeDataDBtoAPL(String strType){
         String sld = new String();
-        if (strType.equals("CHAR")){
+        if (strType.toUpperCase().equals("CHAR")){
             sld = "java.lang.String";
-        }else if (strType.equals("VARCHAR")){
+        }else if (strType.toUpperCase().equals("VARCHAR")){
             sld = "java.lang.String";
-        }else if(strType.equals("INT") ){
+        }else if(strType.toUpperCase().equals("INT") ){
             sld = "java.lang.Integer";
-        }else if(strType.equals("DATETIME") ){
+        }else if(strType.toUpperCase().equals("DATETIME") ){
             sld = "java.sql.Date";
-        }else if(strType.equals("BIT") ){
+        }else if(strType.toUpperCase().equals("BIT") ){
             sld = "java.lang.Integer";
-        }else if(strType.equals("TEXT") ){
+        }else if(strType.toUpperCase().equals("TEXT") ){
             sld = "java.lang.String";
         }
         return sld;
