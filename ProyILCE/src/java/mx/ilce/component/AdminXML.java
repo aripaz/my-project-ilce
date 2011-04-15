@@ -21,36 +21,22 @@ import javax.xml.parsers.DocumentBuilder;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.conection.ConSession;
+import mx.ilce.controller.Perfil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 /**
- *
+ *  Clase para la implementacion de los metodos que se encargaran de transformar
+ * los datos en el contenido de un archivo XML, segun la configuracion o la
+ * estructura de los datos
  * @author ccatrilef
  */
 public class AdminXML {
     private static File WORKING_DIRECTORY;
     private int numRow=0;
 
-    public boolean validateXML(StringBuffer xml){
-        boolean bln=true;
 
-        return bln;
-    }
-
-    public List getListByXML(StringBuffer xml, List lst){
-        return lst;
-    }
-
-    private static void print(String s, int level){
-        String str ="";
-        for (int i=level; i>0; i--){
-            str = str + "\t";
-        }
-        System.out.print(str);
-        System.out.println(s+", LEVEL:"+level);
-    }
 
     /**
      * Metodo que permite obtener la data del usuario en el formato del
@@ -78,6 +64,12 @@ public class AdminXML {
         return str;
     }
 
+    /**
+     * Obtiene el menu en formato XML que le corresponde al usuario conectado
+     * segun su perfil
+     * @param user
+     * @return
+     */
     public StringBuffer getMenuXML(User user){
         ConSession con = new ConSession();
 
@@ -92,15 +84,92 @@ public class AdminXML {
             str.append(listNode(document,0,hsCmp,i));
         }
         str.append("</qry>");
-        System.out.println("====== XML LARGO ======");
-        System.out.println(str);
 
         return str;
     }
 
     /**
-     * Obtiene un DOcumento XML, a partir del nombre solicitado. Se asume que
-     * los archivos XML entan en la ruta resource/xml/[nombre archivo]
+     * Entrega los tab en formato XML que le corresponden segun el perfil entregado
+     * @param perfil
+     * @return
+     */
+    public StringBuffer getTabXML(Perfil perfil){
+        StringBuffer str = new StringBuffer("");
+        ConSession con = new ConSession();
+        
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+        HashCampo hsCmp = con.getTabForma(perfil);
+
+        Document document = getDocumentXML("widget.tabs.xml");
+        str.append("<qry>");
+        for (int i=0;i<hsCmp.getLengthData();i++){
+            str.append(listNode(document,0,hsCmp,i));
+        }
+        str.append("</qry>");
+
+        return str;
+    }
+
+    /**
+     * Obtiene una grilla XML a partir de los datos entregados, se debe indicar
+     * la pagina que se desea mostrar, junto con el maximo de registros que se
+     * deben mostrar por pagina
+     * @param hsData   Data obtenida desde una query previa, debe contener los
+     * datos y los campos que le corresponden
+     * @param page   Número de pagina que se desea mostrar del total de datos
+     * @param regByPage Numero de registros por pagina que se deben mostrar
+     * @return
+     */
+    public StringBuffer getGridByData(HashCampo hsData,int page, int regByPage){
+        StringBuffer str = new StringBuffer();
+
+        Campo cmp = new Campo();
+        List lstCmp = hsData.getListCampos();
+        HashMap hsDat = hsData.getListData();
+
+        int total = hsDat.size()/regByPage;
+        if ((hsDat.size()%regByPage)>0){
+            total++;
+        }
+        int reg = hsDat.size();
+        if (reg>regByPage){
+            reg = regByPage;
+        }
+        if (page==total){
+            reg = hsDat.size()-((total-1)*regByPage);
+        }
+        int regIni = (regByPage*(page-1));
+        str.append("<rows>\n");
+        str.append(("<page>"+page+"</page>\n"));
+        str.append(("<total>"+total+"</total>\n"));
+        str.append(("<records>"+reg+"</records>\n"));
+        str.append("<column_definition>\n");
+        for(int i=0; i<lstCmp.size();i++){
+            cmp = (Campo) lstCmp.get(i) ;
+            str.append(("<"+cmp.getNombreDB()+">\n"));
+            str.append(("<alias_campo>"+cmp.getAlias()+"</alias_campo>\n"));
+            str.append(("<tamano>"+cmp.getTamano()+"</tamano>\n"));
+            str.append(("</"+cmp.getNombreDB()+">\n"));
+        }
+        str.append("</column_definition>\n");
+        for(int i=regIni;i<hsDat.size();i++){
+            ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
+            str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
+            for (int j=0; j<lstCmp.size();j++){
+                str.append("<cell>");
+                cmp = (Campo) arr.get(j) ;
+                str.append(cmp.getValor());
+                str.append("</cell>\n");
+            }
+            str.append("</row>\n");
+        }
+        str.append("</rows>");
+        return str;
+    }
+
+    /**
+     * Obtiene un Documento XML, a partir del nombre solicitado. Se asume que
+     * los archivos XML estan en la ruta resource/xml/[nombre archivo]
      * @param fileName
      * @return
      */
@@ -138,6 +207,7 @@ public class AdminXML {
     /**
      * Recorre un archivo XML y va reemplazando los datos del XML por el que le
      * corresponde segun el resultado de la query entregada en el objeto hsCmp.
+     * Se utiliza cuando es un registro unico.
      * @param e
      * @param level
      * @param hsCmp
@@ -159,7 +229,7 @@ public class AdminXML {
                 //print("NODO:"+ e.getNodeName(),level);
                 str.append(("\n<"+e.getNodeName()+" "));
                 strPadre = e.getNodeName();
-                cmp = hsCmp.getCampoByName(e.getNodeName().toUpperCase());
+                cmp = hsCmp.getCampoByNameDB(e.getNodeName());
             }
         }
         if (cmp != null){
@@ -208,6 +278,7 @@ public class AdminXML {
     /**
      * Recorre un archivo XML y va reemplazando los datos del XML por el que le
      * corresponde segun el resultado de la query entregada en el objeto hsCmp.
+     * Se utiliza cuando son mas de un registro
      * @param e
      * @param level
      * @param hsCmp
@@ -229,7 +300,7 @@ public class AdminXML {
                 //print("NODO:"+ e.getNodeName(),level);
                 str.append(("\n<"+e.getNodeName()+" "));
                 strPadre = e.getNodeName();
-                cmp = hsCmp.getCampoByName(e.getNodeName().toUpperCase());
+                cmp = hsCmp.getCampoByNameDB(e.getNodeName());
             }
         }
         if (cmp != null){
@@ -308,7 +379,7 @@ public class AdminXML {
         return str;
     }
 
-    public StringBuffer getXMLByList(List lst){
+    private StringBuffer getXMLByList(List lst){
         StringBuffer str = new StringBuffer("");
         str.append("<?xml version='1.0' encoding='ISO-8859-1'?>"+
                    "<qry source='SELECT * FROM aplicacion' columnas='1' >"+
@@ -334,7 +405,7 @@ public class AdminXML {
         return str;
     }
 
-    public StringBuffer getDataByXML(StringBuffer str){
+    private StringBuffer getDataByXML(StringBuffer str){
         StringBuffer strSld = new StringBuffer("");
         strSld.append("[");
         strSld.append("{clave_aplicacion:\"1\",aplicacion:\"Back End\",estatus:\"En desarrollo\"},");
@@ -344,6 +415,25 @@ public class AdminXML {
         strSld.append("{clave_aplicacion:\"5\",aplicacion:\"Control Presupuestal\",estatus:\"En desarrollo\"}");
         strSld.append("]");
         return strSld;
+    }
+
+        private boolean validateXML(StringBuffer xml){
+        boolean bln=true;
+
+        return bln;
+    }
+
+    private List getListByXML(StringBuffer xml, List lst){
+        return lst;
+    }
+
+    private static void print(String s, int level){
+        String str ="";
+        for (int i=level; i>0; i--){
+            str = str + "\t";
+        }
+        System.out.print(str);
+        System.out.println(s+", LEVEL:"+level);
     }
 
 }
