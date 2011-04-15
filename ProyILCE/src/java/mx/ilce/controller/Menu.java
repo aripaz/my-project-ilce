@@ -10,6 +10,7 @@ import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
+ *  Clase para la implementacion de los metodos asociados al menu
  *
  * @author ccatrilef
  */
@@ -109,8 +110,8 @@ public class Menu extends Entidad {
             ConEntidad con = new ConEntidad();
             List lst = con.obtieneMenu();
             AdminXML admXml = new AdminXML();
-            StringBuffer str = admXml.getXMLByList(lst);
-            setXmlEntidad(str);
+            //StringBuffer str = admXml.getXMLByList(lst);
+            //setXmlEntidad(str);
             this.setData(getXmlMenu());
 
         }catch(Exception e){
