@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<registro id="1" >
+    <alias_tab tipo_dato="string"></alias_tab>
+    <orden_tab tipo_dato="integer"></orden_tab>
+</registro>
