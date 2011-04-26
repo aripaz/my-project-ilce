@@ -8,6 +8,9 @@ package mx.ilce.conection;
 import java.util.ArrayList;
 import java.util.List;
 import mx.ilce.bean.Campo;
+import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.HashCampo;
+import mx.ilce.component.ListHash;
 
 /**
  *
@@ -42,5 +45,56 @@ public class ConEntidad {
             lst.add(cmp);
         }
         return lst;
+    }
+
+    /**
+     * Obtiene la configuracion de la formas a partir del ID de la misma  y los
+     * campos que se estan buscando
+     * @param strData   Debe contener dos parametros, el ID de la Forma y un
+     * listado de String con los nombres de los campos que se quieren obtener.
+     * Con esto se evita traer la forma completa.
+     * @return
+     */
+    public List getListFormaByIdAndCampos(String[] strData){
+        List lstSld=null;
+        try{
+
+            ConQuery connQ = new ConQuery();
+            HashCampo hsCmp = connQ.getData(11, strData);
+            if (!hsCmp.getListData().isEmpty()){
+                //introducimos en el Bean los datos obtenidos
+                ListHash lst = new ListHash();
+                lstSld = lst.getListBean(CampoForma.class, hsCmp);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+
+        }
+        return lstSld;
+    }
+
+    /**
+     * Obtiene la configuracion de una forma a partir del ID de la misma
+     * @param strData   Debe contener el ID de la forma a buscar
+     * @return
+     */
+    public List getListFormaById(String[] strData){
+        List lstSld=null;
+        try{
+
+            ConQuery connQ = new ConQuery();
+            HashCampo hsCmp = connQ.getData(12, strData);
+            if (!hsCmp.getListData().isEmpty()){
+                //introducimos en el Bean los datos obtenidos
+                ListHash lst = new ListHash();
+                lstSld = lst.getListBean(CampoForma.class, hsCmp);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+
+        }
+        return lstSld;
     }
 }
