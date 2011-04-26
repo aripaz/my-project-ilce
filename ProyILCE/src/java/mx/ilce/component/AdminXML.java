@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.conection.ConSession;
@@ -116,13 +117,17 @@ public class AdminXML {
      * deben mostrar por pagina
      * @param hsData   Data obtenida desde una query previa, debe contener los
      * datos y los campos que le corresponden
+     * @param lstCampos Contiene el listado de campos de la forma utilizada, se
+     * utiliza para completar los datos equivalentes que le corresponden a cada
+     * campo de la columna
      * @param page   Número de pagina que se desea mostrar del total de datos
      * @param regByPage Numero de registros por pagina que se deben mostrar
      * @return
      */
-    public StringBuffer getGridByData(HashCampo hsData,int page, int regByPage){
+    public StringBuffer getGridByData(HashCampo hsData, List lstCampos, int page, int regByPage){
         StringBuffer str = new StringBuffer();
 
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
         Campo cmp = new Campo();
         List lstCmp = hsData.getListCampos();
         HashMap hsDat = hsData.getListData();
@@ -147,8 +152,17 @@ public class AdminXML {
         for(int i=0; i<lstCmp.size();i++){
             cmp = (Campo) lstCmp.get(i) ;
             str.append(("<"+cmp.getNombreDB()+">\n"));
-            str.append(("<alias_campo>"+cmp.getAlias()+"</alias_campo>\n"));
-            str.append(("<tamano>"+cmp.getTamano()+"</tamano>\n"));
+            if (cmp.getNombreDB()!=null){
+                CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                if (cmpAux!=null){
+                    if (cmpAux.getAliasCampo()!=null){
+                        str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
+                    }
+                    if (cmpAux.getTamano()!=null){
+                        str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
+                    }
+                }
+            }
             str.append(("</"+cmp.getNombreDB()+">\n"));
         }
         str.append("</column_definition>\n");
@@ -156,15 +170,38 @@ public class AdminXML {
             ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
             str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
             for (int j=0; j<lstCmp.size();j++){
-                str.append("<cell>");
+                str.append("\t<cell>");
                 cmp = (Campo) arr.get(j) ;
-                str.append(cmp.getValor());
+                str.append(String.valueOf(cmp.getValor()).trim());
                 str.append("</cell>\n");
             }
             str.append("</row>\n");
         }
         str.append("</rows>");
         return str;
+    }
+
+    /**
+     * Obtiene los datos de un campo, obtenidos desde la forma que se le entrega
+     * @param lstData   Listado con la configuracion de la forma
+     * @param nombreCampo   Campo que se esta buscando desde la forma
+     * @return
+     */
+    private CampoForma getCampoForma(List lstData, String nombreCampo ){
+        CampoForma cmp = null;
+
+        if ((lstData!=null)&&(!lstData.isEmpty())){
+            Iterator it = lstData.iterator();
+            boolean seguir=true;
+            while(it.hasNext()&&seguir){
+                CampoForma cmpAux = (CampoForma) it.next();
+                if (cmpAux.getCampo().equals(nombreCampo)){
+                    cmp = cmpAux;
+                    seguir=false;
+                }
+            }
+        }
+        return cmp;
     }
 
     /**
