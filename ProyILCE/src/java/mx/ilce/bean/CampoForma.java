@@ -14,6 +14,8 @@ import java.io.Serializable;
 public class CampoForma implements Serializable  {
 
     private Integer claveCampo;
+    private Integer claveForma;
+    private String tabla;
     private String campo;
     private String aliasCampo;
     private Integer obligatorio;
@@ -24,6 +26,7 @@ public class CampoForma implements Serializable  {
     private String ayuda;
     private Integer datoSensible;
     private Integer activo;
+    private Integer tamano;
 
     public Integer getActivo() {
         return activo;
@@ -63,6 +66,14 @@ public class CampoForma implements Serializable  {
 
     public void setClaveCampo(Integer claveCampo) {
         this.claveCampo = claveCampo;
+    }
+
+    public Integer getClaveForma() {
+        return claveForma;
+    }
+
+    public void setClaveForma(Integer claveForma) {
+        this.claveForma = claveForma;
     }
 
     public Integer getDatoSensible() {
@@ -105,6 +116,22 @@ public class CampoForma implements Serializable  {
         this.obligatorio = obligatorio;
     }
 
+    public String getTabla() {
+        return tabla;
+    }
+
+    public void setTabla(String tabla) {
+        this.tabla = tabla;
+    }
+
+    public Integer getTamano() {
+        return tamano;
+    }
+
+    public void setTamano(Integer tamano) {
+        this.tamano = tamano;
+    }
+
     public String getTipoControl() {
         return tipoControl;
     }
@@ -112,5 +139,6 @@ public class CampoForma implements Serializable  {
     public void setTipoControl(String tipoControl) {
         this.tipoControl = tipoControl;
     }
+
     
 }
