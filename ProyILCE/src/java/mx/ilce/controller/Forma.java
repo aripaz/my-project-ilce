@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.controller;
-
+  
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +7,7 @@ import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExecutionHandler;
 
-/**
+/**   
  * Clase para la implementacion de los metodos asociados a Forma
  * Se prevee dejar en memoria esta objeto para que mantenga las formas
  * obtenidas a partir de las aplicaciones asociadas al Perfil del usuario
