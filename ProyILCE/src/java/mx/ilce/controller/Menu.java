@@ -7,6 +7,7 @@ package mx.ilce.controller;
 
 import java.util.List;
 import mx.ilce.component.AdminXML;
+import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
