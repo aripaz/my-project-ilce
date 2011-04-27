@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.component;
 
 import java.sql.SQLException;
@@ -21,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.controller.Perfil;
 import org.w3c.dom.Attr;
@@ -36,8 +32,6 @@ import org.w3c.dom.NamedNodeMap;
 public class AdminXML {
     private static File WORKING_DIRECTORY;
     private int numRow=0;
-
-
 
     /**
      * Metodo que permite obtener la data del usuario en el formato del
@@ -172,13 +166,185 @@ public class AdminXML {
             for (int j=0; j<lstCmp.size();j++){
                 str.append("\t<cell>");
                 cmp = (Campo) arr.get(j) ;
-                str.append(String.valueOf(cmp.getValor()).trim());
+                str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
                 str.append("</cell>\n");
             }
             str.append("</row>\n");
         }
         str.append("</rows>");
         return str;
+    }
+
+    /**
+     * Entrega un XML en base a la Forma indicada y con los datos que se le
+     * entregan
+     * @param hsData    Data entregada
+     * @param lstCampos Listado de campos de la Forma
+     * @param idForma   ID de la Forma entregada
+     * @return
+     */
+    public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, Integer idForma){
+        StringBuffer str = new StringBuffer();
+
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+        Campo cmp = new Campo();
+        List lstCmp = hsData.getListCampos();
+        HashMap hsDat = hsData.getListData();
+
+        str.append("<qry>\n");
+        for(int i=0;i<hsDat.size();i++){
+            ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
+            str.append(("<registro id='"+String.valueOf(i+1)+"'>\n"));
+            for (int j=0; j<lstCmp.size();j++){
+                cmp = (Campo) arr.get(j) ;
+                str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
+                                 + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
+                str.append(("<![CDATA["));
+                str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                str.append("]]>\n");
+                if (cmp.getNombreDB()!=null){
+                    CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                    if (cmpAux!=null){
+                        if (cmpAux.getAliasCampo()!=null){
+                            str.append(("\t\t<alias_campo><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
+                                    + "]]></alias_campo>\n"));
+                        }
+                        if (cmpAux.getObligatorio()!=null){
+                            str.append(("\t\t<obligatorio><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
+                                    + "]]></obligatorio>\n"));
+                        }
+                        if (cmpAux.getTipoControl()!=null){
+                            str.append(("\t\t<tipo_control><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
+                                    + "]]></tipo_control>\n"));
+                        }
+                        if (cmpAux.getEvento()!=null){
+                            str.append(("\t\t<evento><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getEvento()).trim())
+                                    + "]]></evento>\n"));
+                        }
+                        if (cmpAux.getForaneo()!=null){
+                            str.append("\t\t<foraneo");
+                            if (cmpAux.getFiltroForaneo()!=null){
+                                if (cmpAux.getFiltroForaneo().equals(1)){
+                                    str.append(" agrega_registro=\"true\"");
+                                }
+                            }
+                            str.append((" clave_forma=\""+idForma+"\">\n"));
+                            String[] strData = getStringData(cmpAux.getForaneo(),arr);
+                            StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
+                            if (!"".equals(strForaneo.toString())){
+                                str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
+                                str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
+                                str.append(strForaneo);
+                                str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                            }
+                            str.append("\t\t</foraneo>\n");
+                        }
+                        if (cmpAux.getAyuda()!=null){
+                            str.append(("\t\t<ayuda><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
+                                    + "]]></ayuda>\n"));
+                        }
+                        if (cmpAux.getDatoSensible()!=null){
+                            str.append(("\t\t<dato_sensible><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getDatoSensible()).trim())
+                                    + "]]></dato_sensible>\n"));
+                        }
+                        if (cmpAux.getActivo()!=null){
+                            str.append(("\t\t<activo><![CDATA["
+                                    + castNULL(String.valueOf(cmpAux.getActivo()).trim())
+                                    + "]]></activo>\n"));
+                        }
+                        if (cmpAux.getTamano()!=null){
+                            str.append(("\t\t<tamano>"
+                                    + castNULL(String.valueOf(cmpAux.getTamano()).trim())
+                                    + "</tamano>\n"));
+                        }
+                    }
+                }
+                str.append(("\t</"+cmp.getNombreDB()+">\n"));
+            }
+            str.append("</registro>\n");
+        }
+        str.append("</qry>");
+        return str;
+    }
+
+    /**
+     * Metodo que permite crear la seccion de un XML a partir de la query que
+     * se utilizara para completar los datos, la data que se debe utilizar como
+     * entrada para la query y el nombre del registro que esta solicitando esta
+     * seccion de XML
+     * @param query     Query usada para completar los datos
+     * @param strData   Data de entrada que se usara en la query
+     * @param strRegistro   Nombre del registro desde donde se invoco el metodo
+     * @return
+     */
+    private StringBuffer getXmlByQueryAndData(String query, String[] strData, String strRegistro){
+        ConEntidad con = new ConEntidad();
+        HashCampo hsData = con.getDataByQuery(query, strData);
+        List lstCmp = hsData.getListCampos();
+
+        HashMap hsDat = hsData.getListData();
+
+        StringBuffer str = new StringBuffer("");
+        if (!hsDat.isEmpty()){
+            for(int i=0;i<hsDat.size();i++){
+                ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
+                str.append(("\t\t\t\t<registro_"+ strRegistro+" "));
+                str.append(("id='"+String.valueOf(i+1)+"'>\n"));
+                for (int j=0; j<lstCmp.size();j++){
+                    Campo cmp = (Campo) arr.get(j) ;
+                    str.append(("\t\t\t\t\t<"+ cmp.getNombreDB()));
+                    str.append((" tipo_dato=\"" + castTypeJavaToXML(cmp.getTypeDataAPL()) + "\">"));
+                    str.append(("<![CDATA["));
+                    str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                    str.append(("]]>"));
+                    str.append(("</"+ cmp.getNombreDB() + ">\n"));
+                }
+                str.append(("\t\t\t\t</registro_"+ strRegistro+">\n"));
+            }
+        }
+        return str;
+    }
+
+    /**
+     * Metodo para obtener la data ordenada para ser utilizada en la query.
+     * Se asume que la query esta bien estructurada, es decir, se requiere
+     * que los parametros esten en forma secuencial (Ej: %1 %2 %3 ... ) para
+     * ubicar en forma correcta los datos
+     * @param query
+     * @param lst
+     * @return
+     */
+    private String[] getStringData(String query, ArrayList lst){
+        String[] strData = null;
+        String[] splitPorc = query.split("%");
+        
+        if (splitPorc.length>1){
+            strData = new String[splitPorc.length-1];
+            for (int i=0; i<lst.size();i++){
+                Campo cmp = (Campo) lst.get(i);
+                String word1 = " "+cmp.getNombreDB()+"=";
+                String word2 = " "+cmp.getNombreDB()+" =";
+                if (cmp.getNombreDB()!=null){
+                    if (query.contains(word1)||query.contains(word2)){
+                        boolean seguir = true;
+                        for (int j=0;j<splitPorc.length&&seguir;j++){
+                            String str = splitPorc[j];
+                            if (str.contains(word1)||str.contains(word2)){
+                                strData[j]=String.valueOf(cmp.getValor()).trim();
+                                seguir=false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return strData;
     }
 
     /**
@@ -229,7 +395,6 @@ public class AdminXML {
                                         separador + "resource" +
                                         separador + "xml" +
                                         separador + fileName);
-                                                   //separador + "widget.session.xml");
             if (fichero.exists()){
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
@@ -263,7 +428,6 @@ public class AdminXML {
                     &&(!"#cdata-section".equals(e.getNodeName()))
                     &&(!"#document".equals(e.getNodeName()))
                     &&(!"qry".equals(e.getNodeName()))) {
-                //print("NODO:"+ e.getNodeName(),level);
                 str.append(("\n<"+e.getNodeName()+" "));
                 strPadre = e.getNodeName();
                 cmp = hsCmp.getCampoByNameDB(e.getNodeName());
@@ -280,8 +444,6 @@ public class AdminXML {
                 Attr attr = null;
                 for (int i=0; i<length; i++){
                     attr = (Attr)attributes.item(i);
-                    //print("ATRIBUTO:"+attr.getNodeName(),level);
-                    //print("VALOR:\""+attr.getNodeValue()+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append((attr.getNodeValue()+"\">"));
                     str.append(("<![CDATA["+replaceAccent(cmpR.getValor())+"]]>"));
@@ -295,8 +457,6 @@ public class AdminXML {
                 Attr attr = null;
                 for (int i=0; i<length; i++){
                     attr = (Attr)attributes.item(i);
-                    //print("ATRIBUTO:"+attr.getNodeName(),level);
-                    //print("VALOR:\""+(++numRow)+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append((numRow+"\">"));
                     endRow = true;
@@ -323,7 +483,6 @@ public class AdminXML {
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp, int register){
         StringBuffer str = new StringBuffer("");
-        ArrayList lst = (ArrayList) hsCmp.getListCampos();
         Campo cmp = null;
         String strPadre = "";
         boolean endRow = false;
@@ -334,7 +493,6 @@ public class AdminXML {
                     &&(!"#cdata-section".equals(e.getNodeName()))
                     &&(!"#document".equals(e.getNodeName()))
                     &&(!"qry".equals(e.getNodeName()))) {
-                //print("NODO:"+ e.getNodeName(),level);
                 str.append(("\n<"+e.getNodeName()+" "));
                 strPadre = e.getNodeName();
                 cmp = hsCmp.getCampoByNameDB(e.getNodeName());
@@ -351,8 +509,6 @@ public class AdminXML {
                 Attr attr = null;
                 for (int i=0; i<length; i++){
                     attr = (Attr)attributes.item(i);
-                    //print("ATRIBUTO:"+attr.getNodeName(),level);
-                    //print("VALOR:\""+attr.getNodeValue()+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append((attr.getNodeValue()+"\">"));
                     str.append(("<![CDATA["+replaceAccent(cmpR.getValor())+"]]>"));
@@ -366,8 +522,6 @@ public class AdminXML {
                 Attr attr = null;
                 for (int i=0; i<length; i++){
                     attr = (Attr)attributes.item(i);
-                    //print("ATRIBUTO:"+attr.getNodeName(),level);
-                    //print("VALOR:\""+(++numRow)+"\"",level);
                     str.append((attr.getNodeName()+"=\""));
                     str.append(((register+1)+"\">"));
                     endRow = true;
@@ -382,7 +536,6 @@ public class AdminXML {
         }
         return str;
     }
-
 
     /**
      * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
@@ -416,6 +569,47 @@ public class AdminXML {
         return str;
     }
 
+    /**
+     * Transforma el texto del tipo en Java a el tipo que le corresponde en
+     * el XML
+     * @param strData
+     * @return
+     */
+    private String castTypeJavaToXML(String strData){
+        String strSld = "";
+        if ("java.lang.String".equals(strData)){
+            strSld = "string";
+        }
+        if ("java.lang.Integer".equals(strData)){
+            strSld = "integer";
+        }
+        return strSld;
+    }
+
+     /**
+     * Al entregarse un texto con la palabra NULL, entrega un ""
+     * @param strData   Texto a analizar
+     * @return
+     */
+    private String castNULL(String strData){
+        String sld = "";
+
+        if(!"NULL".equals(strData.toUpperCase()))
+            sld = strData;
+        return sld;
+    }
+
+    private static void print(String s, int level){
+        String str ="";
+        for (int i=level; i>0; i--){
+            str = str + "\t";
+        }
+        System.out.print(str);
+        System.out.println(s+", LEVEL:"+level);
+    }
+
+/******************** METODOS DE LA ENTIDAD ******************************/
+
     private StringBuffer getXMLByList(List lst){
         StringBuffer str = new StringBuffer("");
         str.append("<?xml version='1.0' encoding='ISO-8859-1'?>"+
@@ -427,10 +621,10 @@ public class AdminXML {
             while (it!=null && it.hasNext()){
                 Campo cmp = (Campo) it.next();
                 str.append("<campo>");
-                str.append("<nombre>"+cmp.getNombre()+"</nombre>");
-                str.append("<alias_campo>"+cmp.getAlias()+"</alias_campo");
-                str.append("<valor>"+cmp.getValor()+"</valor>");
-                str.append("<tipo_dato>"+cmp.getTypeDataDB()+"</tipo_dato>");
+                str.append(("<nombre>"+cmp.getNombre()+"</nombre>"));
+                str.append(("<alias_campo>"+cmp.getAlias()+"</alias_campo"));
+                str.append(("<valor>"+cmp.getValor()+"</valor>"));
+                str.append(("<tipo_dato>"+cmp.getTypeDataDB()+"</tipo_dato>"));
                 str.append("<tipo_control></tipo_control>");
                 str.append("<evento>onClick=alert('Ejecuta evento on blur');");
                 str.append("<ayuda></ayuda>");
@@ -454,7 +648,7 @@ public class AdminXML {
         return strSld;
     }
 
-        private boolean validateXML(StringBuffer xml){
+    private boolean validateXML(StringBuffer xml){
         boolean bln=true;
 
         return bln;
@@ -464,13 +658,5 @@ public class AdminXML {
         return lst;
     }
 
-    private static void print(String s, int level){
-        String str ="";
-        for (int i=level; i>0; i--){
-            str = str + "\t";
-        }
-        System.out.print(str);
-        System.out.println(s+", LEVEL:"+level);
-    }
 
 }
