@@ -85,6 +85,14 @@ public class Perfil extends Entidad{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Metodo para obtener los datos del usuario a partir de los datos de
+     * conexion Usuario y Password. En caso de existir problemas se obtiene
+     * el texto con la causa
+     * @param user      Texto de identificacion del usuario
+     * @param password  Texto con la password del usuario
+     * @return
+     */
     public LoginHandler login(String user, String password) {
         LoginHandler lg = new LoginHandler();
         try{
@@ -93,7 +101,6 @@ public class Perfil extends Entidad{
 
             if (usr.isLogged()){
                 lg.setIsLogin(true);
-
                 //completar los datos del perfil
                 //this.setXmlEntidad(usr.getXmlPermiso());
                 lg.setObjectData(usr);
@@ -111,6 +118,13 @@ public class Perfil extends Entidad{
         return lg;
     }
 
+    /**
+     * Metodo para obtener los datos del usuario a partir de los datos de
+     * conexion contenidos en el Bean User. En caso de existir problemas se
+     * obtiene el texto con la causa
+     * @param usuario
+     * @return
+     */
     public LoginHandler login(User usuario) {
         LoginHandler lg = new LoginHandler();
         try{
