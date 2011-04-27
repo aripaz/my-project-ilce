@@ -13,7 +13,8 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.component.ListHash;
 
 /**
- *
+ * Clase utilizada para realizar las consultas a la base de datos desde
+ * la aplicacion
  * @author ccatrilef
  */
 public class ConEntidad {
@@ -75,14 +76,14 @@ public class ConEntidad {
     }
 
     /**
-     * Obtiene la configuracion de una forma a partir del ID de la misma
+     * Obtiene la configuracion de una forma a partir del ID de la misma,
+     * entregando un Listado de Bean del tipo CampoForma
      * @param strData   Debe contener el ID de la forma a buscar
      * @return
      */
     public List getListFormaById(String[] strData){
         List lstSld=null;
         try{
-
             ConQuery connQ = new ConQuery();
             HashCampo hsCmp = connQ.getData(12, strData);
             if (!hsCmp.getListData().isEmpty()){
@@ -96,5 +97,23 @@ public class ConEntidad {
 
         }
         return lstSld;
+    }
+
+    /**
+     * Obtiene la data generada a partir de la Query entregada y los parametros
+     * de entrada que deben utilizarce con la Query
+     * @param strQuery
+     * @param strData
+     * @return
+     */
+    public HashCampo getDataByQuery(String strQuery, String[] strData){
+        HashCampo hsCmp = new HashCampo();
+        ConQuery con = new ConQuery();
+        try{
+            hsCmp = con.getDataByQuery(strQuery, strData);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return hsCmp;
     }
 }
