@@ -6,7 +6,6 @@
 package mx.ilce.bean;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * Clase implementada para el manejo de los campos que se obtienen al ejecutar
