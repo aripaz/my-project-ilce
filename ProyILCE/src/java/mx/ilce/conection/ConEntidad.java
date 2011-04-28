@@ -7,9 +7,11 @@ package mx.ilce.conection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.ListHash;
 
 /**
@@ -18,6 +20,25 @@ import mx.ilce.component.ListHash;
  * @author ccatrilef
  */
 public class ConEntidad {
+
+    private Properties prop = null;
+    private AdminFile adm = new AdminFile();
+
+    public ConEntidad(){
+        try{
+            this.prop = adm.leerIdQuery();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private Integer getIdQuery(String key) throws Exception{
+        if (prop == null){
+            prop = adm.leerIdQuery();
+        }
+        return adm.getIdQuery(prop,key);
+    }
+
 
     public void ingresaEntidad(){
 
@@ -61,7 +82,8 @@ public class ConEntidad {
         try{
 
             ConQuery connQ = new ConQuery();
-            HashCampo hsCmp = connQ.getData(11, strData);
+            //HashCampo hsCmp = connQ.getData(11, strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(adm.FORMACAMPOS), strData);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
@@ -85,7 +107,8 @@ public class ConEntidad {
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
-            HashCampo hsCmp = connQ.getData(12, strData);
+            //HashCampo hsCmp = connQ.getData(12, strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(adm.FORMA), strData);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
