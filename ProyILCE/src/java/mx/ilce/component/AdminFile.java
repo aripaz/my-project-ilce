@@ -53,7 +53,10 @@ public class AdminFile {
      * de campos
      */
     public static String FORMACAMPOS = "FORMACAMPOS";
-    
+    /**
+     * Query para obtener la query en base a la forma
+     */
+    public static String FORMAQUERY = "FORMAQUERY";
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
      * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la
