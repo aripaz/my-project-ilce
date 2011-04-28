@@ -102,7 +102,11 @@ public class Perfil extends Entidad{
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                //this.setXmlEntidad(usr.getXmlPermiso());
+                Perfil perfil = con.getPerfil(usr);
+                this.clavePerfil = perfil.getClavePerfil();
+                this.lstAplicacion = perfil.getLstAplicacion();
+                this.perfil = perfil.getPerfil();
+                
                 lg.setObjectData(usr);
                 this.setData(usr);
             }else{
@@ -136,7 +140,11 @@ public class Perfil extends Entidad{
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                //this.setXmlEntidad(usr.getXmlPermiso());
+                Perfil perfil = con.getPerfil(usr);
+                this.clavePerfil = perfil.getClavePerfil();
+                this.lstAplicacion = perfil.getLstAplicacion();
+                this.perfil = perfil.getPerfil();
+
                 lg.setObjectData(usr);
                 this.setData(usr);
             }else{
