@@ -25,25 +25,30 @@ public class srvForma extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     */
+     */    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             String claveForma = (String) request.getParameter("clave_forma");
+            String pk = (String) request.getParameter("pk");
             if (claveForma==null){
                 claveForma = (String) request.getSession().getAttribute("clave_forma");
+            }
+            if (pk==null){
+                pk = (String) request.getSession().getAttribute("pk");
             }
             Forma forma = (Forma) request.getSession().getAttribute("forma");
 
             if (forma !=null){
+                forma.setPk(pk);
                 forma.setClaveForma(Integer.valueOf(claveForma));
                 forma.mostrarForma();
                 StringBuffer xmlForma = forma.getXmlEntidad();
                 request.getSession().setAttribute("xmlForma", xmlForma);
             }
-            request.getRequestDispatcher("/vista.jsp").forward(request, response);
+            request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
         }catch (Exception e){
         } finally { 
             out.close();
