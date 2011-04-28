@@ -34,7 +34,7 @@ public class ConSession {
         }
     }
 
-    private Integer getIdQuery(String key) throws Exception{
+    public Integer getIdQuery(String key) throws Exception{
         if (prop == null){
             prop = adm.leerIdQuery();
         }
