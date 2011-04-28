@@ -3,12 +3,16 @@ package mx.ilce.servlet.Login;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.component.AdminXML;
+import mx.ilce.conection.ConSession;
+import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.LoginHandler;
 
@@ -39,9 +43,36 @@ public class srvLogin extends HttpServlet {
             if (lg.isLogin()){
                 user = (User) lg.getObjectData();
                 if (user != null){
+                    List lst = perfil.getLstAplicacion();
+
+                    Forma forma = new Forma();
+                    forma.getFormasByAplications(lst);
+
+                    request.getSession().setAttribute("user", user);
+                    request.getSession().setAttribute("perfil", perfil);
+                    request.getSession().setAttribute("forma", forma);
+
                     AdminXML adm = new AdminXML();
                     StringBuffer xmlSession = adm.getSessionXML(user);
                     StringBuffer xmlMenu = adm.getMenuXML(user);
+                    StringBuffer xmlTab = adm.getTabXML(perfil);
+
+                    /**** FIXME ****/
+                    /* ESTA ES UNA PRUEBA DE DATA HAY QUE DEFINIR CUAL ES LA
+                     PRIMERA CONSULTA */
+                    List lstF = (List)forma.getForma(2);
+                    String[] strData = new String[1];
+                    ConSession con = new ConSession();
+                    HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(10), strData);
+                    StringBuffer xmlGrid = adm.getGridByData(hsCmp,lstF,1,10);
+
+                    hsCmp = con.getDataByIdQuery(Integer.valueOf(13), strData);
+                    StringBuffer xmlForma = adm.getFormaByData(hsCmp, lstF,2);
+                    /** FIN DATA PRUEBA***/
+
+                    request.getSession().setAttribute("xmlTab", xmlTab);
+                    request.getSession().setAttribute("xmlGrid", xmlGrid);
+                    request.getSession().setAttribute("xmlForma", xmlForma);
 
                     request.getSession().setAttribute("xmlSession", xmlSession );
                     request.getSession().setAttribute("xmlMenu",xmlMenu);
