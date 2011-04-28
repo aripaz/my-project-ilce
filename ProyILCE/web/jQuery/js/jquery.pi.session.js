@@ -6,7 +6,7 @@
     $.fn.sessionmenu = function(opc){
 
         $.fn.sessionmenu.settings = {
-            xmlUrl : "/ProyILCE/resource/jsp/xmlSession.jsp",
+            xmlUrl : "/ProyILCE/xml_tests/widget.session.xml", /*"/ProyILCE/resource/jsp/xmlSession.jsp",*/
             empleado:"",
             nombre:"",
             apellido_paterno:"",
@@ -23,7 +23,7 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
-             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
+             obj.html("<div align='center' class='cargando' ><br /><br />Cargando informaci&oacute;n...  <br /><img src='img/loading.gif' /></div>")
              $.fn.sessionmenu.ajax(obj);
         });
 

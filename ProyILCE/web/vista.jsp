@@ -1,9 +1,15 @@
+<%@ page import="mx.ilce.bean.User" %>
+<%
+/*User user = (User) request.getSession().getAttribute("user");
+if (user == null){
+ request.getRequestDispatcher("/index.jsp");
+}*/
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <title>Plataforma ILCE</title>
-        <link rel="stylesheet" href="jQuery/development-bundle/themes/cupertino/jquery.ui.all.css" />
-        <link rel="stylesheet" href="jQuery/development-bundle/demos/demos.css" />
+        <link rel="stylesheet" href="css/themes/cupertino/jquery.ui.all.css" />
 
         <!-- librerias para cargar dialogo  -->
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
@@ -14,16 +20,20 @@
         <!-- Theme Switcher Widget -->
         <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
         <!-- jqGrid -->
-        <script src="jQuery/jqGrid/js/i18n/grid.locale-es.js" type="text/javascript"></script>
-        <script src="jQuery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+        <script src="jQuery/js/grid.locale-es.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
 
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="jqGrid/css/ui.jqgrid.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
+        
+        <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
+
     </head>
     <body>
         <div id="header">
@@ -48,29 +58,23 @@
                     <div id="advanced_search">
                     </div>
                 </div>
-                <div id="divGrid">
-                    <table width="100%" id="gridApp">
-                    </table>
-                    <div id="pager"></div>
-                </div>
                 <div id="tabcontainer">
                     <div id="tabs">
                         <ul>
-                            <li><a href="#tab1">Datos destacados</a></li>
+                            <li><a href="#tabUser">Datos destacados</a></li>
                         </ul>
-                        <div id="tab1">
+                        <div id="tabUser">
                             <p>Aquí van a ir breves reportes y alertas</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="dialog" title="Aplicación">
-            <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-                <ul id="tablist">
-                    <li id="tabs-1-tab"><a href="#tabs-1">#</a></li>
-                </ul>
-                <div id="tabs-1"></div>
+        <div id="dlgConfig" title="Configuraci&oacute;n">
+            <div id="divConfigGrid">
+                <table width="100%" id="gridConfig">
+                </table>
+                <div id="pagerConfig"></div>
             </div>
         </div>
     </body>

@@ -6,7 +6,7 @@
     $.fn.appmenu = function(opc){
 
         $.fn.appmenu.settings = {
-            xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp",
+            xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp", //"/ProyILCE/xml_tests/widget.accordion.xml",
             perfil : 1,
             menu: [/*{aplicacion:"", elementos_menu:[{etiqueta:"", entidad:"", funcion:""}]}*/]
         };
@@ -17,7 +17,7 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
-             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
+             obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>")
              $.fn.appmenu.ajax(obj);
         });
 
@@ -68,9 +68,9 @@
                         var nEntidad=$.fn.appmenu.options.menu[i].elementos_menu[k].entidad;
                         var nAplicacion=$.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion;
                         if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                            link_id="#nuevaEntidad_" + nAplicacion + "_" + nEntidad; }
+                            link_id="#newEntity_" + nAplicacion + "_" + nEntidad; }
                         else {
-                            link_id="#mostrarEntidad_" + nAplicacion + "_" + nEntidad;  }
+                            link_id="#showEntity_" + nAplicacion + "_" + nEntidad;  }
 
                         $(link_id).click(function() {
                             //Verifica si existe
@@ -87,8 +87,9 @@
                                 //Si no existe crea nueva tab
                                 $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
                                 $tabs.tabs( "select", "#tab"+this.id);
-                                if (this.id.split("_")[0]=="nuevaEntidad") {
+                                if (this.id.split("_")[0]=="newEntity") {
                                     $("#tab"+this.id).form({
+                                                    aplicacion:nAplicacion,
                                                     forma:nEntidad,
                                                     modo:"inserta_entidad",
                                                     titulo: sTitulo
@@ -189,10 +190,10 @@
                 "<div>";
             for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
                 if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                    tipoliga="nuevaEntidad_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
+                    tipoliga="newEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
                 }
                 else {
-                    tipoliga="mostrarEntidad_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
+                    tipoliga="showEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
                 }
 
                 sHtml+="<div><a href='#' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "'>"+$.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <qry source="SELECT * FROM aplicacion" >
     <registro id="1" >
-        <clave_aplicacion tipo_dato="integer">  <![CDATA[1]]>
+        <clave_aplicacion tipo_dato="integer"><![CDATA[1]]>
             <alias_campo><![CDATA[Clave]]></alias_campo>
             <evento></evento>
             <ayuda></ayuda>
@@ -9,6 +9,7 @@
         <aplicacion tipo_dato="string" ><![CDATA[BackEnd]]>
             <alias_campo><![CDATA[Aplicaci&oacute;n]]></alias_campo>
             <evento><![CDATA[ onClick="alert('Ejecuta evento on blur');"]]></evento>
+            <obligatorio>1</obligatorio>
             <tipo_control></tipo_control>
             <ayuda></ayuda>
         </aplicacion>
@@ -56,7 +57,7 @@
             <evento></evento>
             <ayuda></ayuda>
         </icono>
-        <logo tipo_dato="string"><![CDATA[]]>
+        <logo tipo_dato="date"><![CDATA[]]>
             <alias_campo><![CDATA[Logo de la aplicaci&oacute;n]]></alias_campo>
             <control>file</control>
             <evento></evento>
@@ -64,6 +65,7 @@
         </logo>
         <autor tipo_dato="string"><![CDATA[]]>
             <alias_campo><![CDATA[Autor]]></alias_campo>
+            <obligatorio>1</obligatorio>
             <tipo_control></tipo_control>
             <evento></evento>
             <ayuda></ayuda>
@@ -77,6 +79,7 @@
         <clave_estatus tipo_dato="string"><![CDATA[1]]>
             <alias_campo><![CDATA[Estatus]]></alias_campo>
             <tipo_control></tipo_control>
+            <obligatorio>1</obligatorio>
             <evento></evento>
             <ayuda></ayuda>
         </clave_estatus>

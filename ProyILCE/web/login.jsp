@@ -3,6 +3,13 @@
     Created on : 13/12/2010, 09:32:14 AM
     Author     : Administrador
 --%>
+<%@page import="mx.ilce.handler.ExecutionHandler" %>
+<%
+    ExecutionHandler execHand = (ExecutionHandler) request.getSession().getAttribute("loginHand");
+    if (execHand == null) {
+        execHand = new ExecutionHandler();
+    }
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,44 +33,45 @@
             <tr>
                 <td>
                     <div id="divLogin">
-                        <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
-                            <tr>
-                                <td width="48%" ><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
-                                <td width="52%"><div align="right">
-                                        <input name="u" type="text" id="u" size="24" />
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td ><div id="contrasena" align="right" class="etiqueta_forma">Contrase&ntilde;a</div></td>
-                                <td><div align="right">
-                                        <input name="c" type="password" id="c" size="24" />
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td><div align="right">
-                                    </div></td>
-                                <td><div align="right">
-                                        <button id="iniciarsesion">Iniciar sesi&oacute;n</button>
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td><div align="right">
-                                    </div></td>
-                                <td><div align="right">
-                                        <a href="#" id="lnkRecuperaPw" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div class="ui-widget" id="divMsgLogin">
-                                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                            <p id="msjLogin"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                                                <strong>Error!!</strong></p>
+                        <form action="srvLogin" method="post" name="frmLogin" id="frmLogin">
+                            <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
+                                <tr>
+                                    <td width="48%" ><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
+                                    <td width="52%"><div align="right">
+                                            <input name="lgn" type="text" id="lgn" size="24" />
+                                        </div></td>
+                                </tr>
+                                <tr>
+                                    <td ><div id="contrasena" align="right" class="etiqueta_forma">Contrase&ntilde;a</div></td>
+                                    <td><div align="right">
+                                            <input name="psw" type="password" id="psw" size="24" />
+                                        </div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="right">
+                                        </div></td>
+                                    <td><div align="right">
+                                            <button id="iniciarsesion">Iniciar sesi&oacute;n</button>
+                                        </div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="right">
+                                        </div></td>
+                                    <td><div align="right">
+                                            <a href="#" id="lnkRecuperaPw" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
+                                        </div></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="ui-widget" id="divMsgLogin">
+                                            <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                                                <p id="msjLogin"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span><%=execHand.getTextExecution()%></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                     <div id="divLostPw">
                         <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
@@ -87,8 +95,7 @@
                                 <td colspan="2">
                                     <div class="ui-widget" id="divMsjRecuperaPW">
                                         <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                            <p id="msjRecuperaPW"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                                                <strong>Error!!</strong></p>
+                                            <p id="msjRecuperaPW"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong></strong></p>
                                         </div>
                                     </div>
                                 </td>
@@ -100,3 +107,4 @@
         </table>
     </body>
 </html>
+<% execHand.setTextExecution(""); %>

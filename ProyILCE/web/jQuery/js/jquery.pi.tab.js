@@ -47,7 +47,8 @@
 
                 //Inicializa forma de edición en la primera página
                 $("#tabEntity_" + $.fn.apptab.options.app + "_" + $.fn.apptab.options.entidad+"_1").form({
-                        forma:1,
+                        aplicacion: $.fn.apptab.options.app,
+                        forma:$.fn.apptab.options.entidad,
                         modo:"edita_entidad",
                         titulo: "Edici&oacute;n"
                 });

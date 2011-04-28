@@ -3,7 +3,12 @@
  * and open the template in the editor.
  */
 $(document).ready(function() {
+
+    if (($("#msjLogin").html().toLowerCase()=='<span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>')||
+        ($("#msjLogin").html().toLowerCase()=='<span style="float: left; margin-right: 0.3em" class="ui-icon ui-icon-alert"></span>'))   {
     $("#divMsgLogin").hide();
+    }
+    
     $("#divMsjRecuperaPW").hide();
 
     $("#divLostPw").hide();
@@ -15,36 +20,23 @@ $(document).ready(function() {
 
     $("#iniciarsesion").click(function(){
         s=$("#texto_mensaje").html;
-        if ($("#u").val()=="") {
+        if ($("#lgn").val()=="") {
             $("#msjLogin").html("<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;'></span><strong>Se requiere clave de usuario, verifique</strong>");
             $("#divMsgLogin").show();
-            return;
+            return false;
         }
         else {
             $("#divMsgLogin").hide();
         }
 
-        if ($("#c").val()=="") {
+        if ($("#psw").val()=="") {
             $("#msjLogin").html("<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;'></span><strong>Se requiere contrase&ntilde;a, verifique</strong>");
             $("#divMsgLogin").show();
-            return;
+            return false;
         }
 
-        $.post("controlador.jsp",{
-            cmd: "login",
-            email: $("#u").val(),
-            "password":  $("#c").val(),
-            "clave_aplicacion": $("#clave_aplicacion").val()
-            },
-        function(response){
-            var sError=($(response).find('error').text());
-            if (sError!="")  {
-                $("#msjLogin").html("<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;'></span><strong>" + sError + "</strong>");
-                $("#divMsgLogin").show();
-            }
-        }
-        );
-
+        $("#frmLogin").submit();
+        return true;
     });
 
     $("#btnRecuperarPw").click(function(){
