@@ -55,7 +55,7 @@ public class srvLogin extends HttpServlet {
                     AdminXML adm = new AdminXML();
                     StringBuffer xmlSession = adm.getSessionXML(user);
                     StringBuffer xmlMenu = adm.getMenuXML(user);
-                    StringBuffer xmlTab = adm.getTabXML(perfil);
+                    //StringBuffer xmlTab = adm.getTabXML(perfil);
 
                     /**** FIXME ****/
                     /* ESTA ES UNA PRUEBA DE DATA HAY QUE DEFINIR CUAL ES LA
@@ -70,7 +70,7 @@ public class srvLogin extends HttpServlet {
                     StringBuffer xmlForma = adm.getFormaByData(hsCmp, lstF,2);
                     /** FIN DATA PRUEBA***/
 
-                    request.getSession().setAttribute("xmlTab", xmlTab);
+                    //request.getSession().setAttribute("xmlTab", xmlTab);
                     request.getSession().setAttribute("xmlGrid", xmlGrid);
                     request.getSession().setAttribute("xmlForma", xmlForma);
 
