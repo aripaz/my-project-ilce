@@ -287,14 +287,14 @@ public class AdminXML {
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
         Campo cmp = new Campo();
         List lstCmp = hsData.getListCampos();
-        HashMap hsDat = hsData.getListData();
+        //HashMap hsDat = hsData.getListData();
 
         str.append("<qry>\n");
         for(int i=0;i<1;i++){
-            ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
+            //ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
             str.append(("<registro id='"+String.valueOf(i)+"'>\n"));
             for (int j=0; j<lstCmp.size();j++){
-                cmp = (Campo) arr.get(j) ;
+                cmp = (Campo) lstCmp.get(j) ;
                 str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
                                  + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
                 str.append("<![CDATA[]]>\n");
@@ -327,9 +327,9 @@ public class AdminXML {
                                 if (cmpAux.getFiltroForaneo().equals(1)){
                                     str.append(" agrega_registro=\"true\"");
                                 }
-                            }
+                            } 
                             str.append((" clave_forma=\""+idForma+"\">\n"));
-                            String[] strData = getStringData(cmpAux.getForaneo(),arr);
+                            String[] strData = null; //getStringData(cmpAux.getForaneo(),arr);
                             StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
                             if (!"".equals(strForaneo.toString())){
                                 str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
