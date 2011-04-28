@@ -27,8 +27,17 @@ public class Forma extends Entidad{
     private Integer claveForma;
     private Integer claveFormaPadre;
     private HashMap hsForma;
+    private String pk;
 
     /************** GETTER Y SETTER ***************/
+
+    public String getPk() {
+        return pk;
+    }
+
+    public void setPk(String pk) {
+        this.pk = pk;
+    }
 
     public String getAliasTab() {
         return aliasTab;
@@ -162,9 +171,12 @@ public class Forma extends Entidad{
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
-
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
-                        xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                        if ((this.getPk()!=null)&&("0".equals(this.getPk()))){
+                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                        }else{
+                            xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                        }
                     }
                 }
             }
