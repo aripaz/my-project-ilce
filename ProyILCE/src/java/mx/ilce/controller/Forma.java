@@ -168,6 +168,7 @@ public class Forma extends Entidad{
                 if (!dq.isEmpty()){
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    strData[0]= this.getPk();
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
@@ -179,7 +180,7 @@ public class Forma extends Entidad{
                         }
                     }
                 }
-            }
+            } 
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             e.printStackTrace();
