@@ -151,8 +151,7 @@ public class Forma extends Entidad{
             StringBuffer xmlForma = new StringBuffer("");
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.claveForma);
-                HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMA), strData);
-
+                HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery("3"), strData);
                 if (!this.hsForma.isEmpty()){
                     AdminXML admXML = new AdminXML();
 
