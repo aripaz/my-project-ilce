@@ -1,8 +1,10 @@
 package mx.ilce.controller;
   
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import mx.ilce.bean.Campo;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
@@ -151,12 +153,19 @@ public class Forma extends Entidad{
             StringBuffer xmlForma = new StringBuffer("");
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.claveForma);
-                HashCampo hsCmp = con.getDataByIdQuery(3, strData);
-                if (!this.hsForma.isEmpty()){
-                    AdminXML admXML = new AdminXML();
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
+                HashMap dq = hsCmpQ.getListData(); 
+                if (!dq.isEmpty()){
+                    ArrayList arr = (ArrayList)dq.get(0);
+                    Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
+                    if (!this.hsForma.isEmpty()){
+                        AdminXML admXML = new AdminXML();
 
-                    List lstF = (List)this.getForma(Integer.valueOf(claveForma));
-                    xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                        List lstF = (List)this.getForma(Integer.valueOf(claveForma));
+                        xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                    }
                 }
             }
             this.setXmlEntidad(xmlForma);
