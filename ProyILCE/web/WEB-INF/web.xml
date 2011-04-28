@@ -4,9 +4,17 @@
         <servlet-name>srvLogin</servlet-name>
         <servlet-class>mx.ilce.servlet.Login.srvLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>srvForma</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvForma</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvForma</servlet-name>
+        <url-pattern>/srvForma</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
