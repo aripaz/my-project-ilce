@@ -3,8 +3,11 @@ package mx.ilce.controller;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import mx.ilce.bean.HashCampo;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
+import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExecutionHandler;
 
 /**   
@@ -142,21 +145,29 @@ public class Forma extends Entidad{
      * @return
      */
     public Forma mostrarForma() {
-        Forma frm = new Forma();
         try{
-            //procesar el xml como se necesite y asignarlo
-            StringBuffer str = new StringBuffer("<?xml version='1.0' encoding='ISO-8859-1'?>");
-            this.setXmlEntidad(str);
-            AdminXML admXml = new AdminXML();
-            //this.setData(admXml.getDataByXML(this.getXmlEntidad()));
+            ConSession con = new ConSession();
+            String[] strData = new String[1];
+            StringBuffer xmlForma = new StringBuffer("");
+            if (this.claveForma !=null){
+                strData[0] = String.valueOf(this.claveForma);
+                HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMA), strData);
 
+                if (!this.hsForma.isEmpty()){
+                    AdminXML admXML = new AdminXML();
+
+                    List lstF = (List)this.getForma(Integer.valueOf(claveForma));
+                    xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                }
+            }
+            this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             e.printStackTrace();
             //throw new UnsupportedOperationException("Not supported yet.");
         }finally{
             //colocar instrucciones que siempre se deben hacer
         }
-        return frm;
+        return this;
     }
 
     public Forma mostrarResultado() {
