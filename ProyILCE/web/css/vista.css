@@ -1,18 +1,20 @@
 html, body{
 height:100%;width:100%;
 margin:0;padding:0;overflow: hidden;
+font-size:80%;
 }
 
-table { font-size: 1em; }
-.forma {  font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif }
-table.forma {font-size: 1em; width: 90%; margin:5px; font-size:120% }
-h3.searchtitle {font-size: 1.2em; font-weight: bold}
-td.etiqueta_forma {width: 20%; font-size: 1em; margin:5px; }
-div.etiqueta_forma { font-size:12px ; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
-input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%}
-select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%}
-input.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif}
-select.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 92%}
+#search {width: 98%; }
+form.forma {font-size: 1em; width: 100%; margin:5px; }
+table.forma { width: 100%; margin:5px;}
+h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
+td.etiqueta_forma {width: 24.5%; font-size: .80em; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top  }
+div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
+input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
+textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
+select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
+input.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; }
+select.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 90%; }
 
 #header{height:90px;}/* Header */
 
@@ -96,5 +98,17 @@ ui-jqgrid-view {width:100%}
     background: url("cupertino/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png") repeat-x scroll 50% top #F2F5F7 !important;
 }
 
-.ui-state-error { font-size: 0.75em;}
+.ui-state-highlight {
+    background: url("cupertino/images/ui-bg_highlight-soft_25_ffef8f_1x100.png") repeat-x scroll 50% top #FFEF8F;
+    border: 1px solid #F9DD34;
+    color: #363636 !important;
+}
 
+.ui-state-error { font-size: 1em;}
+.cargando { font-family:Verdana, Arial, Helvetica, sans-serif; font-size: 10px;  }
+.ui-jqgrid-btable, .ui-jqgrid-labels { font-size: 11px }
+input.formButton { font-size: 80%; font-style: normal; font-family:Verdana, Arial, Helvetica, sans-serif !important  }
+.obigatorio {}
+.fecha {}
+.errorencampo {border: 1px solid #FF6600; }
+td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
