@@ -9,9 +9,10 @@
             titulo:"",
             aplicacion:"",
             forma:"",
-            xmlUrl : "xml_tests/forma.app.xml?forma=",
+            pk:"",
+            xmlUrl : "srvForma",
             columnas: 2,
-            modo:"edicion"
+            modo:""
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -29,7 +30,7 @@
     $.fn.form.ajax = function(obj){
         $.ajax(
         {
-            url: $.fn.form.options.xmlUrl,
+            url: $.fn.form.options.xmlUrl + "?clave_forma=" + $.fn.form.options.forma + "&pk=" + $.fn.form.options.pk,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -90,11 +91,21 @@
                         var sData="";
                         var oCampos = oForm.serializeArray();
                         jQuery.each(oCampos, function(i, oCampo){
-                            sData+=oCampo.name.split("_")[0]+"="+oCampo.value;
+                            sData+=oCampo.name.split("_")[0]+"="+oCampo.value + "&";
                         });
 
+                        //Crea el control para manipular los tabs
                         var $tabs = $('#tabs').tabs();
+                        //Elimina el tab de la entidad que se caba de ingresar
                         $tabs.tabs( "remove", $tabs.tabs('option', 'selected') );
+                        //
+                        /*sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
+                        $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
+                        $tabs.tabs( "select", "#tabEditEntity"+id);
+                        $("#tabEditEntity"+id).apptab({
+                            entidad:id,
+                            app:nAplicacion
+                        });*/
                         return false;
 
                         $.ajax({

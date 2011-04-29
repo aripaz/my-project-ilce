@@ -91,6 +91,7 @@
                                     $("#tab"+this.id).form({
                                                     aplicacion:nAplicacion,
                                                     forma:nEntidad,
+                                                    pk:0,
                                                     modo:"inserta_entidad",
                                                     titulo: sTitulo
                                      });
@@ -131,10 +132,12 @@
                                               }
                                               else {
                                                     sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
+                                                    sEntidad=this.id.split("_")[2];
                                                     $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
                                                     $tabs.tabs( "select", "#tabEditEntity"+id);
                                                     $("#tabEditEntity"+id).apptab({
-                                                        entidad:id,
+                                                        entidad:sEntidad,
+                                                        pk:id,
                                                         app:nAplicacion
                                                     });
 
