@@ -51,7 +51,7 @@
 
                 //Crea el control tab aqui, puesto que desde este control se va a manipular
                 var $tabs = $('#tabs').tabs({
-                    tabTemplate: "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+                    tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
                     });
 
                 $( "#tabs span.ui-icon-close" ).live( "click", function() {
@@ -92,7 +92,7 @@
                                                     aplicacion:nAplicacion,
                                                     forma:nEntidad,
                                                     pk:0,
-                                                    modo:"inserta_entidad",
+                                                    modo:"insert",
                                                     titulo: sTitulo
                                      });
                                 }
@@ -125,6 +125,7 @@
                                           sortname:  oSortName,
                                           viewrecords: true,
                                           sortorder: "desc",
+                                          caption:sTitulo,
                                           ondblClickRow: function(id){
                                               //Verifica si ya está abierto el tab en modo de edición
                                               if ($("#tabEditEntity"+id).length) {
@@ -142,8 +143,8 @@
                                                     });
 
                                               }
-                                            },
-                                            caption:sTitulo}).navGrid('#pager' + this.id,{edit:false,add:false,del:false});
+                                            }
+                                            });
 
                                 }
                             }

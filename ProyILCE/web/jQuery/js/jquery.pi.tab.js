@@ -91,7 +91,7 @@
                         aplicacion: $.fn.apptab.options.app,
                         forma:$.fn.apptab.options.entidad,
                         pk:$.fn.apptab.options.pk,
-                        modo:"edita_entidad",
+                        modo:"update",
                         titulo: "Datos generales"
                 });
 

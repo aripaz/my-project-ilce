@@ -30,7 +30,7 @@
     $.fn.form.ajax = function(obj){
         $.ajax(
         {
-            url: $.fn.form.options.xmlUrl + "?clave_forma=" + $.fn.form.options.forma + "&pk=" + $.fn.form.options.pk,
+            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -46,7 +46,7 @@
                 obj.html($.fn.form.handleForm(xml));
 
                 //Se incorpora funcionalidad a los botones del modo de búsqueda
-                if ($.fn.form.options.modo=="busqueda_avanzada") {
+                if ($.fn.form.options.modo=="lookup") {
                     //Botón para cerrar formulario de búsqueda avanzada
                     $("#closeAdvancedSearch").click(function(){
                         $("#simple_search").slideToggle();
@@ -91,7 +91,12 @@
                         var sData="";
                         var oCampos = oForm.serializeArray();
                         jQuery.each(oCampos, function(i, oCampo){
-                            sData+=oCampo.name.split("_")[0]+"="+oCampo.value + "&";
+                            aNombreCampo=oCampo.name.split("_");
+                            var sNombreCampo="";
+                            for (var i=0; i<=aNombreCampo.length-3; i++)
+                                    sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
+
+                            sData+=sNombreCampo+"="+oCampo.value + "&";
                         });
 
                         //Crea el control para manipular los tabs
@@ -149,7 +154,7 @@
             }
 
             //Verifica si el campo es obligatorio para incluir la leyenda en el alias
-            if ($.fn.form.options.modo!="busqueda_avanzada" && oCampo.find('obligatorio').text()=="1")  {
+            if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
                 sRenglon += ' (<span id="msgvalida_' + oCampo[0].nodeName + sSuffix + '">Obligatorio</span>*)</td>'
             }
             else {
@@ -162,14 +167,14 @@
             if (nFormaForanea!=undefined) {
                 sRenglon+='<td class="etiqueta_forma"><select tabindex="' + tabIndex + '" ';
                 
-                if ($.fn.form.options.modo!="busqueda_avanzada") {
+                if ($.fn.form.options.modo!="lookup") {
                     sRenglon+='class="inputWidgeted'}
                 else {
                     sRenglon+='class="singleInput'}                   
 
                 //Establece seudoclase a select
 
-                if ($.fn.form.options.modo!="busqueda_avanzada" && oCampo.find('obligatorio').text()=="1")  {
+                if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
                     sRenglon+=' obligatorio" '}
                 else {
                     sRenglon+='" '}
@@ -187,7 +192,7 @@
             )
                                 
                 sRenglon +='</select>';
-                if ($.fn.form.options.modo!="busqueda_avanzada") {
+                if ($.fn.form.options.modo!="lookup") {
                     sRenglon +="<img src='img/browse_catalog2.jpg' align='absbottom' onclick='alert(\"Funcionalidad por implementar\");' />";
                 }
                 
@@ -199,7 +204,7 @@
                               '<textarea tabindex="' + tabIndex + '" ';
                     
                     //Establece la marca de obligatorio con la seudoclase obligatorio
-                    if ($.fn.form.options.modo!="busqueda_avanzada" && oCampo.find('obligatorio').text()=="1")  {
+                    if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
                         sRenglon+='class="singleInput obligatorio"'}
                     else {
                         sRenglon+='class="singleInput"'}
@@ -213,7 +218,7 @@
                                 '<input tabindex="' + tabIndex + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
 
                     // Establece la marca de obligatorio con la seudoclase obligatorio
-                    if ($.fn.form.options.modo!="busqueda_avanzada" && oCampo.find('obligatorio').text()=="1")  {
+                    if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
                         sRenglon+='class="singleInput"';}
                     else {
                         sRenglon+='class="singleInput obligatorio"';}
@@ -228,7 +233,7 @@
                                 'tabindex="' + tabIndex + '" ' +
                                 ' class="singleInput';
                     
-                    if ($.fn.form.options.modo!="busqueda_avanzada" && oCampo.find('obligatorio').text()=="1")  
+                    if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio"';
 
                     if (sTipoCampo=="date")
@@ -277,7 +282,7 @@
             if (i==1) {
                 sEncabezado+="<td colspan='2' class='etiqueta_forma'>";
                 sPie+="<td colspan='2' class='etiqueta_forma'>";
-                if ($.fn.form.options.modo=="busqueda_avanzada") {
+                if ($.fn.form.options.modo=="lookup") {
                     sEncabezado+="<h3 class='searchtitle'>B&uacute;squeda avanzada</h3>";}
                 else  {
                     sEncabezado+="<h3 class='searchtitle'>" + $.fn.form.options.titulo + "</h3>";}
@@ -290,10 +295,10 @@
 
 
             if (i==nCols) {
-                if ($.fn.form.options.modo=="busqueda_avanzada") {
-                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='busqueda_avanzada'><button id='advancedSearch'>Buscar</button><button id='closeAdvancedSearch'>Cerrar</button></div>";
+                if ($.fn.form.options.modo=="lookup") {
+                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='lookup'><button id='advancedSearch'>Buscar</button><button id='closeAdvancedSearch'>Cerrar</button></div>";
                 }
-                else if ($.fn.form.options.modo=="inserta_entidad") {
+                else if ($.fn.form.options.modo=="insert") {
                     sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='nuevo_registro'><input type='submit' class='formButton'  value='Guardar' id='btnInsertEntity_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma + "' /></div>";
                 }
                 else {
@@ -311,7 +316,7 @@
         sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
 
         //Llena la primer pestaña con la forma de la entidad principal
-        if ($.fn.form.options.modo=="edita_entidad") {
+        if ($.fn.form.options.modo=="update") {
             sForm="<br><br><form class='forma' id='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "' name='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "'><table class='forma'>" + sForm + "</table></form>"
         } else {
             sForm="<form class='forma' id='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "' name='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "'><table class='forma'>" + sForm + "</table></form>"

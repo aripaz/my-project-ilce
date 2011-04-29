@@ -38,7 +38,7 @@ $(document).ready(function() {
     $("#advanced_search").hide();
     $("#advanced_search").form({
         forma:nUltimaForma,
-        modo:"busqueda_avanzada",
+        modo:"lookup",
         pk:0
     });
 
