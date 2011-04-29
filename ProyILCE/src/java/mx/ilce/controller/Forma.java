@@ -28,16 +28,30 @@ public class Forma extends Entidad{
     private Integer claveFormaPadre;
     private HashMap hsForma;
     private String pk;
+    private String tipoAccion;
+
+
 
     /************** GETTER Y SETTER ***************/
+    public String getTipoAccion() {
+        return tipoAccion;
+    }
+
+    public void setTipoAccion(String tipoAccion) {
+        if (tipoAccion==null){
+            tipoAccion="";
+        }
+        this.tipoAccion = tipoAccion;
+    }
 
     public String getPk() {
         return pk;
     }
 
     public void setPk(String pk) {
-        if (pk==null)
+        if (pk==null){
             pk="0";
+        }
         this.pk = pk;
     }
 
@@ -114,6 +128,7 @@ public class Forma extends Entidad{
     public Forma() {
         this.aliasTab = "";
         this.pk ="0";
+        this.tipoAccion ="";
         this.hsForma = new HashMap();
     }
 
@@ -160,16 +175,18 @@ public class Forma extends Entidad{
     public Forma mostrarForma() {
         try{
             ConSession con = new ConSession();
-            String[] strData = new String[1];
+            String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
             if (this.claveForma !=null){
-                strData[0] = String.valueOf(this.claveForma);
+                strData[0] = String.valueOf(this.getClaveForma());
+                strData[1] = String.valueOf(this.getTipoAccion());
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData(); 
                 if (!dq.isEmpty()){
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    strData = new String[1];
                     strData[0]= this.getPk();
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
                     if (!this.hsForma.isEmpty()){
