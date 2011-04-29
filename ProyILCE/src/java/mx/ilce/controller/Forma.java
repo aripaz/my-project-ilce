@@ -36,6 +36,8 @@ public class Forma extends Entidad{
     }
 
     public void setPk(String pk) {
+        if (pk==null)
+            pk="0";
         this.pk = pk;
     }
 
@@ -111,7 +113,7 @@ public class Forma extends Entidad{
 
     public Forma() {
         this.aliasTab = "";
-        //this.lstFormas = new ArrayList();
+        this.pk ="0";
         this.hsForma = new HashMap();
     }
 
@@ -173,7 +175,8 @@ public class Forma extends Entidad{
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
-                        if ((this.getPk()!=null)&&("0".equals(this.getPk()))){
+                        //if ((this.getPk()!=null)&&("0".equals(this.getPk()))){
+                        if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
                         }else{
                             xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
