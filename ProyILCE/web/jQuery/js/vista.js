@@ -34,11 +34,12 @@ $(document).ready(function() {
     $("#session_menu").sessionmenu();
 
     //Crea el formulario de búsqueda avanzada de la última aplicación abierta
-    nUltimaApp=1;
+    nUltimaForma=2;
     $("#advanced_search").hide();
     $("#advanced_search").form({
-        forma:nUltimaApp,
-        modo:"busqueda_avanzada"
+        forma:nUltimaForma,
+        modo:"busqueda_avanzada",
+        pk:0
     });
 
     //Habilita mecanismo para expandir / colapsar el formulario de búsqueda avanzada

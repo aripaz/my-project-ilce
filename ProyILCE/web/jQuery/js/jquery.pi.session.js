@@ -6,7 +6,7 @@
     $.fn.sessionmenu = function(opc){
 
         $.fn.sessionmenu.settings = {
-            xmlUrl : "/ProyILCE/xml_tests/widget.session.xml", /*"/ProyILCE/resource/jsp/xmlSession.jsp",*/
+            xmlUrl : "/ProyILCE/resource/jsp/xmlSession.jsp",
             empleado:"",
             nombre:"",
             apellido_paterno:"",
@@ -66,7 +66,8 @@
         })
 
         //Construye html de acuerdo a configuración recuperada
-
+        if ($.fn.sessionmenu.options.foto=="")
+            $.fn.sessionmenu.options.foto='img/sin_foto.jpg'
         var sHtml='<table border="0" cellspacing="0" cellpadding="0">'+
                   '<tr>' +
                   '<td valign="top">' +
