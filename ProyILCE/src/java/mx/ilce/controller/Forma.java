@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import mx.ilce.bean.Campo;
+import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
@@ -29,10 +30,18 @@ public class Forma extends Entidad{
     private HashMap hsForma;
     private String pk;
     private String tipoAccion;
-
-
+    private String campoPK;
 
     /************** GETTER Y SETTER ***************/
+
+    public String getCampoPK() {
+        return campoPK;
+    }
+
+    public void setCampoPK(String campoPK) {
+        this.campoPK = campoPK;
+    }
+
     public String getTipoAccion() {
         return tipoAccion;
     }
@@ -115,8 +124,9 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene una forma desde el listado de formas, mediante el ID introducido
-     * como Key
+     * Obtiene, mediante el ID introducido, una forma desde el listado de formas,
+     * que se asociaron cuando se obtuvo el prfil del Usuario.  El resultado es
+     * un listado con los campos de la forma.
      * @param key   ID de la forma a solicitar
      * @return
      */
@@ -142,7 +152,77 @@ public class Forma extends Entidad{
      * @return
      */
     public ExecutionHandler ingresarEntidad(Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ExecutionHandler ex = null;
+        try{
+            List lstData = (List) data;
+
+            HashMap hsForm = (HashMap) lstData.get(0);
+            Forma forma = (Forma) lstData.get(1);
+            Integer claveFormaInsert = forma.getClaveForma();
+
+            List lstForma = forma.getForma(Integer.valueOf(claveFormaInsert));
+            CampoForma cmpF = (CampoForma) lstForma.get(0);
+            String tabla = cmpF.getTabla();
+
+            ConEntidad conE = new ConEntidad();
+            String query = "select * from " + tabla;
+            String[] strData = new String[0];
+            HashCampo hsCmp = conE.getDataByQuery(query, strData);
+            StringBuffer strQuery = new StringBuffer("");
+            StringBuffer strCampos = new StringBuffer("(");
+            StringBuffer strValues = new StringBuffer("(");
+            for (int i=0;i<lstForma.size();i++){
+                CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                String valor = (String) hsForm.get(cmpFL.getCampo());
+                // si es autoIncremental, no se necesita enviar
+                if (!cmpHS.getIsIncrement()){
+                    if (valor!=null){
+                        boolean isString = false;
+                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                            isString = true;
+                        }
+                        strCampos.append(cmpFL.getCampo()).append(",");
+                        if (isString){
+                            strValues.append("'");
+                            strValues.append(valor);
+                            strValues.append("',");
+                        }else{
+                            strValues.append(valor).append(",");
+                        }
+                    }
+                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
+                        //error
+                        System.err.append("Error");
+                    }
+                }
+            }
+            strCampos.delete(strCampos.length()-1 ,strCampos.length());
+            strCampos.append(")");
+            strValues.delete(strValues.length()-1 ,strValues.length());
+            strValues.append(")");
+            strQuery.append("insert into ").append(tabla);
+            strQuery.append(" ").append(strCampos);
+            strQuery.append(" values ");
+            strQuery.append(strValues);
+            strQuery.append("");
+            
+            conE.setQuery(strQuery.toString());
+            conE.setCampoForma(cmpF);
+            conE.ingresaEntidad();
+
+            HashCampo hs = conE.getHashCampo();
+            Integer intHs = (Integer) hs.getObjData();
+            ex = new ExecutionHandler();
+            if (intHs.equals(1)){
+                ex.setExecutionOK(true);
+            }else{
+                ex.setExecutionOK(false);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return ex;
     }
 
     /**
@@ -153,7 +233,76 @@ public class Forma extends Entidad{
      * @return
      */
     public ExecutionHandler editarEntidad(Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ExecutionHandler ex = null;
+        try{
+            List lstData = (List) data;
+
+            HashMap hsForm = (HashMap) lstData.get(0);
+            Forma forma = (Forma) lstData.get(1);
+
+            String pkInsert = forma.getPk();
+            Integer claveFormaInsert = forma.getClaveForma();
+
+            List lstForma = forma.getForma(Integer.valueOf(claveFormaInsert));
+            CampoForma cmpF = (CampoForma) lstForma.get(0);
+            String tabla = cmpF.getTabla();
+
+            ConEntidad conE = new ConEntidad();
+            String query = "select * from " + tabla;
+            String[] strData = new String[0];
+            HashCampo hsCmp = conE.getDataByQuery(query, strData);
+            StringBuffer strQuery = new StringBuffer("");
+            strQuery.append("update ").append(tabla).append(" set ");
+            String strCampoPK = "";
+            for (int i=0;i<lstForma.size();i++){
+                CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                String valor = (String) hsForm.get(cmpFL.getCampo());
+                // si es autoIncremental, no se necesita enviar
+                if (!cmpHS.getIsIncrement()){
+                    if (valor!=null){
+                        boolean isString = false;
+                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                            isString = true;
+                        }
+                        strQuery.append(cmpFL.getCampo()).append("=");
+                        if (isString){
+                            strQuery.append("'");
+                            strQuery.append(valor);
+                            strQuery.append("',");
+                        }else{
+                            strQuery.append(valor).append(",");
+                        }
+                    }
+                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
+                        //error
+                        System.err.append("Error");
+                    }
+                }else{
+                    strCampoPK = cmpFL.getCampo();
+                }
+            }
+            strQuery.delete(strQuery.length()-1,strQuery.length());
+            strQuery.append(" where ").append(strCampoPK);
+            strQuery.append(" = ").append(pkInsert);
+            strQuery.append("");
+
+            conE.setQuery(strQuery.toString());
+            conE.setCampoForma(cmpF);
+            conE.editarEntidad();
+
+            HashCampo hs = conE.getHashCampo();
+            Integer intHs = (Integer) hs.getObjData();
+            ex = new ExecutionHandler();
+            if (intHs.equals(1)){
+                ex.setExecutionOK(true);
+            }else{
+                ex.setExecutionOK(false);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return ex;
     }
 
     /**
@@ -164,7 +313,75 @@ public class Forma extends Entidad{
      * @return
      */
     public ExecutionHandler eliminarEntidad(Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ExecutionHandler ex = null;
+        try{
+            List lstData = (List) data;
+
+            HashMap hsForm = (HashMap) lstData.get(0);
+            Forma forma = (Forma) lstData.get(1);
+
+            String pkInsert = forma.getPk();
+            Integer claveFormaInsert = forma.getClaveForma();
+
+            List lstForma = forma.getForma(Integer.valueOf(claveFormaInsert));
+            CampoForma cmpF = (CampoForma) lstForma.get(0);
+            String tabla = cmpF.getTabla();
+
+            ConEntidad conE = new ConEntidad();
+            String query = "select * from " + tabla;
+            String[] strData = new String[0];
+            HashCampo hsCmp = conE.getDataByQuery(query, strData);
+            StringBuffer strQuery = new StringBuffer("");
+            strQuery.append("delete from ").append(tabla).append(" where ");
+            String strCampoPK = "";
+            for (int i=0;i<lstForma.size();i++){
+                CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                String valor = (String) hsForm.get(cmpFL.getCampo());
+                // si es autoIncremental, no se necesita enviar
+                if (!cmpHS.getIsIncrement()){
+                    if ((valor!=null)&&(!"".equals(valor))){
+                        boolean isString = false;
+                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                            isString = true;
+                        }
+                        strQuery.append(cmpFL.getCampo()).append("=");
+                        if (isString){
+                            strQuery.append("'");
+                            strQuery.append(valor);
+                            strQuery.append("' AND ");
+                        }else{
+                            strQuery.append(valor).append(" AND ");
+                        }
+                    }
+                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
+                        //error
+                        System.err.append("Error");
+                    }
+                }else{
+                    strCampoPK = cmpFL.getCampo();
+                }
+            }
+            strQuery.append(strCampoPK);
+            strQuery.append(" = ").append(pkInsert);
+            strQuery.append("");
+
+            conE.setQuery(strQuery.toString());
+            conE.setCampoForma(cmpF);
+            conE.eliminaEntidad();
+
+            HashCampo hs = conE.getHashCampo();
+            Integer intHs = (Integer) hs.getObjData();
+            ex = new ExecutionHandler();
+            if (intHs.equals(1)){
+                ex.setExecutionOK(true);
+            }else{
+                ex.setExecutionOK(false);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return ex;
     }
 
     /**
@@ -182,7 +399,7 @@ public class Forma extends Entidad{
                 strData[1] = String.valueOf(this.getTipoAccion());
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
-                HashMap dq = hsCmpQ.getListData(); 
+                HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
@@ -192,7 +409,6 @@ public class Forma extends Entidad{
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
-                        //if ((this.getPk()!=null)&&("0".equals(this.getPk()))){
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
                         }else{
@@ -204,7 +420,6 @@ public class Forma extends Entidad{
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             e.printStackTrace();
-            //throw new UnsupportedOperationException("Not supported yet.");
         }finally{
             //colocar instrucciones que siempre se deben hacer
         }
@@ -310,7 +525,7 @@ public class Forma extends Entidad{
      * deben obtener a travez del Perfil
      * @return
      */
-    public Integer getIdFormaByIdAplic(Integer idAplication, List lstAplications){
+    private Integer getIdFormaByIdAplic(Integer idAplication, List lstAplications){
         Integer idForma=Integer.valueOf(0);
 
         if ((lstAplications!=null)&&(!lstAplications.isEmpty())){
