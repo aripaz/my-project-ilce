@@ -10,8 +10,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,6 +62,16 @@ public class AdminFile {
      * Query para obtener la query en base a la forma
      */
     public static String FORMAQUERY = "FORMAQUERY";
+
+    /**
+     * Numero con el tamaño maximo de un archivo en Bytes
+     */
+    public static String MAXSIZEFILE = "MAXSIZEFILE";
+
+    /**
+     * Ruta del server para depositar los archivos enviados por usuarios
+     */
+    public static String FILESERVER = "FILESERVER";
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
      * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la
@@ -94,6 +109,11 @@ public class AdminFile {
 	return prop;
     }
 
+    /**
+     * Lee el archivo de properties que contiene los ID de query configurados
+     * @return
+     * @throws Exception
+     */
     public static Properties leerIdQuery() throws Exception{
         Properties prop = new Properties();
 	InputStream is = null;
@@ -144,6 +164,13 @@ public class AdminFile {
         return sld;
     }
 
+    /**
+     * Entrega el id de la query que le corresponde segun el archivo de
+     * configuracion.
+     * @param prop
+     * @param key
+     * @return
+     */
     public Integer getIdQuery(Properties prop, String key){
         Integer sld = Integer.valueOf(0);
         String str = "";
@@ -157,5 +184,40 @@ public class AdminFile {
             e.printStackTrace();
 	}
         return sld;
+    }
+
+    /**
+     * Borra un archivo desde el servidor. Antes de borrar el archivo, se valida
+     * que la ruta que se entrega corresponda con el de la configuracion, destinada
+     * a los archivos enviados por el usuario
+     * @param hsFile
+     * @return
+     */
+    public static boolean deleFileFromServer(HashMap hsFile){
+        boolean isOK = false;
+        try {
+            if (hsFile!=null){
+                if (!hsFile.isEmpty()){
+                    Properties prop = AdminFile.leerConfig();
+                    AdminFile adm = new AdminFile();
+                    String FileServerPath = adm.getKey(prop, AdminFile.FILESERVER);
+                    Collection col = hsFile.values();
+                    Iterator it = col.iterator();
+                    while (it.hasNext()){
+                        String str = (String) it.next();
+                        int len = FileServerPath.length();
+                        String strSub = str.substring(0, len);
+                        if (FileServerPath.equals(strSub)){
+                            File file = new File(str);
+                            file.delete();
+                        }
+                    }
+                    isOK=true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isOK;
     }
 }
