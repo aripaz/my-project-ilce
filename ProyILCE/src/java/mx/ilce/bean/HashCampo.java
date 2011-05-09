@@ -24,11 +24,7 @@ public class HashCampo implements Serializable  {
     private HashMap listCampoByCod;
     private HashMap listCampoByName;
     private HashMap listAlias;
-
     private Object objData;
-
-
-
 
     /**
      * Agregamos un registro (linea) al listado de Data
