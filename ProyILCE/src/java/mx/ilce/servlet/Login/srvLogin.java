@@ -55,24 +55,6 @@ public class srvLogin extends HttpServlet {
                     AdminXML adm = new AdminXML();
                     StringBuffer xmlSession = adm.getSessionXML(user);
                     StringBuffer xmlMenu = adm.getMenuXML(user);
-                    //StringBuffer xmlTab = adm.getTabXML(perfil);
-
-                    /**** FIXME ****/
-                    /* ESTA ES UNA PRUEBA DE DATA HAY QUE DEFINIR CUAL ES LA
-                     PRIMERA CONSULTA */
-                    List lstF = (List)forma.getForma(2);
-                    String[] strData = new String[1];
-                    ConSession con = new ConSession();
-                    HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(10), strData);
-                    StringBuffer xmlGrid = adm.getGridByData(hsCmp,lstF,1,10);
-
-                    hsCmp = con.getDataByIdQuery(Integer.valueOf(13), strData);
-                    StringBuffer xmlForma = adm.getFormaByData(hsCmp, lstF,2);
-                    /** FIN DATA PRUEBA***/
-
-                    //request.getSession().setAttribute("xmlTab", xmlTab);
-                    request.getSession().setAttribute("xmlGrid", xmlGrid);
-                    request.getSession().setAttribute("xmlForma", xmlForma);
 
                     request.getSession().setAttribute("xmlSession", xmlSession );
                     request.getSession().setAttribute("xmlMenu",xmlMenu);
