@@ -8,6 +8,18 @@
         <servlet-name>srvForma</servlet-name>
         <servlet-class>mx.ilce.servlet.forma.srvForma</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>srvFormaInsert</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvFormaInsert</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvFormaUpdate</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvFormaUpdate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvFormaDelete</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvFormaDelete</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -16,9 +28,21 @@
         <servlet-name>srvForma</servlet-name>
         <url-pattern>/srvForma</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvFormaInsert</servlet-name>
+        <url-pattern>/srvFormaInsert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvFormaUpdate</servlet-name>
+        <url-pattern>/srvFormaUpdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvFormaDelete</servlet-name>
+        <url-pattern>/srvFormaDelete</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            300
         </session-timeout>
     </session-config>
     <welcome-file-list>
