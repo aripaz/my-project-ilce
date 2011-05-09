@@ -25,6 +25,8 @@ public class Campo implements Serializable {
     private String event;
     private String help;
     private Integer tamano;
+    private boolean isIncrement;
+
 
     /**
      * Constructor de la clase donde se entregan los distintos elementos que
@@ -278,6 +280,26 @@ public class Campo implements Serializable {
     public void setTamano(Integer tamano) {
         this.tamano = tamano;
     }
+
+    /**
+     * Retorna si es Autoincremet el campo. Se debe interpretar TRUE es la clave 
+     * de la tabla, FALSE no es la clave de la tabla
+     * @return
+     */
+    public boolean getIsIncrement() {
+        return isIncrement;
+    }
+
+    /**
+     * Asigna si es Autoincrement el campo. Se debe interpretar TRUE es la clave
+     * de la tabla, FALSE no es la clave de la tabla
+     * @param isIncrement
+     */
+    public void setIsIncrement(boolean isIncrement) {
+        this.isIncrement = isIncrement;
+    }
+
+
 
     @Override
     /**
