@@ -28,7 +28,7 @@ public class ConSession {
 
     public ConSession(){
         try{
-            this.prop = adm.leerIdQuery();
+            this.prop = AdminFile.leerIdQuery();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class ConSession {
 
     public Integer getIdQuery(String key) throws Exception{
         if (prop == null){
-            prop = adm.leerIdQuery();
+            prop = AdminFile.leerIdQuery();
         }
         return adm.getIdQuery(prop,key);
     }
@@ -60,15 +60,13 @@ public class ConSession {
 
             ConQuery connQ = new ConQuery();
             //validamos user y password
-            //HashCampo hsCmp = connQ.getData(4, strData);
-            HashCampo hsCmp = connQ.getData(getIdQuery(adm.LOGIN), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=user;
                 //validamos que es problema de la password
-                //HashCampo hsCmpUsr = connQ.getData(5, datUser );
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(adm.USER), datUser );
+                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser );
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -110,15 +108,13 @@ public class ConSession {
 
             ConQuery connQ = new ConQuery();
             //validamos user y password
-            //HashCampo hsCmp = connQ.getData(4, strData);
-            HashCampo hsCmp = connQ.getData(getIdQuery(adm.LOGIN), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=usuario.getNombre();
                 //validamos que es problema de la password
-                //HashCampo hsCmpUsr = connQ.getData(5, datUser );
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(adm.USER), datUser );
+                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser );
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -157,8 +153,7 @@ public class ConSession {
             strData[0] = String.valueOf(user.getClavePerfil());
 
             ConQuery connQ = new ConQuery();
-            //HashCampo hsCmp = connQ.getData(8, strData);
-            HashCampo hsCmp = connQ.getData(getIdQuery(adm.PERFIL), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData);
 
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
@@ -199,8 +194,7 @@ public class ConSession {
                     strData[1]= String.valueOf(apl.getClaveFormaPrincipal());
                     strData[2]= String.valueOf(apl.getClaveAplicacion());
                     strData[3]= String.valueOf(apl.getClaveFormaPrincipal());
-                    //hsCmpAux = connQ.getData(9, strData);
-                    hsCmpAux = connQ.getData(getIdQuery(adm.TABFORMA), strData);
+                    hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData);
                     if ((hsCmp.getLengthCampo()==0)&&(hsCmpAux!=null)) {
                         hsCmp.setListCampos(hsCmpAux.getListCampos());
                     }
@@ -230,10 +224,8 @@ public class ConSession {
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
             strData[0] = usuario.getClaveEmpleado().toString();
-            //hsCmp = connQ.getData(6, strData);
-            hsCmp = connQ.getData(getIdQuery(adm.XMLSESSION), strData);
+            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData);
             hsCmp.setObjData(usuario);
-
         }catch(Exception ex){
             ex.printStackTrace();
             usuario.setIsLogged(false);
@@ -258,10 +250,8 @@ public class ConSession {
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
             strData[0] = usuario.getClavePerfil().toString();
-            //hsCmp = connQ.getData(7, strData);
-            hsCmp = connQ.getData(getIdQuery(adm.XMLMENU), strData);
+            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData);
             hsCmp.setObjData(usuario);
-
         }catch(Exception ex){
             ex.printStackTrace();
             usuario.setIsLogged(false);
@@ -284,7 +274,6 @@ public class ConSession {
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getData(IdQuery, strData);
-
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
