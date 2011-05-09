@@ -20,6 +20,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
+import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 
@@ -44,23 +45,26 @@ class ConQuery {
         StringBuffer strConexion = new StringBuffer("");
         try {
             AdminFile admFile = new AdminFile();
-            Properties prop = admFile.leerConfig();
+            Properties prop = AdminFile.leerConfig();
 
-            String server = admFile.getKey(prop,"SERVER"); //"172.16.1.28";
-            String base = admFile.getKey(prop,"BASE"); //"ILCE_frmwrk";
+            String server = admFile.getKey(prop,"SERVER"); 
+            String base = admFile.getKey(prop,"BASE"); 
             String port = admFile.getKey(prop,"PORT");
             String user = admFile.getKey(prop,"USR");
             String psw = admFile.getKey(prop,"PSW");
 
             strConexion.append("jdbc:sqlserver://");
             strConexion.append(server);
-            strConexion.append(":"+port);
+            strConexion.append(":").append(port);
             strConexion.append(";databasename=");
             strConexion.append(base);
             strConexion.append(";selectMethod=cursor;");
 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection(strConexion.toString(),user,psw);//"javaws","ikaro75");
+            this.conn = DriverManager.getConnection(strConexion.toString(),user,psw);
+            if (this.conn.isClosed()){
+                System.out.println("NO HAY CONEXION");
+            }
         }catch (SQLException sqlex){
             Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, sqlex);
         } catch (ClassNotFoundException ex) {
@@ -68,6 +72,166 @@ class ConQuery {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Metodo que ejecuta una query de insercion, tras efectuarla, se obtiene el
+     * ID o clave de los datos insertados, el cual es retornado en el atributo
+     * Object del HashCampo. En caso que no se ejecute la operacion el numero
+     * retornado es -1, en Caso que sea una tabla sin ID o clave, el valor
+     * retornado es 0.
+     * @param campoForma    Variable con datos para validacion
+     * @param arrData       Query a ejecutar
+     * @return
+     * @throws SQLException
+     */
+    public HashCampo executeInsert(CampoForma campoForma, String arrData) throws SQLException{
+        HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        ResultSet rs = null;
+        try{
+            Integer increment =Integer.valueOf(-1);
+            if (validateInsert(campoForma.getTabla(), arrData)){
+                getConexion();
+                st = this.conn.createStatement();
+                int res = st.executeUpdate(arrData, Statement.RETURN_GENERATED_KEYS);
+                rs = st.getGeneratedKeys();
+                if (res!=0){
+                    ResultSetMetaData rsmd = rs.getMetaData();
+                    int columnCount = rsmd.getColumnCount();
+                    if (rs.next()) {
+                        do {
+                            for (int i=1; i<=columnCount; i++) {
+                                String key = rs.getString(i);
+                                increment = Integer.valueOf(key);
+                            }
+                        } while(rs.next());
+                    }
+                }
+            }
+            hsCmp.setObjData(increment);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            if (rs!=null){
+                rs.close();
+            }
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
+        }
+        return hsCmp;
+    }
+
+    /**
+     * Metodo para validar que se esta ejecutando una instruccion insert, en la
+     * tabla que corresponde, con la query entregada
+     * @param tabla     Nombre de la tabla
+     * @param query     Query a validar
+     * @return
+     */
+    private boolean validateInsert(String tabla, String query){
+        boolean queryOK = true;
+        String str = "insert into " + tabla;
+        if ((!query.toUpperCase().contains(str.toUpperCase())) &&
+                (!query.toUpperCase().contains("VALUES"))){
+            queryOK = false;
+        }
+        return queryOK;
+    }
+
+    /**
+     * Metodo que efectua una query de actualizacion de datos, tras su ejecucion 
+     * entrega un numero 1, que efectuo correctamente la operacion, cero en caso 
+     * contrario. El valor es retornado en el atributo Object del HashCampo
+     * @param campoForma    Variable con datos para validacion
+     * @param arrData       Query a ejecutar
+     * @return
+     * @throws SQLException
+     */
+    public HashCampo executeUpdate(CampoForma campoForma, String arrData) throws SQLException{
+        HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        try{
+            Integer increment =Integer.valueOf(-1);
+            if (validateUpdate(campoForma.getTabla(), arrData)){
+                getConexion();
+                st = this.conn.createStatement();
+                increment = st.executeUpdate(arrData);
+            }
+            hsCmp.setObjData(increment);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
+        }
+        return hsCmp;
+    }
+
+    /**
+     * Metodo para validar que se esta ejecutando una instruccion update, en la
+     * tabla que corresponde, con la query entregada
+     * @param tabla     Nombre de la tabla
+     * @param query     Query a validar
+     * @return
+     */
+    private boolean validateUpdate(String tabla, String query){
+        boolean queryOK = true;
+        String str = "update " + tabla;
+        if ((!query.toUpperCase().contains(str.toUpperCase())) &&
+                (!query.toUpperCase().contains("WHERE"))){
+            queryOK = false;
+        }
+        return queryOK;
+    }
+
+    public HashCampo executeDelete(CampoForma campoForma, String arrData) throws SQLException{
+        HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        try{
+            Integer increment =Integer.valueOf(-1);
+            if (validateDelete(campoForma.getTabla(), arrData)){
+                getConexion();
+                st = this.conn.createStatement();
+                increment = st.executeUpdate(arrData);
+            }
+            hsCmp.setObjData(increment);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
+        }
+        return hsCmp;
+    }
+
+    /**
+     * Metodo para validar que se esta ejecutando una instruccion Delete, en la
+     * tabla que corresponde, con la query entregada
+     * @param tabla     Nombre de la tabla
+     * @param query     Query a validar
+     * @return
+     */
+    private boolean validateDelete(String tabla, String query){
+        boolean queryOK = true;
+        String str = "delete from " + tabla;
+        if ((!query.toUpperCase().contains(str.toUpperCase())) &&
+                (!query.toUpperCase().contains("WHERE"))){
+            queryOK = false;
+        }
+        return queryOK;
     }
 
     /**
@@ -85,18 +249,20 @@ class ConQuery {
      */
     public HashCampo getData(Integer idQuery, String[] arrData) throws SQLException{
         HashCampo hsCmp = new HashCampo();
+        Statement ps = null;
+        ResultSet rs = null;
         try{
             getConexion();
             String query = getQueryById(idQuery);
             if ((!"".equals(query)) && (arrData != null)){
-                Statement ps = conn.createStatement();
+                ps =this.conn.createStatement();
                 for(int i=1;i<=arrData.length;i++){
                     String strData = arrData[i-1];
                     if (strData != null){
                         query = query.replaceFirst("%"+i, strData);
                     }
                 }
-                ResultSet rs = ps.executeQuery(query);
+                rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
@@ -129,7 +295,13 @@ class ConQuery {
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
-            conn.close();
+            if (rs!=null){
+                rs.close();
+            }
+            if (ps!=null){
+                ps.close();
+            }
+            this.conn.close();
         }
         return hsCmp;
     }
@@ -138,19 +310,21 @@ class ConQuery {
      /**
      * Obtiene la data aplicando la query seleccionada mediante el idQuery.
      * Esta query no posee parametros de entrada.
-     * @param idQuery   Codigo de la query a utilizar
-     * @return HashCampo.  Contiene el listado de registros obtenidos y los campos
-     * que posee la query, con sus tipos de datos
+     * @param idQuery       Codigo de la query a utilizar
+     * @return HashCampo    Contiene el listado de registros obtenidos y los
+     * campos que posee la query, con sus tipos de datos
      * @throws SQLException
      */
     public HashCampo getData(Integer idQuery) throws SQLException{
         HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        ResultSet rs = null;
         try{
             getConexion();
             String query = getQueryById(idQuery);
             if (!"".equals(query)){
-                Statement ps = conn.createStatement();
-                ResultSet rs = ps.executeQuery(query);
+                st = this.conn.createStatement();
+                rs = st.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
@@ -183,9 +357,52 @@ class ConQuery {
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
-            conn.close();
+            if (rs!=null){
+                rs.close();
+            }
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
         }
         return hsCmp;
+    }
+
+    /**
+     * Obtiene el nombre del campo PK de una tabla
+     * @param tabla     Nombre de la tabla que se desea analizar
+     * @return
+     */
+    public String getCampoPK(String tabla) throws SQLException{
+        String str ="";
+        Statement st = null;
+        ResultSet rs = null;
+        try{
+            getConexion();
+            String query = "select * from " + tabla;
+            st = this.conn.createStatement();
+            rs = st.executeQuery(query);
+            ResultSetMetaData rstm = rs.getMetaData();
+
+            for (int i=1;i<=rstm.getColumnCount();i++){
+                if (rstm.isAutoIncrement(i)){
+                    str = rstm.getColumnName(i);
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            if (rs!=null){
+                rs.close();
+            }
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
+        }
+        return str;
     }
 
     /**
@@ -223,18 +440,20 @@ class ConQuery {
      */
     public HashCampo getDataByQuery(String query, String[] arrData) throws SQLException{
         HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        ResultSet rs = null;
         try{
             getConexion();
             if (allowedQuery(query)){
                 if ((!"".equals(query)) && (arrData != null)){
-                    Statement ps = conn.createStatement();
+                    st = this.conn.createStatement();
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){
                             query = query.replaceFirst("%"+i, strData);
                         }
                     }
-                    ResultSet rs = ps.executeQuery(query);
+                    rs = st.executeQuery(query);
                     ResultSetMetaData rstm = rs.getMetaData();
 
                     for (int i=1;i<=rstm.getColumnCount();i++){
@@ -242,6 +461,9 @@ class ConQuery {
                                               Integer.valueOf(i),
                                               rstm.getColumnTypeName(i));
                         cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
+                        if (rstm.isAutoIncrement(i)){
+                            cmp.setIsIncrement(true);
+                        }
                         hsCmp.addCampo(cmp);
                     }
                     int i=0;
@@ -268,7 +490,13 @@ class ConQuery {
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
-            conn.close();
+            if (rs!=null){
+                rs.close();
+            }
+            if (st!=null){
+                st.close();
+            }
+            this.conn.close();
         }
         return hsCmp;
     }
@@ -284,11 +512,13 @@ class ConQuery {
      */
     private HashCampo getDataParam(Integer idQuery, String[][] arrData) throws SQLException{
         HashCampo hsCmp = new HashCampo();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try{
             getConexion();
             String query = getQueryById(idQuery);
             if (!"".equals(query)){
-                PreparedStatement ps = conn.prepareStatement(query);
+                ps = this.conn.prepareStatement(query);
                 for(int i=1;i<=arrData.length;i++){
                     String strTipo = arrData[i-1][0];
                     String strData = arrData[i-1][1];
@@ -300,7 +530,7 @@ class ConQuery {
                         ps.setBigDecimal(i,new BigDecimal(strData));
                     }
                 }
-                ResultSet rs = ps.executeQuery();
+                rs = ps.executeQuery();
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
@@ -332,7 +562,13 @@ class ConQuery {
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
-            conn.close();
+            if (rs!=null){
+                rs.close();
+            }
+            if (ps!=null){
+                ps.close();
+            }
+            this.conn.close();
         }
         return hsCmp;
     }
@@ -343,21 +579,32 @@ class ConQuery {
      * @param idQuery
      * @return
      */
-    private String getQueryById(Integer idQuery){
+    private String getQueryById(Integer idQuery) throws SQLException{
         String strSld = "";
+        Statement st = null;
+        ResultSet rs = null;
         try{
-            if (conn == null){
+            if (this.conn == null){
                 getConexion();
             }
-            String query = "select consulta from consulta_forma "
-                    + " where clave_consulta = " + idQuery.toString();
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            StringBuffer query = new StringBuffer();
+            query.append("select consulta from consulta_forma ");
+            query.append("where clave_consulta = ").append(idQuery.toString());
+            st = this.conn.createStatement();
+            rs = st.executeQuery(query.toString());
             if (rs.next()){
-                strSld = rs.getString(1);
+                strSld =  rs.getString(1);
             }
         }catch(Exception e){
             e.printStackTrace();
+        }finally{
+            if (rs!=null){
+                rs.close();
+            }
+            if (st!=null){
+                st.close();
+            }
+            //Conn no se debe cerrar ya que es llamada privada
         }
         return strSld;
     }
