@@ -23,10 +23,13 @@ public class ConEntidad {
 
     private Properties prop = null;
     private AdminFile adm = new AdminFile();
+    private String query = "";
+    private HashCampo hashCampo = new HashCampo();
+    private CampoForma campoForma = new CampoForma();
 
     public ConEntidad(){
         try{
-            this.prop = adm.leerIdQuery();
+            this.prop = AdminFile.leerIdQuery();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -34,22 +37,28 @@ public class ConEntidad {
 
     public Integer getIdQuery(String key) throws Exception{
         if (prop == null){
-            prop = adm.leerIdQuery();
+            prop = AdminFile.leerIdQuery();
         }
         return adm.getIdQuery(prop,key);
     }
 
 
-    public void ingresaEntidad(){
-
+    public void ingresaEntidad() throws Exception{
+        ConQuery con = new ConQuery();
+        HashCampo hs = con.executeInsert(this.campoForma,this.query);
+        this.hashCampo = hs;
     }
 
-    public void eliminaEntidad(){
-
+    public void eliminaEntidad() throws Exception{
+        ConQuery con = new ConQuery();
+        HashCampo hs = con.executeDelete(this.campoForma,this.query);
+        this.hashCampo = hs;
     }
 
-    public void actualizaEntidad(){
-
+    public void editarEntidad() throws Exception{
+        ConQuery con = new ConQuery();
+        HashCampo hs = con.executeUpdate(this.campoForma,this.query);
+        this.hashCampo = hs;
     }
 
     public void obtieneEntidad(){
@@ -80,10 +89,8 @@ public class ConEntidad {
     public List getListFormaByIdAndCampos(String[] strData){
         List lstSld=null;
         try{
-
             ConQuery connQ = new ConQuery();
-            //HashCampo hsCmp = connQ.getData(11, strData);
-            HashCampo hsCmp = connQ.getData(getIdQuery(adm.FORMACAMPOS), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
@@ -107,8 +114,7 @@ public class ConEntidad {
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
-            //HashCampo hsCmp = connQ.getData(12, strData);
-            HashCampo hsCmp = connQ.getData(getIdQuery(adm.FORMA), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
@@ -139,4 +145,43 @@ public class ConEntidad {
         }
         return hsCmp;
     }
+
+    public String getCampoPK(String tabla){
+        String campo = "";
+        ConQuery con = new ConQuery();
+        try{
+            campo = con.getCampoPK(tabla);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return campo;
+    }
+
+
+/********************* GETTER AND SETTER ******************/
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public HashCampo getHashCampo() {
+        return hashCampo;
+    }
+
+    public void setHashCampo(HashCampo hashCampo) {
+        this.hashCampo = hashCampo;
+    }
+
+    public CampoForma getCampoForma() {
+        return campoForma;
+    }
+
+    public void setCampoForma(CampoForma campoForma) {
+        this.campoForma = campoForma;
+    }
+
 }
