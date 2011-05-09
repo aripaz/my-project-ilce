@@ -11,11 +11,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Forma;
-
+ 
 /**
- *
- * @author vaio
+ * Servlet implementado para permitir la recuperacion y manejo de las formas
+ * segun el perfil del usuario, existente en memoria.
+ * @author ccatrilef
  */
 public class srvForma extends HttpServlet {
 
@@ -31,20 +33,13 @@ public class srvForma extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String claveForma = (String) request.getParameter("$cf");
-            String pk = (String) request.getParameter("$pk");
-            String tipoAccion = (String) request.getParameter("$ta");
-            if (claveForma==null){
-                claveForma = (String) request.getSession().getAttribute("$cf");
-            }
-            if (pk==null){
-                pk = (String) request.getSession().getAttribute("$pk");
-            }
-            if (tipoAccion==null){
-                tipoAccion = (String) request.getSession().getAttribute("$ta");
-            }
-            Forma forma = (Forma) request.getSession().getAttribute("forma");
+            AdminForm admForm = new AdminForm();
 
+            String claveForma = admForm.getStringRequest("$cf",request);
+            String pk = admForm.getStringRequest("$pk",request);
+            String tipoAccion = admForm.getStringRequest("$ta",request);
+
+            Forma forma = (Forma) request.getSession().getAttribute("forma");
             if (forma !=null){
                 forma.setPk(pk);
                 forma.setClaveForma(Integer.valueOf(claveForma));
