@@ -101,43 +101,11 @@
 
                                     //Crea el formulario de búsqueda avanzada de la aplicacion
                                     oTabPanel=$("#tab"+this.id);
-
-                                    $("#tab"+this.id).appgrid({app: nAplicacion, entidad: nEntidad});
-
-                                    /*
-
-                                    $("#grid" +  this.id).jqGrid(
-                                         {url:"xml_tests/grid.body.xml?entidad=" + this.id.split("_")[1],
-                                          datatype: "xml",
-                                          colNames:oColNames,
-                                          colModel:oColModel,
-                                          rowNum:20,
-                                          autowidth: true,
-                                          rowList:[10,20,30],
-                                          pager: jQuery('#pager' + nEntidad),
-                                          sortname:  oSortName,
-                                          viewrecords: true,
-                                          sortorder: "desc",
-                                          caption:sTitulo,
-                                          ondblClickRow: function(id){
-                                              //Verifica si ya está abierto el tab en modo de edición
-                                              if ($("#tabEditEntity"+id).length) {
-                                                   $tabs.tabs( "select", "#tabEditEntity"+id);
-                                              }
-                                              else {
-                                                    sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
-                                                    sEntidad=this.id.split("_")[2];
-                                                    $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
-                                                    $tabs.tabs( "select", "#tabEditEntity"+id);
-                                                    $("#tabEditEntity"+id).apptab({
-                                                        entidad:sEntidad,
-                                                        pk:id,
-                                                        app:nAplicacion
-                                                    });
-
-                                              }
-                                            }
-                                            });*/
+                                    var sLeyendaNuevoRegistro=$.fn.appmenu.options.menu[nAplicacion-1].elementos_menu[0].etiqueta;
+                                    var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
+                                    $("#tab"+this.id).appgrid({app: nAplicacion,
+                                                               entidad: nEntidad,
+                                                               leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro] });
 
                                 }
                             }

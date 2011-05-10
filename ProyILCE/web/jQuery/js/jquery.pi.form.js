@@ -21,6 +21,7 @@
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
             obj = $(this);
+            obj.title=$.fn.form.options.titulo;
             obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
             $.fn.form.ajax(obj);
         });
@@ -310,12 +311,12 @@
         for (i=1; i<=nCols; i++) {
             
             if (i==1) {
-                sEncabezado+="<td colspan='2' class='etiqueta_forma'>";
+                /*sEncabezado+="<td colspan='2' class='etiqueta_forma'>";*/
                 sPie+="<td colspan='2' class='etiqueta_forma'>";
-                if ($.fn.form.options.modo=="lookup") {
+                /*if ($.fn.form.options.modo=="lookup") {
                     sEncabezado+="<h3 class='searchtitle'>B&uacute;squeda avanzada</h3>";}
                 else  {
-                    sEncabezado+="<h3 class='searchtitle'>" + $.fn.form.options.titulo + "</h3>";}
+                    sEncabezado+="<h3 class='searchtitle'>" + $.fn.form.options.titulo + "</h3>";}*/
             }
             else {
                 sEncabezado+="<td>&nbsp;";
@@ -343,7 +344,8 @@
             if (i==1) {i++}
         }
 
-        sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
+        //sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
+        sForm+="<tr>"+sPie+"</tr>" ;
 
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
