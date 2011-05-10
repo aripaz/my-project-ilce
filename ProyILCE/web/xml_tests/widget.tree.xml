@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<item id="app_1" rel="app">
+		<content><name><![CDATA[Back End]]></name></content>
+		<item id="entidad_1" rel="entidades">
+			<content><name><![CDATA[Entidades]]></name></content>
+                        <item id="consulta_1" rel="consultas">
+                                <content><name><![CDATA[Consultas]]></name></content>
+                                <item id="consulta_1_1" rel="consulta">
+                                    <content><name><![CDATA[Consulta 1]]></name></content>
+                                </item>
+                         </item>
+		</item>
+		<item id="perfil_l" rel="perfiles">
+			<content><name><![CDATA[Perfiles de seguridad]]></name></content>
+		</item>
+		<item id="usuario_1" rel="usuarios">
+			<content><name><![CDATA[Usuarios]]></name></content>
+		</item>
+	</item>
+</root>
