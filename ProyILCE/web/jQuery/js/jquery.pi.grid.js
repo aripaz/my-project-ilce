@@ -6,8 +6,9 @@
     $.fn.appgrid = function(opc){
 
         $.fn.appgrid.settings = {
-            xmlUrl : "xml_tests/widget.grid.xml?entidad=",
+            xmlUrl : "srvGrid", // "xml_tests/widget.grid.xml"
             titulo:"",
+            leyendas:[],
             app:"",
             entidad:"",
             pk:"",
@@ -30,17 +31,10 @@
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
-            $(this).append("<div id='search_" + nApp + "'>" +
-                       "<div id='simple_search_" + nApp + "'>" +
-                       "<input id='txtBusquedaSencilla_" + nApp + "' type='text' class='txtBusquedaSencilla'/>"+
-                       "<input id='btnBusquedaSencilla_" + nApp + "' type='button' class='btnBusquedaSencilla' value='Buscar' />" +
-                       "&nbsp;<a href='#' id='lnkBusqueda_" + nApp + "'>B&uacute;squeda avanzada</a>" +
-                       "</div>" +
-                       "<div id='advanced_search_" + nApp + "'></div>" +
-                       "<div id='gridContainer" + suffix + "'><table width='100%' id='grid" + suffix + "'>" +
+            $(this).append("<div id='gridContainer" + suffix + "'><table width='100%' id='grid" + suffix + "'>" +
                        "</table><div id='pager" + suffix +"'></div></div>");
 
-            $("#advanced_search_" + nApp).hide();
+            /*$("#advanced_search_" + nApp).hide();
             $("#advanced_search_" + nApp).form({
                                      aplicacion: nApp,
                                      forma:nEntidad,
@@ -53,7 +47,7 @@
                     nApp=this.id.split("_")[1];
                     $("#simple_search_"+ nApp).slideToggle();
                     $("#advanced_search_"+ nApp).slideToggle();
-             });
+             });*/
 
              $.fn.appgrid.getGridDefinition();
         });
@@ -63,7 +57,7 @@
     $.fn.appgrid.getGridDefinition = function(obj){
          $.ajax(
             {
-            url: $.fn.appgrid.options.xmlUrl,
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -81,9 +75,11 @@
                 var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
 
                 /* Inicia implementación del grid */
+                var nApp=$.fn.appgrid.options.app;
+                var nEntidad=$.fn.appgrid.options.entidad;
 
                 $("#grid" + suffix).jqGrid(
-                            {url:"xml_tests/widget.grid.xml?entidad=" + $.fn.appgrid.options.entidad,
+                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body",
                             datatype: "xml",
                             colNames:$.fn.appgrid.options.colNames,
                             colModel:$.fn.appgrid.options.colModel,
@@ -126,11 +122,22 @@
                                   }
                             },
                             caption:"Aplicaciones"}).navGrid('#pager' + suffix,
-                                                    {edit:true,add:true,del:false},
-                                                    {},// default settings for edit
-                                                    {},// defautl settings for add
-                                                    {}, // delete instead that del:false we need this
-                                                    {"drag":true,"resize":true,"closeOnEscape":true,closeAfterSearch:true,multipleSearch:true});
+                                                    {edit:false,add:false,del:false,search:false}).navButtonAdd("#pager" + suffix,
+                                                                                                   { caption:"",
+                                                                                                     buttonicon:"ui-icon-plus",
+                                                                                                     onClickButton:function() {
+                                                                                                            $("#dlgRegister").dialog({height:240,width:800,
+                                                                                                                               modal: true,
+                                                                                                                               title: $.fn.appgrid.options.leyendas[0]
+                                                                                                                               }).form({aplicacion: nApp,
+                                                                                                                                                   forma:nEntidad,
+                                                                                                                                                   modo:"insert",
+                                                                                                                                                   titulo: $.fn.appgrid.options.leyendas[0],
+                                                                                                                                                   pk:0});
+                                                                                                        },
+                                                                                                     position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
+                                                                                                        { caption:"", buttonicon:"ui-icon-pencil", onClickButton:null, position: "last", title:"Editar registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
+                                                                                                        { caption:"", buttonicon:"ui-icon-search", onClickButton:null, position: "last", title:"Filtrar", cursor: "pointer"});
 
                 /* Finaliza implementación de grid */
 
