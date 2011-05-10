@@ -23,7 +23,6 @@ import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
-import mx.ilce.handler.ExceptionHandler;
 
 /**
  *  Clase para la implementacion de los metodos que se conectan a la Base de
