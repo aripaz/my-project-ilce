@@ -94,7 +94,7 @@ public class ConSession {
      * login y password, si no corresponde la dupla entregada, se hace una
      * segunda validacion para ver si al menos existe el usuario y solo hubo
      * error en la password
-     * @param usuario
+     * @param usuario   Bean que contiene los datos del usuario
      * @return
      * @throws SQLException
      */
@@ -142,7 +142,7 @@ public class ConSession {
      * el campo clavePerfil como parametro de entrada. Ademas de los datos del
      * perfil, entrega el listado de aplicaciones que le corresponden segun su
      * perfil
-     * @param user
+     * @param user  Bean que contiene los datos del usuario
      * @return
      * @throws SQLException
      */
@@ -174,7 +174,7 @@ public class ConSession {
      * Obtiene los datos para completar el XML de TAB que le corresponden
      * segun Perfil. Desde el perfil se toma el campo lstAplicacion para
      * obtener todos los tab segun los datos aplicacion y forma.
-     * @param perfil
+     * @param perfil    Bean que contiene los datos del perfil
      * @return
      */
     public HashCampo getTabForma(Perfil perfil){
@@ -215,7 +215,7 @@ public class ConSession {
      * Bean User.
      * En ObjectData se coloca un objeto Bean del tipo User, con los datos que
      * se obtuvieron.
-     * @param usuario
+     * @param usuario   Bean que contiene los datos del usuario
      * @return
      */
     public HashCampo getUserXML(User usuario){
@@ -241,7 +241,7 @@ public class ConSession {
      * Bean User.
      * En ObjectData se coloca un objeto Bean del tipo User, con los datos que
      * se obtuvieron.
-     * @param usuario
+     * @param usuario   Bean que contiene los datos del usuario
      * @return
      */
     public HashCampo getMenuXML(User usuario){
@@ -263,9 +263,9 @@ public class ConSession {
 
     /**
      * Entrega un objeto con la data y los campos que resultan de ejecutar la
-     * uery del ID entregado, junto con los parametros resdpectivos
+     * query del ID entregado, junto con los parametros respectivos
      * @param IdQuery   ID de la query que se quiere ejecutar
-     * @param strData[] Arreglo con la data de entrada que se debe usar en la
+     * @param strData   Arreglo con la data de entrada que se debe usar en la
      * Query   
      * @return
      */
