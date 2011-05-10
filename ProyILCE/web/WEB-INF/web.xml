@@ -20,6 +20,10 @@
         <servlet-name>srvFormaDelete</servlet-name>
         <servlet-class>mx.ilce.servlet.forma.srvFormaDelete</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>srvGrid</servlet-name>
+        <servlet-class>mx.ilce.servlet.grid.srvGrid</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>srvFormaDelete</servlet-name>
         <url-pattern>/srvFormaDelete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvGrid</servlet-name>
+        <url-pattern>/srvGrid</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
