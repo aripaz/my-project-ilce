@@ -68,9 +68,9 @@
                         var nEntidad=$.fn.appmenu.options.menu[i].elementos_menu[k].entidad;
                         var nAplicacion=$.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion;
                         if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                            link_id="#newEntity_" + nAplicacion + "_" + nEntidad;}
+                            link_id="#newEntity_" + nAplicacion + "_" + nEntidad; }
                         else {
-                            link_id="#showEntity_" + nAplicacion + "_" + nEntidad;}
+                            link_id="#showEntity_" + nAplicacion + "_" + nEntidad;  }
 
                         $(link_id).click(function() {
                             //Verifica si existe
@@ -99,45 +99,10 @@
                                 else {
                                     $tabs.tabs( "select", "#tab"+this.id);
 
-                                    //Crea el formulario de búsqueda avanzada de la aplicacion
-                                    oTabPanel=$("#tab"+this.id);
+                                    /*$("#tab"+this.id).append('<div id="gridContainer' + this.id + '"><table width="100%" id="grid' + this.id + '">' +
+                                        '</table><div id="pager' + this.id +'"></div></div>');*/
 
                                     $("#tab"+this.id).appgrid({app: nAplicacion, entidad: nEntidad});
-
-                                    /*
-
-                                    $("#grid" +  this.id).jqGrid(
-                                         {url:"xml_tests/grid.body.xml?entidad=" + this.id.split("_")[1],
-                                          datatype: "xml",
-                                          colNames:oColNames,
-                                          colModel:oColModel,
-                                          rowNum:20,
-                                          autowidth: true,
-                                          rowList:[10,20,30],
-                                          pager: jQuery('#pager' + nEntidad),
-                                          sortname:  oSortName,
-                                          viewrecords: true,
-                                          sortorder: "desc",
-                                          caption:sTitulo,
-                                          ondblClickRow: function(id){
-                                              //Verifica si ya está abierto el tab en modo de edición
-                                              if ($("#tabEditEntity"+id).length) {
-                                                   $tabs.tabs( "select", "#tabEditEntity"+id);
-                                              }
-                                              else {
-                                                    sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
-                                                    sEntidad=this.id.split("_")[2];
-                                                    $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
-                                                    $tabs.tabs( "select", "#tabEditEntity"+id);
-                                                    $("#tabEditEntity"+id).apptab({
-                                                        entidad:sEntidad,
-                                                        pk:id,
-                                                        app:nAplicacion
-                                                    });
-
-                                              }
-                                            }
-                                            });*/
 
                                 }
                             }
@@ -183,8 +148,14 @@
 
         //Construye menu de acuerdo a configuración recuperada
         for (i=0;i<$.fn.appmenu.options.menu.length;i++) {
-            sHtml+="<h3><a href='#' >" + $.fn.appmenu.options.menu[i].aplicacion + "</a></h3>" +
-                "<div>";
+            var nApp=$.fn.appmenu.options.menu[i].aplicacion;
+            sHtml+="<h3><a href='#' >" + nApp + "</a></h3>" +
+                   "<div>" +
+                   "<div><input type='text' id='busqueda_" + nApp + "' class='busqueda'>" +
+                   "<input type='button' id='btnBusca" + nApp+ "' value='Buscar' class='busqueda' /></div>" +
+                   "<div ><a href='#' id='lnkBusquedaAvanzada_" + nApp + "'>B&uacute;squeda avanzada</a></div>"+
+                   "<div id='divToolBar_" + nApp +"'>";
+ 
             for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
                 if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
                     tipoliga="newEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
@@ -193,9 +164,9 @@
                     tipoliga="showEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
                 }
 
-                sHtml+="<div><a href='#' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "'>"+$.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";
+                sHtml+="<input type='button' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "' value='" + $.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+ "'>";
             }
-            sHtml+="</div>"
+            sHtml+="</div></div>"
         }
         return sHtml;
     }
