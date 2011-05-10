@@ -176,6 +176,47 @@ public class AdminXML {
     }
 
     /**
+     * Obtiene las columnas de una grilla XML a partir de los datos entregados
+     * @param hsData   Data obtenida desde una query previa, debe contener los
+     * datos y los campos que le corresponden
+     * @param lstCampos Contiene el listado de campos de la forma utilizada, se
+     * utiliza para completar los datos equivalentes que le corresponden a cada
+     * campo de la columna
+     * @return
+     */
+    public StringBuffer getGridColumByData(HashCampo hsData, List lstCampos){
+        StringBuffer str = new StringBuffer();
+
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+        Campo cmp = new Campo();
+        List lstCmp = hsData.getListCampos();
+        HashMap hsDat = hsData.getListData();
+
+        int reg = hsDat.size();
+        str.append("<rows>\n");
+        str.append("<column_definition>\n");
+        for(int i=0; i<lstCmp.size();i++){
+            cmp = (Campo) lstCmp.get(i) ;
+            str.append(("<"+cmp.getNombreDB()+">\n"));
+            if (cmp.getNombreDB()!=null){
+                CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                if (cmpAux!=null){
+                    if (cmpAux.getAliasCampo()!=null){
+                        str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
+                    }
+                    if (cmpAux.getTamano()!=null){
+                        str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
+                    }
+                }
+            }
+            str.append(("</"+cmp.getNombreDB()+">\n"));
+        }
+        str.append("</column_definition>\n");
+        str.append("</rows>");
+        return str;
+    }
+
+    /**
      * Entrega un XML en base a la Forma indicada y con los datos que se le
      * entregan
      * @param hsData    Data entregada
