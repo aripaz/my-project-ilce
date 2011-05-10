@@ -5,7 +5,8 @@ font-size:80%;
 }
 
 #search {width: 98%; }
-form.forma {font-size: 1em; width: 100%; margin:5px; }
+form.forma {font-size: 1em !important; width: 100%; margin:5px; }
+.ui-widget button {font-size: 12px !important; font-family:Verdana, Arial, Helvetica, sans-serif !important }
 table.forma { width: 100%; margin:5px;}
 h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
 td.etiqueta_forma {width: 24.5%; font-size: .80em; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top  }
@@ -83,8 +84,9 @@ color:#FF6600; font-size:12px; font-family:Verdana, Arial, Helvetica, sans-serif
 
 #banner {float:left}
 #session_menu {float:right}
-#txtBusquedaSencilla {width:80%;  }
-#lnkBusqueda { font-size:10px}
+.txtBusquedaSencilla {width:80%; font-family:Verdana, Arial, Helvetica, sans-serif !important; font-size: 12px !important; }
+.btnBusquedaSencilla { font-family:Verdana, Arial, Helvetica, sans-serif !important; font-size: 12px !important; }
+.lnkBusqueda { font-size:10px;  }
 #search {margin:0;padding:5px;}
 
 .accordionHeader { display: table; width: 100%; border-top: 10px solid #FFFFFF;}
@@ -94,21 +96,32 @@ ui-jqgrid-view {width:100%}
 
 .ui-widget-header { border: 1px solid #aed0ea; background: #deedf7 url(images/ui-bg_highlight-soft_100_deedf7_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold !important; }
 
-.ui-widget-content {
+/*.ui-widget-content {
     background: url("cupertino/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png") repeat-x scroll 50% top #F2F5F7 !important;
-}
+}*/
 
 .ui-state-highlight {
     background: url("cupertino/images/ui-bg_highlight-soft_25_ffef8f_1x100.png") repeat-x scroll 50% top #FFEF8F;
     border: 1px solid #F9DD34;
     color: #363636 !important;
 }
-
+.ui-paging-info { font-size: 11px; }
+.ui-pg-table { font-size: 11px; }
 .ui-state-error { font-size: 1em;}
 .cargando { font-family:Verdana, Arial, Helvetica, sans-serif; font-size: 10px;  }
 .ui-jqgrid-btable, .ui-jqgrid-labels { font-size: 11px }
 input.formButton { font-size: 80%; font-style: normal; font-family:Verdana, Arial, Helvetica, sans-serif !important  }
 .obigatorio {}
 .fecha {}
-.errorencampo {border: 1px solid #FF6600; }
+.errorencampo {border: 1px solid #FF6600;  }
+.gridContainer { margin-top: 20px; overflow:auto  }
 td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
+
+.treeContainer {
+    border: 1px solid gray;
+    float: none;
+    height: 600px;
+    overflow: auto;
+    width: 30%;
+    background-color:white;
+}
