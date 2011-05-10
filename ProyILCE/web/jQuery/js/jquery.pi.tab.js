@@ -7,9 +7,12 @@
 
         $.fn.apptab.settings = {
             xmlUrl : "xml_tests/widget.tabs.xml?entidad=",
+            app:"",
             entidad:"",
             pk:"",
-            app:""
+            tabs:[{id:"",
+                  label:"",
+                  grids:[]}]
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -40,54 +43,28 @@
                  else {
                     xml = data;}
                 obj.html($.fn.apptab.handleTab(xml));
-                var $entityTab = $("#tabEntity_" + $.fn.apptab.options.app + "_" + $.fn.apptab.options.entidad).tabs({
+                var suffix = "_" + $.fn.apptab.options.app + "_" + $.fn.apptab.options.entidad + "_" + $.fn.apptab.options.pk;
+                var $entityTab = $("#tabEntity" + suffix).tabs({
                         select: function(event, ui) {
                             /*Aqui se debe carga el grid
                              *Primero se verifica si existe el elemento HTML
                              *Si existe quiere decir que ya está cargado el grid
                              *con sus grids foraneos
                              */
-
-                            if ($("#grid" + ui).length==0) {
-                               $.fn.apptab.getForeignGrids(fn.apptab.options.entidad);
-                                 $("#grid" +  this.id).jqGrid(
-                                 {url:"xml_tests/grid.body.xml?entidad=" + this.id.split("_")[1],
-                                  datatype: "xml",
-                                  /* Parte dinámica */
-                                  colNames:oColNames,
-                                  colModel:oColModel,
-                                  rowNum:20,
-                                  autowidth: true,
-                                  rowList:[10,20,30],
-                                  pager: jQuery('#pager' + nEntidad),
-                                  sortname:  oSortName,
-                                  viewrecords: true,
-                                  sortorder: "desc",
-                                  ondblClickRow: function(id){
-                                      //Verifica si ya está abierto el tab en modo de edición
-                                      if ($("#tabEditEntity"+id).length) {
-                                           $tabs.tabs( "select", "#tabEditEntity"+id);
-                                      }
-                                      else {
-                                            sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
-                                            $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
-                                            $tabs.tabs( "select", "#tabEditEntity"+id);
-                                            $("#tabEditEntity"+id).apptab({
-                                                entidad:id,
-                                                app:nAplicacion
-                                            });
-
-                                      }
-                                    },
-                                    caption:sTitulo}).navGrid('#pager' + this.id,{edit:false,add:false,del:false});
+                            if (ui.index==0) return true;
+                            
+                            var nForeignEntity=ui.tab.hash.split("_")[ui.tab.hash.split("_").length-1];
+                            if ($("#tree_" + $.fn.apptab.options.pk).length==0) {
+                               //$.fn.apptab.getTreeStructure($.fn.apptab.options.app, ui.index);
+                               // Construye grids foraneos
+                               //$.fn.apptab.getForeignGrids(nForeignEntity,ui.index);
                             }
-
-
-                        }}
-                );
+                        }
+                });
 
                 //Inicializa forma de edición en la primera página
-                $("#tabEntity_" + $.fn.apptab.options.app + "_" + $.fn.apptab.options.entidad+"_1").form({
+                firstTab=$entityTab.find(".ui-tabs-panel:first")[0].id;
+                $("#" + firstTab).form({
                         aplicacion: $.fn.apptab.options.app,
                         forma:$.fn.apptab.options.entidad,
                         pk:$.fn.apptab.options.pk,
@@ -103,29 +80,34 @@
     };
 
     $.fn.apptab.handleTab = function(xml){
-
         var sUl='<ul>';
         var sDivs='';
-        i=1;
+        var i=0;
+        suffix=$.fn.apptab.options.app + '_' + $.fn.apptab.options.entidad + "_" + $.fn.apptab.options.pk;
+        oForaneos=$(xml).find("clave_forma");
         $(xml).find("alias_tab").each(function(){
             //Carga los datos del xml en la variable de configuración
-            sUl+='<li><a href="#tabEntity_' + $.fn.apptab.options.app + '_' + $.fn.apptab.options.entidad + '_' + i + '">' + this.childNodes[0].data + '</a></li>';
-            sDivs+='<div id="tabEntity_' + $.fn.apptab.options.app + '_' + $.fn.apptab.options.entidad + '_' + i + '"></div>';
+            tabStructure={id:"tabEntity_"  + suffix + "_" + $(oForaneos[i]).text(),
+                          label:this.childNodes[0].data,
+                          grids:[]};
+            $.fn.apptab.options.tabs[i]=tabStructure;
+            sUl+='<li><a href="#' + tabStructure.id + '">' + tabStructure.label + '</a></li>';
+            sDivs+='<div id="' + tabStructure.id + '"></div>';
             i++;
         });
 
         //Construye html de acuerdo a configuración recuperada
         var sHtml =
-         '<div id="tabEntity_' + $.fn.apptab.options.app + '_' + $.fn.apptab.options.entidad + '">' +
+         '<div id="tabEntity_' + suffix + '">' +
          sUl + sDivs + '</div>';
 
         return sHtml
     }
 
-    $.fn.apptab.getForeignGrids=function (nForm) {
+    $.fn.apptab.getForeignGrids=function (nForm, nTab) {
         $.ajax(
             {
-            url: $.fn.apptab.options.xmlUrl + "?nForm=" + nForm,
+            url: "xml_tests/foreign_grids.xml?entidad=", //$.fn.apptab.options.xmlUrl + "?nForm=" + nForm,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -138,20 +120,112 @@
                 }
                  else {
                     xml = data;}
-               $.fn.apptab.handleForeignGrids(xml);
-            },
-            error:function(xhr,err){
-                alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                alert("responseText: "+xhr.responseText);}
-            });
+
+                var nGrid=0;
+                var suffix=$.fn.apptab.options.app + '_' + $.fn.apptab.options.entidad + "_" + $.fn.apptab.options.pk + "_" + nForm;
+                $(xml).find("clave_forma").each(function() {
+                    sDivGridId=$.fn.apptab.options.app + "_" + $(this).text();
+                    grids={id:"#divForeingGrid2_" + sDivGridId,
+                           app:$.fn.apptab.options.app,
+                           entidad:$(this).text()
+                       };
+
+                   //Guarda el ID del grid en la definición del tab correspondiente
+                   $.fn.apptab.options.tabs[nTab].grids[nGrid]=grids;
+
+                    if (nGrid==0) {
+                        $("#tabEntity_"+suffix).append("<div id='divForeingGrid1_" + sDivGridId + "' name='divForeingGrid1_" + sDivGridId + "' class='gridContainer'>" +
+                                                          "<div id='divForeingGrid2_" + sDivGridId + "' name='divForeingGrid2_" + sDivGridId + "' ></div>" +
+                                                       "</div>");
+                        sElementIdDiv="#divForeingGrid1_" + sDivGridId;
+                        sElementIdGrid="#divForeingGrid2_" + sDivGridId}
+                    else {
+                        //Si es el primero de crea un marco que indique que los otros son registros relacionados
+                        if (nGrid==1) sLeyenda='<h4>Registros relacionados</h4>';
+                        else sLeyenda='';
+
+                        $(sElementIdDiv).append(sLeyenda + "<div id='divForeingGrid1_" + sDivGridId +"' name='divForeingGrid1_" + sDivGridId +"' class='gridContainer'>" +
+                                             "<div id='divForeingGrid2_" + sDivGridId + "' name='divForeingGrid2_" + sDivGridId + "' ></div>" +
+                                             "</div>")
+                        sElementIdGrid="#divForeingGrid2_" + sDivGridId;
+                    }
+
+                    nGrid++;
+                    });
+
+                    $.fn.apptab.initForeingGrids(nTab);
+                    },
+                    error:function(xhr,err){
+                        alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                        alert("responseText: "+xhr.responseText);}
+                    });
     }
     
-    $.fn.apptab.handleForeignGrids=function(xml) {
-        $(xml).find("clave_forma").each(function() {
-            s='<div id="gridContainer' + this.value + '"><table width="100%" id="grid' + this.id + '">' +
-                                        '</table><div id="pager' + this.id +'"></div></div>'
+    $.fn.apptab.initForeingGrids=function(nTab) {
+        oCurrentTab=$.fn.apptab.options.tabs[nTab];
+        for (i=0; i<oCurrentTab.grids.length; i++)
+            $(oCurrentTab.grids[i].id).appgrid({app:$.fn.apptab.options.app,
+                                                entidad: oCurrentTab.grids[i].entidad,
+                                                pk:$.fn.apptab.options.pk});
+    }
+
+    $.fn.apptab.getTreeStructure=function(nApp, nTab) {
+        $("#tv1").jstree({
+            "plugins" : [ "themes", "contextmenu", "xml_data","types" ],
+            "xml_data" : {
+			"ajax" : {
+				"url" : "xml_tests/widget.tree.xml?app=   " + nApp
+                                },
+			"xsl" : "nest"
+                        },
+            "types" : {
+                        "max_depth" : -2,
+                        "max_children" : -2,
+                        "valid_children" : [ "drive" ],
+                        "types" : {
+                                   "app" : {
+                                              "valid_children" : [ "entidad", "perfil","usuario" ],
+                                               "icon" : {
+                                                          "image" : "/static/v.1.0rc2/_demo/root.png"
+                                                        },
+                                            "start_drag" : false,
+                                            "move_node" : false,
+                                            "delete_node" : false,
+                                            "remove" : false
+                                    },                            
+                                   "entidad" : {
+                                                "valid_children" : ["consulta", "entidad"],
+                                                "icon" : {
+                                                           "image" : "/static/v.1.0rc2/_demo/folder.png"
+                                                         }
+                                   },
+                                   "consulta" : {
+                                                "valid_children" : "campo",
+                                                "icon" : {
+                                                            "image" : "/static/v.1.0rc2/_demo/file.png"
+                                                }
+                                    },
+                                   "campo" : {
+                                                "valid_children" : "none",
+                                                "icon" : {
+                                                            "image" : "/static/v.1.0rc2/_demo/file.png"
+                                                }
+                                    },
+                                    "perfil" : {
+                                                "valid_children" : [ "campo", "folder" ],
+                                                "icon" : {
+                                                           "image" : "/static/v.1.0rc2/_demo/folder.png"
+                                                         }
+                                    },
+                                    "usuario" : {
+                                                "valid_children" : [ "campo", "folder" ],
+                                                "icon" : {
+                                                           "image" : "/static/v.1.0rc2/_demo/folder.png"
+                                                         }
+                                    }
+                        }
+                    }
         });
     }
 
 })(jQuery);
-

@@ -30,7 +30,7 @@
     $.fn.form.ajax = function(obj){
         $.ajax(
         {
-            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo,
+            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -47,62 +47,103 @@
 
                 //Se incorpora funcionalidad a los botones del modo de búsqueda
                 if ($.fn.form.options.modo=="lookup") {
+                    var nApp=$.fn.form.options.aplicacion;
                     //Botón para cerrar formulario de búsqueda avanzada
-                    $("#closeAdvancedSearch").click(function(){
-                        $("#simple_search").slideToggle();
-                        $("#advanced_search").slideToggle();
+                    $("#closeAdvancedSearch_" + nApp ).click(function(){
+                        $("#simple_search_"+ nApp).slideToggle();
+                        $("#advanced_search_" + nApp).slideToggle();
                         return false;
                     })
                 }
-                else{
-                    //Crea clave unica para forma
-                    oForm=$("#form_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma);
+                
+                //Crea clave unica para forma
+                oForm=$("#form_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma);
 
-                    // Se ocultan los mensajes de validación
-                    oForm.find('.obligatorio').each(function() {
+                // Se ocultan los mensajes de validación
+                oForm.find('.obligatorio').each(function() {
                          $("#msgvalida_" + this.name).hide();
                     });
 
-                    //Se activa el datepicker para los campos con seudoclase fecha
-                    oForm.find('.fecha').datepicker( { dateFormat: 'dd/mm/yy',
-                                                       dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                                                       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] });
+                //Se activa el datepicker para los campos con seudoclase fecha
+                oForm.find('.fecha').datepicker( { dateFormat: 'dd/mm/yy',
+                                                   dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                                   monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] });
 
-                    //Se captura el submit
-                    oForm.submit(function() {
-                        var bCompleto=true;
-                        oForm.find('.obligatorio').each(function() {
-                            if (this.   value.trim()=="") {
-                                $("#td_" + this.name).addClass("errorencampo")
-                                $(this).addClass("errorencampo");
-                                $("#msgvalida_" + this.name).show();
-                                bCompleto=false;}
-                            else {
-                                $("#td_" + this.name).removeClass("errorencampo")
-                                $("#msgvalida_" + this.name).hide();
-                                $(this).removeClass("errorencampo");}
-                            
-
-                        });
-
-                        if (!bCompleto) return false;
-
-                        //Preparando la información para enviarla via POST
+                //Se captura el submit
+                oForm.submit(function() {
+                        var sWS="";
+                        var oCampos;
                         var sData="";
-                        var oCampos = oForm.serializeArray();
-                        jQuery.each(oCampos, function(i, oCampo){
-                            aNombreCampo=oCampo.name.split("_");
-                            var sNombreCampo="";
-                            for (var i=0; i<=aNombreCampo.length-3; i++)
-                                    sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
+                        if ($.fn.form.options.modo=="insert") {
+                            var bCompleto=true;
+                            oForm.find('.obligatorio').each(function() {
+                                if (this.value.trim()=="") {
+                                    $("#td_" + this.name).addClass("errorencampo")
+                                    $(this).addClass("errorencampo");
+                                    $("#msgvalida_" + this.name).show();
+                                    bCompleto=false;}
+                                else {
+                                    $("#td_" + this.name).removeClass("errorencampo")
+                                    $("#msgvalida_" + this.name).hide();
+                                    $(this).removeClass("errorencampo");}
 
-                            sData+=sNombreCampo+"="+oCampo.value + "&";
-                        });
 
-                        //Crea el control para manipular los tabs
-                        var $tabs = $('#tabs').tabs();
-                        //Elimina el tab de la entidad que se caba de ingresar
-                        $tabs.tabs( "remove", $tabs.tabs('option', 'selected') );
+                            });
+
+                            if (!bCompleto) return false;
+
+                            //Preparando la información para enviarla via POST
+                            sWS="insertEntity.jsp";
+
+                            oCampos = oForm.serializeArray();
+                            jQuery.each(oCampos, function(i, oCampo){
+                                aNombreCampo=oCampo.name.split("_");
+                                var sNombreCampo="";
+                                for (var i=0; i<=aNombreCampo.length-3; i++)
+                                        sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
+
+                                sData+=sNombreCampo+"="+oCampo.value + "&";
+                            });
+
+                            //Crea el control para manipular los tabs
+                            var $tabs = $('#tabs').tabs();
+                            //Elimina el tab de la entidad que se acaba de ingresar
+                            $tabs.tabs( "remove", $tabs.tabs('option', 'selected') );
+
+                            $.ajax({
+                                type: "POST",
+                                url: sWS,
+                                data: sData,
+                                success: function(){
+                                    //Cierra el tab y abre otro
+                                    $tabs .tabs( "remove", index );
+                                }
+                            });
+
+
+                        }
+
+                        if ($.fn.form.options.modo=="lookup") {
+                            //Valida que traiga al menos un dato:
+                            var bSinDatos=true;
+                            oCampos = oForm.serializeArray();
+                            jQuery.each(oCampos, function(i, oCampo){
+                                aNombreCampo=oCampo.name.split("_");
+                                var sNombreCampo="";
+                                for (var i=0; i<=aNombreCampo.length-3; i++)
+                                        sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
+                                if (oCampo.value=="") bSinDatos=false;
+                                sData+=sNombreCampo+"="+oCampo.value + "&";
+                            });
+
+                            if (bSinDatos) {
+                                alert("Es necesario especificar al menos un criterio de b&uacute;queda, verifique");
+                                return false;
+                            }
+
+                            
+                        }
+
                         //
                         /*sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
                         $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
@@ -113,20 +154,8 @@
                         });*/
                         return false;
 
-                        $.ajax({
-                                type: "POST",
-                                url: "insertEntity.jsp",
-                                data: sData,
-                                success: function(){
-                                    //Cierra el tab y abre otro
-                                    $tabs .tabs( "remove", index );
-                                }
-                            });
-
-                        return false;
                     });
 
-                    }
 
             },
             error:function(xhr,err){
@@ -138,6 +167,7 @@
     $.fn.form.handleForm = function(xml){
         var sRenglon='';
         var nFormaForanea=0;
+        var nApp=$.fn.form.options.aplicacion;
         var sSuffix= '_' + $.fn.form.options.aplicacion  + '_' + $.fn.form.options.forma;
         var oCampos= $(xml).find("registro").children();
         var tabIndex=1;
@@ -296,7 +326,7 @@
 
             if (i==nCols) {
                 if ($.fn.form.options.modo=="lookup") {
-                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='lookup'><button id='advancedSearch'>Buscar</button><button id='closeAdvancedSearch'>Cerrar</button></div>";
+                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='lookup'><input type='submit' id='advancedSearch_" + nApp + "' value='Buscar'  class='formButton' /><button id='closeAdvancedSearch_" + nApp + "'>Cerrar</button></div>";
                 }
                 else if ($.fn.form.options.modo=="insert") {
                     sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='nuevo_registro'><input type='submit' class='formButton'  value='Guardar' id='btnInsertEntity_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma + "' /></div>";
@@ -316,10 +346,11 @@
         sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
 
         //Llena la primer pestaña con la forma de la entidad principal
+        var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         if ($.fn.form.options.modo=="update") {
-            sForm="<br><br><form class='forma' id='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "' name='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "'><table class='forma'>" + sForm + "</table></form>"
+            sForm="<br><br><form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data'><table class='forma'>" + sForm + "</table></form>"
         } else {
-            sForm="<form class='forma' id='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "' name='form_"  + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "'><table class='forma'>" + sForm + "</table></form>"
+            sForm="<form class='forma' id='form_"  + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data'><table class='forma'>" + sForm + "</table></form>"
         }
 
         return sForm;

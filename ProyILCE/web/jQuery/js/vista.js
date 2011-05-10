@@ -33,20 +33,4 @@ $(document).ready(function() {
     //Crea el menú de sesión
     $("#session_menu").sessionmenu();
 
-    //Crea el formulario de búsqueda avanzada de la última aplicación abierta
-    nUltimaForma=2;
-    $("#advanced_search").hide();
-    $("#advanced_search").form({
-        forma:nUltimaForma,
-        modo:"lookup",
-        pk:0
-    });
-
-    //Habilita mecanismo para expandir / colapsar el formulario de búsqueda avanzada
-    $("#lnkBusqueda").click(function(){
-        $("#simple_search").slideToggle();
-        $("#advanced_search").slideToggle();
-    });
-
-
 }); //close $(

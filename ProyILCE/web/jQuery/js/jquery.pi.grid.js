@@ -6,48 +6,61 @@
     $.fn.appgrid = function(opc){
 
         $.fn.appgrid.settings = {
-            xmlUrl : "xml_tests/grid.header.xml?entidad=",
+            xmlUrl : "xml_tests/widget.grid.xml?entidad=",
             titulo:"",
+            app:"",
             entidad:"",
+            pk:"",
+            suffix:"",
             colNames: [],
             colModel: [{}],
             sortname:"",
             tab:""
         };
 
-        // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
-        $.fn.appgrid.options = $.extend($.fn.appgrid.settings, opc);
-
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
+            $.fn.appgrid.options = $.extend($.fn.appgrid.settings, opc);
+            /*$.fn.appgrid.options.app=this.id.split("_")[1];
+            $.fn.appgrid.options.entidad=this.id.split("_")[2];*/
+            var nApp=$.fn.appgrid.options.app;
+            var nEntidad=$.fn.appgrid.options.entidad;
+            var suffix =  "_" + nApp + "_" + nEntidad;
              obj = $(this);
-             obj.append('<div id="gridContainer' + obj.id + '"><table width="100%" id="grid' + obj.id + '">' +
-                        '</table><div id="pager' + obj.id +'"></div></div>');
 
-             $("#grid" +  obj.id).jqGrid(
-                     {url:"xml_tests/grid.body.xml?entidad=" + this.id.split("_")[1],
-                      datatype: "xml",
-                      /* Parte dinámica */
-                      colNames:oColNames,
-                      colModel:oColModel,
-                      rowNum:20,
-                      autowidth: true,
-                      rowList:[10,20,30],
-                      pager: jQuery('#pager' + nEntidad),
-                      sortname:  oSortName,
-                      viewrecords: true,
-                      sortorder: "desc",
-                      ondblClickRow: function(id){
-                          $tabs.tabs( "add", "#tabEditEntity"+id, this.childNodes[0].data);
-                        },
-                        caption:sTitulo}).navGrid('#pager' + this.id,{edit:false,add:false,del:false});
+             //Verifica si el objeto padre es un tabEntity
+             //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
+            $(this).append("<div id='search_" + nApp + "'>" +
+                       "<div id='simple_search_" + nApp + "'>" +
+                       "<input id='txtBusquedaSencilla_" + nApp + "' type='text' class='txtBusquedaSencilla'/>"+
+                       "<input id='btnBusquedaSencilla_" + nApp + "' type='button' class='btnBusquedaSencilla' value='Buscar' />" +
+                       "&nbsp;<a href='#' id='lnkBusqueda_" + nApp + "'>B&uacute;squeda avanzada</a>" +
+                       "</div>" +
+                       "<div id='advanced_search_" + nApp + "'></div>" +
+                       "<div id='gridContainer" + suffix + "'><table width='100%' id='grid" + suffix + "'>" +
+                       "</table><div id='pager" + suffix +"'></div></div>");
 
-             $.fn.appgrid.ajax(obj);
+            $("#advanced_search_" + nApp).hide();
+            $("#advanced_search_" + nApp).form({
+                                     aplicacion: nApp,
+                                     forma:nEntidad,
+                                     modo:"lookup",
+                                     pk:0
+            });
+
+            //Habilita mecanismo para expandir / colapsar el formulario de búsqueda avanzada
+            $("#lnkBusqueda_" +nApp).click(function(){
+                    nApp=this.id.split("_")[1];
+                    $("#simple_search_"+ nApp).slideToggle();
+                    $("#advanced_search_"+ nApp).slideToggle();
+             });
+
+             $.fn.appgrid.getGridDefinition();
         });
 
     };
 
-    $.fn.appgrid.ajax = function(obj){
+    $.fn.appgrid.getGridDefinition = function(obj){
          $.ajax(
             {
             url: $.fn.appgrid.options.xmlUrl,
@@ -63,85 +76,88 @@
                 }
                  else {
                     xml = data;}
-                obj.html($.fn.appgrid.handleAccordion(xml));
+                $.fn.appgrid.handleGridDefinition(xml);
+
+                var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
+
+                /* Inicia implementación del grid */
+
+                $("#grid" + suffix).jqGrid(
+                            {url:"xml_tests/widget.grid.xml?entidad=" + $.fn.appgrid.options.entidad,
+                            datatype: "xml",
+                            colNames:$.fn.appgrid.options.colNames,
+                            colModel:$.fn.appgrid.options.colModel,
+                            rowNum:10,
+                            autowidth: true,
+                            rowList:[10,20,30],
+                            pager: jQuery('#pager' + suffix),
+                            sortname:  $.fn.appgrid.options.sortname+suffix,
+                            viewrecords: true,
+                            sortorder: "desc",
+                            ondblClickRow: function(id){
+                                  //inicializa valiable de tabs
+                                  var $tabs = $('#tabs').tabs({
+                                        tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+                                  });
+
+                                  //Verifica si ya está abierto el tab en modo de edición
+                                  if ($("#tabEditEntity"+suffix + "_" + id).length) {
+                                       $tabs.tabs( "select", "#tabEditEntity"+suffix);
+                                  }
+                                  else {
+                                        sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
+                                        sEntidad=this.id.split("_")[2];
+                                        $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
+                                        $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
+                                        //Crea la interfaz de la aplicación abierta
+                                        $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "'>" +
+                                                                               "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer'></div>" +
+                                                                               "<div id='frm" + suffix + "_" + id +"' class='formContainer'></div>" +
+                                                                               "</div>");
+                                        $("#tvApp" + suffix + "_" + id).treeMenu({app:$.fn.appgrid.options.app,
+                                                                       entidad:$.fn.appgrid.options.entidad,
+                                                                       pk:id });
+                                        /*$("#tabEditEntity"+suffix+"_"+id).apptab({
+                                            entidad:$.fn.appgrid.options.entidad,
+                                            pk:id,
+                                            app:$.fn.appgrid.options.app
+                                        });*/
+
+                                  }
+                            },
+                            caption:"Aplicaciones"}).navGrid('#pager' + suffix,
+                                                    {edit:true,add:true,del:false},
+                                                    {},// default settings for edit
+                                                    {},// defautl settings for add
+                                                    {}, // delete instead that del:false we need this
+                                                    {"drag":true,"resize":true,"closeOnEscape":true,closeAfterSearch:true,multipleSearch:true});
+
+                /* Finaliza implementación de grid */
+
             },
             error:function(xhr,err){
-                alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                alert("Error al recuperar definición de grid\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
                 alert("responseText: "+xhr.responseText);}
             });
     };
 
-    $.fn.appgrid.handleGrid = function(xml){
-            $("#grid" + $.fn.appgrid.options.entidad).jqGrid(
-            {url:"xml_tests/grid.body.xml?entidad=" + $.fn.appgrid.options.entidad,
-            datatype: "xml",
-            /* Parte dinámica */
-            colNames:$.fn.appgrid.options.colNames,
-            colModel:$.fn.appgrid.options.colModel,
-            rowNum:10,
-            autowidth: true,
-            rowList:[10,20,30],
-            pager: jQuery('#pager' + $.fn.appgrid.options.entidad),
-            sortname:  $.fn.appgrid.options.sortname,
-            viewrecords: true,
-            sortorder: "desc",
-            ondblClickRow: function(id){
-               $( "#dialog" ).dialog({
-                autoOpen: true,
-                height: 500,
-                width: 650,
-		modal: true});
-                //handleXML('tabs.xml?entity=' + nEntidad,createTabs);
-                //handleDialog(nEntidad, handleTabs)
-                //handleTabs(oParentDiv, nEntidad)
+    $.fn.appgrid.handleGridDefinition = function(xml){
+        var iCol=0;
+        var oColumnas=$(xml).find("column_definition");
+        $.fn.appgrid.options.sortname=oColumnas.children()[0];
+        
+        oTamano=oColumnas.find('tamano');
+        oAlias= oColumnas.find('alias_campo');
+        oAlias.each( function() {
+             suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
+             oColumna={name:$(this)[0].nodeName+suffix,
+                       index:$(this)[0].nodeName+suffix,
+                       width:$(oTamano[iCol]).text()
+                   };
+             $.fn.appgrid.options.colNames[iCol]=$(this).text();
+             $.fn.appgrid.options.colModel[iCol]=oColumna;
+             iCol++;
+        });
 
-            },
-            caption:"Aplicaciones"}).navGrid('#pager',{edit:false,add:false,del:false});
     }
-/*
-        var i=0;
-        var aInsertar ={};
-        var aMostrar={};
-
-        $(xml).find("registro").each(function(){
-            var nEntidad=$(this).find("clave_forma").text();
-            var sAliasNuevaEntidad=$(this).find("alias_menu_nueva_entidad").text();
-            var sAliasMostrarEntidad=$(this).find("alias_menu_mostrar_entidad").text();
-            if ($(this).find("insertar").text()=="1") {
-                aInsertar={etiqueta: sAliasNuevaEntidad,
-                           entidad: nEntidad,
-                           funcion:"insertar"};
-            }
-
-            if ($(this).find("mostrar").text()=="1") {
-                aMostrar={etiqueta:sAliasMostrarEntidad,
-                           entidad:nEntidad,
-                           funcion:"mostrar"};
-            }
-
-            $.fn.appgrid.options.menu[i]={aplicacion:$(this).find("aplicacion").text(), elementos_menu:[aInsertar,aMostrar]};
-            i++;
-        })
-
-        var sHtml=""
-
-        //Construye menu de acuerdo a configuración recuperada
-        for (i=0;i<$.fn.appgrid.options.menu.length;i++) {
-            sHtml+="<h3><a href='#' >" + $.fn.appgrid.options.menu[i].aplicacion + "</a></h3>" +
-                "<div>";
-            for (var k=0;k<$.fn.appgrid.options.menu[i].elementos_menu.length;k++) {
-                if ($.fn.appgrid.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                    tipoliga="nuevaEntidad";
-                }
-                else {
-                    tipoliga="mostrarEntidad";
-                }
-
-                sHtml+="<div><a href='#' id='" + tipoliga+$.fn.appgrid.options.menu[i].elementos_menu[k].entidad + "'>"+$.fn.appgrid.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";
-            }
-            sHtml+="</div>"
-        }
-        return sHtml;
-    }
-*/
 })(jQuery);
