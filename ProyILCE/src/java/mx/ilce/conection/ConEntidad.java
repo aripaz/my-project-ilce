@@ -182,7 +182,7 @@ public class ConEntidad {
      * Entrega un objeto con la data y los campos que resultan de ejecutar la
      * query del ID entregado, junto con los parametros respectivos
      * @param IdQuery   ID de la query que se quiere ejecutar
-     * @param strData   Arreglo con la data de entrada que se debe usar en la
+     * @param strData   Condicionador a aplicar a la query
      * Query
      * @return
      */
@@ -191,6 +191,28 @@ public class ConEntidad {
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getDataWithWhere(IdQuery, strData);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+
+        }
+        return hsCmp;
+    }
+
+    /**
+     * Entrega un objeto con la data y los campos que resultan de ejecutar la
+     * query del ID entregado, junto con los parametros respectivos
+     * @param IdQuery   ID de la query que se quiere ejecutar
+     * @param strWhere  Condicionador a aplicar a la query
+     * @param strData   Arreglo con la data de entrada que se debe usar en la
+     * query
+     * @return
+     */
+    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData ){
+        HashCampo hsCmp = new HashCampo();
+        try{
+            ConQuery connQ = new ConQuery();
+            hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData);
         }catch(Exception ex){
             ex.printStackTrace();
         }finally{
