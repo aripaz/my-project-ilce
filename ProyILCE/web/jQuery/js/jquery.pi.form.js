@@ -58,7 +58,8 @@
                 }
                 
                 //Crea clave unica para forma
-                oForm=$("#form_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma);
+                var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+                oForm=$("#form_" + formSuffix);
 
                 // Se ocultan los mensajes de validación
                 oForm.find('.obligatorio').each(function() {
@@ -169,7 +170,7 @@
         var sRenglon='';
         var nFormaForanea=0;
         var nApp=$.fn.form.options.aplicacion;
-        var sSuffix= '_' + $.fn.form.options.aplicacion  + '_' + $.fn.form.options.forma;
+        var sSuffix= '_' + $.fn.form.options.aplicacion  + '_' + $.fn.form.options.forma + "_" + $.fn.form.options.pk;;
         var oCampos= $(xml).find("registro").children();
         var tabIndex=1;
         oCampos.each(

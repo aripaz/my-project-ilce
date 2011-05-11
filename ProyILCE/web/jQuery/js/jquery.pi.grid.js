@@ -126,7 +126,7 @@
                                                                                                    { caption:"",
                                                                                                      buttonicon:"ui-icon-plus",
                                                                                                      onClickButton:function() {
-                                                                                                            $("#dlgRegister").dialog({height:240,width:800,
+                                                                                                            $("#dlgRegister").dialog({height:240,width:890,
                                                                                                                                modal: true,
                                                                                                                                title: $.fn.appgrid.options.leyendas[0]
                                                                                                                                }).form({aplicacion: nApp,
