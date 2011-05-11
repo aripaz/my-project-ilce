@@ -7,6 +7,7 @@ package mx.ilce.servlet.grid;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,8 @@ public class srvGrid extends HttpServlet {
             String claveForma = admForm.getStringRequest("$cf",request);
             String dp = admForm.getStringRequest("$dp",request);
             String tipoAccion = "select";
+            String strWhere = admForm.getStringRequest("$w",request);
+            String[] strData = getArrayData(admForm, request);
 
             Forma forma = (Forma) request.getSession().getAttribute("forma");
             Aplicacion apl = new Aplicacion();
@@ -46,6 +49,8 @@ public class srvGrid extends HttpServlet {
                 apl.setDisplay(dp);
                 apl.setClaveForma(Integer.valueOf(claveForma));
                 apl.setTipoAccion(tipoAccion);
+                apl.setStrWhereQuery(strWhere);
+                apl.setArrayData(strData);
                 apl.mostrarForma();
                 String numPage = admForm.getStringRequest("numPage",request);
                 String numRows = admForm.getStringRequest("numRows",request);
@@ -62,6 +67,29 @@ public class srvGrid extends HttpServlet {
             out.close();
         }
     } 
+
+    private String[] getArrayData(AdminForm admForm, HttpServletRequest request){
+        String[] strSal = null;
+        int numMaxParam = 10;
+
+        ArrayList lst = new ArrayList();
+        boolean seguir = true;
+        for (int i=1;i<numMaxParam&&seguir;i++){
+            String strData = admForm.getStringRequest("$"+i,request);
+            if (strData!=null){
+                lst.add(strData);
+            }else{
+                seguir = false;
+            }
+        }
+        if (!lst.isEmpty()){
+            strSal = new String[lst.size()];
+            for (int i=0;i<lst.size();i++){
+                strSal[i] = (String) lst.get(i);
+            }
+        }
+        return strSal;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
