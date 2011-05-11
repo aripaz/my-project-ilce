@@ -389,6 +389,84 @@ class ConQuery {
     }
 
     /**
+     * Obtiene la data, aplicando a la query un parametro de entrada, el cual
+     * consiste en 1)Un string con un "WHERE" o un "AND" dependiendo de la query
+     * la cual condicionara la respuesta de la query, 2) Un arreglo con la data
+     * de entreda para la query
+     * El idQuery entregado permite seleccionar la query respectiva.
+     * @param idQuery
+     * @param whereData
+     * @param arrData
+     * @return
+     * @throws SQLException
+     */
+    public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData) throws SQLException{
+        HashCampo hsCmp = new HashCampo();
+        Statement ps = null;
+        ResultSet rs = null;
+        try{
+            getConexion();
+                                                                                                                                                                                                                                                                                                                            String query = getQueryById(idQuery);
+            if ((!"".equals(query)) && (whereData != null)){
+                ps =this.conn.createStatement();
+                if (arrData!=null){
+                    for(int i=1;i<=arrData.length;i++){
+                        String strData = arrData[i-1];
+                        if (strData != null){
+                            query = query.replaceFirst("%"+i, strData);
+                        }
+                    }
+                }
+                query = addWhereToQuery(query,whereData);
+                rs = ps.executeQuery(query);
+                ResultSetMetaData rstm = rs.getMetaData();
+
+                for (int i=1;i<=rstm.getColumnCount();i++){
+                    Campo cmp = new Campo(rstm.getColumnName(i),
+                                          Integer.valueOf(i),
+                                          rstm.getColumnTypeName(i));
+                    cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
+                    hsCmp.addCampo(cmp);
+                }
+                int i=0;
+                while (rs.next()){
+                    List lstData = new ArrayList();
+                    List lstCampo = hsCmp.getListCampos();
+                    Iterator it = lstCampo.iterator();
+                    while (it.hasNext()){
+                        Campo itCmp = (Campo) it.next();
+                        Campo cmp = new Campo(itCmp.getNombre(),
+                                              itCmp.getNombreDB(),
+                                              itCmp.getCodigo(),
+                                              itCmp.getTypeDataDB(),
+                                              castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
+                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        lstData.add(cmp);
+                    }
+                    hsCmp.addListData(lstData,i++);
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            try{
+            if (rs!=null){
+                rs.close();
+            }
+            if (ps!=null){
+                ps.close();
+            }
+            this.conn.close();
+            }catch(SQLException es){
+
+            }
+        }
+        return hsCmp;
+    }
+
+    /**
      * Metodo que toma una instruccion "WHERE" que se va adjuntar a una query y
      * la analiza para evaluar si requiere cambiar el WHERE por AND, agregar un
      * WHERE o un AND o simplemente juntar las instrucciones, con el fin de tener
@@ -400,23 +478,55 @@ class ConQuery {
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
         if ((strWhere!=null) && (!"".equals(strWhere))){
-            if (strWhere.toUpperCase().trim().substring(0,5).equals("WHERE")){
-                if (strWhere.toUpperCase().trim().substring(0,5).equals("WHERE")){
-                    strQuery = query + " " + strWhere.toUpperCase().replaceFirst("WHERE", "AND ");
-                }else if (strWhere.toUpperCase().trim().substring(0,3).equals("AND")){
-                    strQuery = query + " " + strWhere;
+            if (query.toUpperCase().contains("WHERE ")){
+                //evaluaremos el WHERE y el AND
+                if (strWhere.trim().length()>6){
+                    //EMPIEZA CON WHERE
+                    if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
+                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
+                    //EMPIEZA CON AND
+                    }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                            strQuery = query + " " + strWhere;
+                    }else{
+                            strQuery = query + " AND " + strWhere;
+                    }
+                //evaluaremos solo el AND
+                }else if (strWhere.trim().length()>4){
+                    //EMPIEZA CON AND
+                    if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                        strQuery = query + " " + strWhere;
+                    }else{
+                        strQuery = query + " AND " + strWhere;
+                    }
                 }else{
-                    strQuery = query + " AND " + strWhere;
+                        strQuery = query + " AND " + strWhere;
                 }
             }else{
-                if (strWhere.toUpperCase().trim().substring(0,5).equals("WHERE")){
-                    strQuery = query + " " + strWhere;
-                }else if (strWhere.toUpperCase().trim().substring(0,3).equals("AND")){
-                    strQuery = query + " " + strWhere.toUpperCase().replaceFirst("AND", "WHERE ");
+                //evaluaremos el WHERE Y el AND
+                if (strWhere.trim().length()>6){
+                    //COMIENZA CON WHERE
+                    if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
+                        strQuery = query + " " + strWhere;
+                    //COMIENZA CON AND
+                    }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                    }else{
+                        strQuery = query + " WHERE " + strWhere;
+                    }
+                //evaluaremos solo el AND
+                }else if (strWhere.trim().length()>4){
+                    //COMIENZA CON AND
+                    if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                    }else{
+                        strQuery = query + " WHERE " + strWhere;
+                    }
                 }else{
-                    strQuery = query + " WHERE " + strWhere;
+                    strQuery = query + " " + strWhere;
                 }
             }
+        }else{
+             strQuery = query;
         }
         return strQuery;
     }
