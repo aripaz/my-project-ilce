@@ -35,6 +35,7 @@ public class Aplicacion extends Entidad {
     private HashMap hsForma;
     private Integer numPage;
     private Integer numRows;
+    private String[] arrayData;
 
     public Aplicacion() {
         this.claveAplicacion = 0;
@@ -53,6 +54,13 @@ public class Aplicacion extends Entidad {
     }
 
 /********* GETTER Y SETTER *********/
+    public String[] getArrayData() {
+        return arrayData;
+    }
+
+    public void setArrayData(String[] arrayData) {
+        this.arrayData = arrayData;
+    }
 
     public Integer getNumPage() {
         return numPage;
@@ -233,12 +241,24 @@ public class Aplicacion extends Entidad {
                 if (!dq.isEmpty()){
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
-                    strData = new String[1];
-                    strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
-                    hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
+
+                    if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()==null)){
+                        strData = new String[1];
+                        strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
+                        hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
+                    }else if ((this.getStrWhereQuery()==null)&&(this.getArrayData()!=null)){
+                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), this.getArrayData());
+                    }else if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()!=null)){
+                        strData = new String[1];
+                        strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
+                         hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strData[0],this.getArrayData());
+                    }else{
+                        strData = new String[0];
+                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),strData);
+                    }
                 }
             }
-            List lstF = (List) this.getForma(this.getClaveForma());
+             List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridColumByData(hsCmp,lstF);
 
         }catch(Exception e){
