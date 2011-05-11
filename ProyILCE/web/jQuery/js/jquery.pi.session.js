@@ -46,6 +46,16 @@
                  else {
                     xml = data;}
                 obj.html($.fn.sessionmenu.handleSession(xml));
+
+                $("#lnkConfiguracion").click(function() {
+                    $("#dlgConfig").dialog({height:240,width:890,
+                                       modal: true
+                                       }).appgrid({app: 1,
+                                                   entidad: 1,
+                                                   titulo:"Par&aacute;metros de configuraci&oacute;n",
+                                                   leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
+
+                });
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);

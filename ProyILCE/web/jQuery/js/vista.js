@@ -33,4 +33,6 @@ $(document).ready(function() {
     //Crea el menú de sesión
     $("#session_menu").sessionmenu();
 
+
+
 }); //close $(

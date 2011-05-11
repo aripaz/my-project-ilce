@@ -9,7 +9,6 @@ if (user == null){
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <title>Plataforma ILCE</title>
-        <link rel="stylesheet" href="css/themes/cupertino/jquery.ui.all.css" />
 
         <!-- librerias para cargar dialogo  -->
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
@@ -22,9 +21,11 @@ if (user == null){
         <!-- jqGrid -->
         <script src="jQuery/js/grid.locale-es.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.jstree.js"  type="text/javascript"></script>
 
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
@@ -32,6 +33,8 @@ if (user == null){
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.grid.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.tree.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
 
     </head>
@@ -51,13 +54,6 @@ if (user == null){
             <div id="rightPane">
                 <div id="app_menu">
                 </div>
-                <div id="search">
-                    <div id="simple_search">
-                        <input id="txtBusquedaSencilla" type="text" /> <input type="button" id="btnBusquedaSencilla" value="Buscar" /> <a href="#" id="lnkBusqueda">Búsqueda avanzada</a>
-                    </div>
-                    <div id="advanced_search">
-                    </div>
-                </div>
                 <div id="tabcontainer">
                     <div id="tabs">
                         <ul>
@@ -71,11 +67,10 @@ if (user == null){
             </div>
         </div>
         <div id="dlgConfig" title="Configuraci&oacute;n">
-            <div id="divConfigGrid">
-                <table width="100%" id="gridConfig">
-                </table>
-                <div id="pagerConfig"></div>
-            </div>
+        </div>
+        <div id="dlgRegister" title="">
+        </div>
+        <div id="dlgProfiles" title="Perfiles de seguridad">
         </div>
     </body>
 </html>
