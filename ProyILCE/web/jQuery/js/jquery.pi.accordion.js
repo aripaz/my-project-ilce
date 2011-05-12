@@ -84,22 +84,20 @@
                             }
                             else {
 
-                                //Si no existe crea nueva tab
-                                $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
-                                $tabs.tabs( "select", "#tab"+this.id);
                                 if (this.id.split("_")[0]=="newEntity") {
-                                    $("#tab"+this.id).form({
-                                                    aplicacion:nAplicacion,
-                                                    forma:nEntidad,
-                                                    pk:0,
-                                                    modo:"insert",
-                                                    titulo: sTitulo
-                                     });
+                                    $("#dlgRegister").dialog({height:360, width:500,
+                                                   modal: true,
+                                                   title: sTitulo
+                                                   }).form({aplicacion: nAplicacion,
+                                                                       forma:nEntidad,
+                                                                       modo:"insert",
+                                                                       titulo: sTitulo,
+                                                                       columnas:1,
+                                                                       pk:0});
                                 }
                                 else {
+                                    $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
                                     $tabs.tabs( "select", "#tab"+this.id);
-
-                                    //Crea el formulario de búsqueda avanzada de la aplicacion
                                     oTabPanel=$("#tab"+this.id);
                                     var sLeyendaNuevoRegistro=$.fn.appmenu.options.menu[nAplicacion-1].elementos_menu[0].etiqueta;
                                     var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];

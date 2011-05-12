@@ -22,11 +22,68 @@
             $.fn.form.options = $.extend($.fn.form.settings, opc);
             obj = $(this);
             obj.title=$.fn.form.options.titulo;
-            obj.html("<div align='center'><br />Cargando informaci&oacute;n... <br /> <br /><img src='img/loading.gif' /></div>")
-            $.fn.form.ajax(obj);
+
+            if ($.fn.form.options.aplicacion=="1")
+                sTabs="<div id='formTab'>"+
+                        "<ul><li><a href='#divFormGeneral'>General</a></li>"+
+                            "<li><a href='#divFormPerfiles'>Perfiles de seguridad</a></li></ul>"+
+                        "<div id='divFormGeneral'>" +
+                            "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
+                                        "<img src='img/loading.gif' /></div>"+
+                        "</div>"+
+                        "<div id='divFormPerfiles' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles' class='treeProfiles'></div></div>"+
+                       "</div>"
+            else
+                sTabs="<div id='formTab'>"+
+                        "<ul><li><a href='#divFormGeneral'>General</a></li>"+
+                        "<div id='divFormGeneral'>" +
+                            "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
+                                        "<img src='img/loading.gif' /></div>"+
+                        "</div>"+
+                       "</div>";
+
+           sTabs+="<br><div align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'><input type='submit' class='formButton' id='btnGuardar'   value='Guardar'/></div>";
+
+            obj.html(sTabs);
+            var Tabs=$("#formTab").tabs();
+            $.fn.form.ajax($("#divFormGeneral"));
+
+            $("#btnGuardar").click(function() {
+                $("#form_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk).submit();
+            })
+
+            $.fn.form.ajax_profiles($("#divFormProfiles"));
         });
  
     };
+
+    $.fn.form.ajax_profiles =function(obj){
+        $.ajax({
+            url:'srvGrid?$cf=5&$dp=body',
+            dataType: ($.browser.msie) ? "text" : "xml",
+            success:  function(data){
+                if (typeof data == "string") {
+                    xml = new ActiveXObject("Microsoft.XMLDOM");
+                    xml.async = false;
+                    xml.validateOnParse="true";
+                    xml.loadXML(data);
+                    if (xml.parseError.errorCode>0) {
+                        alert("Error de compilación xml:" + xml.parseError.errorCode +"\nParse reason:" + xml.parseError.reason + "\nLinea:" + xml.parseError.line);}
+                }
+                else {
+                    xml = data;}
+               var s="<table>";
+               $(xml).find("row").each( function() {
+                   oCell=$(this).find("cell");
+                   s+="<tr><td><img src='http://localhost:8088/ProyILCE/img/perfiles10.png'></td>" +
+                           "<td class='etiqueta_perfil'><input type='checkbox' name='clave_perfil' value='" +  $(oCell[0]).text()+ "' />" + $(oCell[1]).text() + "</td>"+
+                      "</tr>";
+               })
+               s+="</table>";
+               obj.html(s);
+            }
+        });
+    }
 
     $.fn.form.ajax = function(obj){
         $.ajax(
@@ -56,7 +113,7 @@
                         return false;
                     })
                 }
-                
+
                 //Crea clave unica para forma
                 var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
                 oForm=$("#form_" + formSuffix);
@@ -67,16 +124,16 @@
                     });
 
                 //Se activa el datepicker para los campos con seudoclase fecha
-                oForm.find('.fecha').datepicker( { dateFormat: 'dd/mm/yy',
+                oForm.find('.fecha').datepicker( {dateFormat: 'dd/mm/yy',
                                                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                                                   monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] });
+                                                   monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']});
 
                 //Se captura el submit
                 oForm.submit(function() {
                         var sWS="";
                         var oCampos;
                         var sData="";
-                        if ($.fn.form.options.modo=="insert") {
+                        if ($.fn.form.options.modo!="lookup") {
                             var bCompleto=true;
                             oForm.find('.obligatorio').each(function() {
                                 if (this.value.trim()=="") {
@@ -95,45 +152,34 @@
                             if (!bCompleto) return false;
 
                             //Preparando la información para enviarla via POST
-                            sWS="insertEntity.jsp";
+                            sWS="srvFormaInsert";
 
                             oCampos = oForm.serializeArray();
                             jQuery.each(oCampos, function(i, oCampo){
-                                aNombreCampo=oCampo.name.split("_");
-                                var sNombreCampo="";
-                                for (var i=0; i<=aNombreCampo.length-3; i++)
-                                        sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
-
+                                sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
                                 sData+=sNombreCampo+"="+oCampo.value + "&";
                             });
-
-                            //Crea el control para manipular los tabs
-                            var $tabs = $('#tabs').tabs();
-                            //Elimina el tab de la entidad que se acaba de ingresar
-                            $tabs.tabs( "remove", $tabs.tabs('option', 'selected') );
+                            sData+="$cf=" +$.fn.form.options.forma +
+                                   "&pk=" + $.fn.form.options.pk +
+                                   "&$ta=" + $.fn.form.options.modo
 
                             $.ajax({
                                 type: "POST",
                                 url: sWS,
                                 data: sData,
                                 success: function(){
-                                    //Cierra el tab y abre otro
-                                    $tabs .tabs( "remove", index );
+                                   //Cierra el dialogo
+                                    $("#dlgRegister").dialog("destroy");
+
                                 }
                             });
-
-
                         }
-
-                        if ($.fn.form.options.modo=="lookup") {
+                        else {
                             //Valida que traiga al menos un dato:
                             var bSinDatos=true;
                             oCampos = oForm.serializeArray();
                             jQuery.each(oCampos, function(i, oCampo){
-                                aNombreCampo=oCampo.name.split("_");
-                                var sNombreCampo="";
-                                for (var i=0; i<=aNombreCampo.length-3; i++)
-                                        sNombreCampo+=((sNombreCampo!='')?'_':'') + aNombreCampo[i];
+                                sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
                                 if (oCampo.value=="") bSinDatos=false;
                                 sData+=sNombreCampo+"="+oCampo.value + "&";
                             });
@@ -275,7 +321,7 @@
 
                     //Validación para inputs estandar de acuerdo al tipo de datos del campo
                     if (sTipoCampo=="integer") {
-                        sRenglon+=" onBlur='javascript:check_number(this)'"; }
+                        sRenglon+=" onBlur='javascript:check_number(this)'";}
                     else if (sTipoCampo=="date") {
                         sRenglon+=" onBlur='javascript:check_date(this)' "
                     }
@@ -312,29 +358,23 @@
         for (i=1; i<=nCols; i++) {
             
             if (i==1) {
-                /*sEncabezado+="<td colspan='2' class='etiqueta_forma'>";*/
-                sPie+="<td colspan='2' class='etiqueta_forma'>";
-                /*if ($.fn.form.options.modo=="lookup") {
-                    sEncabezado+="<h3 class='searchtitle'>B&uacute;squeda avanzada</h3>";}
-                else  {
-                    sEncabezado+="<h3 class='searchtitle'>" + $.fn.form.options.titulo + "</h3>";}*/
+                //Si está en BackEnd despliega el botón para mostrar los perfiles
+                /*if ( $.fn.form.options.aplicacion=="1")
+                    sEncabezado+="<tr><td colspan='" + $.fn.form.options.columnas + "' class='etiqueta_forma'><td><div align='right'><a href='#' id='lnkPerfiles" + sSuffix + "' class='lnkPerfil'>Perfiles de seguridad</a></div></td></tr>";
+                else
+                    sEncabezado="";*/
+                
+                sPie+="<td colspan='" + $.fn.form.options.columnas + "' class='etiqueta_forma'>";
             }
             else {
-                sEncabezado+="<td>&nbsp;";
+                sEncabezado+="";
                 sPie+="<td>";
             }
-            sEncabezado+="</td>";
 
 
             if (i==nCols) {
                 if ($.fn.form.options.modo=="lookup") {
                     sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='lookup'><input type='submit' id='advancedSearch_" + nApp + "' value='Buscar'  class='formButton' /><button id='closeAdvancedSearch_" + nApp + "'>Cerrar</button></div>";
-                }
-                else if ($.fn.form.options.modo=="insert") {
-                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='nuevo_registro'><input type='submit' class='formButton'  value='Guardar' id='btnInsertEntity_" + $.fn.form.options.aplicacion  + "_" + $.fn.form.options.forma + "' /></div>";
-                }
-                else {
-
                 }
             }
             else {
@@ -346,14 +386,14 @@
         }
 
         //sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
-        sForm+="<tr>"+sPie+"</tr>" ;
+        sForm=sEncabezado + sForm + "<tr>"+sPie+"</tr>" ;
 
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         if ($.fn.form.options.modo=="update") {
-            sForm="<br><br><form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data'><table class='forma'>" + sForm + "</table></form>"
-        } else {
-            sForm="<form class='forma' id='form_"  + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data'><table class='forma'>" + sForm + "</table></form>"
+            sForm="<br><br><form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' action='srvFormaUpdate'><table class='forma'>" + sForm + "</table></form>"
+        } else if ($.fn.form.options.modo=="insert"){
+            sForm="<form class='forma' id='form_"  + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' action='srvFormaInsert'><table class='forma'>" + sForm + "</table></form>"
         }
 
         return sForm;

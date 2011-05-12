@@ -67,6 +67,7 @@ if (user == null){
             </div>
         </div>
         <div id="dlgConfig" title="Configuraci&oacute;n">
+            <div id="gridConfig" style="width:97%;" ></div>
         </div>
         <div id="dlgRegister" title="">
         </div>
