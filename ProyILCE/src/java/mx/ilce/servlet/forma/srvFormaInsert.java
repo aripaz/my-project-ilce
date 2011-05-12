@@ -97,7 +97,13 @@ public class srvFormaInsert extends HttpServlet {
                 ex.setExecutionOK(false);
                 AdminFile.deleFileFromServer(hsFile);
             }
+            Integer xml = (Integer) ((ex.getObjectData()==null)?new Integer(0):ex.getObjectData());
+            request.getSession().setAttribute("xmlTab", String.valueOf(xml));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
         }catch(Exception e){
+            Integer xml = new Integer(0);
+            request.getSession().setAttribute("xmlTab", String.valueOf(xml));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
             e.printStackTrace();
         } finally { 
             out.close();
