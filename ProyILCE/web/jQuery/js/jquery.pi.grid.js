@@ -7,6 +7,7 @@
 
         $.fn.appgrid.settings = {
             xmlUrl : "srvGrid", // "xml_tests/widget.grid.xml"
+            wsParameters:"",
             titulo:"",
             leyendas:[],
             app:"",
@@ -57,7 +58,7 @@
     $.fn.appgrid.getGridDefinition = function(obj){
          $.ajax(
             {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header",
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -79,7 +80,7 @@
                 var nEntidad=$.fn.appgrid.options.entidad;
 
                 $("#grid" + suffix).jqGrid(
-                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body",
+                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&w=" + $.fn.appgrid.options.wsParameters,
                             datatype: "xml",
                             colNames:$.fn.appgrid.options.colNames,
                             colModel:$.fn.appgrid.options.colModel,
@@ -126,13 +127,14 @@
                                                                                                    { caption:"",
                                                                                                      buttonicon:"ui-icon-plus",
                                                                                                      onClickButton:function() {
-                                                                                                            $("#dlgRegister").dialog({height:240,width:890,
+                                                                                                            $("#dlgRegister").dialog({height:360, width:500,
                                                                                                                                modal: true,
                                                                                                                                title: $.fn.appgrid.options.leyendas[0]
                                                                                                                                }).form({aplicacion: nApp,
                                                                                                                                                    forma:nEntidad,
                                                                                                                                                    modo:"insert",
                                                                                                                                                    titulo: $.fn.appgrid.options.leyendas[0],
+                                                                                                                                                   columnas:1,
                                                                                                                                                    pk:0});
                                                                                                         },
                                                                                                      position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,

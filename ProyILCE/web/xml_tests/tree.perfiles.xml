@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <root src="SELECT clave_perfil, perfil FROM perfil">
-    <item id="perfil_1" parent_id="0" state="closed">
+    <item id="perfil_1" parent_id="0" state="closed" rel="perfiles">
         <content>
             <name><![CDATA[Administrador]]></name>
         </content>

@@ -48,13 +48,26 @@
                 obj.html($.fn.sessionmenu.handleSession(xml));
 
                 $("#lnkConfiguracion").click(function() {
-                    $("#dlgConfig").dialog({height:240,width:890,
-                                       modal: true
-                                       }).appgrid({app: 1,
-                                                   entidad: 1,
-                                                   titulo:"Par&aacute;metros de configuraci&oacute;n",
-                                                   leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
 
+                    //Crea el control del tab
+                    var $tabs = $('#tabs').tabs({
+                    tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+                    });
+
+                    if ($("#tabConfiguracion").length) {
+                         //Selecciona el tab correspondiente
+                         $tabs.tabs( "select", "#tabConfiguracion");    }
+                    else {
+                         $tabs.tabs( "add", "#tabConfiguracion", "Configuraci&oacute;n");
+                         $tabs.tabs( "select", "#tabConfiguracion");
+                         $("#tabConfiguracion").appgrid({app: 1,
+                                              entidad: 1,
+                                              wsParameters:"clave_empleado=" + $.fn.sessionmenu.options.empleado,
+                                              titulo:"Par&aacute;metros de configuraci&oacute;n",
+                                              leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});;
+
+                    }
+                    
                 });
             },
             error:function(xhr,err){
