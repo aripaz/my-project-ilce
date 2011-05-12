@@ -94,6 +94,8 @@ class ConQuery {
             if (validateInsert(campoForma.getTabla(), arrData)){
                 getConexion();
                 st = this.conn.createStatement();
+                System.out.println("QUERY INSERT:");
+                System.out.println(arrData);
                 int res = st.executeUpdate(arrData, Statement.RETURN_GENERATED_KEYS);
                 rs = st.getGeneratedKeys();
                 if (res!=0){
@@ -159,6 +161,8 @@ class ConQuery {
             Integer increment =Integer.valueOf(-1);
             if (validateUpdate(campoForma.getTabla(), arrData)){
                 getConexion();
+                System.out.println("QUERY UPDATE:");
+                System.out.println(arrData);
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(arrData);
             }
@@ -209,6 +213,8 @@ class ConQuery {
             Integer increment =Integer.valueOf(-1);
             if (validateDelete(campoForma.getTabla(), arrData)){
                 getConexion();
+                System.out.println("QUERY DELETE:");
+                System.out.println(arrData);
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(arrData);
             }
