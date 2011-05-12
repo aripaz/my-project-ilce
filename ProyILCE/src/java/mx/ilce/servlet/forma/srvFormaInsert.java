@@ -88,6 +88,8 @@ public class srvFormaInsert extends HttpServlet {
                 lstData.add(forma);
                 if ("0".equals(forma.getPk())){     // Es un nuevo elemento
                     ex = forma.ingresarEntidad(lstData);
+                }else{
+                    ex = forma.editarEntidad(lstData);
                 }
                 ex.setExecutionOK(true);
             }else{
