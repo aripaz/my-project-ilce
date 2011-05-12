@@ -508,7 +508,7 @@ public class Forma extends Entidad{
             Iterator it = lstAplications.iterator();
             while (it.hasNext()){
                 Aplicacion apl = (Aplicacion) it.next();
-                Integer idForma = apl.getClaveFormaPrincipal();
+                Integer idForma = apl.getClaveForma();
                 String[] strData = new String[1];
                 strData[0]=String.valueOf(idForma);
                 List lstE = con.getListFormaById(strData);
