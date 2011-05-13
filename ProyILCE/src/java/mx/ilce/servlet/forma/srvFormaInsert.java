@@ -74,11 +74,12 @@ public class srvFormaInsert extends HttpServlet {
                             dato = (String) hsFile.get(cmp.getCampo());
                         }
                     }
+                    /*
                     if ((dato==null) && (cmp.getObligatorio()==1) && (!"0".equals(pk))) {
                         obligatorioOk=false;
-                    }else{
+                    }else{*/
                         hsFormQuery.put(cmp.getCampo(), dato);
-                    }
+                    //}
                 }
             } 
             ExecutionHandler ex = new ExecutionHandler();
