@@ -31,8 +31,17 @@ public class Forma extends Entidad{
     private String pk;
     private String tipoAccion;
     private String campoPK;
+    private boolean cleanIncrement;
 
     /************** GETTER Y SETTER ***************/
+
+    public boolean isCleanIncrement() {
+        return cleanIncrement;
+    }
+
+    public void setCleanIncrement(boolean cleanIncrement) {
+        this.cleanIncrement = cleanIncrement;
+    }
 
     public String getCampoPK() {
         return campoPK;
@@ -411,6 +420,9 @@ public class Forma extends Entidad{
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
+                        if (this.isCleanIncrement()){
+                            admXML.setDeleteIncreement(cleanIncrement);
+                        }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
                         }else{
