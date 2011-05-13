@@ -274,10 +274,11 @@ public class Forma extends Entidad{
                             strQuery.append(valor).append(",");
                         }
                     }
+                    /*
                     if ((valor==null)&&(cmpFL.getObligatorio()==1)){
                         //error
                         System.err.append("Error");
-                    }
+                    }*/
                 }else{
                     strCampoPK = cmpFL.getCampo();
                 }
