@@ -13,7 +13,6 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
-import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
@@ -36,6 +35,7 @@ public class Aplicacion extends Entidad {
     private Integer numPage;
     private Integer numRows;
     private String[] arrayData;
+    private boolean cleanIncrement;
 
     public Aplicacion() {
         this.claveAplicacion = 0;
@@ -51,9 +51,19 @@ public class Aplicacion extends Entidad {
         this.hsForma = new HashMap();
         this.numPage = 1;
         this.numRows = 10;
+        this.cleanIncrement=false;
     }
 
 /********* GETTER Y SETTER *********/
+
+    public boolean isCleanIncrement() {
+        return cleanIncrement;
+    }
+
+    public void setCleanIncrement(boolean cleanIncrement) {
+        this.cleanIncrement = cleanIncrement;
+    }
+    
     public String[] getArrayData() {
         return arrayData;
     }
@@ -287,6 +297,9 @@ public class Aplicacion extends Entidad {
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
                     hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
                 }
+            }
+            if (this.isCleanIncrement()){
+                adm.setDeleteIncreement(cleanIncrement);
             }
             List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
