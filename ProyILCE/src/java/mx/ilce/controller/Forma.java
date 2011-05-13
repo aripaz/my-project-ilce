@@ -185,16 +185,17 @@ public class Forma extends Entidad{
                         strCampos.append(cmpFL.getCampo()).append(",");
                         if (isString){
                             strValues.append("'");
-                            strValues.append(valor);
+                            strValues.append((valor==null)?"":valor);
                             strValues.append("',");
                         }else{
                             strValues.append(valor).append(",");
                         }
                     }
+                    /*
                     if ((valor==null)&&(cmpFL.getObligatorio()==1)){
                         //error
                         System.err.append("Error");
-                    }
+                    }*/
                 }
             }
             strCampos.delete(strCampos.length()-1 ,strCampos.length());
@@ -268,7 +269,7 @@ public class Forma extends Entidad{
                         strQuery.append(cmpFL.getCampo()).append("=");
                         if (isString){
                             strQuery.append("'");
-                            strQuery.append(valor);
+                            strQuery.append((valor==null)?"":valor);
                             strQuery.append("',");
                         }else{
                             strQuery.append(valor).append(",");
