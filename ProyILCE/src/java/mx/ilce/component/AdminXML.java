@@ -32,6 +32,18 @@ import org.w3c.dom.NamedNodeMap;
 public class AdminXML {
     private static File WORKING_DIRECTORY;
     private int numRow=0;
+    private boolean deleteIncreement=false;
+
+    
+    public boolean isDeleteIncreement() {
+        return deleteIncreement;
+    }
+
+    public void setDeleteIncreement(boolean deleteIncreement) {
+        this.deleteIncreement = deleteIncreement;
+    }
+
+
 
     /**
      * Metodo que permite obtener la data del usuario en el formato del
@@ -49,12 +61,8 @@ public class AdminXML {
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
 
         HashCampo hsCmp = con.getUserXML(user);
-
         Document document = getDocumentXML("widget.session.xml");
-
         str.append(listNode(document,0,hsCmp));
-        System.out.println("====== XML ======");
-        System.out.println(str);
 
         return str;
     }
@@ -145,29 +153,39 @@ public class AdminXML {
         str.append("<column_definition>\n");
         for(int i=0; i<lstCmp.size();i++){
             cmp = (Campo) lstCmp.get(i) ;
-            str.append(("<"+cmp.getNombreDB()+">\n"));
-            if (cmp.getNombreDB()!=null){
-                CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
-                if (cmpAux!=null){
-                    if (cmpAux.getAliasCampo()!=null){
-                        str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
-                    }
-                    if (cmpAux.getTamano()!=null){
-                        str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
-                    }
+            boolean seguir = true;
+            if (this.isDeleteIncreement()){
+                if (cmp.getIsIncrement()){
+                    seguir = false;
                 }
             }
-            str.append(("</"+cmp.getNombreDB()+">\n"));
+            if (seguir){
+                str.append(("<"+cmp.getNombreDB()+">\n"));
+                if (cmp.getNombreDB()!=null){
+                    CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                    if (cmpAux!=null){
+                        if (cmpAux.getAliasCampo()!=null){
+                            str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
+                        }
+                        if (cmpAux.getTamano()!=null){
+                            str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
+                        }
+                    }
+                }
+                str.append(("</"+cmp.getNombreDB()+">\n"));
+            }
         }
         str.append("</column_definition>\n");
         for(int i=regIni;i<hsDat.size();i++){
             ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
             str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
             for (int j=0; j<lstCmp.size();j++){
-                str.append("\t<cell>");
                 cmp = (Campo) arr.get(j) ;
-                str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
-                str.append("</cell>\n");
+                if (!this.isDeleteIncreement() && !cmp.getIsIncrement()){
+                    str.append("\t<cell>");
+                    str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                    str.append("</cell>\n");
+                }
             }
             str.append("</row>\n");
         }
@@ -238,75 +256,83 @@ public class AdminXML {
             str.append(("<registro id='"+String.valueOf(i+1)+"'>\n"));
             for (int j=0; j<lstCmp.size();j++){
                 cmp = (Campo) arr.get(j) ;
-                str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                 + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
-                str.append(("<![CDATA["));
-                str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
-                str.append("]]>\n");
-                if (cmp.getNombreDB()!=null){
-                    CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
-                    if (cmpAux!=null){
-                        if (cmpAux.getAliasCampo()!=null){
-                            str.append(("\t\t<alias_campo><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
-                                    + "]]></alias_campo>\n"));
-                        }
-                        if (cmpAux.getObligatorio()!=null){
-                            str.append(("\t\t<obligatorio><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
-                                    + "]]></obligatorio>\n"));
-                        }
-                        if (cmpAux.getTipoControl()!=null){
-                            str.append(("\t\t<tipo_control><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
-                                    + "]]></tipo_control>\n"));
-                        }
-                        if (cmpAux.getEvento()!=null){
-                            str.append(("\t\t<evento><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getEvento()).trim())
-                                    + "]]></evento>\n"));
-                        }
-                        if (cmpAux.getForaneo()!=null){
-                            str.append("\t\t<foraneo");
-                            if (cmpAux.getFiltroForaneo()!=null){
-                                if (cmpAux.getFiltroForaneo().equals(1)){
-                                    str.append(" agrega_registro=\"true\"");
-                                }
-                            }
-                            str.append((" clave_forma=\""+idForma+"\">\n"));
-                            String[] strData = getStringData(cmpAux.getForaneo(),arr);
-                            StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
-                            if (!"".equals(strForaneo.toString())){
-                                str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
-                                str.append(strForaneo);
-                                str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
-                            }
-                            str.append("\t\t</foraneo>\n");
-                        }
-                        if (cmpAux.getAyuda()!=null){
-                            str.append(("\t\t<ayuda><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
-                                    + "]]></ayuda>\n"));
-                        }
-                        if (cmpAux.getDatoSensible()!=null){
-                            str.append(("\t\t<dato_sensible><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getDatoSensible()).trim())
-                                    + "]]></dato_sensible>\n"));
-                        }
-                        if (cmpAux.getActivo()!=null){
-                            str.append(("\t\t<activo><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getActivo()).trim())
-                                    + "]]></activo>\n"));
-                        }
-                        if (cmpAux.getTamano()!=null){
-                            str.append(("\t\t<tamano>"
-                                    + castNULL(String.valueOf(cmpAux.getTamano()).trim())
-                                    + "</tamano>\n"));
-                        }
+                boolean seguir = true;
+                if (this.isDeleteIncreement()){
+                    if (cmp.getIsIncrement()){
+                        seguir = false;
                     }
                 }
-                str.append(("\t</"+cmp.getNombreDB()+">\n"));
+                if (seguir){
+                    str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
+                                     + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
+                    str.append(("<![CDATA["));
+                    str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                    str.append("]]>\n");
+                    if (cmp.getNombreDB()!=null){
+                        CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                        if (cmpAux!=null){
+                            if (cmpAux.getAliasCampo()!=null){
+                                str.append(("\t\t<alias_campo><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
+                                        + "]]></alias_campo>\n"));
+                            }
+                            if (cmpAux.getObligatorio()!=null){
+                                str.append(("\t\t<obligatorio><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
+                                        + "]]></obligatorio>\n"));
+                            }
+                            if (cmpAux.getTipoControl()!=null){
+                                str.append(("\t\t<tipo_control><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
+                                        + "]]></tipo_control>\n"));
+                            }
+                            if (cmpAux.getEvento()!=null){
+                                str.append(("\t\t<evento><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getEvento()).trim())
+                                        + "]]></evento>\n"));
+                            }
+                            if (cmpAux.getForaneo()!=null){
+                                str.append("\t\t<foraneo");
+                                if (cmpAux.getFiltroForaneo()!=null){
+                                    if (cmpAux.getFiltroForaneo().equals(1)){
+                                        str.append(" agrega_registro=\"true\"");
+                                    }
+                                }
+                                str.append((" clave_forma=\""+idForma+"\">\n"));
+                                String[] strData = getStringData(cmpAux.getForaneo(),arr);
+                                StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
+                                if (!"".equals(strForaneo.toString())){
+                                    str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
+                                    str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
+                                    str.append(strForaneo);
+                                    str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                }
+                                str.append("\t\t</foraneo>\n");
+                            }
+                            if (cmpAux.getAyuda()!=null){
+                                str.append(("\t\t<ayuda><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
+                                        + "]]></ayuda>\n"));
+                            }
+                            if (cmpAux.getDatoSensible()!=null){
+                                str.append(("\t\t<dato_sensible><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getDatoSensible()).trim())
+                                        + "]]></dato_sensible>\n"));
+                            }
+                            if (cmpAux.getActivo()!=null){
+                                str.append(("\t\t<activo><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getActivo()).trim())
+                                        + "]]></activo>\n"));
+                            }
+                            if (cmpAux.getTamano()!=null){
+                                str.append(("\t\t<tamano>"
+                                        + castNULL(String.valueOf(cmpAux.getTamano()).trim())
+                                        + "</tamano>\n"));
+                            }
+                        }
+                    }
+                    str.append(("\t</"+cmp.getNombreDB()+">\n"));
+                }
             }
             str.append("</registro>\n");
         }
@@ -336,73 +362,81 @@ public class AdminXML {
             str.append(("<registro id='"+String.valueOf(i)+"'>\n"));
             for (int j=0; j<lstCmp.size();j++){
                 cmp = (Campo) lstCmp.get(j) ;
-                str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                 + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
-                str.append("<![CDATA[]]>\n");
-                if (cmp.getNombreDB()!=null){
-                    CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
-                    if (cmpAux!=null){
-                        if (cmpAux.getAliasCampo()!=null){
-                            str.append(("\t\t<alias_campo><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
-                                    + "]]></alias_campo>\n"));
-                        }
-                        if (cmpAux.getObligatorio()!=null){
-                            str.append(("\t\t<obligatorio><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
-                                    + "]]></obligatorio>\n"));
-                        }
-                        if (cmpAux.getTipoControl()!=null){
-                            str.append(("\t\t<tipo_control><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
-                                    + "]]></tipo_control>\n"));
-                        }
-                        if (cmpAux.getEvento()!=null){
-                            str.append(("\t\t<evento><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getEvento()).trim())
-                                    + "]]></evento>\n"));
-                        }
-                        if (cmpAux.getForaneo()!=null){
-                            str.append("\t\t<foraneo");
-                            if (cmpAux.getFiltroForaneo()!=null){
-                                if (cmpAux.getFiltroForaneo().equals(1)){
-                                    str.append(" agrega_registro=\"true\"");
-                                }
-                            } 
-                            str.append((" clave_forma=\""+idForma+"\">\n"));
-                            String[] strData = null; //getStringData(cmpAux.getForaneo(),arr);
-                            StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
-                            if (!"".equals(strForaneo.toString())){
-                                str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
-                                str.append(strForaneo);
-                                str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
-                            }
-                            str.append("\t\t</foraneo>\n");
-                        }
-                        if (cmpAux.getAyuda()!=null){
-                            str.append(("\t\t<ayuda><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
-                                    + "]]></ayuda>\n"));
-                        }
-                        if (cmpAux.getDatoSensible()!=null){
-                            str.append(("\t\t<dato_sensible><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getDatoSensible()).trim())
-                                    + "]]></dato_sensible>\n"));
-                        }
-                        if (cmpAux.getActivo()!=null){
-                            str.append(("\t\t<activo><![CDATA["
-                                    + castNULL(String.valueOf(cmpAux.getActivo()).trim())
-                                    + "]]></activo>\n"));
-                        }
-                        if (cmpAux.getTamano()!=null){
-                            str.append(("\t\t<tamano>"
-                                    + castNULL(String.valueOf(cmpAux.getTamano()).trim())
-                                    + "</tamano>\n"));
-                        }
+                boolean seguir = true;
+                if (this.isDeleteIncreement()){
+                    if (cmp.getIsIncrement()){
+                        seguir = false;
                     }
                 }
-                str.append(("\t</"+cmp.getNombreDB()+">\n"));
+                if (seguir){
+                    str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
+                                     + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
+                    str.append("<![CDATA[]]>\n");
+                    if (cmp.getNombreDB()!=null){
+                        CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
+                        if (cmpAux!=null){
+                            if (cmpAux.getAliasCampo()!=null){
+                                str.append(("\t\t<alias_campo><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
+                                        + "]]></alias_campo>\n"));
+                            }
+                            if (cmpAux.getObligatorio()!=null){
+                                str.append(("\t\t<obligatorio><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
+                                        + "]]></obligatorio>\n"));
+                            }
+                            if (cmpAux.getTipoControl()!=null){
+                                str.append(("\t\t<tipo_control><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
+                                        + "]]></tipo_control>\n"));
+                            }
+                            if (cmpAux.getEvento()!=null){
+                                str.append(("\t\t<evento><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getEvento()).trim())
+                                        + "]]></evento>\n"));
+                            }
+                            if (cmpAux.getForaneo()!=null){
+                                str.append("\t\t<foraneo");
+                                if (cmpAux.getFiltroForaneo()!=null){
+                                    if (cmpAux.getFiltroForaneo().equals(1)){
+                                        str.append(" agrega_registro=\"true\"");
+                                    }
+                                }
+                                str.append((" clave_forma=\""+idForma+"\">\n"));
+                                String[] strData = null;//getStringData(cmpAux.getForaneo(),arr);
+                                StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
+                                if (!"".equals(strForaneo.toString())){
+                                    str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
+                                    str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
+                                    str.append(strForaneo);
+                                    str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                }
+                                str.append("\t\t</foraneo>\n");
+                            }
+                            if (cmpAux.getAyuda()!=null){
+                                str.append(("\t\t<ayuda><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
+                                        + "]]></ayuda>\n"));
+                            }
+                            if (cmpAux.getDatoSensible()!=null){
+                                str.append(("\t\t<dato_sensible><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getDatoSensible()).trim())
+                                        + "]]></dato_sensible>\n"));
+                            }
+                            if (cmpAux.getActivo()!=null){
+                                str.append(("\t\t<activo><![CDATA["
+                                        + castNULL(String.valueOf(cmpAux.getActivo()).trim())
+                                        + "]]></activo>\n"));
+                            }
+                            if (cmpAux.getTamano()!=null){
+                                str.append(("\t\t<tamano>"
+                                        + castNULL(String.valueOf(cmpAux.getTamano()).trim())
+                                        + "</tamano>\n"));
+                            }
+                        }
+                    }
+                    str.append(("\t</"+cmp.getNombreDB()+">\n"));
+                }
             }
             str.append("</registro>\n");
         }
@@ -742,8 +776,6 @@ public class AdminXML {
         for (int i=level; i>0; i--){
             str = str + "\t";
         }
-        System.out.print(str);
-        System.out.println(s+", LEVEL:"+level);
     }
 
 /******************** METODOS DE LA ENTIDAD ******************************/
