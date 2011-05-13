@@ -74,7 +74,7 @@ public class srvFormaInsert extends HttpServlet {
                             dato = (String) hsFile.get(cmp.getCampo());
                         }
                     }
-                    if ((dato==null) && (cmp.getObligatorio()==1)) {
+                    if ((dato==null) && (cmp.getObligatorio()==1) && (!"0".equals(pk))) {
                         obligatorioOk=false;
                     }else{
                         hsFormQuery.put(cmp.getCampo(), dato);
