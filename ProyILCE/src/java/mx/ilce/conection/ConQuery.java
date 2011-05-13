@@ -286,6 +286,7 @@ class ConQuery {
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
+                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
                 }
                 int i=0;
                 while (rs.next()){
@@ -355,6 +356,7 @@ class ConQuery {
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
+                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
                 }
                 int i=0;
                 while (rs.next()){
@@ -433,6 +435,7 @@ class ConQuery {
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
+                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
                 }
                 int i=0;
                 while (rs.next()){
@@ -563,6 +566,7 @@ class ConQuery {
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
                     hsCmp.addCampo(cmp);
+                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
                 }
                 int i=0;
                 while (rs.next()){
@@ -695,6 +699,7 @@ class ConQuery {
                             cmp.setIsIncrement(true);
                         }
                         hsCmp.addCampo(cmp);
+                        cmp.setIsIncrement(rstm.isAutoIncrement(i));
                     }
                     int i=0;
                     while (rs.next()){
@@ -768,6 +773,7 @@ class ConQuery {
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     hsCmp.addCampo(cmp);
+                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
                 }
                 int i=0;
                 while (rs.next()){
