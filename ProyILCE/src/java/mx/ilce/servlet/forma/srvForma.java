@@ -44,6 +44,9 @@ public class srvForma extends HttpServlet {
                 forma.setPk(pk);
                 forma.setClaveForma(Integer.valueOf(claveForma));
                 forma.setTipoAccion(tipoAccion);
+                if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
+                    forma.setCleanIncrement(true);
+                }
                 forma.mostrarForma();
                 StringBuffer xmlForma = forma.getXmlEntidad();
                 request.getSession().setAttribute("xmlForma", xmlForma);
