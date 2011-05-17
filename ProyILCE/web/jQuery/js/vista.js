@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     $("#splitterContainer").splitter({
         minAsize:100,
-        maxAsize:300,
+        maxAsize:250,
         splitVertical:true,
         A:$('#leftPane'),
         B:$('#rightPane'),

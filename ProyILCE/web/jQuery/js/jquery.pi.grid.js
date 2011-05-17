@@ -17,7 +17,9 @@
             colNames: [],
             colModel: [{}],
             sortname:"",
-            tab:""
+            tab:"",
+            insertarEnEscritorio:"1",
+            width:"650"
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -28,7 +30,8 @@
             var nApp=$.fn.appgrid.options.app;
             var nEntidad=$.fn.appgrid.options.entidad;
             var suffix =  "_" + nApp + "_" + nEntidad;
-             obj = $(this);
+            obj = $(this);
+            var nForma = obj.attr(name)
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
@@ -79,7 +82,7 @@
                 var nApp=$.fn.appgrid.options.app;
                 var nEntidad=$.fn.appgrid.options.entidad;
 
-                $("#grid" + suffix).jqGrid(
+                var oGrid=$("#grid" + suffix).jqGrid(
                             {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&w=" + $.fn.appgrid.options.wsParameters,
                             datatype: "xml",
                             colNames:$.fn.appgrid.options.colNames,
@@ -93,56 +96,74 @@
                             sortorder: "desc",
                             ondblClickRow: function(id){
                                   //inicializa valiable de tabs
-                                  var $tabs = $('#tabs').tabs({
-                                        tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
-                                  });
-
-                                  //Verifica si ya está abierto el tab en modo de edición
-                                  if ($("#tabEditEntity"+suffix + "_" + id).length) {
-                                       $tabs.tabs( "select", "#tabEditEntity"+suffix);
-                                  }
-                                  else {
-                                        sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
-                                        sEntidad=this.id.split("_")[2];
-                                        $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
-                                        $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
-                                        //Crea la interfaz de la aplicación abierta
-                                        $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "'>" +
-                                                                               "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer'></div>" +
-                                                                               "<div id='frm" + suffix + "_" + id +"' class='formContainer'></div>" +
-                                                                               "</div>");
-                                        $("#tvApp" + suffix + "_" + id).treeMenu({app:$.fn.appgrid.options.app,
-                                                                       entidad:$.fn.appgrid.options.entidad,
-                                                                       pk:id });
-                                        /*$("#tabEditEntity"+suffix+"_"+id).apptab({
-                                            entidad:$.fn.appgrid.options.entidad,
-                                            pk:id,
-                                            app:$.fn.appgrid.options.app
-                                        });*/
-
-                                  }
+                                  $.fn.appgrid.openKardex(id);
                             },
                             caption:"Aplicaciones"}).navGrid('#pager' + suffix,
-                                                    {edit:false,add:false,del:false,search:false}).navButtonAdd("#pager" + suffix,
-                                                                                                   { caption:"",
+                                                    {edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,
+                                                                                                   {caption:"",
                                                                                                      buttonicon:"ui-icon-plus",
                                                                                                      onClickButton:function() {
-                                                                                                            $("#dlgRegister").dialog({height:360, width:500,
-                                                                                                                               modal: true,
-                                                                                                                               title: $.fn.appgrid.options.leyendas[0]
-                                                                                                                               }).form({aplicacion: nApp,
-                                                                                                                                                   forma:nEntidad,
-                                                                                                                                                   modo:"insert",
-                                                                                                                                                   titulo: $.fn.appgrid.options.leyendas[0],
-                                                                                                                                                   columnas:1,
-                                                                                                                                                   pk:0});
+                                                                                                             $("body").form({aplicacion: nApp,
+                                                                                                                             forma:nEntidad,
+                                                                                                                             modo:"insert",
+                                                                                                                             titulo: $.fn.appgrid.options.leyendas[0],
+                                                                                                                             columnas:1,
+                                                                                                                             pk:0,
+                                                                                                                             height:400,
+                                                                                                                             width:500});
+                                                                                                            $(this).trigger("reloadGrid");
                                                                                                         },
                                                                                                      position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
-                                                                                                        { caption:"", buttonicon:"ui-icon-pencil", onClickButton:null, position: "last", title:"Editar registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
-                                                                                                        { caption:"", buttonicon:"ui-icon-search", onClickButton:null, position: "last", title:"Filtrar", cursor: "pointer"});
+                                                                                                        {caption:"",
+                                                                                                          buttonicon:"ui-icon-pencil",
+                                                                                                          onClickButton:function() {
+                                                                                                            nPK=$(this).getGridParam('selrow');
 
-                /* Finaliza implementación de grid */
+                                                                                                            if (nPK) {
+                                                                                                                $("body").form({aplicacion: nApp,
+                                                                                                                            forma:nEntidad,
+                                                                                                                            modo:"update",
+                                                                                                                            titulo: $.fn.appgrid.options.leyendas[1],
+                                                                                                                            columnas:1,
+                                                                                                                            pk:nPK,
+                                                                                                                            height:"500",
+                                                                                                                            width:"500"});
+                                                                                                                $(this).trigger("reloadGrid");
+                                                                                                            }
+                                                                                                           else
+                                                                                                               alert('Seleccione un registro');
 
+                                                                                                        },
+                                                                                                     position: "last", title:"Editar registro",  cursor: "pointer"}).navButtonAdd("#pager" + suffix,
+                                                                                                        {caption:"",
+                                                                                                         buttonicon:"ui-icon-search",
+                                                                                                         onClickButton:  function() {
+                                                                                                               $("body").form({aplicacion: nApp,
+                                                                                                                               forma:nEntidad,
+                                                                                                                               modo:"lookup",
+                                                                                                                               titulo: "B&uacute;squeda de registros",
+                                                                                                                               columnas:1,
+                                                                                                                               pk:0});
+                                                                                                            /*$(this).trigger("reloadGrid");*/
+                                                                                                          },
+                                                                                                      position: "last",title:"Filtrar",cursor: "pointer"}).navButtonAdd("#pager" + suffix,
+                                                                                                        {caption:"", 
+                                                                                                         buttonicon:"ui-icon-document",
+                                                                                                         onClickButton:  function() {
+                                                                                                            nPK=$(this).getGridParam('selrow');
+                                                                                                            if (nPK)
+                                                                                                                $.fn.appgrid.openKardex(nPK);
+                                                                                                            else
+                                                                                                               alert('Seleccione un registro');
+                                                                                                          },
+                                                                                                      position: "last",title:"Abrir kardex",cursor: "pointer"});
+               if ($.fn.appgrid.options.insertarEnEscritorio=="1")
+                $("#grid" + suffix).jqGrid().navGrid('#pager' + suffix).navButtonAdd("#pager" + suffix,{caption:"Insertar en escritorio",
+                                                                                                         onClickButton:  function() {
+                                                                                                             alert('Por implementar');
+                                                                                                          },
+                                                                                                      position: "last",title:"",cursor: "pointer"});
+               /* Finaliza implementación de grid */
             },
             error:function(xhr,err){
                 alert("Error al recuperar definición de grid\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -159,14 +180,52 @@
         oAlias= oColumnas.find('alias_campo');
         oAlias.each( function() {
              suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
-             oColumna={name:$(this)[0].nodeName+suffix,
-                       index:$(this)[0].nodeName+suffix,
+             var sParent=$(this).parent()[0].tagName;
+             oColumna={name:sParent+suffix,
+                       index:sParent+suffix,
                        width:$(oTamano[iCol]).text()
                    };
              $.fn.appgrid.options.colNames[iCol]=$(this).text();
              $.fn.appgrid.options.colModel[iCol]=oColumna;
              iCol++;
         });
+
+    $.fn.appgrid.openKardex = function(id) {
+         var nApp=$.fn.appgrid.options.app;
+         var nEntidad=$.fn.appgrid.options.entidad;
+         var suffix =  "_" + nApp + "_" + nEntidad;
+
+         var $tabs = $('#tabs').tabs({
+                tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+            });
+
+         //Verifica si ya está abierto el tab en modo de edición
+         if ($("#tabEditEntity"+suffix + "_" + id).length) {
+             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
+         }
+         else {
+             sTabTitulo=$('#grid'+ suffix).jqGrid()[0].p.colNames[1] + ' ' + $('#grid'+ suffix).jqGrid()[0].rows[id].cells[1].innerHTML;
+             sEntidad=$('#grid'+ suffix).jqGrid()[0].id.split("_")[2];
+             $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
+             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
+             //Crea la interfaz de la aplicación abierta
+             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "'>" +
+                 "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer'></div>" +
+                 "<div id='frm" + suffix + "_" + id +"' class='formContainer'></div>" +
+                 "</div>");
+             $("#tvApp" + suffix + "_" + id).treeMenu({
+                 app:$.fn.appgrid.options.app,
+                 entidad:$.fn.appgrid.options.entidad,
+                 pk:id
+            });
+            /*$("#tabEditEntity"+suffix+"_"+id).apptab({
+            entidad:$.fn.appgrid.options.entidad,
+            pk:id,
+            app:$.fn.appgrid.options.app
+        });*/
+
+            }
+        }
 
     }
 })(jQuery);
