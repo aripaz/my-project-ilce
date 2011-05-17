@@ -22,11 +22,29 @@ public class CampoForma implements Serializable  {
     private String tipoControl;
     private String evento;
     private String foraneo;
-    private Integer filtroForaneo;
+    private String filtroForaneo;
     private String ayuda;
     private Integer datoSensible;
     private Integer activo;
     private Integer tamano;
+    private Integer claveFormaForanea;
+    private String typeData;
+
+    public String getTypeData() {
+        return typeData;
+    }
+
+    public void setTypeData(String typeData) {
+        this.typeData = typeData;
+    }
+
+    public Integer getClaveFormaForanea() {
+        return claveFormaForanea;
+    }
+
+    public void setClaveFormaForanea(Integer claveFormaForanea) {
+        this.claveFormaForanea = claveFormaForanea;
+    }
 
     public Integer getActivo() {
         return activo;
@@ -92,11 +110,11 @@ public class CampoForma implements Serializable  {
         this.evento = evento;
     }
 
-    public Integer getFiltroForaneo() {
+    public String getFiltroForaneo() {
         return filtroForaneo;
     }
 
-    public void setFiltroForaneo(Integer filtroForaneo) {
+    public void setFiltroForaneo(String filtroForaneo) {
         this.filtroForaneo = filtroForaneo;
     }
 
