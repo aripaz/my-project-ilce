@@ -262,6 +262,7 @@ public class Forma extends Entidad{
             ex = new ExecutionHandler();
             if (!intHs.equals(0)){
                 ex.setExecutionOK(true);
+                ex.setObjectData(intHs);
             }else{
                 ex.setExecutionOK(false);
             }
