@@ -85,15 +85,15 @@
                             else {
 
                                 if (this.id.split("_")[0]=="newEntity") {
-                                    $("#dlgRegister").dialog({height:360, width:500,
-                                                   modal: true,
-                                                   title: sTitulo
-                                                   }).form({aplicacion: nAplicacion,
+                                    $("body").form({aplicacion: nAplicacion,
                                                                        forma:nEntidad,
                                                                        modo:"insert",
                                                                        titulo: sTitulo,
                                                                        columnas:1,
-                                                                       pk:0});
+                                                                       pk:0,
+                                                                       height:400,
+                                                                       width:500
+                                                                   });
                                 }
                                 else {
                                     $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);

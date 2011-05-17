@@ -10,9 +10,12 @@
             aplicacion:"",
             forma:"",
             pk:"",
-            xmlUrl : "srvForma",
+            xmlUrl : "srvForma", //"xml_tests/forma.app.xml"
             columnas: 2,
-            modo:""
+            modo:"",
+            height:500,
+            width:500
+
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -20,39 +23,58 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
+            var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
             obj = $(this);
-            obj.title=$.fn.form.options.titulo;
 
-            if ($.fn.form.options.aplicacion=="1")
-                sTabs="<div id='formTab'>"+
-                        "<ul><li><a href='#divFormGeneral'>General</a></li>"+
+            if ($.fn.form.options.aplicacion=="1" && $.fn.form.options.modo!='lookup')
+                sTabs="<div id='formTab_" + suffix +"'>"+
+                        "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
                             "<li><a href='#divFormPerfiles'>Perfiles de seguridad</a></li></ul>"+
-                        "<div id='divFormGeneral'>" +
+                        "<div id='divFormGeneral_" + suffix +"'>" +
                             "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
                                         "<img src='img/loading.gif' /></div>"+
                         "</div>"+
                         "<div id='divFormPerfiles' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles' class='treeProfiles'></div></div>"+
                        "</div>"
-            else
-                sTabs="<div id='formTab'>"+
-                        "<ul><li><a href='#divFormGeneral'>General</a></li>"+
-                        "<div id='divFormGeneral'>" +
-                            "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
-                                        "<img src='img/loading.gif' /></div>"+
-                        "</div>"+
-                       "</div>";
+            else {
 
-           sTabs+="<br><div align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'><input type='submit' class='formButton' id='btnGuardar'   value='Guardar'/></div>";
+                if ($.fn.form.options.modo!='lookup')
+                    sTituloTab="General"
+                else
+                    sTituloTab="Seleccione los criterios de b&uacute;queda"
 
-            obj.html(sTabs);
-            var Tabs=$("#formTab").tabs();
-            $.fn.form.ajax($("#divFormGeneral"));
+                sTabs="<div id='formTab_" + suffix + "'>"+
+                      "<ul><li><a href='#divFormGeneral_" + suffix +"'>" + sTituloTab + "</a></li></ul>"+
+                      "<div id='divFormGeneral'>" +
+                          "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
+                                      "<img src='img/loading.gif' /></div>"+
+                      "</div>"+
+                      "</div>";
 
-            $("#btnGuardar").click(function() {
-                $("#form_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk).submit();
-            })
+           }
 
-            $.fn.form.ajax_profiles($("#divFormProfiles"));
+
+           if ($.fn.form.options.modo!='lookup')
+               sButtonCaption='Guardar';
+           else
+               sButtonCaption='Buscar'
+
+           sTabs+="<br><div align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'><input type='submit' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></div>";
+           obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>");
+           $("#dlgModal_"+ suffix).dialog({modal: true,
+                                           height:$.fn.form.options.height,
+                                           width:$.fn.form.options.width});
+           //obj.html(sTabs);                                                                                                                               
+                                                                                                                             
+           var Tabs=$("#formTab_" + suffix).tabs();
+           $.fn.form.ajax($("#divFormGeneral_" + suffix));
+
+           $("#btnGuardar_"+ suffix).click(function() {
+                $("#form_" + suffix).submit();
+           })
+
+           if ($.fn.form.options.modo!='lookup')
+                $.fn.form.ajax_profiles($("#divFormProfiles"));
         });
  
     };
@@ -72,14 +94,14 @@
                 }
                 else {
                     xml = data;}
-               var s="<table>";
+               var s="<form id='frmPerfiles'><table>";
                $(xml).find("row").each( function() {
                    oCell=$(this).find("cell");
                    s+="<tr><td><img src='http://localhost:8088/ProyILCE/img/perfiles10.png'></td>" +
-                           "<td class='etiqueta_perfil'><input type='checkbox' name='clave_perfil' value='" +  $(oCell[0]).text()+ "' />" + $(oCell[1]).text() + "</td>"+
+                           "<td class='etiqueta_perfil'><input type='checkbox' name='clave_perfil' value='" +  $(oCell[0]).text()+ "'" + (($(oCell[1]).text()=="Administrador")?" checked='checked'":"") + " />" + $(oCell[1]).text() + "</td>"+
                       "</tr>";
                })
-               s+="</table>";
+               s+="</table></form>";
                obj.html(s);
             }
         });
@@ -88,7 +110,7 @@
     $.fn.form.ajax = function(obj){
         $.ajax(
         {
-            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo,
+            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -102,17 +124,6 @@
                 else {
                     xml = data;}
                 obj.html($.fn.form.handleForm(xml));
-
-                //Se incorpora funcionalidad a los botones del modo de búsqueda
-                if ($.fn.form.options.modo=="lookup") {
-                    var nApp=$.fn.form.options.aplicacion;
-                    //Botón para cerrar formulario de búsqueda avanzada
-                    $("#closeAdvancedSearch_" + nApp ).click(function(){
-                        $("#simple_search_"+ nApp).slideToggle();
-                        $("#advanced_search_" + nApp).slideToggle();
-                        return false;
-                    })
-                }
 
                 //Crea clave unica para forma
                 var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
@@ -128,6 +139,9 @@
                                                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
                                                    monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']});
 
+               //Se activa el foreign toolbar para editar registros foraneos
+               oForm.find('.foreign_toolbar').fieldtoolbar({app:$.fn.form.options.aplicacion});
+
                 //Se captura el submit
                 oForm.submit(function() {
                         var sWS="";
@@ -136,7 +150,7 @@
                         if ($.fn.form.options.modo!="lookup") {
                             var bCompleto=true;
                             oForm.find('.obligatorio').each(function() {
-                                if (this.value.trim()=="") {
+                                if ($.trim(this.value)=="") {
                                     $("#td_" + this.name).addClass("errorencampo")
                                     $(this).addClass("errorencampo");
                                     $("#msgvalida_" + this.name).show();
@@ -145,8 +159,6 @@
                                     $("#td_" + this.name).removeClass("errorencampo")
                                     $("#msgvalida_" + this.name).hide();
                                     $(this).removeClass("errorencampo");}
-
-
                             });
 
                             if (!bCompleto) return false;
@@ -160,46 +172,53 @@
                                 sData+=sNombreCampo+"="+oCampo.value + "&";
                             });
                             sData+="$cf=" +$.fn.form.options.forma +
-                                   "&pk=" + $.fn.form.options.pk +
+                                   "&$pk=" + $.fn.form.options.pk +
                                    "&$ta=" + $.fn.form.options.modo
 
                             $.ajax({
                                 type: "POST",
                                 url: sWS,
-                                data: sData,
-                                success: function(){
+                                data:sData,
+                                success: function(data){
+                                    if (data=='0') {
+                                        alert('Error al insertar registro');
+                                        return false;
+                                    }
+                                    //Envía perfiles asociados a la forma
+                                    oCampos=$("#frmPerfiles").serializeArray();
+                                    sData="";
+                                    sNombreCampo='';
+                                    $.each(oCampos, function(i,oCampo){
+                                        sData+=oCampo.name+"="+oCampo.value + "&clave_aplicacion=" + data + "&activo=1&$cf=5&$pk=0&$ta="+ $.fn.form.options.modo;
+                                        $.post(sWS, sData);
+                                        sData="";
+                                    });
+
                                    //Cierra el dialogo
-                                    $("#dlgRegister").dialog("destroy");
+                                   var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
+                                   $("#dlgModal_"+ suffix).dialog("destroy");
 
                                 }
                             });
                         }
                         else {
                             //Valida que traiga al menos un dato:
-                            var bSinDatos=true;
+                            sData = "";
                             oCampos = oForm.serializeArray();
                             jQuery.each(oCampos, function(i, oCampo){
                                 sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                                if (oCampo.value=="") bSinDatos=false;
+                                if ($.trim(oCampo.value)!="") 
                                 sData+=sNombreCampo+"="+oCampo.value + "&";
                             });
 
-                            if (bSinDatos) {
-                                alert("Es necesario especificar al menos un criterio de b&uacute;queda, verifique");
-                                return false;
+                            if (sData=="") {
+                                alert("Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");}
+                            else {
+                                $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid('setGridParam',{url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$w=" + sData+ "&dp=body"}).trigger("reloadGrid")
+                                $("#dlgRegister").dialog("destroy");
                             }
-
-                            
                         }
 
-                        //
-                        /*sTabTitulo=this.p.colNames[1] + ' ' + this.rows[id].cells[1].innerHTML;
-                        $tabs.tabs( "add", "#tabEditEntity"+id, sTabTitulo);
-                        $tabs.tabs( "select", "#tabEditEntity"+id);
-                        $("#tabEditEntity"+id).apptab({
-                            entidad:id,
-                            app:nAplicacion
-                        });*/
                         return false;
 
                     });
@@ -224,8 +243,9 @@
             oCampo=$(this);
             sTipoCampo= oCampo.attr("tipo_dato").toLowerCase();
             //Genera etiqueta
-            if (oCampo.find('alias_campo').text()!='') {
-                sRenglon += '<td class="etiqueta_forma" id="td_' +oCampo[0].nodeName + sSuffix + '">' + oCampo.find('alias_campo').text();
+            sAlias= oCampo.find('alias_campo').text();
+            if (sAlias!='') {
+                sRenglon += '<td class="etiqueta_forma" id="td_' +oCampo[0].nodeName + sSuffix + '">' +sAlias;
             }
             else {
                 sRenglon += '<td class="etiqueta_forma" id="td_' + oCampo[0].nodeName + sSuffix + '">' + oCampo[0].nodeName;
@@ -271,7 +291,7 @@
                                 
                 sRenglon +='</select>';
                 if ($.fn.form.options.modo!="lookup") {
-                    sRenglon +="<img src='img/browse_catalog2.jpg' align='absbottom' onclick='alert(\"Funcionalidad por implementar\");' />";
+                    sRenglon +="<div class='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' class='fieldToolbar'></div>";
                 }
                 
                 sRenglon+='</td>|';
@@ -312,10 +332,10 @@
                                 ' class="singleInput';
                     
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
-                        sRenglon +=' obligatorio"';
+                        sRenglon +=' obligatorio';
 
                     if (sTipoCampo=="date")
-                        sRenglon +=' fecha ';
+                        sRenglon +=' fecha';
 
                     sRenglon +='" type="text" value="' + oCampo[0].childNodes[0].data + '" ' + oCampo.find('evento').text();
 
@@ -348,53 +368,10 @@
             sForm+="</tr>";
         }
 
-        
-        var sEncabezado="";
-        var sPie="";
-        //Se multiplican las columnas por dos por que se agrega una columna separadora
-        //para cada columna existente
-        nCols=(nCols*2)+1
-
-        for (i=1; i<=nCols; i++) {
-            
-            if (i==1) {
-                //Si está en BackEnd despliega el botón para mostrar los perfiles
-                /*if ( $.fn.form.options.aplicacion=="1")
-                    sEncabezado+="<tr><td colspan='" + $.fn.form.options.columnas + "' class='etiqueta_forma'><td><div align='right'><a href='#' id='lnkPerfiles" + sSuffix + "' class='lnkPerfil'>Perfiles de seguridad</a></div></td></tr>";
-                else
-                    sEncabezado="";*/
-                
-                sPie+="<td colspan='" + $.fn.form.options.columnas + "' class='etiqueta_forma'>";
-            }
-            else {
-                sEncabezado+="";
-                sPie+="<td>";
-            }
-
-
-            if (i==nCols) {
-                if ($.fn.form.options.modo=="lookup") {
-                    sPie+="<div align='right'><input type='hidden' id='$cmd' name='$cmd' value='lookup'><input type='submit' id='advancedSearch_" + nApp + "' value='Buscar'  class='formButton' /><button id='closeAdvancedSearch_" + nApp + "'>Cerrar</button></div>";
-                }
-            }
-            else {
-                sPie+="&nbsp;";
-            }
-
-            sPie+="</td>";
-            if (i==1) {i++}
-        }
-
-        //sForm="<tr>"+sEncabezado + "</tr>"+sForm+"<tr>"+sPie+"</tr>" ;
-        sForm=sEncabezado + sForm + "<tr>"+sPie+"</tr>" ;
-
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-        if ($.fn.form.options.modo=="update") {
-            sForm="<br><br><form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' action='srvFormaUpdate'><table class='forma'>" + sForm + "</table></form>"
-        } else if ($.fn.form.options.modo=="insert"){
-            sForm="<form class='forma' id='form_"  + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' action='srvFormaInsert'><table class='forma'>" + sForm + "</table></form>"
-        }
+        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' ><table class='forma'>" + sForm + "</table></form>"
+
 
         return sForm;
     }
