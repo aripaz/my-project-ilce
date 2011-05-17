@@ -165,7 +165,9 @@ public class AdminXML {
                     CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                     if (cmpAux!=null){
                         if (cmpAux.getAliasCampo()!=null){
-                            str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
+                            str.append(("\t<alias_campo><![CDATA["
+                                    + replaceAccent(castNULL(cmpAux.getAliasCampo().trim()))
+                                    + "]]></alias_campo>\n"));
                         }
                         if (cmpAux.getTamano()!=null){
                             str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
@@ -220,7 +222,9 @@ public class AdminXML {
                 CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                 if (cmpAux!=null){
                     if (cmpAux.getAliasCampo()!=null){
-                        str.append(("\t<alias_campo><![CDATA["+cmpAux.getAliasCampo().trim()+"]]></alias_campo>\n"));
+                        str.append(("\t<alias_campo><![CDATA["
+                                +replaceAccent(castNULL(cmpAux.getAliasCampo().trim()))
+                                +"]]></alias_campo>\n"));
                     }
                     if (cmpAux.getTamano()!=null){
                         str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
@@ -242,7 +246,7 @@ public class AdminXML {
      * @param idForma   ID de la Forma entregada
      * @return
      */
-    public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, Integer idForma){
+    public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, Integer idForma, String tipoAccion){
         StringBuffer str = new StringBuffer();
 
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
@@ -266,14 +270,14 @@ public class AdminXML {
                     str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
                                      + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
                     str.append(("<![CDATA["));
-                    str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                    str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
                     str.append("]]>\n");
                     if (cmp.getNombreDB()!=null){
                         CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                         if (cmpAux!=null){
                             if (cmpAux.getAliasCampo()!=null){
                                 str.append(("\t\t<alias_campo><![CDATA["
-                                        + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
+                                        + replaceAccent(castNULL(String.valueOf(cmpAux.getAliasCampo()).trim()))
                                         + "]]></alias_campo>\n"));
                             }
                             if (cmpAux.getObligatorio()!=null){
@@ -291,19 +295,21 @@ public class AdminXML {
                                         + castNULL(String.valueOf(cmpAux.getEvento()).trim())
                                         + "]]></evento>\n"));
                             }
-                            if (cmpAux.getForaneo()!=null){
+                            if (cmpAux.getClaveFormaForanea()!=null){
                                 str.append("\t\t<foraneo");
-                                if (cmpAux.getFiltroForaneo()!=null){
-                                    if (cmpAux.getFiltroForaneo().equals(1)){
-                                        str.append(" agrega_registro=\"true\"");
-                                    }
+                                if ("SELECT".equals(tipoAccion.toUpperCase())){
+                                    str.append(" agrega_registro=\"false\"");
+                                }else{
+                                    str.append(" agrega_registro=\"true\"");
                                 }
                                 str.append((" clave_forma=\""+idForma+"\">\n"));
-                                String[] strData = getStringData(cmpAux.getForaneo(),arr);
-                                StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
+                                String[] strData = new String[2];
+                                strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
+                                strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                 if (!"".equals(strForaneo.toString())){
                                     str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                    str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
+                                    str.append((" source=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     str.append(strForaneo);
                                     str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
                                 }
@@ -311,7 +317,7 @@ public class AdminXML {
                             }
                             if (cmpAux.getAyuda()!=null){
                                 str.append(("\t\t<ayuda><![CDATA["
-                                        + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
+                                        + replaceAccent(castNULL(String.valueOf(cmpAux.getAyuda()).trim()))
                                         + "]]></ayuda>\n"));
                             }
                             if (cmpAux.getDatoSensible()!=null){
@@ -348,7 +354,7 @@ public class AdminXML {
      * @param idForma
      * @return
      */
-    public StringBuffer getFormaWithoutData(HashCampo hsData, List lstCampos, Integer idForma){
+    public StringBuffer getFormaWithoutData(HashCampo hsData, List lstCampos, Integer idForma, String tipoAccion){
         StringBuffer str = new StringBuffer();
 
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
@@ -377,7 +383,7 @@ public class AdminXML {
                         if (cmpAux!=null){
                             if (cmpAux.getAliasCampo()!=null){
                                 str.append(("\t\t<alias_campo><![CDATA["
-                                        + castNULL(String.valueOf(cmpAux.getAliasCampo()).trim())
+                                        + replaceAccent(castNULL(String.valueOf(cmpAux.getAliasCampo()).trim()))
                                         + "]]></alias_campo>\n"));
                             }
                             if (cmpAux.getObligatorio()!=null){
@@ -395,19 +401,21 @@ public class AdminXML {
                                         + castNULL(String.valueOf(cmpAux.getEvento()).trim())
                                         + "]]></evento>\n"));
                             }
-                            if (cmpAux.getForaneo()!=null){
+                            if (cmpAux.getClaveFormaForanea()!=null){
                                 str.append("\t\t<foraneo");
-                                if (cmpAux.getFiltroForaneo()!=null){
-                                    if (cmpAux.getFiltroForaneo().equals(1)){
-                                        str.append(" agrega_registro=\"true\"");
-                                    }
+                                if ("SELECT".equals(tipoAccion.toUpperCase())){
+                                    str.append(" agrega_registro=\"false\"");
+                                }else{
+                                    str.append(" agrega_registro=\"true\"");
                                 }
                                 str.append((" clave_forma=\""+idForma+"\">\n"));
-                                String[] strData = null;//getStringData(cmpAux.getForaneo(),arr);
-                                StringBuffer strForaneo = getXmlByQueryAndData(cmpAux.getForaneo(), strData, cmp.getNombreDB());
+                                String[] strData = new String[2];
+                                strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
+                                //strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                 if (!"".equals(strForaneo.toString())){
                                     str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                    str.append((" source=\""+String.valueOf(cmpAux.getForaneo()).trim()+"\">\n"));
+                                    str.append((" source=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     str.append(strForaneo);
                                     str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
                                 }
@@ -415,7 +423,7 @@ public class AdminXML {
                             }
                             if (cmpAux.getAyuda()!=null){
                                 str.append(("\t\t<ayuda><![CDATA["
-                                        + castNULL(String.valueOf(cmpAux.getAyuda()).trim())
+                                        + replaceAccent(castNULL(String.valueOf(cmpAux.getAyuda()).trim()))
                                         + "]]></ayuda>\n"));
                             }
                             if (cmpAux.getDatoSensible()!=null){
@@ -473,7 +481,60 @@ public class AdminXML {
                     str.append(("\t\t\t\t\t<"+ cmp.getNombreDB()));
                     str.append((" tipo_dato=\"" + castTypeJavaToXML(cmp.getTypeDataAPL()) + "\">"));
                     str.append(("<![CDATA["));
-                    str.append(castNULL(String.valueOf(cmp.getValor()).trim()));
+                    str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
+                    str.append(("]]>"));
+                    str.append(("</"+ cmp.getNombreDB() + ">\n"));
+                }
+                str.append(("\t\t\t\t</registro_"+ strRegistro+">\n"));
+            }
+        }
+        return str;
+    }
+
+    /**
+     * Metodo que permite crear la seccion de un XML a partir de la forma que
+     * se esta entregando en la data, con ello se obtiene el XML respectivo
+     * @param strData   Data de entrada que se usara en la query
+     * @param strRegistro   Nombre del registro desde donde se invoco el metodo
+     * @return
+     */
+    private StringBuffer getXmlByIdForma(String[] strData, String strRegistro){
+        ConEntidad con = new ConEntidad();
+        HashCampo hsData = new HashCampo();
+        try{
+            //obtenemos la query de la forma entregada
+            String[] strDataQ = new String[2];
+            strDataQ[0] =strData[0];
+            strDataQ[1] ="select";
+            HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ);
+            Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
+            HashMap dq = hsCmpQ.getListData();
+                if (!dq.isEmpty()){
+                    ArrayList arr = (ArrayList)dq.get(0);
+                    Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    String[] strDataFiltro = new String[1];
+                    strDataFiltro[0] = strData[1];
+                    //ejecutamos la query, con el filtro entregado
+                    hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro);
+                }
+        }catch(Exception e){
+
+        }
+        List lstCmp = hsData.getListCampos();
+        HashMap hsDat = hsData.getListData();
+
+        StringBuffer str = new StringBuffer("");
+        if (!hsDat.isEmpty()){
+            for(int i=0;i<hsDat.size();i++){
+                ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
+                str.append(("\t\t\t\t<registro_"+ strRegistro+" "));
+                str.append(("id='"+String.valueOf(i+1)+"'>\n"));
+                for (int j=0; j<lstCmp.size();j++){
+                    Campo cmp = (Campo) arr.get(j) ;
+                    str.append(("\t\t\t\t\t<"+ cmp.getNombreDB()));
+                    str.append((" tipo_dato=\"" + castTypeJavaToXML(cmp.getTypeDataAPL()) + "\">"));
+                    str.append(("<![CDATA["));
+                    str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
                     str.append(("]]>"));
                     str.append(("</"+ cmp.getNombreDB() + ">\n"));
                 }

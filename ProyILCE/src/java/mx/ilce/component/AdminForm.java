@@ -10,6 +10,7 @@ import com.oreilly.servlet.multipart.MultipartParser;
 import com.oreilly.servlet.multipart.ParamPart;
 import com.oreilly.servlet.multipart.Part;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -25,9 +26,11 @@ public class AdminForm {
 
     /**
      * Entrega un HashMap que contiene los datos de un formulario, separados en
-     * dos Hash: Datos (FORM) y Archivos (FILES). Para poder recuperar los
-     * Archivos se requiere que el contentType del Form sea "multipart/form-data",
-     * sino es de este tipo, no se envia el Hash de archivos y el campo correspondiente
+     * dos Hash: Datos (FORM) y Archivos (FILES) y dos ArrayList: con los nombres
+     * de los campos del formulario (arrayFORM) y uno con los nombres de los
+     * campos de archivo (arrayFILE). Para poder recuperar los Archivos se
+     * requiere que el contentType del Form sea "multipart/form-data", sino es
+     * de este tipo, no se envia el Hash de archivos y el campo correspondiente
      * al archivo se incluye dentro del Hash de FORM. La estructura de cada hash
      * contiene el nombre del campo como clave y el dato obtenido del formulario,
      * ambos en formato String. Cuando se envia el contentType correcto y existe
@@ -54,9 +57,11 @@ public class AdminForm {
     }
 
     /**
-     * Entrega un Hash con el contenido de un formulario, los datos asociados a
-     * archivos solo se entregan como otro dato mas, no generandose el hash con
-     * los datos de archivo ni realizandose la copia en el servidor
+     * Entrega un Hash con el contenido de un formulario, en el Hash de
+     * datos (FORM) y un arreglo con los nombres de los campos de datos del
+     * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
+     * como otro dato mas, no generandose el hash con los datos de archivo ni
+     * realizandose la copia en el servidor
      * @param request
      * @return
      */
@@ -65,15 +70,18 @@ public class AdminForm {
         HashMap hsForm = null;
         try{
             Enumeration enumData = request.getParameterNames();
+            ArrayList arrayFORM = new ArrayList();
             if (enumData != null){
                 hsForm = new HashMap();
                 while (enumData.hasMoreElements()){
                     String strEnum = (String) enumData.nextElement();
                     String[] strData = request.getParameterValues(strEnum);
                     hsForm.put(strEnum, strData[0]);
+                    arrayFORM.add(strEnum);
                 }
                 hs = new HashMap();
                 hs.put("FORM", hsForm);
+                hs.put("arrayFORM", arrayFORM);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -84,7 +92,9 @@ public class AdminForm {
     
     /**
      * Entrega un Hash con el contenido de un formulario, separados en el Hash
-     * de datos (FORM) y el de archivos (FILE). Cuando los archivos que se indican
+     * de datos (FORM), el de archivos (FILE), un arreglo con nombres campos de
+     * datos del formulario (arrayFORM) y un arreglo con los nombres de los
+     * campos de archivo (arrayFILE). Cuando los archivos que se indican
      * existen, se genera una copia en el servidor y se entrega en el Hash, el
      * nombre y ruta del archivo.
      * @param request
@@ -101,6 +111,8 @@ public class AdminForm {
             String FileServerPath = admF.getKey(prop, AdminFile.FILESERVER);
             String maxSizeFile = admF.getKey(prop, AdminFile.MAXSIZEFILE);
             int maxPostSize = Integer.valueOf(maxSizeFile);
+            ArrayList arrayFORM = new ArrayList();
+            ArrayList arrayFILE = new ArrayList();
 
             MultipartParser mp = new MultipartParser(request, maxPostSize,true,true);
             Part part;
@@ -116,6 +128,7 @@ public class AdminForm {
                         hsForm = new HashMap();
                     }
                     hsForm.put(name, value);
+                    arrayFORM.add(name);
                 }else if (part.isFile()) {
                     FilePart filePart = (FilePart) part;
                     String fileName = filePart.getFileName();
@@ -131,12 +144,15 @@ public class AdminForm {
                         long size = filePart.writeTo(dir);
                         if (size>0){
                             hsFile.put(name, dirName);
+                            arrayFILE.add(name);
                         }
                     }
                 }
             }
             hs.put("FORM", hsForm);
             hs.put("FILE", hsFile);
+            hs.put("arrayFORM", arrayFORM);
+            hs.put("arrayFILE", arrayFILE);
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -32,8 +32,44 @@ public class Forma extends Entidad{
     private String tipoAccion;
     private String campoPK;
     private boolean cleanIncrement;
+    private String strWhereQuery;
+    private String[] arrayData;
+    private HashMap formData;
+    private ArrayList formName;
 
     /************** GETTER Y SETTER ***************/
+
+    public HashMap getFormData() {
+        return formData;
+    }
+
+    public void setFormData(HashMap formData) {
+        this.formData = formData;
+    }
+
+    public ArrayList getFormName() {
+        return formName;
+    }
+
+    public void setFormName(ArrayList formName) {
+        this.formName = formName;
+    }
+
+    public String[] getArrayData() {
+        return arrayData;
+    }
+
+    public void setArrayData(String[] arrayData) {
+        this.arrayData = arrayData;
+    }
+
+    public String getStrWhereQuery() {
+        return (strWhereQuery==null)?"":strWhereQuery;
+    }
+
+    public void setStrWhereQuery(String strWhereQuery) {
+        this.strWhereQuery = (strWhereQuery==null)?"":strWhereQuery;
+    }
 
     public boolean isCleanIncrement() {
         return cleanIncrement;
@@ -52,7 +88,7 @@ public class Forma extends Entidad{
     }
 
     public String getTipoAccion() {
-        return tipoAccion;
+        return ((tipoAccion==null)?"":tipoAccion);
     }
 
     public void setTipoAccion(String tipoAccion) {
@@ -408,6 +444,7 @@ public class Forma extends Entidad{
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+                //Obtenemos el IDQUERY de la forma entregada
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -416,6 +453,7 @@ public class Forma extends Entidad{
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
                     strData = new String[1];
                     strData[0]= this.getPk();
+                    //ejecutamos la QUERY que se obtuvo al buscar la forma
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
@@ -424,9 +462,9 @@ public class Forma extends Entidad{
                             admXML.setDeleteIncreement(cleanIncrement);
                         }
                         if (hsCmp.getLengthData()==0){
-                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                            xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),this.getTipoAccion());
                         }else{
-                            xmlForma = admXML.getFormaByData(hsCmp, lstF, con.getIdQuery(AdminFile.FORMA));
+                            xmlForma = admXML.getFormaByData(hsCmp,lstF,this.getClaveForma(),this.getTipoAccion());
                         }
                     }
                 }
@@ -454,29 +492,95 @@ public class Forma extends Entidad{
     }
 
     public Forma ingresarBusquedaSencilla() {
-        Forma frm = new Forma();
         try{
-            //procesar el xml como se necesite y asignarlo
+            ConEntidad con = new ConEntidad();
+            String[] strData = new String[2];
+            StringBuffer xmlForma = new StringBuffer("");
+            if (this.claveForma !=null){
+                strData[0] = String.valueOf(this.getClaveForma());
+                strData[1] = String.valueOf(this.getTipoAccion());
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
+                HashMap dq = hsCmpQ.getListData();
+                if (!dq.isEmpty()){
+                    ArrayList arr = (ArrayList)dq.get(0);
+                    Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    String strWhere = this.getStrWhereQuery();
+                    HashCampo hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strWhere);
+                    if (!this.hsForma.isEmpty()){
+                        AdminXML admXML = new AdminXML();
+                        List lstF = (List)this.getForma(Integer.valueOf(claveForma));
+                        if (this.isCleanIncrement()){
+                            admXML.setDeleteIncreement(cleanIncrement);
+                        }
+                        if (hsCmp.getLengthData()==0){
+                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF,this.getClaveForma(), this.getTipoAccion());
+                        }else{
+                            xmlForma = admXML.getFormaByData(hsCmp, lstF,this.getClaveForma(), this.getTipoAccion());
+                        }
+                    }
+                }
+            }
+            this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             e.printStackTrace();
-            //throw new UnsupportedOperationException("Not supported yet.");
         }finally{
             //colocar instrucciones que siempre se deben hacer
         }
-        return frm;
+        return this;
     }
 
     public Forma ingresarBusquedaAvanzada() {
-        Forma frm = new Forma();
         try{
-            //procesar el xml como se necesite y asignarlo
+            ConEntidad con = new ConEntidad();
+            String[] strData = new String[2];
+            StringBuffer xmlForma = new StringBuffer("");
+            if (this.claveForma !=null){
+                strData[0] = String.valueOf(this.getClaveForma());
+                strData[1] = String.valueOf(this.getTipoAccion());
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
+                HashMap dq = hsCmpQ.getListData();
+                if (!dq.isEmpty()){
+                    ArrayList arr = (ArrayList)dq.get(0);
+                    Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                    String strWhere = this.getStrWhereQuery();
+                    strData = this.getArrayData();
+                    HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()), strWhere, strData);
+                    if (!this.hsForma.isEmpty()){
+                        AdminXML admXML = new AdminXML();
+                        List lstF = (List)this.getForma(Integer.valueOf(claveForma));
+                        if (this.isCleanIncrement()){
+                            admXML.setDeleteIncreement(cleanIncrement);
+                        }
+                        if (hsCmp.getLengthData()==0){
+                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),this.getTipoAccion());
+                        }else{
+                            xmlForma = admXML.getFormaByData(hsCmp, lstF, this.getClaveForma(),this.getTipoAccion());
+                        }
+                    }
+                }
+            }
+            this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             e.printStackTrace();
-            //throw new UnsupportedOperationException("Not supported yet.");
         }finally{
             //colocar instrucciones que siempre se deben hacer
         }
-        return frm;
+        return this;
+    }
+
+    private String[] getArrayOfData(){
+        String[] data = null;
+
+        String[] arrData = this.getArrayData();
+        if (arrData!=null){
+            HashMap hm = this.getFormData();
+            for (int i=0;i<arrData.length;i++){
+                hm.get(String.valueOf(i));
+            }
+        }
+        return data;
     }
 
     public boolean validarCampos(){
