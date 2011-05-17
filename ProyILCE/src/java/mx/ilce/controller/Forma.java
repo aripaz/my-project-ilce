@@ -260,7 +260,7 @@ public class Forma extends Entidad{
             HashCampo hs = conE.getHashCampo();
             Integer intHs = (Integer) hs.getObjData();
             ex = new ExecutionHandler();
-            if (intHs.equals(1)){
+            if (!intHs.equals(0)){
                 ex.setExecutionOK(true);
             }else{
                 ex.setExecutionOK(false);
