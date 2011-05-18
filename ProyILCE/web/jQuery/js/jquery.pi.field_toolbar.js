@@ -56,7 +56,7 @@
                     nPK=$("#" +$.fn.fieldtoolbar.options.control+ " :selected").val();
                     if (nPK=="") {
                         alert('Seleccione un elemento de la lista para poder editarlo');
-                        return true
+                        return;
                     }
 
                     $("body").form({aplicacion:  $.fn.fieldtoolbar.options.app,
