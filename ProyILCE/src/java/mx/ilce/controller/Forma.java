@@ -658,4 +658,49 @@ public class Forma extends Entidad{
         }
         return idForma;
     }
+
+    public List getListFormaById(String[] arrayData){
+        List lst = null;
+        ConEntidad con = new ConEntidad();
+        try{
+            lst = con.getListFormaById(arrayData);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return lst;
+    }
+
+    public ArrayList getNewFormaById(String[] arrayData){
+        ArrayList lst = new ArrayList();
+        ConEntidad con = new ConEntidad();
+        try{
+            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData);
+            Campo cmp = hsCmp.getCampoByName("consulta");
+            HashMap dq = hsCmp.getListData();
+            if (!dq.isEmpty()){
+                ArrayList arr = (ArrayList)dq.get(0);
+                Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
+                String[] strSPlit2 = strSplit[1].split(" ");
+                String tabla = strSPlit2[0];
+
+                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), arrayData);
+                List lstCmp = (List) hsCmpList.getListCampos();
+                for (int i=0;i<lstCmp.size();i++){
+                    Campo cmpArr = (Campo) lstCmp.get(i);
+                    if (!cmpArr.getIsIncrement()){
+                        CampoForma cmpF = new CampoForma();
+                        cmpF.setTipoControl("text");
+                        cmpF.setCampo(cmpArr.getNombreDB());
+                        cmpF.setTabla(tabla);
+                        cmpF.setTypeData(cmpArr.getTypeDataAPL());
+                        lst.add(cmpF);
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return lst;
+    }
 }

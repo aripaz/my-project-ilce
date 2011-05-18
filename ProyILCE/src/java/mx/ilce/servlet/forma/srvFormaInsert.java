@@ -7,6 +7,7 @@ package mx.ilce.servlet.forma;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
+import mx.ilce.controller.Aplicacion;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExecutionHandler;
 
@@ -58,6 +60,17 @@ public class srvFormaInsert extends HttpServlet {
             forma.setClaveForma(Integer.valueOf(claveForma));
             forma.setTipoAccion(tipoAccion);
             List lstForma = forma.getForma(Integer.valueOf(claveForma));
+            List lstNew = null;
+            if (("0".equals(pk))&&("INSERT".equals(tipoAccion.toUpperCase()))&& (lstForma==null)){
+                String[] arrayData = new String[2];
+                arrayData[0] = claveForma;
+                arrayData[1] = "insert";
+                lstNew = forma.getNewFormaById(arrayData);
+                if (!lstNew.isEmpty()){
+                    lstForma = lstNew;
+                    forma.addForma(Integer.valueOf(claveForma), lstNew);
+                }
+            }
 
             //Analizamos segun la forma obtenida
             boolean obligatorioOk = true;
@@ -74,12 +87,7 @@ public class srvFormaInsert extends HttpServlet {
                             dato = (String) hsFile.get(cmp.getCampo());
                         }
                     }
-                    /*
-                    if ((dato==null) && (cmp.getObligatorio()==1) && (!"0".equals(pk))) {
-                        obligatorioOk=false;
-                    }else{*/
-                        hsFormQuery.put(cmp.getCampo(), dato);
-                    //}
+                    hsFormQuery.put(cmp.getCampo(), dato);
                 }
             } 
             ExecutionHandler ex = new ExecutionHandler();
