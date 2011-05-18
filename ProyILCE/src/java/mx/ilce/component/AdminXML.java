@@ -302,14 +302,14 @@ public class AdminXML {
                                 }else{
                                     str.append(" agrega_registro=\"true\"");
                                 }
-                                str.append((" clave_forma=\""+idForma+"\">\n"));
+                                str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                 String[] strData = new String[2];
                                 strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                 strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
                                 StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                 if (!"".equals(strForaneo.toString())){
                                     str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                    str.append((" source=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
+                                    str.append((" source=\"\">\n"));
                                     str.append(strForaneo);
                                     str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
                                 }
@@ -408,14 +408,14 @@ public class AdminXML {
                                 }else{
                                     str.append(" agrega_registro=\"true\"");
                                 }
-                                str.append((" clave_forma=\""+idForma+"\">\n"));
+                                str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                 String[] strData = new String[2];
                                 strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                 //strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
                                 StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                 if (!"".equals(strForaneo.toString())){
                                     str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                    str.append((" source=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
+                                    str.append((" source=\"\">\n"));
                                     str.append(strForaneo);
                                     str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
                                 }
