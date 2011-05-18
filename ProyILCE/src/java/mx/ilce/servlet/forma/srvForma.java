@@ -7,6 +7,7 @@ package mx.ilce.servlet.forma;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +35,13 @@ public class srvForma extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             AdminForm admForm = new AdminForm();
+            HashMap hs = admForm.getFormulario(request);
+            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+            HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
 
-            String claveForma = admForm.getStringRequest("$cf",request);
-            String pk = admForm.getStringRequest("$pk",request);
-            String tipoAccion = admForm.getStringRequest("$ta",request);
+            String claveForma = (String) hsForm.get("$cf");
+            String pk = (String) hsForm.get("$pk");
+            String tipoAccion = (String) hsForm.get("$ta");
 
             Forma forma = (Forma) request.getSession().getAttribute("forma");
             if (forma !=null){
