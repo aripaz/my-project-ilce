@@ -29,6 +29,7 @@ if (user == null){
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.field_toolbar.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
@@ -57,7 +58,7 @@ if (user == null){
                 <div id="tabcontainer">
                     <div id="tabs">
                         <ul>
-                            <li><a href="#tabUser">Datos destacados</a></li>
+                            <li><a href="#tabUser">Escritorio</a></li>
                         </ul>
                         <div id="tabUser">
                             <p>Aquí van a ir breves reportes y alertas</p>
@@ -65,13 +66,6 @@ if (user == null){
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="dlgConfig" title="Configuraci&oacute;n">
-            <div id="gridConfig" style="width:97%;" ></div>
-        </div>
-        <div id="dlgRegister" title="">
-        </div>
-        <div id="dlgProfiles" title="Perfiles de seguridad">
         </div>
     </body>
 </html>
