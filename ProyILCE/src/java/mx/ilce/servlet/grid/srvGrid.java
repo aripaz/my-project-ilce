@@ -8,6 +8,7 @@ package mx.ilce.servlet.grid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +36,24 @@ public class srvGrid extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             AdminForm admForm = new AdminForm();
-
+/*
             String claveForma = admForm.getStringRequest("$cf",request);
             String dp = admForm.getStringRequest("$dp",request);
             String tipoAccion = "select";
             String strWhere = admForm.getStringRequest("$w",request);
+            String[] strData = getArrayData(admForm, request);
+*/
+
+            HashMap hs = admForm.getFormulario(request);
+
+            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+            HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
+            HashMap hsFormQuery = new HashMap();
+
+            String claveForma = (String) hsForm.get("$cf");
+            String dp = (String) hsForm.get("$dp");
+            String tipoAccion = "select";
+            String strWhere = (String) hsForm.get("$w");
             String[] strData = getArrayData(admForm, request);
 
             Forma forma = (Forma) request.getSession().getAttribute("forma");
