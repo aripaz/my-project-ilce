@@ -2,18 +2,17 @@ package mx.ilce.servlet.Login;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
-import mx.ilce.conection.ConSession;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
 
 /**
@@ -31,6 +30,8 @@ public class srvLogin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
         try {
             String lgn = (String) request.getParameter("lgn");
             String psw = (String) request.getParameter("psw");
@@ -64,15 +65,34 @@ public class srvLogin extends HttpServlet {
                 }else{
                     lg.setTextExecution("Error en obtención de datos del Usuario, aunque se logro Login");
                     request.getSession().setAttribute("loginHand",lg);
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
                 }
             }else{
                 lg.setTextExecution("Usuario o password incorrecto, verifique");
                 request.getSession().setAttribute("loginHand",lg);
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
-        }catch(SQLException e){
-            e.printStackTrace();
+        }catch (ExceptionHandler eh){
+            try{
+                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+                eh.setLogFile(true);
+                eh.writeToFile();
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }catch (Exception es){
+                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh2.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }
+        }catch(Exception e){
+                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+        } finally {
+            out.close();
         }
     }
 
