@@ -15,6 +15,7 @@ import mx.ilce.component.AdminFile;
 import mx.ilce.component.ListHash;
 import mx.ilce.controller.Aplicacion;
 import mx.ilce.controller.Perfil;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
  *  Clase para la implementacion de los metodos de conexion y obtencion de datos
@@ -26,19 +27,25 @@ public class ConSession {
     private Properties prop = null;
     private AdminFile adm = new AdminFile();
 
-    public ConSession(){
+    public ConSession() throws ExceptionHandler{
         try{
             this.prop = AdminFile.leerIdQuery();
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para abrir Conexion ConSession");
         }
     }
 
-    public Integer getIdQuery(String key) throws Exception{
-        if (prop == null){
-            prop = AdminFile.leerIdQuery();
+    public Integer getIdQuery(String key) throws ExceptionHandler{
+        Integer intSld = new Integer(0);
+        try{
+            if (prop == null){
+                prop = AdminFile.leerIdQuery();
+            }
+            intSld = AdminFile.getIdQuery(prop,key);
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener ID QUERY desde properties");
         }
-        return adm.getIdQuery(prop,key);
+        return intSld;
     }
 
     /**
@@ -51,7 +58,7 @@ public class ConSession {
      * @return
      * @throws SQLException
      */
-    public User getUser(String user, String password) throws SQLException{
+    public User getUser(String user, String password) throws ExceptionHandler{
         User usr = new User();
         try{
             String[] strData = new String[2];
@@ -81,8 +88,8 @@ public class ConSession {
                 usr.setPassword(password);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
             usr.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
         }finally{
             
         }
@@ -98,7 +105,7 @@ public class ConSession {
      * @return
      * @throws SQLException
      */
-    public User getUser(User usuario) throws SQLException{
+    public User getUser(User usuario) throws ExceptionHandler{
         User usr = new User();
         try{
             //String user, String password
@@ -129,8 +136,8 @@ public class ConSession {
                 usr.setPassword(usuario.getPassword());
             }
         }catch(Exception ex){
-            ex.printStackTrace();
             usr.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
         }finally{
 
         }
@@ -146,7 +153,7 @@ public class ConSession {
      * @return
      * @throws SQLException
      */
-    public Perfil getPerfil(User user) throws SQLException{
+    public Perfil getPerfil(User user) throws ExceptionHandler{
         Perfil perfil = new Perfil();
         try{
             String[] strData = new String[1];
@@ -163,7 +170,7 @@ public class ConSession {
                 perfil.setLstAplicacion(lstApli);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
         }finally{
 
         }
@@ -177,7 +184,7 @@ public class ConSession {
      * @param perfil    Bean que contiene los datos del perfil
      * @return
      */
-    public HashCampo getTabForma(Perfil perfil){
+    public HashCampo getTabForma(Perfil perfil) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             List lstApl = perfil.getLstAplicacion();
@@ -202,7 +209,7 @@ public class ConSession {
                 }
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
         }finally{
 
         }
@@ -218,7 +225,7 @@ public class ConSession {
      * @param usuario   Bean que contiene los datos del usuario
      * @return
      */
-    public HashCampo getUserXML(User usuario){
+    public HashCampo getUserXML(User usuario) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             String[] strData = new String[1];
@@ -227,8 +234,8 @@ public class ConSession {
             hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
-            ex.printStackTrace();
             usuario.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del User");
         }finally{
 
         }
@@ -244,7 +251,7 @@ public class ConSession {
      * @param usuario   Bean que contiene los datos del usuario
      * @return
      */
-    public HashCampo getMenuXML(User usuario){
+    public HashCampo getMenuXML(User usuario) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             String[] strData = new String[1];
@@ -253,8 +260,8 @@ public class ConSession {
             hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
-            ex.printStackTrace();
             usuario.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del MENU");
         }finally{
 
         }
@@ -269,13 +276,13 @@ public class ConSession {
      * Query   
      * @return
      */
-    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ){
+    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getData(IdQuery, strData);
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");
         }finally{
 
         }
@@ -289,6 +296,4 @@ public class ConSession {
     public boolean deleteUser(User user){
         return true;
     }
-
-
 }

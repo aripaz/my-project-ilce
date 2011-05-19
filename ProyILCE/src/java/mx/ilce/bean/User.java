@@ -27,7 +27,16 @@ public class User implements Serializable {
     private Integer clavePerfil;
     private Integer claveArea;
     private String email;
-    
+
+//------------ CONSTRUCTOR -----------------
+    public User() {
+        this.login = "";
+        this.nombre = "";
+        this.password = "";
+        this.isLogged = false;
+    }
+
+//------------ GETTER Y SETTER --------------
     public Integer getClaveArea() {
         return claveArea;
     }

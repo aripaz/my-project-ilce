@@ -13,6 +13,7 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
@@ -188,6 +189,34 @@ public class Aplicacion extends Entidad {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public Aplicacion mostrarResultado(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public Aplicacion ingresarBusquedaSencilla(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Aplicacion ingresarBusquedaAvanzada() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Aplicacion mostrarPanel(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Aplicacion guardarBusqueda(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Aplicacion rescatarBusqueda(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Aplicacion eliminarBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }    
+
     /**
      * Agrega una forma (con formato List) al Hash de formas, asignandole como
      * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es
@@ -215,8 +244,9 @@ public class Aplicacion extends Entidad {
      * Asigna el XML obtenido con referencia a los datos introducidos al
      * controlador
      * @return
+     * @throws ExceptionHandler
      */
-    public Aplicacion mostrarForma() {
+    public Aplicacion mostrarForma() throws ExceptionHandler{
         try{
             StringBuffer xmlForma = new StringBuffer("");
             if (this.getDisplay().toUpperCase().equals("HEADER")){
@@ -227,19 +257,25 @@ public class Aplicacion extends Entidad {
                 xmlForma = this.getHeaderGrid();
             }
             this.setXmlEntidad(xmlForma);
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Mostrar la Forma");
         }finally{
 
         }
         return this;
     }
 
-    private StringBuffer getHeaderGrid(){
+    /**
+     * Obtiene las columnas de una grilla XML a partir de los datos asignados a
+     * los campos ClaveForma, TipoAccion, ArrayData, strWhereQuery y Forma
+     * @return
+     * @throws ExceptionHandler
+     */
+    private StringBuffer getHeaderGrid() throws ExceptionHandler{
         StringBuffer strSld = null;
-        ConEntidad con = new ConEntidad();
-        AdminXML adm = new AdminXML();
         try{
+            AdminXML adm = new AdminXML();
+            ConEntidad con = new ConEntidad();
             String[] strData = new String[2];
             HashCampo hsCmp = new HashCampo();
             if (this.claveForma !=null){
@@ -270,18 +306,23 @@ public class Aplicacion extends Entidad {
             }
              List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridColumByData(hsCmp,lstF);
-
-        }catch(Exception e){
-
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header Grid");
         }
         return strSld;
     }
 
-    private StringBuffer getHeaderAndBodyGrid(){
+    /**
+     * Obtiene una grilla XML a partir de los datos asignados: ClaveForma,
+     * TipoAccion, strWhereQuery, NumPage y NumRows
+     * @return
+     * @throws ExceptionHandler
+     */
+    private StringBuffer getHeaderAndBodyGrid() throws ExceptionHandler{
         StringBuffer strSld = null;
-        ConEntidad con = new ConEntidad();
-        AdminXML adm = new AdminXML();
         try{
+            ConEntidad con = new ConEntidad();
+            AdminXML adm = new AdminXML();
             String[] strData = new String[2];
             HashCampo hsCmp = new HashCampo();
             if (this.claveForma !=null){
@@ -303,88 +344,9 @@ public class Aplicacion extends Entidad {
             }
             List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
-        }catch(Exception e){
-
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header y Body Grid");
         }
         return strSld;
     }
-
-    public Aplicacion mostrarResultado() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-    
-    public Aplicacion ingresarBusquedaSencilla() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    public Aplicacion ingresarBusquedaAvanzada() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    public Aplicacion mostrarPanel(){
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    public Aplicacion guardarBusqueda(){
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    public Aplicacion rescatarBusqueda(){
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    public Aplicacion eliminarBusqueda() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
-    }
-
-    
 }

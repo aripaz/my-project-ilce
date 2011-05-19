@@ -18,9 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
  *
@@ -78,36 +80,53 @@ public class srvFormaSearch extends HttpServlet {
                 request.getSession().setAttribute("xmlForma", xmlForma);
             }
             request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
+        }catch (ExceptionHandler eh){
+            try{
+                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+                eh.setLogFile(true);
+                eh.writeToFile();
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }catch (Exception es){
+                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh2.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }
         }catch(Exception e){
-            e.printStackTrace();
+                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         } finally { 
             out.close();
         }
     } 
 
-    private String getWhereData(HashMap hsDataForm, List lstForma){
+    private String getWhereData(HashMap hsDataForm, List lstForma) throws ExceptionHandler{
         String strSal = new String("");
-        int numMaxParam = 10;
-        HashMap hsForm = (HashMap) hsDataForm.get("FORM");
-        StringBuffer str = new StringBuffer();
+        try{
+            int numMaxParam = 10;
+            HashMap hsForm = (HashMap) hsDataForm.get("FORM");
+            StringBuffer str = new StringBuffer();
 
-        if ((lstForma != null) && (!lstForma.isEmpty())){
-            String[][] strCampos = new String[lstForma.size()][2];
-            StringBuffer strQuery = new StringBuffer("select ");
-            String nameTable ="";
-            Iterator it = lstForma.iterator();
-            int i=0;
-            while (it.hasNext()){
-                CampoForma cmp = (CampoForma) it.next();
-                String strData = (String) hsForm.get(cmp.getCampo());
-                strCampos[i][0]= cmp.getCampo();
-                strCampos[i++][1]= strData;
-                nameTable = cmp.getTabla();
-                strQuery.append(cmp.getCampo()).append(",");
-            }
-            strQuery.delete(strQuery.length()-1, strQuery.length());
-            strQuery.append(" from ").append(nameTable).append(" where 1=2");
-            try{
+            if ((lstForma != null) && (!lstForma.isEmpty())){
+                String[][] strCampos = new String[lstForma.size()][2];
+                StringBuffer strQuery = new StringBuffer("select ");
+                String nameTable ="";
+                Iterator it = lstForma.iterator();
+                int i=0;
+                while (it.hasNext()){
+                    CampoForma cmp = (CampoForma) it.next();
+                    String strData = (String) hsForm.get(cmp.getCampo());
+                    strCampos[i][0]= cmp.getCampo();
+                    strCampos[i++][1]= strData;
+                    nameTable = cmp.getTabla();
+                    strQuery.append(cmp.getCampo()).append(",");
+                }
+                strQuery.delete(strQuery.length()-1, strQuery.length());
+                strQuery.append(" from ").append(nameTable).append(" where 1=2");
                 ConEntidad con = new ConEntidad();
                 HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
                 if (hsCmp.getLengthCampo()>0){
@@ -125,12 +144,11 @@ public class srvFormaSearch extends HttpServlet {
                     }
                     str.delete(str.length()-4, str.length());
                 }
-            }catch(Exception ex){
-                ex.printStackTrace();
+                strSal = str.toString();
             }
-            strSal = str.toString();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar la QUERY de la forma con el WHERE");
         }
-
         return strSal;
     }
 

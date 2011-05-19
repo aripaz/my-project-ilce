@@ -12,8 +12,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Forma;
+import mx.ilce.handler.ExceptionHandler;
  
 /**
  * Servlet implementado para permitir la recuperacion y manejo de las formas
@@ -37,7 +39,7 @@ public class srvForma extends HttpServlet {
             AdminForm admForm = new AdminForm();
             HashMap hs = admForm.getFormulario(request);
             HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-            HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
+            //HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
 
             String claveForma = (String) hsForm.get("$cf");
             String pk = (String) hsForm.get("$pk");
@@ -56,7 +58,25 @@ public class srvForma extends HttpServlet {
                 request.getSession().setAttribute("xmlForma", xmlForma);
             }
             request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
-        }catch (Exception e){
+        }catch (ExceptionHandler eh){
+            try{
+                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+                eh.setLogFile(true);
+                eh.writeToFile();
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }catch (Exception es){
+                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh2.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }
+        }catch(Exception e){
+                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         } finally {
             out.close();
         }

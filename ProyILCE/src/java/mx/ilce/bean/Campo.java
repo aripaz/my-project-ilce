@@ -299,14 +299,8 @@ public class Campo implements Serializable {
         this.isIncrement = isIncrement;
     }
 
-
-
     @Override
-    /**
-     * Entrega un string con los datos que contiene el campo
-     */
     public String toString() {
-        return "Campo{" + "nombre=" + nombre + "valor=" + valor + "codigo=" + codigo + "alias=" + alias + "typeData=" + typeDataDB + "typeControl=" + typeControl + "event=" + event + "help=" + help + '}';
+        return "Campo{" + "nombre=" + nombre + "nombreDB=" + nombreDB + "valor=" + valor + "codigo=" + codigo + "alias=" + alias + "typeDataDB=" + typeDataDB + "typeDataAPL=" + typeDataAPL + "typeControl=" + typeControl + "event=" + event + "help=" + help + "tamano=" + tamano + "isIncrement=" + isIncrement + '}';
     }
-    
 }

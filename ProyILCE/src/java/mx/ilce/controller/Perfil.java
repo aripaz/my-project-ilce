@@ -5,10 +5,10 @@
 
 package mx.ilce.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import mx.ilce.bean.User;
 import mx.ilce.conection.ConSession;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
      
@@ -93,7 +93,7 @@ public class Perfil extends Entidad{
      * @param password  Texto con la password del usuario
      * @return
      */
-    public LoginHandler login(String user, String password) {
+    public LoginHandler login(String user, String password) throws ExceptionHandler{
         LoginHandler lg = new LoginHandler();
         try{
             ConSession con = new ConSession();
@@ -114,8 +114,8 @@ public class Perfil extends Entidad{
                 lg.setTitleExecution("Error al conectarse");
                 lg.setTextExecution(usr.getMessage());
             }
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
         }finally{
             
         }
@@ -129,7 +129,7 @@ public class Perfil extends Entidad{
      * @param usuario
      * @return
      */
-    public LoginHandler login(User usuario) {
+    public LoginHandler login(User usuario) throws ExceptionHandler {
         LoginHandler lg = new LoginHandler();
         try{
             String user = usuario.getLogin();
@@ -152,8 +152,8 @@ public class Perfil extends Entidad{
                 lg.setTitleExecution("Error al conectarse");
                 lg.setTextExecution(usr.getMessage());
             }
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
         }finally{
 
         }
@@ -165,16 +165,7 @@ public class Perfil extends Entidad{
     }
 
     public ExecutionHandler enviarPasswordPerdido() {
-        ExecutionHandler execHand = new ExecutionHandler();
-        try{
-            List lst = new ArrayList();
-            lst.add("uno");
-            lst.add("dos");
-            execHand.setListData(lst);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return execHand;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void cerrarSession(){

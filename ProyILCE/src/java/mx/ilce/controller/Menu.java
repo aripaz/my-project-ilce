@@ -8,6 +8,7 @@ package mx.ilce.controller;
 import java.util.List;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
@@ -20,30 +21,7 @@ public class Menu extends Entidad {
     private StringBuffer xmlMenu;
 
     private StringBuffer getXmlMenu() {
-
-        StringBuffer str = new StringBuffer("");
-        str.append("<h3><a href=\"#\">BackEnd</a></h3>");
-        str.append("<div>");
-        str.append("<div><a href=\"#\">Nueva aplicación</a></div>");
-        str.append("<div><a href=\"#\">Aplicaciones</a></div>");
-        str.append("</div>");
-        str.append("<h3><a href=\"#\">CRM</a></h3>");
-        str.append("<div>");
-        str.append("<div><a href=\"#\">Nuevo grupo de interés</a></div>");
-        str.append("<div><a href=\"#\">Grupos de interés</a></div>");
-        str.append("</div>");
-        str.append("<h3><a href=\"#\">Proyectos</a></h3>");
-        str.append("<div>");
-        str.append("<div><a href=\"#\">Nuevo proyecto</a></div>");
-        str.append("<div><a href=\"#\">Proyectos</a></div>");
-        str.append("</div>");
-        str.append("<h3><a href=\"#\">SRM</a></h3>");
-        str.append("<div>");
-        str.append("<div><a href=\"#\">Nuevo proveedor</a></div>");
-        str.append("<div><a href=\"#\">Proveedores</a></div>");
-        str.append("</div>");
-        
-        return str;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private void setXmlMenu(StringBuffer xmlMenu) {
@@ -63,60 +41,29 @@ public class Menu extends Entidad {
     }
 
     public Menu mostrarForma() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public Menu mostrarResultado() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public Menu ingresarBusquedaSencilla() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public Menu ingresarBusquedaAvanzada() {
-        try{
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-
-        }
-        return this;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Menu crearMenu(){
+    public Menu crearMenuN() throws ExceptionHandler{
         try{
             ConEntidad con = new ConEntidad();
             List lst = con.obtieneMenu();
             AdminXML admXml = new AdminXML();
-            //StringBuffer str = admXml.getXMLByList(lst);
-            //setXmlEntidad(str);
             this.setData(getXmlMenu());
-
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para crear el XML de Menu");
         }finally{
 
         }

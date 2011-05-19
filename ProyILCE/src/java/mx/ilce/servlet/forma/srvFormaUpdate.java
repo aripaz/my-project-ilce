@@ -5,8 +5,6 @@
 
 package mx.ilce.servlet.forma;
 
-import java.io.DataInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ import mx.ilce.bean.CampoForma;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Forma;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
@@ -97,9 +96,26 @@ public class srvFormaUpdate extends HttpServlet {
                 ex.setExecutionOK(false);
                 AdminFile.deleFileFromServer(hsFile);
             }
+        }catch (ExceptionHandler eh){
+            try{
+                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+                eh.setLogFile(true);
+                eh.writeToFile();
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }catch (Exception es){
+                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh2.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }
         }catch(Exception e){
-            e.printStackTrace();
-        } finally { 
+                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+        } finally {
             out.close();
         }
     } 

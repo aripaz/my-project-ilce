@@ -6,6 +6,7 @@
 package mx.ilce.handler;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +14,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
+ * Manejador de Exception general, que permite unificar las respuestas generales
+ * de las Exception ocurridas en la aplicacion. Mediante algunas configuraciones
+ * y entradas adicionales, permite dar informes mas generales, ademas de tomar
+ * acciones adicionales como la generacion de archivos con el registro de las
+ * Exception, junto con su traza, ubicacion, dia y hora de su activacion.
  * @author ccatrilef
  */
 public class ExceptionHandler extends Throwable {
@@ -30,6 +35,7 @@ public class ExceptionHandler extends Throwable {
     private UtilDate utiDt;
     private ArrayList arrayData;
     private String stringData;
+    private boolean seeStringData;
     private boolean logFile;
     private String rutaFile;
 
@@ -45,11 +51,20 @@ public class ExceptionHandler extends Throwable {
         this.arrClass = new ArrayList();
         this.time="";
         this.arrayData=new ArrayList();
-        this.stringData="";
+        this.stringData=null;
         this.logFile=false;
         this.rutaFile="";
     }
 
+    /**
+     * Constructor de la Exception donde se entrega un objeto con la clase de la
+     * exception ocurrida, la clase donde ocurrio el problema y un mensaje que se
+     * desea desplegar, junto con los mensajes obtenidos desde la exception y la
+     * data adicional entregada.
+     * @param obj
+     * @param clase
+     * @param message
+     */
     public ExceptionHandler(Object obj, Class clase, String message){
         cleanData();
         utiDt = new UtilDate();
@@ -98,19 +113,28 @@ public class ExceptionHandler extends Throwable {
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
         }
-        setArrayData();
-        setTextToXmlError();
-        if ((this.logFile) && (this.rutaFile!=null)){
-            writeToFile();
-        }
     }
 
-    public void writeToFile(){
+    public boolean writeToFile(){
+        boolean sld = true;
         writeLogError wf = new writeLogError();
         String strRutaFile = this.getRutaFile();
         String strNameFile = "";
         if ((this.logFile) && (this.rutaFile!=null)){
             try{
+                StringBuffer strAdicional = new StringBuffer();
+                File directorio = new File(this.rutaFile);
+                if (!directorio.exists()){
+                    strAdicional.append("No Existe el Directorio para Log\n");
+                    sld = false;
+                }
+                if (!directorio.isDirectory()){
+                    strAdicional.append("El Directorio configurado para Log no es un directorio\n");
+                    sld = false;
+                }
+                if ((strAdicional!=null) && (!"".equals(strAdicional))){
+                    this.setStringData(strAdicional.toString());
+                }
                 UtilDate ut = new UtilDate();
                 strNameFile = strNameFile.concat(ut.getFecha(formato.AMD,""));
                 strNameFile = strNameFile.concat(this.getTypeError().toString());
@@ -122,14 +146,21 @@ public class ExceptionHandler extends Throwable {
                 strTexto.append("\nTIPO: ").append(this.getTypeError());
                 strTexto.append("\nMENSAGE: ").append(this.getTextMessage());
                 strTexto.append("\nDESCRIPCION: ").append(this.getTextError());
+                if ((this.stringData!=null)&&(!"".equals(this.stringData))){
+                    strTexto.append("\nDATA ADICIONAL:\n").append(this.getStringData());
+                }
                 strTexto.append("\nTRAZA\n-------------\n").append(this.getSecuenceError());
                 strTexto.append("\n****************\n");
-
-                wf.guardarArchivo(strTexto);
+                if (sld){
+                    sld = wf.guardarArchivo(strTexto);
+                }else{
+                    this.setStringData(strAdicional.toString());
+                }
             }catch(IOException e){
                 e.printStackTrace();
             }
         }
+        return sld;
     }
 
     private void setArrayData(){
@@ -168,6 +199,14 @@ public class ExceptionHandler extends Throwable {
         str.append("TIPO:");
         str.append(this.getTypeError());
         str.append("</row>").append("\n");
+        if (this.seeStringData()){
+            if ((this.stringData!=null) && (!"".equals(this.stringData))) {
+                str.append("<row>");
+                str.append("DATA ADICIONAL:");
+                str.append(this.getStringData());
+                str.append("</row>").append("\n");
+            }
+        }
         str.append("</error>");
         this.setXmlError(str);
     }
@@ -228,6 +267,14 @@ public class ExceptionHandler extends Throwable {
 
     /******** GETTER AND SETTER ***********/
 
+    public boolean seeStringData() {
+        return seeStringData;
+    }
+
+    public void setSeeStringData(boolean seeStringData) {
+        this.seeStringData = seeStringData;
+    }
+
     public String getRutaFile() {
         return rutaFile;
     }
@@ -257,7 +304,17 @@ public class ExceptionHandler extends Throwable {
     }
 
     public void setStringData(String stringData) {
-        this.stringData = stringData;
+        String str = this.stringData;
+        if (str!=null){
+            if (stringData!=null){
+                str = str + "\n" + stringData;
+            }
+        }else{
+            if (stringData!=null){
+                str = stringData;
+            }
+        }
+        this.stringData = str;
     }
 
     public StringBuffer getTypeError() {
@@ -306,6 +363,7 @@ public class ExceptionHandler extends Throwable {
     }
 
     public StringBuffer getXmlError() {
+        setTextToXmlError();
         return xmlError;
     }
 
@@ -334,21 +392,25 @@ public class ExceptionHandler extends Throwable {
             this.rutaFile = rutaFile;
         }
 
-        public void guardarArchivo(StringBuffer strEntrada) throws IOException{
+        public boolean guardarArchivo(StringBuffer strEntrada) throws IOException{
+            boolean sld = true;
             FileWriter w = null;
             try{
                 w = new FileWriter(rutaFile + "/" + nameFile, true);
                 w.append(strEntrada.toString());
             }catch (IOException eFile){
                 eFile.printStackTrace();
+                sld = false;
             }catch(Exception e){
                 e.printStackTrace();
+                sld = false;
             }finally{
                 if (w!=null){
                     w.flush();
                     w.close();
                 }
             }
+            return sld;
         }
     }
 

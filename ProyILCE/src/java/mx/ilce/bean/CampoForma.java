@@ -158,5 +158,8 @@ public class CampoForma implements Serializable  {
         this.tipoControl = tipoControl;
     }
 
-    
+    @Override
+    public String toString() {
+        return "CampoForma{" + "claveCampo=" + claveCampo + "claveForma=" + claveForma + "tabla=" + tabla + "campo=" + campo + "aliasCampo=" + aliasCampo + "obligatorio=" + obligatorio + "tipoControl=" + tipoControl + "evento=" + evento + "foraneo=" + foraneo + "filtroForaneo=" + filtroForaneo + "ayuda=" + ayuda + "datoSensible=" + datoSensible + "activo=" + activo + "tamano=" + tamano + "claveFormaForanea=" + claveFormaForanea + "typeData=" + typeData + '}';
+    }
 }
