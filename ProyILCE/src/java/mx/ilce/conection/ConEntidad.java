@@ -13,6 +13,7 @@ import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.ListHash;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
  * Clase utilizada para realizar las consultas a la base de datos desde
@@ -22,43 +23,60 @@ import mx.ilce.component.ListHash;
 public class ConEntidad {
 
     private Properties prop = null;
-    private AdminFile adm = new AdminFile();
     private String query = "";
     private HashCampo hashCampo = new HashCampo();
     private CampoForma campoForma = new CampoForma();
 
-    public ConEntidad(){
+    public ConEntidad() throws ExceptionHandler{
         try{
             this.prop = AdminFile.leerIdQuery();
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para abrir Conexion ConSession");
         }
     }
 
-    public Integer getIdQuery(String key) throws Exception{
-        if (prop == null){
-            prop = AdminFile.leerIdQuery();
+    public Integer getIdQuery(String key) throws ExceptionHandler{
+        Integer intSld = new Integer(0);
+        try{
+            if (prop == null){
+                prop = AdminFile.leerIdQuery();
+            }
+            intSld = AdminFile.getIdQuery(prop,key);
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener ID QUERY desde properties");
         }
-        return adm.getIdQuery(prop,key);
+        return intSld;
     }
 
 
-    public void ingresaEntidad() throws Exception{
-        ConQuery con = new ConQuery();
-        HashCampo hs = con.executeInsert(this.campoForma,this.query);
-        this.hashCampo = hs;
+    public void ingresaEntidad() throws ExceptionHandler{
+        try{
+            ConQuery con = new ConQuery();
+            HashCampo hs = con.executeInsert(this.campoForma,this.query);
+            this.hashCampo = hs;
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Ingresar la Entidad");
+        }
     }
 
-    public void eliminaEntidad() throws Exception{
-        ConQuery con = new ConQuery();
-        HashCampo hs = con.executeDelete(this.campoForma,this.query);
-        this.hashCampo = hs;
+    public void eliminaEntidad() throws ExceptionHandler{
+        try {
+            ConQuery con = new ConQuery();
+            HashCampo hs = con.executeDelete(this.campoForma,this.query);
+            this.hashCampo = hs;
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Eliminar la Entidad");
+        }
     }
 
-    public void editarEntidad() throws Exception{
-        ConQuery con = new ConQuery();
-        HashCampo hs = con.executeUpdate(this.campoForma,this.query);
-        this.hashCampo = hs;
+    public void editarEntidad() throws ExceptionHandler{
+        try {
+            ConQuery con = new ConQuery();
+            HashCampo hs = con.executeUpdate(this.campoForma,this.query);
+            this.hashCampo = hs;
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Editar la Entidad");
+        }
     }
 
     public void obtieneEntidad(){
@@ -86,7 +104,7 @@ public class ConEntidad {
      * Con esto se evita traer la forma completa.
      * @return
      */
-    public List getListFormaByIdAndCampos(String[] strData){
+    public List getListFormaByIdAndCampos(String[] strData) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
@@ -97,7 +115,7 @@ public class ConEntidad {
                 lstSld = lst.getListBean(CampoForma.class, hsCmp);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el listado de Formas por ID y Campos");
         }finally{
 
         }
@@ -110,7 +128,7 @@ public class ConEntidad {
      * @param strData   Debe contener el ID de la forma a buscar
      * @return
      */
-    public List getListFormaById(String[] strData){
+    public List getListFormaById(String[] strData) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
@@ -121,7 +139,7 @@ public class ConEntidad {
                 lstSld = lst.getListBean(CampoForma.class, hsCmp);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el listado de Formas por ID");
         }finally{
 
         }
@@ -135,24 +153,30 @@ public class ConEntidad {
      * @param strData
      * @return
      */
-    public HashCampo getDataByQuery(String strQuery, String[] strData){
+    public HashCampo getDataByQuery(String strQuery, String[] strData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
-        ConQuery con = new ConQuery();
         try{
+            ConQuery con = new ConQuery();
             hsCmp = con.getDataByQuery(strQuery, strData);
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Datos por una QUERY");
         }
         return hsCmp;
     }
 
-    public String getCampoPK(String tabla){
+    /**
+     * Entrega el campo PK de una Tabla
+     * @param tabla
+     * @return
+     * @throws ExceptionHandler
+     */
+    public String getCampoPK(String tabla) throws ExceptionHandler{
         String campo = "";
-        ConQuery con = new ConQuery();
         try{
+            ConQuery con = new ConQuery();
             campo = con.getCampoPK(tabla);
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el Campo PK de una tabla");
         }
         return campo;
     }
@@ -165,13 +189,13 @@ public class ConEntidad {
      * Query
      * @return
      */
-    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ){
+    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getData(IdQuery, strData);
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY");
         }finally{
 
         }
@@ -186,13 +210,13 @@ public class ConEntidad {
      * Query
      * @return
      */
-    public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData ){
+    public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getDataWithWhere(IdQuery, strData);
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY y WHERE");
         }finally{
 
         }
@@ -208,13 +232,13 @@ public class ConEntidad {
      * query
      * @return
      */
-    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData ){
+    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData);
         }catch(Exception ex){
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY, WHERE y DATA");
         }finally{
 
         }

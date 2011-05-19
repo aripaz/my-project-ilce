@@ -6,6 +6,7 @@
 package mx.ilce.controller;
 
 import java.math.BigDecimal;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
@@ -42,11 +43,11 @@ public abstract class Entidad {
         this.data = data;
     }
 
-    public abstract ExecutionHandler ingresarEntidad(Object data);
-    public abstract ExecutionHandler editarEntidad(Object data);
-    public abstract ExecutionHandler eliminarEntidad(Object data);
-    public abstract Entidad mostrarForma();
-    public abstract Entidad mostrarResultado();
-    public abstract Entidad ingresarBusquedaSencilla();
-    public abstract Entidad ingresarBusquedaAvanzada();
+    public abstract ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler;
+    public abstract ExecutionHandler editarEntidad(Object data) throws ExceptionHandler;
+    public abstract ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler;
+    public abstract Entidad mostrarForma() throws ExceptionHandler;
+    public abstract Entidad mostrarResultado() throws ExceptionHandler;
+    public abstract Entidad ingresarBusquedaSencilla() throws ExceptionHandler;
+    public abstract Entidad ingresarBusquedaAvanzada() throws ExceptionHandler;
 }

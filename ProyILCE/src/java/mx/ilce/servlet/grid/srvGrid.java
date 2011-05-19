@@ -13,9 +13,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Aplicacion;
 import mx.ilce.controller.Forma;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
  *  Servlet encargado de cargar los datos de la grilla
@@ -36,19 +38,9 @@ public class srvGrid extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             AdminForm admForm = new AdminForm();
-/*
-            String claveForma = admForm.getStringRequest("$cf",request);
-            String dp = admForm.getStringRequest("$dp",request);
-            String tipoAccion = "select";
-            String strWhere = admForm.getStringRequest("$w",request);
-            String[] strData = getArrayData(admForm, request);
-*/
-
             HashMap hs = admForm.getFormulario(request);
 
             HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-            HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
-            HashMap hsFormQuery = new HashMap();
 
             String claveForma = (String) hsForm.get("$cf");
             String dp = (String) hsForm.get("$dp");
@@ -75,8 +67,25 @@ public class srvGrid extends HttpServlet {
                 request.getSession().setAttribute("xmlGrid", xmlForma);
             }
             request.getRequestDispatcher("/resource/jsp/xmlGrid.jsp").forward(request, response);
+        }catch (ExceptionHandler eh){
+            try{
+                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+                eh.setLogFile(true);
+                eh.writeToFile();
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }catch (Exception es){
+                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh2.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            }
         }catch(Exception e){
-            e.printStackTrace();
+                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
+                StringBuffer xmlError = eh.getXmlError();
+                request.getSession().setAttribute("xmlError", xmlError);
+                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         } finally {
             out.close();
         }

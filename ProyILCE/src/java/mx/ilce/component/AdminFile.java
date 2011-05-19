@@ -15,8 +15,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -64,7 +62,7 @@ public class AdminFile {
     public static String FORMAQUERY = "FORMAQUERY";
 
     /**
-     * Numero con el tamaño maximo de un archivo en Bytes
+     * Numero con el tamaÃ±o maximo de un archivo en Bytes
      */
     public static String MAXSIZEFILE = "MAXSIZEFILE";
 
@@ -72,6 +70,11 @@ public class AdminFile {
      * Ruta del server para depositar los archivos enviados por usuarios
      */
     public static String FILESERVER = "FILESERVER";
+
+    /**
+     * Ruta del server para depositar los archivos de Log
+     */
+    public static String LOGFILESERVER = "LOGFILESERVER";
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
      * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la
@@ -151,7 +154,7 @@ public class AdminFile {
      * @param strKey
      * @return
      */
-    public String getKey(Properties prop, String key){
+    public static String getKey(Properties prop, String key){
         String sld = "";
 	try{
             Enumeration e = prop.keys();
@@ -171,7 +174,7 @@ public class AdminFile {
      * @param key
      * @return
      */
-    public Integer getIdQuery(Properties prop, String key){
+    public static Integer getIdQuery(Properties prop, String key){
         Integer sld = Integer.valueOf(0);
         String str = "";
 	try{
