@@ -79,6 +79,8 @@ public class srvFormaSearch extends HttpServlet {
                     if ((strWhere!=null) && (strWhere.trim().length()>0)){
                         if ((whereForm!=null) && (whereForm.trim().length()>0)){
                             forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                        }else{
+                            forma.setStrWhereQuery(strWhere);
                         }
                     }else{
                         if ((whereForm!=null) && (whereForm.trim().length()>0)){
