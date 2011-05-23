@@ -24,35 +24,66 @@ public class Perfil extends Entidad{
 
 /******** GETTER Y SETTER ********/
 
+    /**
+     * Obtiene la clave del perfil
+     * @return
+     */
     public Integer getClavePerfil() {
         return clavePerfil;
     }
 
+    /**
+     * Asigna la clave del perfil
+     * @param clavePerfil
+     */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
     }
 
+    /**
+     * Obtiene el listado de aplicaciones del perfil
+     * @return
+     */
     public List getLstAplicacion() {
         return lstAplicacion;
     }
 
+    /**
+     * Asigna el listado de aplicaciones del perfil
+     * @param lstAplicacion
+     */
     public void setLstAplicacion(List lstAplicacion) {
         this.lstAplicacion = lstAplicacion;
     }
 
+    /**
+     * Obtiene el nombre del perfil
+     * @return
+     */
     public String getPerfil() {
         return perfil;
     }
 
+    /**
+     * Asigna el nombre del perfil
+     * @param perfil
+     */
     public void setPerfil(String perfil) {
         this.perfil = perfil;
     }
 
 /******* OPERACIONES DE ENTIDAD ******/
 
+    /**
+     * Constructor Basico
+     */
     public Perfil() {
     }
 
+    /**
+     * Asigna un Object
+     * @param data
+     */
     public Perfil(Object data) {
         this.setData(data);
     }
@@ -102,10 +133,10 @@ public class Perfil extends Entidad{
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                Perfil perfil = con.getPerfil(usr);
-                this.clavePerfil = perfil.getClavePerfil();
-                this.lstAplicacion = perfil.getLstAplicacion();
-                this.perfil = perfil.getPerfil();
+                Perfil perf = con.getPerfil(usr);
+                this.clavePerfil = perf.getClavePerfil();
+                this.lstAplicacion = perf.getLstAplicacion();
+                this.perfil = perf.getPerfil();
                 
                 lg.setObjectData(usr);
                 this.setData(usr);
@@ -140,10 +171,10 @@ public class Perfil extends Entidad{
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                Perfil perfil = con.getPerfil(usr);
-                this.clavePerfil = perfil.getClavePerfil();
-                this.lstAplicacion = perfil.getLstAplicacion();
-                this.perfil = perfil.getPerfil();
+                Perfil perf = con.getPerfil(usr);
+                this.clavePerfil = perf.getClavePerfil();
+                this.lstAplicacion = perf.getLstAplicacion();
+                this.perfil = perf.getPerfil();
 
                 lg.setObjectData(usr);
                 this.setData(usr);

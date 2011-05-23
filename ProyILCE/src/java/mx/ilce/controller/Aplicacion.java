@@ -38,6 +38,9 @@ public class Aplicacion extends Entidad {
     private String[] arrayData;
     private boolean cleanIncrement;
 
+    /**
+     * Constructor Basico de la clase, inicializa las variables de la clase
+     */
     public Aplicacion() {
         this.claveAplicacion = 0;
         this.aplicacion = "";
@@ -57,26 +60,50 @@ public class Aplicacion extends Entidad {
 
 /********* GETTER Y SETTER *********/
 
+    /**
+     * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * @return
+     */
     public boolean isCleanIncrement() {
         return cleanIncrement;
     }
 
+    /**
+     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * @param cleanIncrement
+     */
     public void setCleanIncrement(boolean cleanIncrement) {
         this.cleanIncrement = cleanIncrement;
     }
-    
+
+    /**
+     * Obtiene el Array de data ingresado al objeto
+     * @return
+     */
     public String[] getArrayData() {
         return arrayData;
     }
 
+    /**
+     * Asigna el Array de data a ingresar al objeto
+     * @param arrayData
+     */
     public void setArrayData(String[] arrayData) {
         this.arrayData = arrayData;
     }
 
+    /**
+     * Obtiene el numero de pagina que se debe visualizar en la aplicacion
+     * @return
+     */
     public Integer getNumPage() {
         return numPage;
     }
 
+    /**
+     * Asigna el numero de pagina que se debe visualizar en la aplicacion
+     * @param numPage
+     */
     public void setNumPage(String numPage) {
         if ((numPage==null)||("".equals(numPage))) {
             numPage = "1";
@@ -84,10 +111,18 @@ public class Aplicacion extends Entidad {
         this.numPage = Integer.valueOf(numPage);
     }
 
+    /**
+     * Obtiene el numero de filas que se deben desplegar
+     * @return
+     */
     public Integer getNumRows() {
         return numRows;
     }
 
+    /**
+     * Asigna el numero de filas que se deben desplegar
+     * @param numRows
+     */
     public void setNumRows(String numRows) {
         if ((numRows==null)||("".equals(numRows))){
             numRows = "10";
@@ -95,82 +130,162 @@ public class Aplicacion extends Entidad {
         this.numRows = Integer.valueOf(numRows);
     }
 
+    /**
+     * Obtiene el texto adicional que se incluira en la query
+     * @return
+     */
     public String getStrWhereQuery() {
         return strWhereQuery;
     }
 
+    /**
+     * Asigna el texto adicional que se incluira en la query
+     * @param strWhereQuery
+     */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = strWhereQuery;
     }
 
+    /**
+     * Obtiene la clave de la forma
+     * @return
+     */
     public Integer getClaveForma() {
         return claveForma;
     }
 
+    /**
+     * Asigna la clave de la forma
+     * @param claveForma
+     */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
     }
 
+    /**
+     * Obtiene el display de la forma (HEADER o BODY) que se debe utilizar
+     * @return
+     */
     public String getDisplay() {
         return display;
     }
 
+    /**
+     * Asigna el display de la forma (HEADER o BODY) que se debe utilizar
+     * @param display
+     */
     public void setDisplay(String display) {
         this.display = display;
     }
 
+    /**
+     * Obtiene el tipo de accion que se esta efectuando con la Forma
+     * @return
+     */
     public String getTipoAccion() {
         return tipoAccion;
     }
 
+    /**
+     * Asigna el tipo de accion que se esta efectuando con la Forma
+     * @param tipoAccion
+     */
     public void setTipoAccion(String tipoAccion) {
         this.tipoAccion = tipoAccion;
     }
 
+    /**
+     * Obtiene el Alias del MenuMostrarEntidad
+     * @return
+     */
     public String getAliasMenuMostrarEntidad() {
         return aliasMenuMostrarEntidad;
     }
 
+    /**
+     * Asigna el Alias del MenuMostrarEntidad
+     * @param aliasMenuMostrarEntidad
+     */
     public void setAliasMenuMostrarEntidad(String aliasMenuMostrarEntidad) {
         this.aliasMenuMostrarEntidad = aliasMenuMostrarEntidad;
     }
 
+    /**
+     * Obtiene el Alias del MenuNuevaEntidad
+     * @return
+     */
     public String getAliasMenuNuevaEntidad() {
         return aliasMenuNuevaEntidad;
     }
 
+    /**
+     * Asigna el Alias del MenuNuevaEntidad
+     * @param aliasMenuNuevaEntidad
+     */
     public void setAliasMenuNuevaEntidad(String aliasMenuNuevaEntidad) {
         this.aliasMenuNuevaEntidad = aliasMenuNuevaEntidad;
     }
 
+    /**
+     * Obtiene el nombre de la aplicacion
+     * @return
+     */
     public String getAplicacion() {
         return aplicacion;
     }
 
+    /**
+     * Asigna el nombre de la aplicacion
+     * @param aplicacion
+     */
     public void setAplicacion(String aplicacion) {
         this.aplicacion = aplicacion;
     }
 
+    /**
+     * Obtiene la clave de la aplicacion
+     * @return
+     */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
     }
 
+    /**
+     * Asigna la clave de la aplicacion
+     * @param claveAplicacion
+     */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
     }
 
+    /**
+     * Obtiene la clave de la Forma principal
+     * @return
+     */
     public Integer getClaveFormaPrincipal() {
         return claveFormaPrincipal;
     }
 
+    /**
+     * Asigna la clave de la Forma principal
+     * @param claveFormaPrincipal
+     */
     public void setClaveFormaPrincipal(Integer claveFormaPrincipal) {
         this.claveFormaPrincipal = claveFormaPrincipal;
     }
 
+    /**
+     * Obtiene la descripcion
+     * @return
+     */
     public String getDescripcion() {
         return descripcion;
     }
 
+    /**
+     * Asigna la descripcion
+     * @param descripcion
+     */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
