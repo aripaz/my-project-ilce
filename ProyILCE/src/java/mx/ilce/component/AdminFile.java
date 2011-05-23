@@ -1,23 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.component;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
- *
+ *  Clase implementada para la administracion de archivos de la aplicacion
  * @author ccatrilef
  */
 public class AdminFile {
@@ -82,7 +79,7 @@ public class AdminFile {
      * @return
      * @throws Exception
      */
-    public static Properties leerConfig() throws Exception{
+    public static Properties leerConfig() throws ExceptionHandler{
         Properties prop = new Properties();
 	InputStream is = null;
 	File f = null;
@@ -102,11 +99,17 @@ public class AdminFile {
                 is=new FileInputStream(fichero.getAbsolutePath());
                 prop.load(is);
             }
+        } catch(URISyntaxException u){
+            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de configuracion");
 	} catch(IOException e) {
-            e.printStackTrace();
-	}finally{
-            if (is != null){
-                is.close();
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para Ingresar el INSERT de la Forma");
+        }finally{
+            try{
+                if (is != null){
+                    is.close();
+                }
+            }catch (Exception e){
+                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de configuracion");
             }
         }
 	return prop;
@@ -117,7 +120,7 @@ public class AdminFile {
      * @return
      * @throws Exception
      */
-    public static Properties leerIdQuery() throws Exception{
+    public static Properties leerIdQuery() throws ExceptionHandler{
         Properties prop = new Properties();
 	InputStream is = null;
 	File f = null;
@@ -137,11 +140,17 @@ public class AdminFile {
                 is=new FileInputStream(fichero.getAbsolutePath());
                 prop.load(is);
             }
+        } catch(URISyntaxException u){
+            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de Queries");
 	} catch(IOException e) {
-            e.printStackTrace();
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de Queries");
 	}finally{
-            if (is != null){
-                is.close();
+            try {
+                if (is != null){
+                    is.close();
+                }
+            }catch (Exception e){
+                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de Queries");
             }
         }
 	return prop;
@@ -154,7 +163,7 @@ public class AdminFile {
      * @param strKey
      * @return
      */
-    public static String getKey(Properties prop, String key){
+    public static String getKey(Properties prop, String key) throws ExceptionHandler{
         String sld = "";
 	try{
             Enumeration e = prop.keys();
@@ -162,7 +171,7 @@ public class AdminFile {
                 sld = prop.getProperty(key);
             }
 	}catch(Exception e){
-            e.printStackTrace();
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener la llave desde el properties");
 	}
         return sld;
     }
@@ -174,7 +183,7 @@ public class AdminFile {
      * @param key
      * @return
      */
-    public static Integer getIdQuery(Properties prop, String key){
+    public static Integer getIdQuery(Properties prop, String key) throws ExceptionHandler{
         Integer sld = Integer.valueOf(0);
         String str = "";
 	try{
@@ -184,7 +193,7 @@ public class AdminFile {
             }
             sld = sld.valueOf(str);
 	}catch(Exception e){
-            e.printStackTrace();
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener el ID de la Query");
 	}
         return sld;
     }
@@ -196,7 +205,7 @@ public class AdminFile {
      * @param hsFile
      * @return
      */
-    public static boolean deleFileFromServer(HashMap hsFile){
+    public static boolean deleFileFromServer(HashMap hsFile) throws ExceptionHandler{
         boolean isOK = false;
         try {
             if (hsFile!=null){
@@ -219,7 +228,7 @@ public class AdminFile {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new ExceptionHandler(ex,AdminFile.class,"Problemas para borrar los archivos desde el Server");
         }
         return isOK;
     }

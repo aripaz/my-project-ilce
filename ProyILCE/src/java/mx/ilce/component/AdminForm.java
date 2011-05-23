@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.component;
 
 import com.oreilly.servlet.multipart.FilePart;
@@ -15,6 +10,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.UtilDate;
 
 /**
@@ -40,7 +36,7 @@ public class AdminForm {
      * @param request
      * @return
      */
-    public HashMap getFormulario(HttpServletRequest request){
+    public HashMap getFormulario(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
         try{
             String contentType = request.getContentType();
@@ -51,7 +47,7 @@ public class AdminForm {
                 hs = getFormularioSimple(request);
             }
         }catch(Exception e){
-
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario");
         }
         return hs;
     }
@@ -65,7 +61,7 @@ public class AdminForm {
      * @param request
      * @return
      */
-    private HashMap getFormularioSimple(HttpServletRequest request){
+    private HashMap getFormularioSimple(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
         HashMap hsForm = null;
         try{
@@ -84,7 +80,7 @@ public class AdminForm {
                 hs.put("arrayFORM", arrayFORM);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario Simple");
         }
         return hs;
 
@@ -100,7 +96,7 @@ public class AdminForm {
      * @param request
      * @return
      */
-    private HashMap getFormularioMultiPart(HttpServletRequest request){
+    private HashMap getFormularioMultiPart(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
         HashMap hsForm = null;
         HashMap hsFile = null;
@@ -108,8 +104,8 @@ public class AdminForm {
             AdminFile admF = new AdminFile();
             Properties prop = AdminFile.leerConfig();
 
-            String FileServerPath = admF.getKey(prop, AdminFile.FILESERVER);
-            String maxSizeFile = admF.getKey(prop, AdminFile.MAXSIZEFILE);
+            String FileServerPath = AdminFile.getKey(prop, AdminFile.FILESERVER);
+            String maxSizeFile = AdminFile.getKey(prop, AdminFile.MAXSIZEFILE);
             int maxPostSize = Integer.valueOf(maxSizeFile);
             ArrayList arrayFORM = new ArrayList();
             ArrayList arrayFILE = new ArrayList();
@@ -154,7 +150,7 @@ public class AdminForm {
             hs.put("arrayFORM", arrayFORM);
             hs.put("arrayFILE", arrayFILE);
         }catch(Exception e){
-            e.printStackTrace();
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario multipart");
         }
         return hs;
     }
@@ -167,7 +163,7 @@ public class AdminForm {
      * @param request
      * @return
      */
-    public String getStringRequest(String name, HttpServletRequest request){
+    public String getStringRequest(String name, HttpServletRequest request) throws ExceptionHandler{
         String data = null;
         try{
             data = (String) request.getSession().getAttribute(name);
@@ -175,7 +171,7 @@ public class AdminForm {
                 data = (String) request.getParameter(name);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener los datos de un campo en el request");
         }
         return data;
     }

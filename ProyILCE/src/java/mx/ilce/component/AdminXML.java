@@ -35,11 +35,20 @@ public class AdminXML {
     private int numRow=0;
     private boolean deleteIncreement=false;
 
-    
+    /**
+     * Indica con TRUE o FALSE si al ir formando el XML se debe ignorar o no
+     * los datos de tipo Increement
+     * @return
+     */
     public boolean isDeleteIncreement() {
         return deleteIncreement;
     }
 
+    /**
+     * Asigna con TRUE o FALSE si al ir formando el XML se deben ignorar o no
+     * los datos del tipo increment
+     * @param deleteIncreement
+     */
     public void setDeleteIncreement(boolean deleteIncreement) {
         this.deleteIncreement = deleteIncreement;
     }
@@ -51,7 +60,7 @@ public class AdminXML {
      * @param user  Bean con los datos del usuario que se va a buscar, debe
      * contener la clave de empleado del usuario
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public StringBuffer getSessionXML(User user) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
@@ -72,6 +81,7 @@ public class AdminXML {
      * segun su perfil
      * @param user
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getMenuXML(User user) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
@@ -96,6 +106,7 @@ public class AdminXML {
      * Entrega los tab en formato XML que le corresponden segun el perfil entregado
      * @param perfil
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getTabXML(Perfil perfil) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
@@ -127,6 +138,7 @@ public class AdminXML {
      * @param page   Número de pagina que se desea mostrar del total de datos
      * @param regByPage Numero de registros por pagina que se deben mostrar
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getGridByData(HashCampo hsData, List lstCampos, int page, int regByPage)
                 throws ExceptionHandler{
@@ -210,6 +222,7 @@ public class AdminXML {
      * utiliza para completar los datos equivalentes que le corresponden a cada
      * campo de la columna
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getGridColumByData(HashCampo hsData, List lstCampos)
                 throws ExceptionHandler {
@@ -257,6 +270,7 @@ public class AdminXML {
      * @param lstCampos Listado de campos de la Forma
      * @param idForma   ID de la Forma entregada
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, 
             Integer idForma, String tipoAccion) throws ExceptionHandler{
@@ -369,6 +383,7 @@ public class AdminXML {
      * @param lstCampos
      * @param idForma
      * @return
+     * @throws ExceptionHandler
      */
     public StringBuffer getFormaWithoutData(HashCampo hsData, List lstCampos, 
             Integer idForma, String tipoAccion) throws ExceptionHandler{
@@ -482,6 +497,7 @@ public class AdminXML {
      * @param strData   Data de entrada que se usara en la query
      * @param strRegistro   Nombre del registro desde donde se invoco el metodo
      * @return
+     * @throws ExceptionHandler
      */
     private StringBuffer getXmlByQueryAndData(String query, String[] strData, 
             String strRegistro) throws ExceptionHandler {
@@ -523,8 +539,10 @@ public class AdminXML {
      * @param strData   Data de entrada que se usara en la query
      * @param strRegistro   Nombre del registro desde donde se invoco el metodo
      * @return
+     * @throws ExceptionHandler
      */
-    private StringBuffer getXmlByIdForma(String[] strData, String strRegistro) throws ExceptionHandler{
+    private StringBuffer getXmlByIdForma(String[] strData, String strRegistro)
+            throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try{
             ConEntidad con = new ConEntidad();
@@ -577,6 +595,7 @@ public class AdminXML {
      * @param query
      * @param lst
      * @return
+     * @throws ExceptionHandler
      */
     private String[] getStringData (String query, ArrayList lst) throws ExceptionHandler{
         String[] strData = null;
@@ -614,6 +633,7 @@ public class AdminXML {
      * @param lstData   Listado con la configuracion de la forma
      * @param nombreCampo   Campo que se esta buscando desde la forma
      * @return
+     * @throws ExceptionHandler
      */
     private CampoForma getCampoForma(List lstData, String nombreCampo ) throws ExceptionHandler{
         CampoForma cmp = null;
@@ -640,6 +660,7 @@ public class AdminXML {
      * los archivos XML estan en la ruta resource/xml/[nombre archivo]
      * @param fileName
      * @return
+     * @throws ExceptionHandler
      */
     private Document getDocumentXML(String fileName) throws ExceptionHandler{
         Document documento = null;
@@ -679,6 +700,7 @@ public class AdminXML {
      * @param level
      * @param hsCmp
      * @return
+     * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
@@ -749,6 +771,7 @@ public class AdminXML {
      * @param level
      * @param hsCmp
      * @return
+     * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp, int register)
             throws ExceptionHandler{
@@ -815,6 +838,7 @@ public class AdminXML {
      * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
      * @param data  String de datos donde se buscaran los caracteres especiales
      * @return
+     * @throws ExceptionHandler
      */
     private String replaceAccent(String data) throws ExceptionHandler{
         String str = "";
@@ -847,7 +871,14 @@ public class AdminXML {
         return str;
     }
 
-        private String replaceHtml(String data) throws ExceptionHandler{
+    /**
+     * Metodo para reemplazar los acentos que viene en configuracion HTML por
+     * el texto correspondiente
+     * @param data
+     * @return
+     * @throws ExceptionHandler
+     */
+    private String replaceHtml(String data) throws ExceptionHandler{
         String str = "";
         try{
             if (data!=null){

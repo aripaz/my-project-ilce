@@ -14,34 +14,57 @@ import java.util.HashMap;
 import java.util.List;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.handler.ExceptionHandler;
 
 /**
- *
+ *  Clase implementada para guardar datos en un listado Hash
  * @author ccatrilef
  */
 public class ListHash {
 
     private HashMap lista;
 
-    public boolean insertListHash(Object dato, BigDecimal clave){
+    /**
+     * Inserta un dato a una lista Hash
+     * @param dato  Dato a insertar
+     * @param clave clave que poseera en el Hash
+     * @return
+     */
+    private boolean insertListHash(Object dato, BigDecimal clave){
         boolean bln=true;
         this.lista.put(clave, dato);
         return bln;
     }
 
-    public boolean deleteListHash(BigDecimal clave){
+    /**
+     * Elimina un dato de una lista Hash, ubicandolo por su clave
+     * @param clave clave del objeto a eliminar
+     * @return
+     */
+    private boolean deleteListHash(BigDecimal clave){
+        this.lista.remove(clave);
+        return true;
+    }
+
+    /**
+     * Actualiza el contenido de un listado Hash, reemplazando el objeto ubicado
+     * en la clave entregada por el nuevo objeto entregado
+     * @param dato
+     * @param clave
+     * @return
+     */
+    private boolean updateListHash(Object dato, BigDecimal clave){
         boolean bln=true;
         return bln;
     }
 
-    public boolean updateListHash(Object dato, BigDecimal clave){
-        boolean bln=true;
-        return bln;
-    }
-
-    public Object getObjectHash(BigDecimal clave){
-        String str="";
-        return str;
+    /**
+     * Obtiene un objeto desde el listado hash, mediante una clave
+     * @param clave
+     * @return
+     */
+    private Object getObjectHash(BigDecimal clave){
+        return this.lista.get(clave);
     }
 
      /**
@@ -54,7 +77,7 @@ public class ListHash {
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
      */
-    public Object getBean(Class nameClass, HashCampo hsCmp){
+    public Object getBean(Class nameClass, HashCampo hsCmp)throws ExceptionHandler{
         Object sld = null;
         try{
             Class clase = Class.forName(nameClass.getName());
@@ -98,19 +121,19 @@ public class ListHash {
             }
             sld = objeto;
         }catch(NullPointerException e0){
-            e0.printStackTrace();
+            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(ClassNotFoundException e1){
-            e1.printStackTrace();
+            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(NoSuchMethodException e2 ){
-            e2.printStackTrace();
+            throw new ExceptionHandler(e2,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(InstantiationException e3){
-            e3.printStackTrace();
+            throw new ExceptionHandler(e3,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(IllegalAccessException e4){
-            e4.printStackTrace();
+            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(IllegalArgumentException e5){
-            e5.printStackTrace();
+            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Bean individual");
         }catch(InvocationTargetException e6){
-            e6.printStackTrace();
+            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Bean individual");
         }
         return sld;
     }
@@ -127,7 +150,7 @@ public class ListHash {
      *                  introducida en la clase señalada
      * @return
      */
-    public ArrayList getListBean(Class nameClass, HashCampo hsCmp){
+    public ArrayList getListBean(Class nameClass, HashCampo hsCmp) throws ExceptionHandler{
         ArrayList arr = new ArrayList();
         try{
             Class clase = Class.forName(nameClass.getName());
@@ -173,19 +196,19 @@ public class ListHash {
                 }
             }
         }catch(NullPointerException e0){
-            e0.printStackTrace();
+            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(ClassNotFoundException e1){
-            e1.printStackTrace();
+            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(NoSuchMethodException e2 ){
-            e2.printStackTrace();
+            throw new ExceptionHandler(e2,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(InstantiationException e3){
-            e3.printStackTrace();
+            throw new ExceptionHandler(e3,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(IllegalAccessException e4){
-            e4.printStackTrace();
+            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(IllegalArgumentException e5){
-            e5.printStackTrace();
+            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Listado de Bean");
         }catch(InvocationTargetException e6){
-            e6.printStackTrace();
+            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Listado de Bean");
         }
         return arr;
     }
@@ -197,23 +220,30 @@ public class ListHash {
      * @return
      * @throws ClassNotFoundException
      */
-    private Object getTypeValueCampo(Class type, String obj) throws ClassNotFoundException{
-        Object sld = Class.forName(type.getName()) ;
-        if (type.getSimpleName().equals("String")){
-            sld = String.valueOf(obj);
-            if ("null".equals(sld)){
-                sld = null;
+    private Object getTypeValueCampo(Class type, String obj) throws ExceptionHandler{
+        Object sld = null;
+        try {
+            sld = Class.forName(type.getName()) ;
+            if (type.getSimpleName().equals("String")){
+                sld = String.valueOf(obj);
+                if ("null".equals(sld)){
+                    sld = null;
+                }
+            }else if(type.getSimpleName().equals("Integer") ){
+                if ((obj != null) && (!"null".equals(obj))){
+                    sld = Integer.valueOf(obj);
+                }else{
+                    sld = null;
+                }
+            }else if(type.getSimpleName().equals("Date") ){
+                if ((obj != null) && (!"null".equals(obj))){
+                    sld = Date.valueOf(obj) ;
+                }
             }
-        }else if(type.getSimpleName().equals("Integer") ){
-            if ((obj != null) && (!"null".equals(obj))){
-                sld = Integer.valueOf(obj);
-            }else{
-                sld = null;
-            }
-        }else if(type.getSimpleName().equals("Date") ){
-            if ((obj != null) && (!"null".equals(obj))){
-                sld = Date.valueOf(obj) ;
-            }
+        }catch (ClassNotFoundException e1){
+            throw new ExceptionHandler(e1,this.getClass(),"Problemas para converti el Tipo de Campo");
+        }catch (Exception e2){
+            throw new ExceptionHandler(e2,this.getClass(),"Problemas para converti el Tipo de Campo");
         }
         return sld;
     }

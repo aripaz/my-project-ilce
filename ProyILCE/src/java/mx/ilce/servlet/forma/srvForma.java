@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
-import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.util.Validation;
  
 /**
  * Servlet implementado para permitir la recuperacion y manejo de las formas
@@ -42,12 +42,12 @@ public class srvForma extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Validation val = new Validation();
         try {
             Forma forma = (Forma) request.getSession().getAttribute("forma");
             AdminForm admForm = new AdminForm();
             HashMap hs = admForm.getFormulario(request);
             HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-            //HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
             forma.setFormData(hsForm);
             ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
             forma.setFormName(arrayForm);
@@ -57,56 +57,58 @@ public class srvForma extends HttpServlet {
             String tipoAccion = (String) hsForm.get("$ta");
             String strWhere = (String) hsForm.get("$w");
 
-            if (forma !=null){
-                forma.setPk(pk);
-                forma.setClaveForma(Integer.valueOf(claveForma));
-                forma.setTipoAccion(tipoAccion);
-                if ((strWhere!=null)&&(!"".equals(strWhere))){
-                    String[] strData = new String[1];
-                    strData[0] = pk;
-                    forma.setArrayData(strData);
-                    String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
-                    if ((strWhere!=null) && (strWhere.trim().length()>0)){
-                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                            forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+            ArrayList arrVal = new ArrayList();
+            arrVal.add("$cf");
+            arrVal.add("$pk");
+            arrVal.add("$ta");
+
+            List lstVal = val.validationForm(arrVal, hsForm);
+            String blOK = (String) lstVal.get(0);
+            if ("false".equals(blOK)){
+                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            }else{
+                if (forma !=null){
+                    forma.setPk(pk);
+                    forma.setClaveForma(Integer.valueOf(claveForma));
+                    forma.setTipoAccion(tipoAccion);
+                    if ((strWhere!=null)&&(!"".equals(strWhere))){
+                        String[] strData = new String[1];
+                        strData[0] = pk;
+                        forma.setArrayData(strData);
+                        String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                        if ((strWhere!=null) && (strWhere.trim().length()>0)){
+                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                            }else{
+                                forma.setStrWhereQuery(strWhere);
+                            }
                         }else{
-                            forma.setStrWhereQuery(strWhere);
+                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                forma.setStrWhereQuery(whereForm);
+                            }
                         }
+                        forma.ingresarBusquedaAvanzada();
                     }else{
-                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                            forma.setStrWhereQuery(whereForm);
+                        if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
+                            forma.setCleanIncrement(true);
                         }
+                        forma.mostrarForma();
                     }
-                    forma.ingresarBusquedaAvanzada();
-                }else{
-                    if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
-                        forma.setCleanIncrement(true);
-                    }
-                    forma.mostrarForma();
+                    StringBuffer xmlForma = forma.getXmlEntidad();
+                    request.getSession().setAttribute("xmlForma", xmlForma);
                 }
-                StringBuffer xmlForma = forma.getXmlEntidad();
-                request.getSession().setAttribute("xmlForma", xmlForma);
+                request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
             }
-            request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
         }catch (ExceptionHandler eh){
             try{
-                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
-                eh.setLogFile(true);
-                eh.writeToFile();
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh2.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.setTextMessage("Problemas en la execucion del Error de srvForma");
+                val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            val.setTextMessage("Problemas en la execucion de srvForma");
+            val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
