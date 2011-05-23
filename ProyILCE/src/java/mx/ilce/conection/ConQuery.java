@@ -33,11 +33,14 @@ import mx.ilce.handler.LogHandler;
  * @author ccatrilef
  */
 class ConQuery {
+    private Connection conn;
 
+    /**
+     * COnstructor Basico
+     */
     public ConQuery() {
     }
 
-    private Connection conn;
     /**
      * Realiza la conexion a la base de datos. Los parametros de conexion se
      * obtienen de un properties para una facil mantencion sin compilar.
@@ -67,10 +70,8 @@ class ConQuery {
                 System.out.println("NO HAY CONEXION");
             }
         }catch (SQLException sqlex){
-            Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, sqlex);
             throw new ExceptionHandler(sqlex,this.getClass(),"Problemas para abrir Conexion a Base de datos");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ConSession.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExceptionHandler(ex,this.getClass(),"No se encontro los Driver de Conexion");
         }catch (Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para abrir Conexion a Base de datos");
@@ -86,7 +87,7 @@ class ConQuery {
      * @param campoForma    Variable con datos para validacion
      * @param arrData       Query a ejecutar
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo executeInsert(CampoForma campoForma, String arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -173,7 +174,7 @@ class ConQuery {
      * @param campoForma    Variable con datos para validacion
      * @param arrData       Query a ejecutar
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo executeUpdate(CampoForma campoForma, String arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -182,8 +183,6 @@ class ConQuery {
             Integer increment =Integer.valueOf(-1);
             if (validateUpdate(campoForma.getTabla(), arrData)){
                 getConexion();
-                //System.out.println("QUERY UPDATE:");
-                //System.out.println(arrData);
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(arrData);
             }
@@ -245,7 +244,7 @@ class ConQuery {
      * @param campoForma
      * @param arrData
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo executeDelete(CampoForma campoForma, String arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -254,8 +253,6 @@ class ConQuery {
             Integer increment =Integer.valueOf(-1);
             if (validateDelete(campoForma.getTabla(), arrData)){
                 getConexion();
-                //System.out.println("QUERY DELETE:");
-                //System.out.println(arrData);
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(arrData);
             }
@@ -411,10 +408,11 @@ class ConQuery {
      * la cual condicionara la respuesta de la query.
      * El idQuery entregado permite seleccionar la query respectiva.
      * @param idQuery   Codigo de la query a utilizar
-     * @param arrData   Arreglo con los parametros de entrada
+     * @param arrData   Arreglo con los parametros de entrada que se utilizara
+     * en la query
      * @return HashCampo.  Contiene el listado de registros obtenidos y los campos
      * que posee la query, con sus tipos de datos
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo getDataWithWhere(Integer idQuery, String whereData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -499,11 +497,12 @@ class ConQuery {
      * la cual condicionara la respuesta de la query, 2) Un arreglo con la data
      * de entreda para la query
      * El idQuery entregado permite seleccionar la query respectiva.
-     * @param idQuery
-     * @param whereData
-     * @param arrData
+     * @param idQuery       ID de la query query a ejecutar
+     * @param whereData     Condiciones adicionales a agregar a la query
+     * @param arrData       Arreglo de data con los parametros de entrada que se
+     * utilizara en la query
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData) 
             throws ExceptionHandler{
@@ -663,7 +662,7 @@ class ConQuery {
      * @param idQuery       Codigo de la query a utilizar
      * @return HashCampo    Contiene el listado de registros obtenidos y los
      * campos que posee la query, con sus tipos de datos
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo getData(Integer idQuery) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -829,7 +828,7 @@ class ConQuery {
      * @param query     Query que se debe ejecutar en la base de Datos
      * @param arrData   Parametros con que se debe completar la query
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public HashCampo getDataByQuery(String query, String[] arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -919,10 +918,10 @@ class ConQuery {
      * Este metodo se debio utilizar, pero el PreparedStatement no esta
      * guardando las variables que se le entregan y deberia reemplazar en
      * las queries buscando el parametro con el signo de ?
-     * @param idQuery
-     * @param arrData
+     * @param idQuery   ID de la query a buscar
+     * @param arrData   matriz de datos a aplicar en la query
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     private HashCampo getDataParam(Integer idQuery, String[][] arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -1013,8 +1012,9 @@ class ConQuery {
     /**
      * Busca una query desde la base de datos, pasandole el ID que posee
      * en la tabla
-     * @param idQuery
+     * @param idQuery   ID de la Query a buscar
      * @return
+     * @throws ExceptionHandler
      */
     private String getQueryById(Integer idQuery) throws ExceptionHandler{
         String strSld = "";
@@ -1066,13 +1066,15 @@ class ConQuery {
     /**
      * Segun el tipo de dato que se entrega, el cual viene desde la base de
      * datos, utiliza la conversion respectiva para dejar el valor como String
-     * @param strType
-     * @param rs
-     * @param codigo
+     * @param strType   Tipo de dato proveniente de la Base de Datos
+     * @param rs        ResulSet donde esta el objeto a analizar
+     * @param codigo    codigo (posicion) dentro del resulset donde esta el dato
+     * a analizar
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
-    private String getValueCampo(String strType, ResultSet rs, Integer codigo) throws ExceptionHandler {
+    private String getValueCampo(String strType, ResultSet rs, Integer codigo)
+            throws ExceptionHandler {
         String sld = new String();
         try{
             if (strType!=null){
@@ -1099,7 +1101,7 @@ class ConQuery {
     /**
      * Segun el tipo entregado que se tiene en la base de datos
      * se entrega un string con el tipo que le debe corresponder en Java
-     * @param strType
+     * @param strType   Texto con el tipo de dato a analizar
      * @return
      */
     private String castTypeDataDBtoAPL(String strType){
@@ -1122,6 +1124,11 @@ class ConQuery {
         return sld;
     }
 
+    /**
+     * Convierte un arreglo de String a un String
+     * @param strData   Arreglo que se llevara a String
+     * @return
+     */
     private String arrayToString(String[] strData){
         StringBuffer sld= new StringBuffer();
         if (strData!=null){
@@ -1132,6 +1139,11 @@ class ConQuery {
         return sld.toString();
     }
 
+    /**
+     * Convierte una matriz bidimensional de String a String
+     * @param strData   Matriz bidimensional que se llevara a String
+     * @return
+     */
     private String arrayToString(String[][] strData){
         StringBuffer sld= new StringBuffer();
         if (strData!=null){

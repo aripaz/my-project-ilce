@@ -27,6 +27,11 @@ public class ConEntidad {
     private HashCampo hashCampo = new HashCampo();
     private CampoForma campoForma = new CampoForma();
 
+    /**
+     * Constructor basico de la clase, al crearse se cargan los datos del
+     * properties
+     * @throws ExceptionHandler
+     */
     public ConEntidad() throws ExceptionHandler{
         try{
             this.prop = AdminFile.leerIdQuery();
@@ -35,6 +40,12 @@ public class ConEntidad {
         }
     }
 
+    /**
+     * Obtiene el IDQUERY desde el properties de queries
+     * @param key   clave que se esta buscando
+     * @return
+     * @throws ExceptionHandler
+     */
     public Integer getIdQuery(String key) throws ExceptionHandler{
         Integer intSld = new Integer(0);
         try{
@@ -48,7 +59,11 @@ public class ConEntidad {
         return intSld;
     }
 
-
+    /**
+     * Se ejecuta la insercion de los datos configurados en el objeto
+     * (CampoForma y Query)
+     * @throws ExceptionHandler
+     */
     public void ingresaEntidad() throws ExceptionHandler{
         try{
             ConQuery con = new ConQuery();
@@ -59,6 +74,11 @@ public class ConEntidad {
         }
     }
 
+    /**
+     * Se ejecuta la eliminacion de los datos configurados en el objeto
+     * (CampoForma y Query)
+     * @throws ExceptionHandler
+     */
     public void eliminaEntidad() throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
@@ -69,6 +89,11 @@ public class ConEntidad {
         }
     }
 
+    /**
+     * Se ejecuta la edicion de los datos configurados en el objeto
+     * (CampoForma y Query)
+     * @throws ExceptionHandler
+     */
     public void editarEntidad() throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
@@ -80,20 +105,11 @@ public class ConEntidad {
     }
 
     public void obtieneEntidad(){
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public List obtieneMenu(){
-        List lst = new ArrayList();
-
-        for (int i=0;i<10;i++){
-            Campo cmp = new Campo();
-            cmp.setNombre("Nombre"+i);
-            cmp.setAlias("Alias"+i);
-            cmp.setValor(String.valueOf(i));
-            lst.add(cmp);
-        }
-        return lst;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
@@ -103,6 +119,7 @@ public class ConEntidad {
      * listado de String con los nombres de los campos que se quieren obtener.
      * Con esto se evita traer la forma completa.
      * @return
+     * @throws ExceptionHandler
      */
     public List getListFormaByIdAndCampos(String[] strData) throws ExceptionHandler{
         List lstSld=null;
@@ -127,6 +144,7 @@ public class ConEntidad {
      * entregando un Listado de Bean del tipo CampoForma
      * @param strData   Debe contener el ID de la forma a buscar
      * @return
+     * @throws ExceptionHandler
      */
     public List getListFormaById(String[] strData) throws ExceptionHandler{
         List lstSld=null;
@@ -149,9 +167,10 @@ public class ConEntidad {
     /**
      * Obtiene la data generada a partir de la Query entregada y los parametros
      * de entrada que deben utilizarce con la Query
-     * @param strQuery
-     * @param strData
+     * @param strQuery  Query que se desea ejecutar
+     * @param strData   datos de entrada para la query
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getDataByQuery(String strQuery, String[] strData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -166,7 +185,7 @@ public class ConEntidad {
 
     /**
      * Entrega el campo PK de una Tabla
-     * @param tabla
+     * @param tabla     nombre de la tabla donde se buscara el PK
      * @return
      * @throws ExceptionHandler
      */
@@ -188,6 +207,7 @@ public class ConEntidad {
      * @param strData   Arreglo con la data de entrada que se debe usar en la
      * Query
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -209,6 +229,7 @@ public class ConEntidad {
      * @param strData   Condicionador a aplicar a la query
      * Query
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -231,8 +252,10 @@ public class ConEntidad {
      * @param strData   Arreglo con la data de entrada que se debe usar en la
      * query
      * @return
+     * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData ) throws ExceptionHandler{
+    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData )
+            throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
@@ -247,28 +270,51 @@ public class ConEntidad {
 
 /********************* GETTER AND SETTER ******************/
 
+    /**
+     * Obtiene la query contenida en el objeto
+     * @return
+     */
     public String getQuery() {
         return query;
     }
 
+    /**
+     * Asigna la query contenida en el objeto
+     * @param query
+     */
     public void setQuery(String query) {
         this.query = query;
     }
 
+    /**
+     * Obtiene el objeto de tipo HashCampo
+     * @return
+     */
     public HashCampo getHashCampo() {
         return hashCampo;
     }
 
+    /**
+     * Asigna el objeto de tipo HashCampo
+     * @param hashCampo
+     */
     public void setHashCampo(HashCampo hashCampo) {
         this.hashCampo = hashCampo;
     }
 
+    /**
+     * Obtiene el campoForma
+     * @return
+     */
     public CampoForma getCampoForma() {
         return campoForma;
     }
 
+    /**
+     * Asigna el campoForma
+     * @param campoForma
+     */
     public void setCampoForma(CampoForma campoForma) {
         this.campoForma = campoForma;
     }
-
 }

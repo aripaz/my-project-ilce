@@ -27,6 +27,11 @@ public class ConSession {
     private Properties prop = null;
     private AdminFile adm = new AdminFile();
 
+    /**
+     * Constructor basico de la clase, al crearse se cargan los datos del
+     * properties
+     * @throws ExceptionHandler
+     */
     public ConSession() throws ExceptionHandler{
         try{
             this.prop = AdminFile.leerIdQuery();
@@ -35,6 +40,12 @@ public class ConSession {
         }
     }
 
+     /**
+     * Obtiene el IDQUERY desde el properties de queries
+     * @param key   clave que se esta buscando
+     * @return
+     * @throws ExceptionHandler
+     */
     public Integer getIdQuery(String key) throws ExceptionHandler{
         Integer intSld = new Integer(0);
         try{
@@ -56,7 +67,7 @@ public class ConSession {
      * @param user  Nombre dado en el sistema al usuario para su identificacion
      * @param password  Password asociada al usuario para identificarlo
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public User getUser(String user, String password) throws ExceptionHandler{
         User usr = new User();
@@ -103,7 +114,7 @@ public class ConSession {
      * error en la password
      * @param usuario   Bean que contiene los datos del usuario
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public User getUser(User usuario) throws ExceptionHandler{
         User usr = new User();
@@ -151,7 +162,7 @@ public class ConSession {
      * perfil
      * @param user  Bean que contiene los datos del usuario
      * @return
-     * @throws SQLException
+     * @throws ExceptionHandler
      */
     public Perfil getPerfil(User user) throws ExceptionHandler{
         Perfil perfil = new Perfil();
@@ -183,6 +194,7 @@ public class ConSession {
      * obtener todos los tab segun los datos aplicacion y forma.
      * @param perfil    Bean que contiene los datos del perfil
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getTabForma(Perfil perfil) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -224,7 +236,8 @@ public class ConSession {
      * se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
      * @return
-     */
+      * @throws ExceptionHandler
+      */
     public HashCampo getUserXML(User usuario) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
@@ -250,6 +263,7 @@ public class ConSession {
      * se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getMenuXML(User usuario) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -275,6 +289,7 @@ public class ConSession {
      * @param strData   Arreglo con la data de entrada que se debe usar en la
      * Query   
      * @return
+     * @throws ExceptionHandler
      */
     public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
@@ -290,10 +305,10 @@ public class ConSession {
     }
 
     public boolean insertUser(User user){
-        return true;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public boolean deleteUser(User user){
-        return true;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
