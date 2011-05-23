@@ -7,21 +7,21 @@
 
         $.fn.fieldtoolbar.settings = {
             app:"",
-            form:"",
+            form:$(this).attr("forma"),
             pk:"",
-            control:"",
-            titulo_agregar:"",
-            titulo_editar:""
+            control:$(this).attr("control"),
+            titulo_agregar:$(this).attr("titulo_agregar"),
+            titulo_editar:$(this).attr("titulo_editar")
         };
 
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.fieldtoolbar.options = $.extend($.fn.fieldtoolbar.settings, opc);
              obj = $(this);
-             $.fn.fieldtoolbar.options.form=$(this).attr("forma");
+             /*$.fn.fieldtoolbar.options.form=$(this).attr("forma");
              $.fn.fieldtoolbar.options.control=$(this).attr("control");
              $.fn.fieldtoolbar.options.titulo_agregar=$(this).attr("titulo_agregar");
-             $.fn.fieldtoolbar.options.titulo_editar=$(this).attr("titulo_editar");
+             $.fn.fieldtoolbar.options.titulo_editar=$(this).attr("titulo_editar");*/
 
              var suffix=obj[0].previousSibling.id;
 
