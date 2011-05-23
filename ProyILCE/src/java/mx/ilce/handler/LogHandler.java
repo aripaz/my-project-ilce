@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- *
+ * Clase implementada para manejar el control de Log de la aplicacion
  * @author ccatrilef
  */
 public class LogHandler {
@@ -22,12 +22,23 @@ public class LogHandler {
     private StringBuffer textMessage = new StringBuffer("");
     private StringBuffer textData = new StringBuffer("");
 
+    /**
+     * Constructor basico de la clase, incializa las variables Time y DateFile
+     */
     public LogHandler() {
         UtilDate ut = new UtilDate();
         setTime(ut.getFechaHMS());
         setDateFile(ut.getFecha(formato.AMD,""));
     }
 
+    /**
+     * Constructor de la clase, el cual asigna los mensajes que se deben escribir
+     * en el log
+     * @param rutaFile      Ruta donde se dejara el archivo
+     * @param textMessage   Texto del mensaje
+     * @param textData      Data adicional para el mensaje
+     * @return
+     */
     public boolean logData(String rutaFile,StringBuffer textMessage, StringBuffer textData){
         boolean sld =false;
         setRutaFile(rutaFile);
@@ -39,46 +50,90 @@ public class LogHandler {
         return sld;
     }
 
+    /**
+     * Obtiene el campo DateFile que se usara para el nombre del archivo de Log
+     * @return
+     */
     private String getDateFile() {
         return dateFile;
     }
 
+    /**
+     * Asigna el campo DateFile que se usara para el nombre del archivo de Log
+     * @param dateFile
+     */
     private void setDateFile(String dateFile) {
         this.dateFile = dateFile;
     }
 
+    /**
+     * Obtiene el texto contenido en textData
+     * @return
+     */
     private StringBuffer getTextData() {
         return textData;
     }
 
+    /**
+     * Asigna el texto a textData
+     * @param textData
+     */
     private void setTextData(StringBuffer textData) {
         this.textData = textData;
     }
 
+    /**
+     * Obtiene el texto del mensaje contenido en textMessage
+     * @return
+     */
     private StringBuffer getTextMessage() {
         return textMessage;
     }
 
+    /**
+     * Asigna el texto del mensaje en textMessage
+     * @param textMessage
+     */
     private void setTextMessage(StringBuffer textMessage) {
         this.textMessage = textMessage;
     }
 
+    /**
+     * Obtiene el texto de la fecha y hora asignada al objeto
+     * @return
+     */
     private String getTime() {
         return time;
     }
 
+    /**
+     * Asigna el texto de la fecha y hora al objeto
+     * @param time
+     */
     private void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     * Obtiene la ruta donde se depositara el archivo de Log
+     * @return
+     */
     private String getRutaFile() {
         return rutaFile;
     }
 
+    /**
+     * Asigna la ruta donde se depositara el archivo de Log
+     * @param rutaFile
+     */
     private void setRutaFile(String rutaFile) {
         this.rutaFile = rutaFile;
     }
 
+    /**
+     * Ejecuta la escritura del archivo de Log con los datos contenidos en el Objeto
+     * @return
+     */
     private boolean writeToFile(){
         boolean sld = true;
         String strNameFile = "";
@@ -106,6 +161,13 @@ public class LogHandler {
         return sld;
     }
 
+    /**
+     * Escribe el archivo de Log con la data entregada y el nombre señalado
+     * @param strEntrada    Data a escribir en el archvio
+     * @param nameFile      Nombre que debera poseer el archivo
+     * @return
+     * @throws IOException
+     */
     private boolean guardarArchivo(StringBuffer strEntrada, String nameFile) throws IOException{
         boolean sld = true;
         FileWriter w = null;
@@ -127,6 +189,9 @@ public class LogHandler {
         return sld;
     }
 
+    /**
+     * Clase local para permitir la obtencion y el manejo de formatos de Fecha
+     */
     private class UtilDate{
 
         private int dia;
@@ -364,5 +429,4 @@ public class LogHandler {
             return sld;
         }
     }
-
 }
