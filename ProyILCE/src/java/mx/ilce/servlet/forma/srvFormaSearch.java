@@ -23,6 +23,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.util.Validation;
 
 /**
  *
@@ -41,65 +42,67 @@ public class srvFormaSearch extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Validation val = new Validation();
         try {
             AdminForm admForm = new AdminForm();
             HashMap hs = admForm.getFormulario(request);
+            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
 
-            Forma forma = (Forma) request.getSession().getAttribute("forma");
-            if (forma !=null){
+            String claveForma = (String) hsForm.get("$cf");
+            String pk = (String) hsForm.get("$pk");
+            String tipoAccion = (String) hsForm.get("$ta");
+            String strWhere = (String) hsForm.get("$w");
 
-                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-                forma.setFormData(hsForm);
-                ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
-                forma.setFormName(arrayForm);
+            ArrayList arrVal = new ArrayList();
+            arrVal.add("$cf");
+            arrVal.add("$pk");
+            arrVal.add("$ta");
+            arrVal.add("$w");
 
-                String claveForma = (String) hsForm.get("$cf");
-                String pk = (String) hsForm.get("$pk");
-                String tipoAccion = (String) hsForm.get("$ta");
-                String strWhere = (String) hsForm.get("$w");
+            List lstVal = val.validationForm(arrVal, hsForm);
+            String blOK = (String) lstVal.get(0);
+            if ("false".equals(blOK)){
+                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            }else{
+                Forma forma = (Forma) request.getSession().getAttribute("forma");
+                if (forma !=null){
+                    forma.setFormData(hsForm);
+                    ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
+                    forma.setFormName(arrayForm);
+                    forma.setPk(pk);
+                    forma.setClaveForma(Integer.valueOf(claveForma));
+                    forma.setTipoAccion(tipoAccion);
 
-                forma.setPk(pk);
-                forma.setClaveForma(Integer.valueOf(claveForma));
-                forma.setTipoAccion(tipoAccion);
-
-                String[] strData = new String[1];
-                strData[0] = pk;
-                forma.setArrayData(strData);
-                String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
-                if ((strWhere!=null) && (strWhere.trim().length()>0)){
-                    if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                        forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                    String[] strData = new String[1];
+                    strData[0] = pk;
+                    forma.setArrayData(strData);
+                    String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                    if ((strWhere!=null) && (strWhere.trim().length()>0)){
+                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                            forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                        }
+                    }else{
+                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                            forma.setStrWhereQuery(whereForm);
+                        }
                     }
-                }else{
-                    if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                        forma.setStrWhereQuery(whereForm);
-                    }
+                    forma.ingresarBusquedaAvanzada();
+                    StringBuffer xmlForma = forma.getXmlEntidad();
+                    request.getSession().setAttribute("xmlForma", xmlForma);
                 }
-                forma.ingresarBusquedaAvanzada();
-                StringBuffer xmlForma = forma.getXmlEntidad();
-                request.getSession().setAttribute("xmlForma", xmlForma);
+                request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
             }
-            request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
         }catch (ExceptionHandler eh){
             try{
-                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
-                eh.setLogFile(true);
-                eh.writeToFile();
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh2.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.setTextMessage("Problemas en la execucion del Error de srvFormaSearch");
+                val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
-        } finally { 
+            val.setTextMessage("Problemas en la execucion de srvFormaSearch");
+            val.executeErrorException(e, request, response);
+        } finally {
             out.close();
         }
     } 

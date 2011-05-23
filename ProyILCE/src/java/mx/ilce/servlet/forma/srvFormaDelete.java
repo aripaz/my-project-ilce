@@ -21,6 +21,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
+import mx.ilce.util.Validation;
 
 /**
  *
@@ -39,6 +40,7 @@ public class srvFormaDelete extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Validation val = new Validation();
         try {
             //Obtenemos los datos del formulario
             AdminForm admF = new AdminForm();
@@ -52,67 +54,69 @@ public class srvFormaDelete extends HttpServlet {
             String pk = (String) hsForm.get("$pk");
             String tipoAccion = (String) hsForm.get("$ta");
 
-            Forma forma = (Forma) request.getSession().getAttribute("forma");
-            forma.setPk(pk);
-            forma.setClaveForma(Integer.valueOf(claveForma));
-            forma.setTipoAccion(tipoAccion);
-            List lstForma = forma.getForma(Integer.valueOf(claveForma));
+            ArrayList arrVal = new ArrayList();
+            arrVal.add("$cf");
+            arrVal.add("$pk");
+            arrVal.add("$ta");
 
-            //Analizamos segun la forma obtenida
-            boolean obligatorioOk = true;
-            if ((!lstForma.isEmpty())&&(obligatorioOk)){
-                Iterator it = lstForma.iterator();
-                while ((it.hasNext())&&(obligatorioOk)){
-                    CampoForma cmp = (CampoForma) it.next();
-                    String dato = null;
-                    if (!"file".equals(cmp.getTipoControl())){
-                        dato = (String) hsForm.get(cmp.getCampo());
-                    }else{
-                        //Si es NULL, por el formato del formulario no se subio el archivo
-                        if (hsFile!=null){
-                            dato = (String) hsFile.get(cmp.getCampo());
+            List lstVal = val.validationForm(arrVal, hsForm);
+            String blOK = (String) lstVal.get(0);
+            if ("false".equals(blOK)){
+                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            }else{
+                Forma forma = (Forma) request.getSession().getAttribute("forma");
+                forma.setPk(pk);
+                forma.setClaveForma(Integer.valueOf(claveForma));
+                forma.setTipoAccion(tipoAccion);
+                List lstForma = forma.getForma(Integer.valueOf(claveForma));
+
+                //Analizamos segun la forma obtenida
+                boolean obligatorioOk = true;
+                if ((!lstForma.isEmpty())&&(obligatorioOk)){
+                    Iterator it = lstForma.iterator();
+                    while ((it.hasNext())&&(obligatorioOk)){
+                        CampoForma cmp = (CampoForma) it.next();
+                        String dato = null;
+                        if (!"file".equals(cmp.getTipoControl())){
+                            dato = (String) hsForm.get(cmp.getCampo());
+                        }else{
+                            //Si es NULL, por el formato del formulario no se subio el archivo
+                            if (hsFile!=null){
+                                dato = (String) hsFile.get(cmp.getCampo());
+                            }
+                        }
+                        if ((dato==null) && (cmp.getObligatorio()==1)) {
+                            obligatorioOk=false;
+                        }else{
+                            hsFormQuery.put(cmp.getCampo(), dato);
                         }
                     }
-                    if ((dato==null) && (cmp.getObligatorio()==1)) {
-                        obligatorioOk=false;
-                    }else{
-                        hsFormQuery.put(cmp.getCampo(), dato);
+                }
+                ExecutionHandler ex = new ExecutionHandler();
+                List lstData = new ArrayList();
+                if (obligatorioOk){
+                    lstData.add(hsFormQuery);
+                    lstData.add(forma);
+                    if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
+                        ex = forma.editarEntidad(lstData);
                     }
+                    ex.setExecutionOK(true);
+                }else{
+                    //Si hubo falla se eliminan los archivo subidos
+                    ex.setExecutionOK(false);
+                    AdminFile.deleFileFromServer(hsFile);
                 }
-            }
-            ExecutionHandler ex = new ExecutionHandler();
-            List lstData = new ArrayList();
-            if (obligatorioOk){
-                lstData.add(hsFormQuery);
-                lstData.add(forma);
-                if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
-                    ex = forma.editarEntidad(lstData);
-                }
-                ex.setExecutionOK(true);
-            }else{
-                //Si hubo falla se eliminan los archivo subidos
-                ex.setExecutionOK(false);
-                AdminFile.deleFileFromServer(hsFile);
             }
         }catch (ExceptionHandler eh){
             try{
-                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
-                eh.setLogFile(true);
-                eh.writeToFile();
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh2.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.setTextMessage("Problemas en la execucion del Error de srvDelete");
+                val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            val.setTextMessage("Problemas en la execucion de srvDelete");
+            val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
