@@ -111,15 +111,15 @@
                                                                                                                              pk:0,
                                                                                                                              height:400,
                                                                                                                              width:500});
-                                                                                                            $(this).trigger("reloadGrid");
+                                                                                                            //$(this).trigger("reloadGrid");
                                                                                                         },
                                                                                                      position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
                                                                                                         {caption:"",
                                                                                                           buttonicon:"ui-icon-pencil",
                                                                                                           onClickButton:function() {
-                                                                                                            nPK=$(this).getGridParam('selrow');
-
-                                                                                                            if (nPK) {
+                                                                                                            nRow=$(this).getGridParam('selrow');
+                                                                                                            if (nRow) {
+                                                                                                                nPK= $(this).getCell(nRow,0);
                                                                                                                 $("body").form({aplicacion: nApp,
                                                                                                                             forma:nEntidad,
                                                                                                                             modo:"update",
@@ -128,12 +128,12 @@
                                                                                                                             pk:nPK,
                                                                                                                             height:"500",
                                                                                                                             width:"500"});
-                                                                                                                $(this).trigger("reloadGrid");
+                                                                                                                //$(this).trigger("reloadGrid");
                                                                                                             }
-                                                                                                           else
-                                                                                                               alert('Seleccione un registro');
-
-                                                                                                        },
+                                                                                                            else {
+                                                                                                                alert('Seleccione un registro');
+                                                                                                            }
+                                                                                                          },
                                                                                                      position: "last", title:"Editar registro",  cursor: "pointer"}).navButtonAdd("#pager" + suffix,
                                                                                                         {caption:"",
                                                                                                          buttonicon:"ui-icon-search",
@@ -150,9 +150,10 @@
                                                                                                         {caption:"", 
                                                                                                          buttonicon:"ui-icon-document",
                                                                                                          onClickButton:  function() {
-                                                                                                            nPK=$(this).getGridParam('selrow');
-                                                                                                            if (nPK)
-                                                                                                                $.fn.appgrid.openKardex(nPK);
+                                                                                                            nRow=$(this).getGridParam('selrow');
+                                                                                                            if (nRow) {
+                                                                                                                nPK= $(this).getCell(nRow,0);
+                                                                                                                $.fn.appgrid.openKardex(nPK); }
                                                                                                             else
                                                                                                                alert('Seleccione un registro');
                                                                                                           },
@@ -204,7 +205,8 @@
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
          }
          else {
-             sTabTitulo=$('#grid'+ suffix).jqGrid()[0].p.colNames[1] + ' ' + $('#grid'+ suffix).jqGrid()[0].rows[id].cells[1].innerHTML;
+             oGrid=$('#grid'+ suffix);
+             sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(oGrid.getGridParam('selrow'),1);
              sEntidad=$('#grid'+ suffix).jqGrid()[0].id.split("_")[2];
              $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
