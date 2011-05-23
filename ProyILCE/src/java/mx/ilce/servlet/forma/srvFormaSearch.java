@@ -87,6 +87,7 @@ public class srvFormaSearch extends HttpServlet {
                     }
                     forma.ingresarBusquedaAvanzada();
                     StringBuffer xmlForma = forma.getXmlEntidad();
+                    request.getSession().removeAttribute("xmlForma");
                     request.getSession().setAttribute("xmlForma", xmlForma);
                 }
                 request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
