@@ -40,58 +40,114 @@ public class Forma extends Entidad{
 
     /************** GETTER Y SETTER ***************/
 
+    /**
+     * Obtiene el FormaData
+     * @return
+     */
     public HashMap getFormData() {
         return formData;
     }
 
+    /**
+     * Asigna el FormaData
+     * @param formData
+     */
     public void setFormData(HashMap formData) {
         this.formData = formData;
     }
 
+    /**
+     * Obtiene el FormaName
+     * @return
+     */
     public ArrayList getFormName() {
         return formName;
     }
 
+    /**
+     * Asigna el FormaName
+     * @param formName
+     */
     public void setFormName(ArrayList formName) {
         this.formName = formName;
     }
 
+    /**
+     * Obtiene el ArrayData
+     * @return
+     */
     public String[] getArrayData() {
         return arrayData;
     }
 
+    /**
+     * Asigna El ArrayData
+     * @param arrayData
+     */
     public void setArrayData(String[] arrayData) {
         this.arrayData = arrayData;
     }
 
+    /**
+     * Obtiene el texto adicional que se incluira en la query
+     * @return
+     */
     public String getStrWhereQuery() {
         return (strWhereQuery==null)?"":strWhereQuery;
     }
 
+    /**
+     * Asigna el texto adicional que se incluira en la query
+     * @param strWhereQuery
+     */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = (strWhereQuery==null)?"":strWhereQuery;
     }
 
+    /**
+     * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * @return
+     */
     public boolean isCleanIncrement() {
         return cleanIncrement;
     }
 
+    /**
+     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * @param cleanIncrement
+     */
     public void setCleanIncrement(boolean cleanIncrement) {
         this.cleanIncrement = cleanIncrement;
     }
 
+    /**
+     * Obtiene el nombre del campo PK de la forma
+     * @return
+     */
     public String getCampoPK() {
         return campoPK;
     }
 
+    /**
+     * Asigna el nombre del campo PK de la forma
+     * @param campoPK
+     */
     public void setCampoPK(String campoPK) {
         this.campoPK = campoPK;
     }
 
+    /**
+     * Obtiene el tipo de accion que se esta efectuando con la Forma
+     * @return
+     */
     public String getTipoAccion() {
         return ((tipoAccion==null)?"":tipoAccion);
     }
 
+    /**
+     * Asigna el tipo de accion que se esta efectuando con la Forma
+     * @param tipoAccion
+     */
     public void setTipoAccion(String tipoAccion) {
         if (tipoAccion==null){
             tipoAccion="";
@@ -99,10 +155,18 @@ public class Forma extends Entidad{
         this.tipoAccion = tipoAccion;
     }
 
+    /**
+     * Obtiene el codigo PK ingresado
+     * @return
+     */
     public String getPk() {
         return pk;
     }
 
+    /**
+     * Asigna el codigo PK ingresado
+     * @param pk
+     */
     public void setPk(String pk) {
         if (pk==null){
             pk="0";
@@ -110,50 +174,98 @@ public class Forma extends Entidad{
         this.pk = pk;
     }
 
+    /**
+     * Obtiene el Alias del TAB
+     * @return
+     */
     public String getAliasTab() {
         return aliasTab;
     }
 
+    /**
+     * Asigna el Alias del TAB
+     * @param aliasTab
+     */
     public void setAliasTab(String aliasTab) {
         this.aliasTab = aliasTab;
     }
 
+    /**
+     * Obtiene la clave de la aplicacion
+     * @return
+     */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
     }
 
+    /**
+     * Asigna la clave de la aplicacion
+     * @param claveAplicacion
+     */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
     }
 
+    /**
+     * Obtiene la clave de la forma
+     * @return
+     */
     public Integer getClaveForma() {
         return claveForma;
     }
 
+    /**
+     * Asigna la clave de la forma
+     * @param claveForma
+     */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
     }
 
+    /**
+     * Obtiene la clave de la forma padre
+     * @return
+     */
     public Integer getClaveFormaPadre() {
         return claveFormaPadre;
     }
 
+    /**
+     * Asigna la clave de la forma padre
+     * @param claveFormaPadre
+     */
     public void setClaveFormaPadre(Integer claveFormaPadre) {
         this.claveFormaPadre = claveFormaPadre;
     }
 
+    /**
+     * Obtiene el orden del Tab
+     * @return
+     */
     public Integer getOrdenTab() {
         return ordenTab;
     }
 
+    /**
+     * Asigna el orden del Tab
+     * @param ordenTab
+     */
     public void setOrdenTab(Integer ordenTab) {
         this.ordenTab = ordenTab;
     }
 
+    /**
+     * Obtiene el hash con la configuracion de la forma
+     * @return
+     */
     public HashMap getHsForma() {
         return hsForma;
     }
 
+    /**
+     * Asigna el hash con la configuracion de la forma
+     * @param hsForma
+     */
     public void setHsForma(HashMap hsForma) {
         this.hsForma = hsForma;
     }
@@ -181,6 +293,9 @@ public class Forma extends Entidad{
         return hs;
     }
 
+    /**
+     * Constructor basico de la forma, inicializa las variables
+     */
     public Forma() {
         this.aliasTab = "";
         this.pk ="0";
@@ -194,7 +309,7 @@ public class Forma extends Entidad{
      * para la aplicacion.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
-     * @param data
+     * @param data  Forma que se ingresara
      * @return
      */
     public ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler{
@@ -277,7 +392,7 @@ public class Forma extends Entidad{
      * Se toma un Objeto del tipo forma para su edicion.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
-     * @param data
+     * @param data  Forma que se editara
      * @return
      */
     public ExecutionHandler editarEntidad(Object data) throws ExceptionHandler{
@@ -358,7 +473,7 @@ public class Forma extends Entidad{
      * Se toma un Objeto del tipo Forma para su eliminacion.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
-     * @param idForma
+     * @param idForma   ID de la Forma que se eliminara
      * @return
      */
     public ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler {
@@ -434,9 +549,9 @@ public class Forma extends Entidad{
     }
 
     /**
-     *
-     * @param idForma
+     * Genera el XML de la forma y lo asigna al campo XmlEntidad
      * @return
+     * @throws ExceptionHandler
      */
     public Forma mostrarForma() throws ExceptionHandler {
         try{
@@ -573,6 +688,10 @@ public class Forma extends Entidad{
         return this;
     }
 
+    /**
+     * Metodo para obtener en un Array de String, los datos contendios en la forma
+     * @return
+     */
     private String[] getArrayOfData(){
         String[] data = null;
 
@@ -602,7 +721,8 @@ public class Forma extends Entidad{
      * su configuracion, introduciendolo en el listado, asociandole el ID de la
      * forma que le corresponde a la configuracion. Cada configuracion (Forma)
      * esta compuesto por un listado de CampoForma.
-     * @param lstAplications
+     * @param lstAplications    Listado con las aplicaciones del User
+     * @throws ExceptionHandler
      */
     public void getFormasByAplications(List lstAplications ) throws ExceptionHandler{
         try{
@@ -630,6 +750,7 @@ public class Forma extends Entidad{
      * @param lstAplications    Listado de aplicaciones, estas aplicaciones se
      * deben obtener a travez del Perfil
      * @return
+     * @throws ExceptionHandler
      */
     private Integer getIdFormaByIdAplic(Integer idAplication, List lstAplications)
                 throws ExceptionHandler{
@@ -653,7 +774,7 @@ public class Forma extends Entidad{
     /**
      * Obtiene un List con la configuracion de la forma entregada. El List esta
      * formado por Bean del tipo Campo Forma
-     * @param arrayData
+     * @param arrayData     Arreglo de datos con la configuracion de la forma
      * @return
      * @throws ExceptionHandler
      */
@@ -673,7 +794,8 @@ public class Forma extends Entidad{
      * no esta configurada la forma, pero se tiene la query con la consulta para
      * completarla. Obviamente no estan disponibles todos los datos, pero si los
      * basicos para construirla en un XML con los datos básicos.
-     * @param arrayData
+     * @param arrayData     Arreglo de datos con los datos de la forma que se
+     * quiere obtener
      * @return
      * @throws ExceptionHandler
      */

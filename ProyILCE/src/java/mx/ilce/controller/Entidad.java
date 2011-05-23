@@ -10,7 +10,8 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
- *
+ * Clase abstracta que define las caracteristicas que deben poseer las
+ * clases que heredaran de ella
  * @author ccatrilef
  */
 public abstract class Entidad {
