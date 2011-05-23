@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ import java.util.ArrayList;
  * Exception, junto con su traza, ubicacion, dia y hora de su activacion.
  * @author ccatrilef
  */
-public class ExceptionHandler extends Throwable {
+public final class ExceptionHandler extends Throwable {
 
     private enum formato {DMA,AMD};
     private StringBuffer textError = new StringBuffer("");
@@ -42,6 +44,26 @@ public class ExceptionHandler extends Throwable {
     public ExceptionHandler() {
     }
 
+
+    /**
+     * Constructor utilizado para situaciones donde se deba forzar un error
+     * @param typeError     Texto con el tipo de error producido
+     * @param clase         Clase donde se produjo el error
+     * @param message       Mensaje de error producido
+     * @param dataError     Data informativa del error producido
+     */
+    public ExceptionHandler(String typeError, Class clase, String message, String dataError){
+        cleanData();
+        utiDt = new UtilDate();
+        setTime(utiDt.getFechaHMS());
+        setTypeError(typeError);
+        setTextMessage(message);
+        setTextError(dataError);
+    }
+
+    /**
+     * Metodo para la limpieza del objeto antes de la generacion de datos
+     */
     private void cleanData(){
         this.textError = new StringBuffer("");
         this.textMessage = new StringBuffer("");
@@ -61,9 +83,10 @@ public class ExceptionHandler extends Throwable {
      * exception ocurrida, la clase donde ocurrio el problema y un mensaje que se
      * desea desplegar, junto con los mensajes obtenidos desde la exception y la
      * data adicional entregada.
-     * @param obj
-     * @param clase
-     * @param message
+     * @param obj       Clase del tipo de Error (Exception, NullPointerException, etc)
+     * @param clase     Clase donde se produjo el error
+     * @param message   Mensaje que se quiere agregar al error ademas de los
+     * contenidos en la exception
      */
     public ExceptionHandler(Object obj, Class clase, String message){
         cleanData();
@@ -72,7 +95,37 @@ public class ExceptionHandler extends Throwable {
         setTypeError(obj.getClass().getSimpleName());
         setTextMessage(message);
 
-        if (getTypeError().equals(NullPointerException.class.getSimpleName())) {
+        if (getTypeError().equals(InvocationTargetException.class.getSimpleName())){
+            InvocationTargetException e = (InvocationTargetException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(IllegalArgumentException.class.getSimpleName())){
+            IllegalArgumentException e = (IllegalArgumentException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(IllegalAccessException.class.getSimpleName())){
+            IllegalAccessException e = (IllegalAccessException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(InstantiationException.class.getSimpleName())){
+            InstantiationException e = (InstantiationException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(NoSuchMethodException.class.getSimpleName())){
+            NoSuchMethodException e = (NoSuchMethodException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(URISyntaxException.class.getSimpleName())){
+            URISyntaxException e = (URISyntaxException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(NullPointerException.class.getSimpleName())) {
             NullPointerException e = (NullPointerException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
@@ -115,6 +168,13 @@ public class ExceptionHandler extends Throwable {
         }
     }
 
+    /**
+     * Manda la instruccion de escribir en un archivo los datos de error capturados
+     * en la exception. Requiere que previamente se haya entregado la ruta donde
+     * se depositara el archivo de error y haber marcado como TRUE que debe generarse
+     * el archivo
+     * @return
+     */
     public boolean writeToFile(){
         boolean sld = true;
         writeLogError wf = new writeLogError();
@@ -157,28 +217,16 @@ public class ExceptionHandler extends Throwable {
                     this.setStringData(strAdicional.toString());
                 }
             }catch(IOException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return sld;
     }
 
-    private void setArrayData(){
-        ArrayList arr = this.getArrayData();
-
-        if ((arr!=null)&& (!arr.isEmpty())){
-            StringBuffer str = new StringBuffer();
-            for (int i=0; i<arr.size(); i++){
-                str.append(("Dato "+i+": ")).append(arr.get(i).toString());
-                str.append("\n");
-            }
-            if (this.textError==null){
-                setTextError("");
-            }
-            this.textError.append("\n").append(str);
-        }
-    }
-
+    /**
+     * Metodo que en base a los datos contenidos en la Exception genera un XML
+     * con dichos datos
+     */
     private void setTextToXmlError(){
         StringBuffer str = new StringBuffer();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
@@ -211,6 +259,11 @@ public class ExceptionHandler extends Throwable {
         this.setXmlError(str);
     }
 
+    /**
+     * Metodo que captura el StackTrace completo de la exception generada
+     * @param stack
+     * @param clase
+     */
     private void getStackTrace(StackTraceElement[] stack, Class clase) {
         boolean buscarPadre = true;
         boolean buscarHijo = false;
@@ -249,6 +302,12 @@ public class ExceptionHandler extends Throwable {
         }
     }
 
+    /**
+     * Metodo que construye un texto con la secuencia de ejecucion del exception
+     * con el objeto de identificar en que clase se produjo, en que metodo y en
+     * que linea se produjo el error
+     * @return
+     */
     private StringBuffer getStringSecuenceError(){
         StringBuffer sld = new StringBuffer();
         sld.append("CLASE\t,METODO\t,LINEA\t,ARCHIVO\n");
@@ -267,42 +326,85 @@ public class ExceptionHandler extends Throwable {
 
     /******** GETTER AND SETTER ***********/
 
+    /**
+     * Metodo para ver si se debe considerar la data incluida en el campo
+     * stringData
+     * @return
+     */
     public boolean seeStringData() {
         return seeStringData;
     }
 
+    /**
+     * Metodo que asigna un valor booleano para considerar o no la inclusion
+     * de la data contenida en el campo stringData
+     * @param seeStringData
+     */
     public void setSeeStringData(boolean seeStringData) {
         this.seeStringData = seeStringData;
     }
 
+    /**
+     * Obtiene la ruta asignada para la generacion del archivo de Log de la
+     * exception
+     * @return
+     */
     public String getRutaFile() {
         return rutaFile;
     }
 
+    /**
+     * Asignada la ruta para la generacion del archivo de Log de la exception
+     * @param rutaFile
+     */
     public void setRutaFile(String rutaFile) {
         this.rutaFile = rutaFile;
     }
 
+    /**
+     * Obtiene la respuesta de si se debe generar o no el archivo de Log
+     * @return
+     */
     public boolean isLogFile() {
         return logFile;
     }
 
+    /**
+     * Asigna la respuesta de si se debe generar o no el archivo de Log
+     * @param logFile
+     */
     public void setLogFile(boolean logFile) {
         this.logFile = logFile;
     }
 
+    /**
+     * Obtiene el arreglo de datos entregados a la Exception
+     * @return
+     */
     public ArrayList getArrayData() {
         return arrayData;
     }
 
+    /**
+     * Asigna el arreglo de datos entregados a la Exception
+     * @param arrayData
+     */
     public void setArrayData(ArrayList arrayData) {
         this.arrayData = arrayData;
     }
 
+    /**
+     * Obtiene los datos contenidos en el campo stringData
+     * @return
+     */
     public String getStringData() {
         return stringData;
     }
 
+    /**
+     * Asigna los datos que debe contener en el campo stringData
+     * @param stringData
+     */
     public void setStringData(String stringData) {
         String str = this.stringData;
         if (str!=null){
@@ -317,81 +419,162 @@ public class ExceptionHandler extends Throwable {
         this.stringData = str;
     }
 
+    /**
+     * Obtiene el tipo de error que se produjo
+     * @return
+     */
     public StringBuffer getTypeError() {
         return typeError;
     }
 
+    /**
+     * Asigna el tipo de error que se produjo
+     * @param typeError
+     */
     private void setTypeError(String typeError) {
         this.typeError.append(typeError);
     }
 
+    /**
+     * Obtiene la fecha y hora en que se genero a la exception
+     * @return
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     * Obtiene la fecha y hora en que se genero a la exception. Se entrega cual
+     * debe ser el caracter separador para representar la fecha
+     * @param separador
+     * @return
+     */
     public String getTime(String separador) {
         String strTime = time.replaceAll("/", separador);
         return strTime;
     }
 
+    /**
+     * Asigna la fecha y hora en que se genero a la exception.
+     * @param time
+     */
     private void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     * Obtiene la secuancia de clases y metodos invocados en la exception
+     * @return
+     */
     public StringBuffer getSecuenceError() {
         return secuenceError;
     }
 
+    /**
+     * Asigna la secuancia de clases y metodos invocados en la exception
+     * @param secuenceError
+     */
     private void setSecuenceError(String secuenceError) {
         this.secuenceError.append(secuenceError);
     }
 
+    /**
+     * Obtiene el texto de error ingresado al campo textError
+     * @return
+     */
     public StringBuffer getTextError() {
         return textError;
     }
 
+    /**
+     * Asigna el texto de error al campo textError
+     * @param textError
+     */
     private void setTextError(String textError) {
         this.textError.append(textError);
     }
 
+    /**
+     * Obtiene el texto del mensaje ingresado al campo textMessage
+     * @return
+     */
     public StringBuffer getTextMessage() {
         return textMessage;
     }
 
+    /**
+     * Asigna el texto del mensaje al campo textMessage
+     * @param textMessage
+     */
     private void setTextMessage(String textMessage) {
         this.textMessage.append(textMessage);
     }
 
+    /**
+     * Obtiene el xml generado con los datos de la Exception
+     * @return
+     */
     public StringBuffer getXmlError() {
         setTextToXmlError();
         return xmlError;
     }
 
+    /**
+     * Asigna el xml generado con los datos de la Exception al campo xmlError
+     * @param xmlError
+     */
     private void setXmlError(StringBuffer xmlError) {
         this.xmlError = xmlError;
     }
 
+    /**
+     * clase definida para manejar la escritura de archivos de Log con los datos
+     * contenidos en la exception
+     */
     private class writeLogError{
 
         private String rutaFile;
         private String nameFile;
 
+        /**
+         * Obtiene el nombre que poseera el archivo de Log
+         * @return
+         */
         public String getNameFile() {
             return nameFile;
         }
 
+        /**
+         * Asigna el nombre que poseera el archivo de Log
+         * @param nameFile
+         */
         public void setNameFile(String nameFile) {
             this.nameFile = nameFile;
         }
 
+        /**
+         * Obtiene la ruta donde se colocara el archivo de Log
+         * @return
+         */
         public String getRutaFile() {
             return rutaFile;
         }
 
+        /**
+         * Asigna la ruta donde se colocara el archivo de Log
+         * @param rutaFile
+         */
         public void setRutaFile(String rutaFile) {
             this.rutaFile = rutaFile;
         }
 
+        /**
+         * Metodo que escribe la data entregada al archivo de Log. Si el archivo
+         * existe, el texto entregado se adjunta al final del archivo
+         * @param strEntrada
+         * @return
+         * @throws IOException
+         */
         public boolean guardarArchivo(StringBuffer strEntrada) throws IOException{
             boolean sld = true;
             FileWriter w = null;
@@ -399,10 +582,10 @@ public class ExceptionHandler extends Throwable {
                 w = new FileWriter(rutaFile + "/" + nameFile, true);
                 w.append(strEntrada.toString());
             }catch (IOException eFile){
-                eFile.printStackTrace();
+                //eFile.printStackTrace();
                 sld = false;
             }catch(Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
                 sld = false;
             }finally{
                 if (w!=null){
@@ -414,7 +597,10 @@ public class ExceptionHandler extends Throwable {
         }
     }
 
-
+    /**
+     * Clase implementada para sea utilizada en un arreglo de datos del tipo List.
+     * Su uso principal es contener los datos de la traza del error
+     */
     private class Dato{
         String nameClass = "";
         String methodClass = "";
@@ -424,39 +610,75 @@ public class ExceptionHandler extends Throwable {
         public Dato() {
         }
 
+        /**
+         * Obtiene el nombre del archivo de la clase donde se produjo el error
+         * @return
+         */
         public String getFileClass() {
             return fileClass;
         }
 
+        /**
+         * Asigna el nombre del archivo de la clase donde se produjo el error
+         * @param fileClass
+         */
         public void setFileClass(String fileClass) {
             this.fileClass = fileClass;
         }
 
+        /**
+         * Obtiene el numero de linea de la clase donde se produjo el error
+         * @return
+         */
         public int getLineNumber() {
             return lineNumber;
         }
 
+        /**
+         * Asigna el numero de linea de la clase donde se produjo el error
+         * @param lineNumber
+         */
         public void setLineNumber(int lineNumber) {
             this.lineNumber = lineNumber;
         }
 
+        /**
+         * Obtiene el metodo de la clase donde se produjo el error
+         * @return
+         */
         public String getMethodClass() {
             return methodClass;
         }
 
+        /**
+         * Asigna el metodo de la clase donde se produjo el error
+         * @param methodClass
+         */
         public void setMethodClass(String methodClass) {
             this.methodClass = methodClass;
         }
 
+        /**
+         * Obtiene el nombre de la clase donde se produjo el error
+         * @return
+         */
         public String getNameClass() {
             return nameClass;
         }
 
+        /**
+         * Asigna el nombre de la clase donde se produjo el error
+         * @param nameClass
+         */
         public void setNameClass(String nameClass) {
             this.nameClass = nameClass;
         }
     }
 
+    /**
+     * Clase implementada para contener utilidades para la obtencion de fechas
+     * en un formato especifico y con mayor o menor contenido de datos
+     */
     private class UtilDate{
 
         private int dia;
