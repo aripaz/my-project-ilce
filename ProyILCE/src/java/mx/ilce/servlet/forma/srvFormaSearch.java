@@ -55,7 +55,6 @@ public class srvFormaSearch extends HttpServlet {
 
             ArrayList arrVal = new ArrayList();
             arrVal.add("$cf");
-            arrVal.add("$pk");
             arrVal.add("$ta");
             arrVal.add("$w");
 
@@ -145,7 +144,11 @@ public class srvFormaSearch extends HttpServlet {
                             str.append(" AND ");
                         }
                     }
-                    str.delete(str.length()-4, str.length());
+                    if (str.length()>=4){
+                        if (str.substring(str.length()-4, str.length()).trim().equals("AND")) {
+                            str.delete(str.length()-4, str.length());
+                        }
+                    }
                 }
                 strSal = str.toString();
             }
