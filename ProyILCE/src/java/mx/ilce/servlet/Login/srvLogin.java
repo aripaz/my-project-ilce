@@ -14,6 +14,7 @@ import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
+import mx.ilce.util.Validation;
 
 /**
  *
@@ -32,6 +33,7 @@ public class srvLogin extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Validation val = new Validation();
         try {
             String lgn = (String) request.getParameter("lgn");
             String psw = (String) request.getParameter("psw");
@@ -74,23 +76,14 @@ public class srvLogin extends HttpServlet {
             }
         }catch (ExceptionHandler eh){
             try{
-                eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
-                eh.setLogFile(true);
-                eh.writeToFile();
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                ExceptionHandler eh2 = new ExceptionHandler(es,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh2.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+                val.setTextMessage("Problemas en la execucion del Error de srvLogin");
+                val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-                ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para efectuar el Login");
-                StringBuffer xmlError = eh.getXmlError();
-                request.getSession().setAttribute("xmlError", xmlError);
-                request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+            val.setTextMessage("Problemas para efectuar el Login");
+            val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
