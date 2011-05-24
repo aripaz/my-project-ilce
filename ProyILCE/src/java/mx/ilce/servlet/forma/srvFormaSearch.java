@@ -61,7 +61,7 @@ public class srvFormaSearch extends HttpServlet {
             if ("false".equals(blOK)){
                     val.executeErrorValidation(lstVal, this.getClass(), request, response);
             }else{
-                Forma forma = (Forma) request.getSession().getAttribute("forma");
+                Forma forma = new Forma();//(Forma) request.getSession().getAttribute("forma");
                 if (forma !=null){
                     forma.setFormData(hsForm);
                     ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
