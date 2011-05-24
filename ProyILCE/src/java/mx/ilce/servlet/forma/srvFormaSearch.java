@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
-import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
@@ -26,7 +25,7 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.Validation;
 
 /**
- *
+ *  Servlet implementado para hacer busqueda general de datos
  * @author vaio
  */
 public class srvFormaSearch extends HttpServlet {
@@ -56,7 +55,6 @@ public class srvFormaSearch extends HttpServlet {
             ArrayList arrVal = new ArrayList();
             arrVal.add("$cf");
             arrVal.add("$ta");
-            arrVal.add("$w");
 
             List lstVal = val.validationForm(arrVal, hsForm);
             String blOK = (String) lstVal.get(0);
@@ -72,8 +70,7 @@ public class srvFormaSearch extends HttpServlet {
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
 
-                    String[] strData = new String[1];
-                    strData[0] = pk;
+                    String[] strData = getArrayData(hsForm);
                     forma.setArrayData(strData);
                     String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
                     if ((strWhere!=null) && (strWhere.trim().length()>0)){
@@ -161,6 +158,26 @@ public class srvFormaSearch extends HttpServlet {
         return strSal;
     }
 
+    private String[] getArrayData(HashMap hsForm){
+        String[] strSld = new String[0];
+
+        if (!hsForm.isEmpty()){
+            String[] arr = new String[hsForm.size()];
+            int j=0;
+            for (int i=0;i<hsForm.size();i++){
+                String dato = (String) hsForm.get("$"+i);
+                if ((dato!=null)&&(!"".equals(dato))){
+                    arr[j]=dato;
+                    j++;
+                }
+            }
+            if (j>0){
+                strSld = new String[j];
+            }
+            System.arraycopy(arr, 0, strSld, 0, j);
+        }
+        return strSld;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
