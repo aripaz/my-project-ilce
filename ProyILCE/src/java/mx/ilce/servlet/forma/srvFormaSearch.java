@@ -61,7 +61,7 @@ public class srvFormaSearch extends HttpServlet {
             if ("false".equals(blOK)){
                     val.executeErrorValidation(lstVal, this.getClass(), request, response);
             }else{
-                Forma forma = new Forma();//(Forma) request.getSession().getAttribute("forma");
+                Forma forma = (Forma) request.getSession().getAttribute("forma");
                 if (forma !=null){
                     forma.setFormData(hsForm);
                     ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
@@ -73,6 +73,7 @@ public class srvFormaSearch extends HttpServlet {
                     String[] strData = getArrayData(hsForm);
                     forma.setArrayData(strData);
                     String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                    forma.setStrWhereQuery("");
                     if ((strWhere!=null) && (strWhere.trim().length()>0)){
                         if ((whereForm!=null) && (whereForm.trim().length()>0)){
                             forma.setStrWhereQuery(strWhere + " AND " + whereForm);
