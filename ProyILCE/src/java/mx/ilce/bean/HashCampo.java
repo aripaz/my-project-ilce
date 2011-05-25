@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.bean;
 
 import java.io.Serializable;
@@ -12,7 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * Clase implementada para el manejo de campos, el cual contendra las respuestas
+ * obtenidas desde las operaciones de la Base de Datos
  * @author ccatrilef
  */
 public class HashCampo implements Serializable  {
@@ -28,8 +24,8 @@ public class HashCampo implements Serializable  {
 
     /**
      * Agregamos un registro (linea) al listado de Data
-     * @param lst
-     * @param codigo
+     * @param lst   Listado con data que se guardara en el contenedor de Data
+     * @param codigo    Codigo con la posicion que ocupara el listado
      */
     public void addListData(List lst, Integer codigo){
         this.listData.put(codigo, lst);
@@ -40,9 +36,10 @@ public class HashCampo implements Serializable  {
      * Agregamos un conjunto de registros (varias lineas) al listado de Data 
      * existente, proveniente de otro HashCampo. Si los campos no son 
      * equivalentes, se rechaza el ingreso. Si la lista es vacia, siendo los
-     * campos correctos, se retorna true.
+     * campos correctos, se retorna TRUE.
      * Se asume que los registros vienen ordenados con codigo index de 0 a n.
-     * @param lst
+     * @param hsCmp     HashCampo que contiene la nueva data a ingresar
+     * @return
      */
     public boolean addListToListData(HashCampo hsCmp){
         boolean ingresado = false;
@@ -63,7 +60,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtenemos un campo por medio de su codigo
-     * @param codigo
+     * @param codigo    Codigo del campo a buscar
      * @return
      */
     public Campo getCampoByCod(Integer codigo){
@@ -73,7 +70,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Agregamos un Campo, ordenandolo por su codigo
-     * @param cmp
+     * @param cmp   Campo a agregar
      */
     private void addCampoByCod(Campo cmp){
         this.listCampoByCod.put(cmp.getCodigo(), cmp);
@@ -81,7 +78,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtenemos un Campo por medio de su alias
-     * @param alias
+     * @param alias     Alias del campo a buscar
      * @return
      */
     public Campo getCampoByAlias(String alias){
@@ -92,7 +89,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Guardamos el codigo de un campo, ordenandolo por el alias
-     * @param cmp
+     * @param cmp   Campo a agregar
      */
     private void addCampoByAlias(Campo cmp){
         this.listAlias.put(cmp.getAlias(), cmp.getCodigo());
@@ -100,7 +97,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtenemos un campo por su nombre
-     * @param name
+     * @param name      Nombre del campo a buscar
      * @return
      */
     public Campo getCampoByName(String name){
@@ -111,15 +108,15 @@ public class HashCampo implements Serializable  {
 
     /**
      * Guardamos el codigo de un campo ordenandolo por su nombre
-     * @param cmp
+     * @param cmp   Campo a agregar
      */
     private void addCampoByName(Campo cmp){
         this.listCampoByName.put(cmp.getNombre(), cmp.getCodigo());
     }
 
     /**
-     * Obtenemos un campo por su nombre
-     * @param name
+     * Obtenemos un campo por su nombre de Base de Datos
+     * @param name      Nombre de Base de Datos del campo a buscar
      * @return
      */
     public Campo getCampoByNameDB(String nameDB){
@@ -131,7 +128,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * guardamos un campo ordenado por Alias, Nombre y Codigo.
-     * @param cmp
+     * @param cmp   Campo a agregar
      */
     public void addCampo(Campo cmp){
         this.listCampos.add(cmp);
@@ -156,7 +153,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Asigna el numero de campos que posee cada registro
-     * @param lengthCampo
+     * @param lengthCampo   Numero de campos existentes
      */
     public void setLengthCampo(Integer lengthCampo) {
         this.lengthCampo = lengthCampo;
@@ -172,7 +169,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Asigna el numero de registros que posee un listado
-     * @param lengthData
+     * @param lengthData    Numero de registros
      */
     public void setLengthData(Integer lengthData) {
         this.lengthData = lengthData;
@@ -188,7 +185,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Asigna un listado con los registros recuperados por medio de una query
-     * @param listData
+     * @param listData  Listado con los registros
      */
     public void setListData(HashMap listData) {
         this.listData = listData;
@@ -206,7 +203,7 @@ public class HashCampo implements Serializable  {
     /**
      * Asigna un listado con los nombres de campo que se usaron para obtener un
      * listado de registros mediante una query
-     * @param listCampos
+     * @param listCampos    Listado con los campos
      */
     public void setListCampos(List listCampos) {
         this.listCampos = listCampos;
@@ -240,7 +237,7 @@ public class HashCampo implements Serializable  {
      * indefinida, ademas del resultado obtenido desde la query que se invoco.
      * El metodo que la utilice debe indicar que clase es la que contiene en
      * su descripcion
-     * @param objData
+     * @param objData   Dato Object cualquiera que se desea asignar
      */
     public void setObjData(Object objData) {
         this.objData = objData;
@@ -263,7 +260,9 @@ public class HashCampo implements Serializable  {
      * generalmente se usaran para mostrarlo como titulo o encabezado en las
      * paginas
      */
-    public HashCampo(Integer lengthCampo, Integer lengthData, HashMap listData, List listCampos, HashMap listCampoByCod, HashMap listCampoByName, HashMap listAlias) {
+    public HashCampo(Integer lengthCampo, Integer lengthData, HashMap listData, 
+            List listCampos, HashMap listCampoByCod, HashMap listCampoByName,
+            HashMap listAlias) {
         this.lengthCampo = lengthCampo;
         this.lengthData = lengthData;
         this.listData = listData;

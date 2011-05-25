@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.bean;
 
 import java.io.Serializable;
@@ -31,12 +26,12 @@ public class Campo implements Serializable {
     /**
      * Constructor de la clase donde se entregan los distintos elementos que
      * componen la clase
-     * @param nombre    nombre del campo, generalmente asociado a los campos
+     * @param nombre    Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
-     * @param valor     valor que posee el campo
-     * @param codigo    codigo que posee el campo
-     * @param alias     alias que pee el campo
-     * @param typeDataDB    tipo de dato equivalente usado por el campo en la
+     * @param valor     Valor que posee el campo
+     * @param codigo    Codigo que posee el campo
+     * @param alias     Alias que posee el campo
+     * @param typeDataDB    Tipo de dato equivalente usado por el campo en la
      * Base de Datos
      * @param typeControl   Tipo de dato equivalente usado por el campo en el
      * codigo Java
@@ -62,10 +57,10 @@ public class Campo implements Serializable {
     /**
      * Constructor de la clase donde se entregan los distintos elementos que
      * componen la clase
-     * @param nombre    nombre del campo, generalmente asociado a los campos
+     * @param nombre    Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
-     * @param codigo    codigo que posee el campo
-     * @param typeDataDB    tipo de dato que posee el campo en la base de datos
+     * @param codigo    Codigo que posee el campo
+     * @param typeDataDB    Tipo de dato que posee el campo en la base de datos
      */
     public Campo(String nombre, Integer codigo, String typeDataDB) {
         this.nombre = nombre.replaceAll("_","").toUpperCase();
@@ -77,11 +72,11 @@ public class Campo implements Serializable {
     /**
      * Constructor de la clase donde se entregan los distintos elementos que
      * componen la clase
-     * @param nombre  nombre del campo, generalmente asociado a los campos
+     * @param nombre  Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
-     * @param codigo  codigo que posee el campo
-     * @param typeDataDB  tipo de dato que posee el campo en la base de datos
-     * @param valor  valor que posee el campo
+     * @param codigo  Codigo que posee el campo
+     * @param typeDataDB  Tipo de dato que posee el campo en la base de datos
+     * @param valor  Valor que posee el campo
      */
     public Campo(String nombre, String nombreDB, Integer codigo, String typeDataDB, String typeAPL, String valor) {
         this.nombre = nombre.replaceAll("_","").toUpperCase();
@@ -99,7 +94,7 @@ public class Campo implements Serializable {
     }
 
     /**
-     * obtiene el alias asociado a un campo
+     * Obtiene el alias asociado a un campo
      * @return
      */
     public String getAlias() {
@@ -108,7 +103,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el alias asociado a un campo
-     * @param alias
+     * @param alias     Alias del Campo
      */
     public void setAlias(String alias) {
         this.alias = alias;
@@ -124,7 +119,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el codigo asociado a un campo
-     * @param codigo
+     * @param codigo    Codigo del Campo
      */
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
@@ -142,7 +137,7 @@ public class Campo implements Serializable {
     /**
      * Asigna el evento asociado a un codigo, generalmente correspondera
      * a un texto o una funcion javascript
-     * @param event
+     * @param event     Texto del evento del Campo
      */
     public void setEvent(String event) {
         this.event = event;
@@ -158,7 +153,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el texto de ayuda a un campo
-     * @param help
+     * @param help      Texto de ayuda del Campo
      */
     public void setHelp(String help) {
         this.help = help;
@@ -176,7 +171,7 @@ public class Campo implements Serializable {
     /**
      * Asigna el nombre del campo sin el caracter _, este se obtiene del campo
      * asociado a la query
-     * @param nombre
+     * @param nombre    Nombre del Campo
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -194,7 +189,7 @@ public class Campo implements Serializable {
     /**
      * Asigna el nombre del campo con el caracter _, este se obtiene del campo
      * asociado a la query
-     * @param nombre
+     * @param nombre    Nombre proveniente de la Base de Datos del Campo
      */
     public void setNombreDB(String nombreDB) {
         this.nombreDB = nombreDB;
@@ -210,7 +205,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el tipo de Control que le corresponde al campo
-     * @param typeControl
+     * @param typeControl   Tipo de control asignado al Campo
      */
     public void setTypeControl(String typeControl) {
         this.typeControl = typeControl;
@@ -227,7 +222,7 @@ public class Campo implements Serializable {
     /**
      * Asigna el tipo de dato que le corresponde en la Base de Datos al campo
      * @return
-     * @param typeDataDB
+     * @param typeDataDB    Tipo de dato proveniente de la Base de Datos
      */
     public void setTypeDataDB(String typeDataDB) {
         this.typeDataDB = typeDataDB;
@@ -242,8 +237,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna el tipo de dato que le corresponde en la Base de datos al campo
-     * @param typeDataAPL
+     * Asigna el tipo de dato que le corresponde en Java al campo
+     * @param typeDataAPL   Typo de dato usado en la aplicacion para el Campo
      */
     public void setTypeDataAPL(String typeDataAPL) {
         this.typeDataAPL = typeDataAPL;
@@ -259,14 +254,14 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el valor que debe poseer el campo
-     * @param valor
+     * @param valor     Valor del Campo
      */
     public void setValor(String valor) {
         this.valor = valor;
     }
 
     /**
-     * Obtiene el tamano de un campo
+     * Obtiene el tamaño de un campo
      * @return
      */
     public Integer getTamano() {
@@ -274,8 +269,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna el tamano que debe poseer un campo
-     * @param tamano
+     * Asigna el tamaño que debe poseer un campo
+     * @param tamano    Tamaño del Campo
      */
     public void setTamano(Integer tamano) {
         this.tamano = tamano;
@@ -293,12 +288,15 @@ public class Campo implements Serializable {
     /**
      * Asigna si es Autoincrement el campo. Se debe interpretar TRUE es la clave
      * de la tabla, FALSE no es la clave de la tabla
-     * @param isIncrement
+     * @param isIncrement   Validacion que indica si el campo es Increment o no
      */
     public void setIsIncrement(boolean isIncrement) {
         this.isIncrement = isIncrement;
     }
 
+    /**
+     * Metodo que lleva a un formato String el contenido del objeto
+     */
     @Override
     public String toString() {
         return "Campo{" + "nombre=" + nombre + "nombreDB=" + nombreDB + "valor=" + valor + "codigo=" + codigo + "alias=" + alias + "typeDataDB=" + typeDataDB + "typeDataAPL=" + typeDataAPL + "typeControl=" + typeControl + "event=" + event + "help=" + help + "tamano=" + tamano + "isIncrement=" + isIncrement + '}';

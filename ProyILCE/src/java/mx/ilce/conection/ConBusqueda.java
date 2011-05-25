@@ -1,27 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.conection;
 
-import java.util.ArrayList;
 import java.util.List;
 import mx.ilce.controller.Entidad;
 
 /**
- *
+ *  NO IMPLEMENTADO
  * @author ccatrilef
  */
 public class ConBusqueda {
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public List getBusquedaSimple(Entidad entidad){
-        List lst = new ArrayList();
-        return lst;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public List getBusquedaAvanzada(Entidad entidad){
-        List lst = new ArrayList();
-        return lst;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

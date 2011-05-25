@@ -1,22 +1,29 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.util;
 
 import java.math.BigDecimal;
 
 /**
- *
- * @author vaio
+ *  Clase implementada para manejar los valores de los datos
+ * @author ccatrilef
  */
 public class UtilValue {
 
+    /**
+     * Entrega "" en caso que un String sea NULL
+     * @param strData
+     * @return
+     */
     public String NVL(String strData){
         return (strData==null)?"":strData.trim();
     }
 
+    /**
+     * COnvierte un object a alguno de los tipos soportados. Los tipos soportados
+     * son varchar, number y date
+     * @param obj   Objeto que debe ser convertido
+     * @param type  Typo al que se desea conenvertir
+     * @return
+     */
     public String castObject(Object obj, String type){
         String strSld = "";
         if (obj != null){

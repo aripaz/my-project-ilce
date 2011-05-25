@@ -1,16 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.util;
 
 /**
- *
+ *  Clase implementada para obtener datos de tipo horario
  * @author ccatrilef
  */
  public class UtilTime {
 
+   /**
+    * Obtiene la hora y minuto del instante en que es invocada
+    * @return
+    */
     public String getHourMinute(){
         java.util.Calendar now = java.util.Calendar.getInstance();
         int h = now.get(java.util.Calendar.HOUR_OF_DAY);
@@ -20,6 +19,10 @@ package mx.ilce.util;
         return str;
     }
 
+    /**
+     * Obtiene la hora, minuto y segundo del instante en que es invocada
+     * @return
+     */
     public String getHourMinuteSecond(){
         java.util.Calendar now = java.util.Calendar.getInstance();
         int h = now.get(java.util.Calendar.HOUR_OF_DAY);
@@ -30,6 +33,10 @@ package mx.ilce.util;
         return str;
     }
 
+    /**
+     * Obtiene la hora del instante en que es invocada
+     * @return
+     */
     public String getHour(){
         java.util.Calendar now = java.util.Calendar.getInstance();
         int h = now.get(java.util.Calendar.HOUR_OF_DAY);
@@ -38,6 +45,10 @@ package mx.ilce.util;
         return str;
     }
 
+    /**
+     * Obtiene el minuto del instante en que es invocada
+     * @return
+     */
     public String getMinute(){
         java.util.Calendar now = java.util.Calendar.getInstance();
         int m = now.get(java.util.Calendar.MINUTE);

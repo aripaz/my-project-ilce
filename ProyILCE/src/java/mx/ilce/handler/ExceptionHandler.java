@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.handler;
 
 
@@ -13,7 +8,10 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Manejador de Exception general, que permite unificar las respuestas generales
@@ -41,9 +39,11 @@ public final class ExceptionHandler extends Throwable {
     private boolean logFile;
     private String rutaFile;
 
+    /**
+     * Constructor Basico
+     */
     public ExceptionHandler() {
     }
-
 
     /**
      * Constructor utilizado para situaciones donde se deba forzar un error
@@ -261,8 +261,10 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Metodo que captura el StackTrace completo de la exception generada
-     * @param stack
-     * @param clase
+     * @param stack     Stack que contiene la secuencia de errores capturadas en
+     * el Exception
+     * @param clase     Clase desde donde debe consultarse los datos de la traza.
+     * Esta clase debe ser desde donde se capturo el error.
      */
     private void getStackTrace(StackTraceElement[] stack, Class clase) {
         boolean buscarPadre = true;
@@ -338,7 +340,8 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Metodo que asigna un valor booleano para considerar o no la inclusion
      * de la data contenida en el campo stringData
-     * @param seeStringData
+     * @param seeStringData     Entrada TRUE o FALSE, para indicar si se debe
+     * considerar en la generacion del informe de error la data adicional
      */
     public void setSeeStringData(boolean seeStringData) {
         this.seeStringData = seeStringData;
@@ -354,8 +357,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asignada la ruta para la generacion del archivo de Log de la exception
-     * @param rutaFile
+     * Asigna la ruta para la generacion del archivo de Log de la exception
+     * @param rutaFile      Ruta donde debe depositarse el archivo de error
      */
     public void setRutaFile(String rutaFile) {
         this.rutaFile = rutaFile;
@@ -371,7 +374,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna la respuesta de si se debe generar o no el archivo de Log
-     * @param logFile
+     * @param logFile       Entrada TRUE o FALSE para indicar si se debe generar
+     * o no el archivo de Log
      */
     public void setLogFile(boolean logFile) {
         this.logFile = logFile;
@@ -387,7 +391,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna el arreglo de datos entregados a la Exception
-     * @param arrayData
+     * @param arrayData     ArrayList que contiene los datos de error adicionales
+     * que se agregaran al informe de error
      */
     public void setArrayData(ArrayList arrayData) {
         this.arrayData = arrayData;
@@ -403,7 +408,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna los datos que debe contener en el campo stringData
-     * @param stringData
+     * @param stringData    String que contiene data o mensajes adicionales que
+     * deben ser incluidos en el informe de error
      */
     public void setStringData(String stringData) {
         String str = this.stringData;
@@ -429,7 +435,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna el tipo de error que se produjo
-     * @param typeError
+     * @param typeError     Asigna el nombre del tipo de error producido
      */
     private void setTypeError(String typeError) {
         this.typeError.append(typeError);
@@ -446,7 +452,8 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Obtiene la fecha y hora en que se genero a la exception. Se entrega cual
      * debe ser el caracter separador para representar la fecha
-     * @param separador
+     * @param separador     Caracter separador que debe utilizarce al obtener
+     * un dato del tipo fecha
      * @return
      */
     public String getTime(String separador) {
@@ -463,7 +470,7 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Obtiene la secuancia de clases y metodos invocados en la exception
+     * Obtiene la secuencia de clases y metodos invocados en la exception
      * @return
      */
     public StringBuffer getSecuenceError() {
@@ -471,8 +478,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna la secuancia de clases y metodos invocados en la exception
-     * @param secuenceError
+     * Asigna la secuencia de clases y metodos invocados en la exception
+     * @param secuenceError     Texto con la secuencia de errores
      */
     private void setSecuenceError(String secuenceError) {
         this.secuenceError.append(secuenceError);
@@ -488,7 +495,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna el texto de error al campo textError
-     * @param textError
+     * @param textError     Texto que contiene el Error entregado
      */
     private void setTextError(String textError) {
         this.textError.append(textError);
@@ -504,7 +511,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna el texto del mensaje al campo textMessage
-     * @param textMessage
+     * @param textMessage   Texto que contiene el Mensaje enregado
      */
     private void setTextMessage(String textMessage) {
         this.textMessage.append(textMessage);
@@ -521,7 +528,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna el xml generado con los datos de la Exception al campo xmlError
-     * @param xmlError
+     * @param xmlError      Texto con el XML de error generado
      */
     private void setXmlError(StringBuffer xmlError) {
         this.xmlError = xmlError;
@@ -546,7 +553,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna el nombre que poseera el archivo de Log
-         * @param nameFile
+         * @param nameFile  Nombre del archivo
          */
         public void setNameFile(String nameFile) {
             this.nameFile = nameFile;
@@ -562,7 +569,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna la ruta donde se colocara el archivo de Log
-         * @param rutaFile
+         * @param rutaFile  Ruta del archivo
          */
         public void setRutaFile(String rutaFile) {
             this.rutaFile = rutaFile;
@@ -571,7 +578,7 @@ public final class ExceptionHandler extends Throwable {
         /**
          * Metodo que escribe la data entregada al archivo de Log. Si el archivo
          * existe, el texto entregado se adjunta al final del archivo
-         * @param strEntrada
+         * @param strEntrada    Texto con lo que debe anexarse al archivo de error
          * @return
          * @throws IOException
          */
@@ -620,7 +627,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna el nombre del archivo de la clase donde se produjo el error
-         * @param fileClass
+         * @param fileClass     Texto con el nombre del archivo de clase
          */
         public void setFileClass(String fileClass) {
             this.fileClass = fileClass;
@@ -636,7 +643,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna el numero de linea de la clase donde se produjo el error
-         * @param lineNumber
+         * @param lineNumber    Numero de linea del error
          */
         public void setLineNumber(int lineNumber) {
             this.lineNumber = lineNumber;
@@ -652,7 +659,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna el metodo de la clase donde se produjo el error
-         * @param methodClass
+         * @param methodClass   Metodo donde se hizo la invocacion
          */
         public void setMethodClass(String methodClass) {
             this.methodClass = methodClass;
@@ -668,7 +675,7 @@ public final class ExceptionHandler extends Throwable {
 
         /**
          * Asigna el nombre de la clase donde se produjo el error
-         * @param nameClass
+         * @param nameClass     Nombre de la clase donde se produjo el error
          */
         public void setNameClass(String nameClass) {
             this.nameClass = nameClass;
@@ -706,9 +713,9 @@ public final class ExceptionHandler extends Throwable {
         /**
         * Constructor donde se inicializa con los parametros de entrada, los datos
         * de la clase
-        * @param dia
-        * @param mes
-        * @param anio
+        * @param dia    Dato con el dia a asignar
+        * @param mes    Dato con el mes a asignar
+        * @param anio   Dato con el año a asignar
         */
         public UtilDate(int dia, int mes, int anio) {
             this.dia = dia;
@@ -722,12 +729,12 @@ public final class ExceptionHandler extends Throwable {
         /**
         * Constructor donde se inicializa con los parametros de entreda los datos
         * de la clase
-        * @param dia
-        * @param mes
-        * @param anio
-        * @param hour
-        * @param min
-        * @param sec
+        * @param dia    Dato con el dia a asignar
+        * @param mes    Dato con el mes a asignar
+        * @param anio   Dato con el año a asignar
+        * @param hour   Dato con la hora a asignar
+        * @param min    Dato con el minuto a asignar
+        * @param sec    Dato con el segundo a asignar
         */
         public UtilDate(int dia, int mes, int anio, int hour, int min, int sec) {
             this.dia = dia;
@@ -752,25 +759,33 @@ public final class ExceptionHandler extends Throwable {
         }
 
         /**
-        * Entrega la fecha que contiene la clase en formato DD/MM/AAAA
+        * Entrega la fecha que contiene la clase en formato DD/MM/AAAA.
+        * En caso que se haya asignado una fecha incorrecta, entregara 00/00/0000
         * @return
         */
         public String getFecha(){
             String strDia = String.valueOf(this.dia);
             String strMes = String.valueOf(this.mes);
             String strAnio = String.valueOf(this.anio);
-
-            if (this.dia<10){
-            strDia = "0"+strDia;
-            }
-            if (this.mes<10){
-            strMes = "0"+strMes;
+            String str = strDia+"/"+strMes+"/"+strAnio;
+            if (isFechaValida(str)){
+                if (this.dia<10){
+                    strDia = "0"+strDia;
+                }
+                if (this.mes<10){
+                    strMes = "0"+strMes;
+                }
+            }else{
+                strDia="00";
+                strMes="00";
+                strAnio="0000";
             }
             return strDia+separador+strMes+separador+strAnio;
         }
 
         /**
         * Entrega la fecha que contiene la clase en el formato DD/MM/AAAA hh:mm:ss
+        * En caso que se haya asignado una fecha incorrecta, entregara 00/00/0000 00:00:00
         * @return
         */
         public String getFechaHMS(){
@@ -780,21 +795,30 @@ public final class ExceptionHandler extends Throwable {
             String strHour = String.valueOf(this.hour);
             String strMin = String.valueOf(this.min);
             String strSec = String.valueOf(this.sec);
-
-            if (this.dia<10){
-            strDia = "0"+strDia;
-            }
-            if (this.mes<10){
-            strMes = "0"+strMes;
-            }
-            if (this.hour<10){
-            strHour = "0"+strHour;
-            }
-            if (this.min<10){
-            strMin = "0"+strMin;
-            }
-            if (this.sec<10){
-            strSec = "0"+strSec;
+            String str = strDia+"/"+strMes+"/"+strAnio;
+            if (isFechaValida(str)){
+                if (this.dia<10){
+                strDia = "0"+strDia;
+                }
+                if (this.mes<10){
+                strMes = "0"+strMes;
+                }
+                if (this.hour<10){
+                strHour = "0"+strHour;
+                }
+                if (this.min<10){
+                strMin = "0"+strMin;
+                }
+                if (this.sec<10){
+                strSec = "0"+strSec;
+                }
+            }else{
+                strDia="00";
+                strMes="00";
+                strAnio="0000";
+                strHour="00";
+                strMin="00";
+                strSec="00";
             }
             return strDia+separador+strMes+separador+strAnio+separador+
             " "+strHour+":"+strMin+":"+strSec;
@@ -802,8 +826,9 @@ public final class ExceptionHandler extends Throwable {
 
         /**
         * Entrega la fecha que contiene la clase en el formato solicitado
-        * AMD=AAAA/MM/DD, DMA=DD/MM/AAAA
-        * @param frm
+        * AMD=AAAA/MM/DD, DMA=DD/MM/AAAA. En caso que se haya asignado una
+        * fecha incorrecta, entregara 00/00/0000
+        * @param frm    Formato que se desea para la fecha AMD, DMA
         * @return
         */
         public String getFecha(formato frm){
@@ -811,25 +836,32 @@ public final class ExceptionHandler extends Throwable {
             String strDia = String.valueOf(this.dia);
             String strMes = String.valueOf(this.mes);
             String strAnio = String.valueOf(this.anio);
-
-            if (this.dia<10){
-            strDia = "0"+strDia;
-            }
-            if (this.mes<10){
-            strMes = "0"+strMes;
+            String str = strDia+"/"+strMes+"/"+strAnio;
+            if (isFechaValida(str)){
+                if (this.dia<10){
+                strDia = "0"+strDia;
+                }
+                if (this.mes<10){
+                strMes = "0"+strMes;
+                }
+            }else{
+                strDia="00";
+                strMes="00";
+                strAnio="0000";
             }
             if (frm.equals(frm.AMD)){
-            sld = strAnio+separador+strMes+separador+strDia;
+                sld = strAnio+separador+strMes+separador+strDia;
             }else{
-            sld = strDia+separador+strMes+separador+strAnio;
+                sld = strDia+separador+strMes+separador+strAnio;
             }
             return sld;
         }
 
         /**
         * Entrega la fecha que contiene la clase en el formato solicitado
-        * AMD=AAAA/MM/DD hh:mm:ss, DMA=DD/MM/AAAA hh:mm:ss
-        * @param frm
+        * AMD=AAAA/MM/DD hh:mm:ss, DMA=DD/MM/AAAA hh:mm:ss. En caso que se haya
+        * asignado una fecha incorrecta, entregara 00/00/0000
+        * @param frm    Formato que se desea para la fecha AMD, DMA
         * @return
         */
         public String getFechaHMS(formato frm){
@@ -840,21 +872,30 @@ public final class ExceptionHandler extends Throwable {
             String strHour = String.valueOf(this.hour);
             String strMin = String.valueOf(this.min);
             String strSec = String.valueOf(this.sec);
-
-            if (this.dia<10){
-            strDia = "0"+strDia;
-            }
-            if (this.mes<10){
-            strMes = "0"+strMes;
-            }
-            if (this.hour<10){
-            strHour="0"+strHour;
-            }
-            if (this.min<10){
-            strMin="0"+strMin;
-            }
-            if (this.sec<10){
-            strSec = "0"+strSec;
+            String str = strDia+"/"+strMes+"/"+strAnio;
+            if (isFechaValida(str)){
+                if (this.dia<10){
+                strDia = "0"+strDia;
+                }
+                if (this.mes<10){
+                strMes = "0"+strMes;
+                }
+                if (this.hour<10){
+                strHour="0"+strHour;
+                }
+                if (this.min<10){
+                strMin="0"+strMin;
+                }
+                if (this.sec<10){
+                strSec = "0"+strSec;
+                }
+            }else{
+                strDia="00";
+                strMes="00";
+                strAnio="0000";
+                strHour="00";
+                strMin="00";
+                strSec="00";
             }
             if (frm.equals(frm.AMD)){
             sld = strAnio+separador+strMes+separador+strDia;
@@ -873,7 +914,7 @@ public final class ExceptionHandler extends Throwable {
         */
         public String getFecha(String separador){
             String sld = getFecha();
-            sld = sld.replace("/", separador);
+                sld = sld.replace("/", separador);
             return sld;
         }
 
@@ -914,6 +955,22 @@ public final class ExceptionHandler extends Throwable {
             String sld = getFechaHMS(frm);
             sld = sld.replaceAll("/", separador);
             return sld;
+        }
+
+        /**
+         * Metodo para validar si una fecha es correcta
+         * @param fechax
+         * @return
+         */
+        private boolean isFechaValida(String fechax) {
+            try {
+                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                formatoFecha.setLenient(false);
+                formatoFecha.parse(fechax);
+            } catch (ParseException e) {
+                return false;
+            }
+            return true;
         }
     }
 }

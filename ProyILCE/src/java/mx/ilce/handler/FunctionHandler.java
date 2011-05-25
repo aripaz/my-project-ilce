@@ -1,22 +1,23 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.handler;
 
 /**
- *
+ * NO IMPLEMENTADO
  * @author vaio
  */
 public class FunctionHandler extends ExecutionHandler{
 
     private String message;
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public void setMessage(String message) {
         this.message = message;
     }

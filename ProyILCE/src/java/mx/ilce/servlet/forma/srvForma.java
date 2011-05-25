@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -44,60 +39,65 @@ public class srvForma extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
-            Forma forma = (Forma) request.getSession().getAttribute("forma");
-            AdminForm admForm = new AdminForm();
-            HashMap hs = admForm.getFormulario(request);
-            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-            forma.setFormData(hsForm);
-            ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
-            forma.setFormName(arrayForm);
-
-            String claveForma = (String) hsForm.get("$cf");
-            String pk = (String) hsForm.get("$pk");
-            String tipoAccion = (String) hsForm.get("$ta");
-            String strWhere = (String) hsForm.get("$w");
-
-            ArrayList arrVal = new ArrayList();
-            arrVal.add("$cf");
-            arrVal.add("$pk");
-            arrVal.add("$ta");
-
-            List lstVal = val.validationForm(arrVal, hsForm);
-            String blOK = (String) lstVal.get(0);
-            if ("false".equals(blOK)){
-                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            if (!val.validateUser(request)){
+                val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                if (forma !=null){
-                    forma.setPk(pk);
-                    forma.setClaveForma(Integer.valueOf(claveForma));
-                    forma.setTipoAccion(tipoAccion);
-                    if ((strWhere!=null)&&(!"".equals(strWhere))){
-                        String[] strData = new String[1];
-                        strData[0] = pk;
-                        forma.setArrayData(strData);
-                        String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
-                        if ((strWhere!=null) && (strWhere.trim().length()>0)){
-                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                                forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                Forma forma = (Forma) request.getSession().getAttribute("forma");
+                AdminForm admForm = new AdminForm();
+                HashMap hs = admForm.getFormulario(request);
+                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+                forma.setFormData(hsForm);
+                ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
+                forma.setFormName(arrayForm);
+
+                String claveForma = (String) hsForm.get("$cf");
+                String pk = (String) hsForm.get("$pk");
+                String tipoAccion = (String) hsForm.get("$ta");
+                String strWhere = (String) hsForm.get("$w");
+
+                ArrayList arrVal = new ArrayList();
+                arrVal.add("$cf");
+                arrVal.add("$pk");
+                arrVal.add("$ta");
+
+                List lstVal = val.validationForm(arrVal, hsForm);
+                String blOK = (String) lstVal.get(0);
+                if ("false".equals(blOK)){
+                        val.executeErrorValidation(lstVal, this.getClass(), request, response);
+                }else{
+                    if (forma !=null){
+                        forma.setPk(pk);
+                        forma.setClaveForma(Integer.valueOf(claveForma));
+                        forma.setTipoAccion(tipoAccion);
+                        if ((strWhere!=null)&&(!"".equals(strWhere))){
+                            String[] strData = getArrayData(hsForm);
+                            forma.setArrayData(strData);
+
+                            String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                            forma.setStrWhereQuery("");
+                            if ((strWhere!=null) && (strWhere.trim().length()>0)){
+                                if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                    forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                                }else{
+                                    forma.setStrWhereQuery(strWhere);
+                                }
                             }else{
-                                forma.setStrWhereQuery(strWhere);
+                                if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                    forma.setStrWhereQuery(whereForm);
+                                }
                             }
+                            forma.ingresarBusquedaAvanzada();
                         }else{
-                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                                forma.setStrWhereQuery(whereForm);
+                            if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
+                                forma.setCleanIncrement(true);
                             }
+                            forma.mostrarForma();
                         }
-                        forma.ingresarBusquedaAvanzada();
-                    }else{
-                        if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
-                            forma.setCleanIncrement(true);
-                        }
-                        forma.mostrarForma();
+                        StringBuffer xmlForma = forma.getXmlEntidad();
+                        request.getSession().setAttribute("xmlForma", xmlForma);
                     }
-                    StringBuffer xmlForma = forma.getXmlEntidad();
-                    request.getSession().setAttribute("xmlForma", xmlForma);
+                    request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
                 }
-                request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
             }
         }catch (ExceptionHandler eh){
             try{
@@ -114,6 +114,15 @@ public class srvForma extends HttpServlet {
         }
     }
 
+    /**
+     * Genera un String con la estrucura adicional de una query, con la data
+     * entregada esto servira de complemento a la query principal, para ayudar
+     * en el filtro de datos
+     * @param hsDataForm    HashMap con los datos capturados del formulario
+     * @param lstForma  Listado de campos de la forma
+     * @return
+     * @throws ExceptionHandler
+     */
     private String getWhereData(HashMap hsDataForm, List lstForma) throws ExceptionHandler{
         String strSal = new String("");
         try{
@@ -164,6 +173,33 @@ public class srvForma extends HttpServlet {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar la QUERY de la forma con el WHERE");
         }
         return strSal;
+    }
+
+    /**
+     * Genera un Array con la data obtenida desde el formulario, cuando esta
+     * data corresponde a las que poseen los nombres $1, $2, $3, etc
+     * @param hsForm    Datos capturados desde el formulario
+     * @return
+     */
+    private String[] getArrayData(HashMap hsForm){
+        String[] strSld = new String[0];
+
+        if (!hsForm.isEmpty()){
+            String[] arr = new String[hsForm.size()];
+            int j=0;
+            for (int i=0;i<hsForm.size();i++){
+                String dato = (String) hsForm.get("$"+i);
+                if ((dato!=null)&&(!"".equals(dato))){
+                    arr[j]=dato;
+                    j++;
+                }
+            }
+            if (j>0){
+                strSld = new String[j];
+            }
+            System.arraycopy(arr, 0, strSld, 0, j);
+        }
+        return strSld;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

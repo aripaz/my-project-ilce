@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.conection;
 
 import java.math.BigDecimal;
@@ -17,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
@@ -241,8 +234,8 @@ class ConQuery {
      * Metodo que efectua una query de eliminacion de datos, tras su ejecucion
      * entrega un numero 1, que efectuo correctamente la operacion, cero en caso
      * contrario. El valor es retornado en el atributo Object del HashCampo
-     * @param campoForma
-     * @param arrData
+     * @param campoForma    Objeto que contiene los datos para identificar la tabla
+     * @param arrData       Arreglo con la query que se ejecutara
      * @return
      * @throws ExceptionHandler
      */
@@ -495,8 +488,8 @@ class ConQuery {
      * Obtiene la data, aplicando a la query un parametro de entrada, el cual
      * consiste en 1)Un string con un "WHERE" o un "AND" dependiendo de la query
      * la cual condicionara la respuesta de la query, 2) Un arreglo con la data
-     * de entreda para la query
-     * El idQuery entregado permite seleccionar la query respectiva.
+     * de entreda para la query. El idQuery entregado permite seleccionar la query
+     * respectiva.
      * @param idQuery       ID de la query query a ejecutar
      * @param whereData     Condiciones adicionales a agregar a la query
      * @param arrData       Arreglo de data con los parametros de entrada que se
@@ -919,10 +912,11 @@ class ConQuery {
      * guardando las variables que se le entregan y deberia reemplazar en
      * las queries buscando el parametro con el signo de ?
      * @param idQuery   ID de la query a buscar
-     * @param arrData   matriz de datos a aplicar en la query
+     * @param arrData   Matriz de datos a aplicar en la query
      * @return
      * @throws ExceptionHandler
      */
+    @Deprecated
     private HashCampo getDataParam(Integer idQuery, String[][] arrData) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         PreparedStatement ps = null;
@@ -1068,7 +1062,7 @@ class ConQuery {
      * datos, utiliza la conversion respectiva para dejar el valor como String
      * @param strType   Tipo de dato proveniente de la Base de Datos
      * @param rs        ResulSet donde esta el objeto a analizar
-     * @param codigo    codigo (posicion) dentro del resulset donde esta el dato
+     * @param codigo    Codigo (posicion) dentro del resulset donde esta el dato
      * a analizar
      * @return
      * @throws ExceptionHandler

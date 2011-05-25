@@ -33,7 +33,7 @@ public class AdminForm {
      * el archivo, se deja una copia del mismo, con un nombre nuevo en el servidor,
      * asociado al campo archivo, va el nuevo nombre y su ruta con que quedo en
      * el servidor.
-     * @param request
+     * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
      */
     public HashMap getFormulario(HttpServletRequest request) throws ExceptionHandler{
@@ -58,7 +58,7 @@ public class AdminForm {
      * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
      * como otro dato mas, no generandose el hash con los datos de archivo ni
      * realizandose la copia en el servidor
-     * @param request
+     * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
      */
     private HashMap getFormularioSimple(HttpServletRequest request) throws ExceptionHandler{
@@ -93,7 +93,7 @@ public class AdminForm {
      * campos de archivo (arrayFILE). Cuando los archivos que se indican
      * existen, se genera una copia en el servidor y se entrega en el Hash, el
      * nombre y ruta del archivo.
-     * @param request
+     * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
      */
     private HashMap getFormularioMultiPart(HttpServletRequest request) throws ExceptionHandler{
@@ -159,8 +159,8 @@ public class AdminForm {
      * Metodo que entrega los datos de una variable. Primero los busca como
      * atributo de la session, si no lo encuentra, lo busca como parametro de
      * un formulario
-     * @param name
-     * @param request
+     * @param name  Nombre de la variable a buscar
+     * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
      */
     public String getStringRequest(String name, HttpServletRequest request) throws ExceptionHandler{

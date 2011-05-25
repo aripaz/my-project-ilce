@@ -15,10 +15,9 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**   
- * Clase para la implementacion de los metodos asociados a Forma
+ * Clase para la implementacion de los metodos asociados a Forma.
  * Se prevee dejar en memoria esta objeto para que mantenga las formas
  * obtenidas a partir de las aplicaciones asociadas al Perfil del usuario
- *
  * @author ccatrilef
  */
 public class Forma extends Entidad{ 
@@ -41,7 +40,7 @@ public class Forma extends Entidad{
     /************** GETTER Y SETTER ***************/
 
     /**
-     * Obtiene el FormaData
+     * Obtiene el FormData
      * @return
      */
     public HashMap getFormData() {
@@ -49,15 +48,15 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna el FormaData
-     * @param formData
+     * Asigna el FormData
+     * @param formData  FormData a ingresar
      */
     public void setFormData(HashMap formData) {
         this.formData = formData;
     }
 
     /**
-     * Obtiene el FormaName
+     * Obtiene el FormName
      * @return
      */
     public ArrayList getFormName() {
@@ -65,8 +64,8 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna el FormaName
-     * @param formName
+     * Asigna el nombre del Form
+     * @param formName  Nombre de la forma
      */
     public void setFormName(ArrayList formName) {
         this.formName = formName;
@@ -81,8 +80,8 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna El ArrayData
-     * @param arrayData
+     * Asigna el ArrayData
+     * @param arrayData     Array con la data
      */
     public void setArrayData(String[] arrayData) {
         this.arrayData = arrayData;
@@ -98,7 +97,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el texto adicional que se incluira en la query
-     * @param strWhereQuery
+     * @param strWhereQuery     Estructura adicional para un query
      */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = (strWhereQuery==null)?"":strWhereQuery;
@@ -114,7 +113,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @param cleanIncrement
+     * @param cleanIncrement    Entrada TRUE o FALSE sobre estado del increment
      */
     public void setCleanIncrement(boolean cleanIncrement) {
         this.cleanIncrement = cleanIncrement;
@@ -130,7 +129,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el nombre del campo PK de la forma
-     * @param campoPK
+     * @param campoPK   Nombre del campo PK
      */
     public void setCampoPK(String campoPK) {
         this.campoPK = campoPK;
@@ -146,7 +145,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el tipo de accion que se esta efectuando con la Forma
-     * @param tipoAccion
+     * @param tipoAccion    Texto con la accion a efectuar
      */
     public void setTipoAccion(String tipoAccion) {
         if (tipoAccion==null){
@@ -165,7 +164,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el codigo PK ingresado
-     * @param pk
+     * @param pk    Codigo PK de la Forma
      */
     public void setPk(String pk) {
         if (pk==null){
@@ -184,7 +183,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el Alias del TAB
-     * @param aliasTab
+     * @param aliasTab      Alias del TAB
      */
     public void setAliasTab(String aliasTab) {
         this.aliasTab = aliasTab;
@@ -200,7 +199,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la aplicacion
-     * @param claveAplicacion
+     * @param claveAplicacion   Codigo con la clave de la Aplicacion
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -216,7 +215,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la forma
-     * @param claveForma
+     * @param claveForma    Codigo con la clave de la Forma
      */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
@@ -232,7 +231,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la forma padre
-     * @param claveFormaPadre
+     * @param claveFormaPadre   Codigo con la clave de la Forma Padre
      */
     public void setClaveFormaPadre(Integer claveFormaPadre) {
         this.claveFormaPadre = claveFormaPadre;
@@ -248,7 +247,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el orden del Tab
-     * @param ordenTab
+     * @param ordenTab      Codigo con el orden
      */
     public void setOrdenTab(Integer ordenTab) {
         this.ordenTab = ordenTab;
@@ -264,7 +263,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el hash con la configuracion de la forma
-     * @param hsForma
+     * @param hsForma   Hash con la configuracion
      */
     public void setHsForma(HashMap hsForma) {
         this.hsForma = hsForma;
@@ -283,7 +282,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene, mediante el ID introducido, una forma desde el listado de formas,
-     * que se asociaron cuando se obtuvo el prfil del Usuario.  El resultado es
+     * que se asociaron cuando se obtuvo el perfil del Usuario. El resultado es
      * un listado con los campos de la forma.
      * @param key   ID de la forma a solicitar
      * @return
@@ -352,11 +351,6 @@ public class Forma extends Entidad{
                             strValues.append(valor).append(",");
                         }
                     }
-                    /*
-                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
-                        //error
-                        System.err.append("Error");
-                    }*/
                 }
             }
             strCampos.delete(strCampos.length()-1 ,strCampos.length());
@@ -437,11 +431,6 @@ public class Forma extends Entidad{
                             strQuery.append(valor).append(",");
                         }
                     }
-                    /*
-                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
-                        //error
-                        System.err.append("Error");
-                    }*/
                 }else{
                     strCampoPK = cmpFL.getCampo();
                 }
@@ -576,7 +565,7 @@ public class Forma extends Entidad{
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
-                            admXML.setDeleteIncreement(cleanIncrement);
+                            admXML.setDeleteIncrement(cleanIncrement);
                         }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),this.getTipoAccion());
@@ -595,6 +584,9 @@ public class Forma extends Entidad{
         return this;
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     public Forma mostrarResultado() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -624,7 +616,7 @@ public class Forma extends Entidad{
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
-                            admXML.setDeleteIncreement(cleanIncrement);
+                            admXML.setDeleteIncrement(cleanIncrement);
                         }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF,this.getClaveForma(), this.getTipoAccion());
@@ -669,7 +661,7 @@ public class Forma extends Entidad{
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
-                            admXML.setDeleteIncreement(cleanIncrement);
+                            admXML.setDeleteIncrement(cleanIncrement);
                         }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),this.getTipoAccion());
@@ -705,10 +697,16 @@ public class Forma extends Entidad{
         return data;
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     public boolean validarCampos(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     public Forma mostrarPanel(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -773,7 +771,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene un List con la configuracion de la forma entregada. El List esta
-     * formado por Bean del tipo Campo Forma
+     * formado por Bean del tipo CampoForma
      * @param arrayData     Arreglo de datos con la configuracion de la forma
      * @return
      * @throws ExceptionHandler
@@ -793,7 +791,7 @@ public class Forma extends Entidad{
      * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
      * no esta configurada la forma, pero se tiene la query con la consulta para
      * completarla. Obviamente no estan disponibles todos los datos, pero si los
-     * basicos para construirla en un XML con los datos básicos.
+     * basicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener
      * @return
