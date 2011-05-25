@@ -8,7 +8,9 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.bean.User;
 import mx.ilce.component.AdminFile;
+import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
@@ -19,10 +21,18 @@ public class Validation {
 
     private String textMessage;
 
+    /**
+     * Obtiene un texto de mensaje
+     * @return
+     */
     public String getTextMessage() {
         return textMessage;
     }
 
+    /**
+     * Asigna un texto de mensaje
+     * @param textMessage   Texto del mesnaje
+     */
     public void setTextMessage(String textMessage) {
         this.textMessage = textMessage;
     }
@@ -38,6 +48,12 @@ public class Validation {
         return ((j==0)?true:false);
     }
 
+    /**
+     * Metodo para el reemplazo de comillas(') a doble comilla('') en los datos
+     * que se entregan a una query
+     * @param strData
+     * @return
+     */
     public String replaceComillas(String strData){
         String sld = strData;
         if ((strData!=null)&&(!"".equals(strData))){
@@ -70,13 +86,13 @@ public class Validation {
             request.getSession().setAttribute("xmlError", xmlError);
             request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         }catch (ExceptionHandler e){
-            
+
         }catch (Exception es){
             ExceptionHandler eh2 = new ExceptionHandler(es,clase.getClass(),this.getTextMessage());
             StringBuffer xmlError = eh2.getXmlError();
             request.getSession().setAttribute("xmlError", xmlError);
             request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
-        }        
+        }
     }
 
     /**
@@ -87,7 +103,7 @@ public class Validation {
      * @param response
      * @throws Exception
      */
-    public void executeErrorHandler(ExceptionHandler eh, HttpServletRequest request, HttpServletResponse response) 
+    public void executeErrorHandler(ExceptionHandler eh, HttpServletRequest request, HttpServletResponse response)
             throws Exception{
         try{
             eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
@@ -97,7 +113,7 @@ public class Validation {
             request.getSession().setAttribute("xmlError", xmlError);
             request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         }catch(ExceptionHandler e){
-            
+
         }
     }
 
@@ -149,5 +165,59 @@ public class Validation {
         sld.add(ok);
         sld.add(str.toString());
         return sld;
+    }
+
+    /**
+     * Valida que esten en memoria el user y el perfil del usuario conectado
+     * @param request
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
+    public boolean validateUser(HttpServletRequest request)
+            throws ServletException, IOException{
+        boolean sld = true;
+        try{
+            Perfil perfil = (Perfil) request.getSession().getAttribute("perfil");
+            User user = (User) request.getSession().getAttribute("user");
+            if ((perfil==null)||(user==null)){
+                sld=false;
+            }
+        }catch(Exception e){
+            sld=false;
+        }
+        return sld;
+    }
+
+    /**
+     * Se utiliza para ejecutar el despliegue de error para cuando se valido que
+     * un usuario no esta validamente conectado.
+     * @param clase
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void executeErrorValidationUser(Class clase, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        try{
+            String dataVal = "";
+            ExceptionHandler eh = new ExceptionHandler(dataVal,
+                    clase.getClass(),
+                    "Error de Datos de Usuario","No se encontro en Session los datos del Usuario");
+            eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+            eh.setLogFile(true);
+            eh.writeToFile();
+            StringBuffer xmlError = eh.getXmlError();
+            request.getSession().setAttribute("xmlError", xmlError);
+            request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+        }catch (ExceptionHandler e){
+
+        }catch (Exception es){
+            ExceptionHandler eh2 = new ExceptionHandler(es,clase.getClass(),this.getTextMessage());
+            StringBuffer xmlError = eh2.getXmlError();
+            request.getSession().setAttribute("xmlError", xmlError);
+            request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
+        }
     }
 }
