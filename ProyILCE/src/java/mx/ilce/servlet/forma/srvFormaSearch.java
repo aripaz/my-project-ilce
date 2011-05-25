@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -43,54 +38,58 @@ public class srvFormaSearch extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
-            AdminForm admForm = new AdminForm();
-            HashMap hs = admForm.getFormulario(request);
-            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-
-            String claveForma = (String) hsForm.get("$cf");
-            String pk = (String) hsForm.get("$pk");
-            String tipoAccion = (String) hsForm.get("$ta");
-            String strWhere = (String) hsForm.get("$w");
-
-            ArrayList arrVal = new ArrayList();
-            arrVal.add("$cf");
-            arrVal.add("$ta");
-
-            List lstVal = val.validationForm(arrVal, hsForm);
-            String blOK = (String) lstVal.get(0);
-            if ("false".equals(blOK)){
-                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            if (!val.validateUser(request)){
+                val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                Forma forma = (Forma) request.getSession().getAttribute("forma");
-                if (forma !=null){
-                    forma.setFormData(hsForm);
-                    ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
-                    forma.setFormName(arrayForm);
-                    forma.setPk(pk);
-                    forma.setClaveForma(Integer.valueOf(claveForma));
-                    forma.setTipoAccion(tipoAccion);
+                AdminForm admForm = new AdminForm();
+                HashMap hs = admForm.getFormulario(request);
+                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
 
-                    String[] strData = getArrayData(hsForm);
-                    forma.setArrayData(strData);
-                    String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
-                    forma.setStrWhereQuery("");
-                    if ((strWhere!=null) && (strWhere.trim().length()>0)){
-                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                            forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                String claveForma = (String) hsForm.get("$cf");
+                String pk = (String) hsForm.get("$pk");
+                String tipoAccion = (String) hsForm.get("$ta");
+                String strWhere = (String) hsForm.get("$w");
+
+                ArrayList arrVal = new ArrayList();
+                arrVal.add("$cf");
+                arrVal.add("$ta");
+
+                List lstVal = val.validationForm(arrVal, hsForm);
+                String blOK = (String) lstVal.get(0);
+                if ("false".equals(blOK)){
+                        val.executeErrorValidation(lstVal, this.getClass(), request, response);
+                }else{
+                    Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    if (forma !=null){
+                        forma.setFormData(hsForm);
+                        ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
+                        forma.setFormName(arrayForm);
+                        forma.setPk(pk);
+                        forma.setClaveForma(Integer.valueOf(claveForma));
+                        forma.setTipoAccion(tipoAccion);
+
+                        String[] strData = getArrayData(hsForm);
+                        forma.setArrayData(strData);
+                        String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                        forma.setStrWhereQuery("");
+                        if ((strWhere!=null) && (strWhere.trim().length()>0)){
+                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                forma.setStrWhereQuery(strWhere + " AND " + whereForm);
+                            }else{
+                                forma.setStrWhereQuery(strWhere);
+                            }
                         }else{
-                            forma.setStrWhereQuery(strWhere);
+                            if ((whereForm!=null) && (whereForm.trim().length()>0)){
+                                forma.setStrWhereQuery(whereForm);
+                            }
                         }
-                    }else{
-                        if ((whereForm!=null) && (whereForm.trim().length()>0)){
-                            forma.setStrWhereQuery(whereForm);
-                        }
+                        forma.ingresarBusquedaAvanzada();
+                        StringBuffer xmlForma = forma.getXmlEntidad();
+                        request.getSession().removeAttribute("xmlForma");
+                        request.getSession().setAttribute("xmlForma", xmlForma);
                     }
-                    forma.ingresarBusquedaAvanzada();
-                    StringBuffer xmlForma = forma.getXmlEntidad();
-                    request.getSession().removeAttribute("xmlForma");
-                    request.getSession().setAttribute("xmlForma", xmlForma);
+                    request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
                 }
-                request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
             }
         }catch (ExceptionHandler eh){
             try{
@@ -107,6 +106,15 @@ public class srvFormaSearch extends HttpServlet {
         }
     } 
 
+    /**
+     * Genera un String con la estrucura adicional de una query, con la data
+     * entregada esto servira de complemento a la query principal, para ayudar
+     * en el filtro de datos
+     * @param hsDataForm    HashMap con los datos capturados del formulario
+     * @param lstForma  Listado de campos de la forma
+     * @return
+     * @throws ExceptionHandler
+     */
     private String getWhereData(HashMap hsDataForm, List lstForma) throws ExceptionHandler{
         String strSal = new String("");
         try{
@@ -159,6 +167,12 @@ public class srvFormaSearch extends HttpServlet {
         return strSal;
     }
 
+    /**
+     * Genera un Array con la data obtenida desde el formulario, cuando esta
+     * data corresponde a las que poseen los nombres $1, $2, $3, etc
+     * @param hsForm    Datos capturados desde el formulario
+     * @return
+     */
     private String[] getArrayData(HashMap hsForm){
         String[] strSld = new String[0];
 
