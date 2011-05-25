@@ -38,6 +38,14 @@ public class Validation {
         return ((j==0)?true:false);
     }
 
+    public String replaceComillas(String strData){
+        String sld = strData;
+        if ((strData!=null)&&(!"".equals(strData))){
+            sld = strData.replaceAll("'", "''");
+        }
+        return sld;
+    }
+
     /**
      * Se utiliza para ejecutar el despliegue de error para cuando se valido que
      * un formulario no esta completo en la data exigida
