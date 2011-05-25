@@ -97,6 +97,7 @@ public class srvFormaInsert extends HttpServlet {
                                 dato = (String) hsFile.get(cmp.getCampo());
                             }
                         }
+                        dato = val.replaceComillas(dato);
                         hsFormQuery.put(cmp.getCampo(), dato);
                     }
                 }
