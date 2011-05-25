@@ -72,7 +72,7 @@ public class srvFormaInsert extends HttpServlet {
                 forma.setTipoAccion(tipoAccion);
                 List lstForma = forma.getForma(Integer.valueOf(claveForma));
                 List lstNew = null;
-                if (("0".equals(pk))&&("INSERT".equals(tipoAccion.toUpperCase()))&& (lstForma==null)){
+                if (("0".equals(pk))&&("INSERT".equals(tipoAccion.toUpperCase()))){
                     String[] arrayData = new String[2];
                     arrayData[0] = claveForma;
                     arrayData[1] = "insert";
