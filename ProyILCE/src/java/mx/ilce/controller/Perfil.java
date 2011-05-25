@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.controller;
 
 import java.util.List;
@@ -22,8 +17,7 @@ public class Perfil extends Entidad{
     private String perfil;
     private List lstAplicacion;
 
-/******** GETTER Y SETTER ********/
-
+//******** GETTER Y SETTER ********
     /**
      * Obtiene la clave del perfil
      * @return
@@ -34,7 +28,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna la clave del perfil
-     * @param clavePerfil
+     * @param clavePerfil   Clave del Perfil
      */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
@@ -50,7 +44,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna el listado de aplicaciones del perfil
-     * @param lstAplicacion
+     * @param lstAplicacion     Listado de aplicaciones del Perfil
      */
     public void setLstAplicacion(List lstAplicacion) {
         this.lstAplicacion = lstAplicacion;
@@ -66,7 +60,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna el nombre del perfil
-     * @param perfil
+     * @param perfil    Nombre del Perfil
      */
     public void setPerfil(String perfil) {
         this.perfil = perfil;
@@ -82,36 +76,57 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna un Object
-     * @param data
+     * @param data  Objeto que se va a asignar
      */
     public Perfil(Object data) {
         this.setData(data);
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler ingresarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler editarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler eliminarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Entidad mostrarForma() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Entidad mostrarResultado() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Entidad ingresarBusquedaSencilla() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Entidad ingresarBusquedaAvanzada() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -157,7 +172,7 @@ public class Perfil extends Entidad{
      * Metodo para obtener los datos del usuario a partir de los datos de
      * conexion contenidos en el Bean User. En caso de existir problemas se
      * obtiene el texto con la causa
-     * @param usuario
+     * @param usuario   Objeto User con los datos del usuario
      * @return
      */
     public LoginHandler login(User usuario) throws ExceptionHandler {
@@ -191,21 +206,31 @@ public class Perfil extends Entidad{
         return lg;
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler registrarUsuario(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler enviarPasswordPerdido() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public void cerrarSession(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public List obtenerVisitas() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    
 }

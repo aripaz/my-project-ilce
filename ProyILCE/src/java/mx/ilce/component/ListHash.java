@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +22,7 @@ public class ListHash {
     /**
      * Inserta un dato a una lista Hash
      * @param dato  Dato a insertar
-     * @param clave clave que poseera en el Hash
+     * @param clave Clave que poseera en el Hash
      * @return
      */
     private boolean insertListHash(Object dato, BigDecimal clave){
@@ -38,7 +33,7 @@ public class ListHash {
 
     /**
      * Elimina un dato de una lista Hash, ubicandolo por su clave
-     * @param clave clave del objeto a eliminar
+     * @param clave Clave del objeto a eliminar
      * @return
      */
     private boolean deleteListHash(BigDecimal clave){
@@ -49,8 +44,8 @@ public class ListHash {
     /**
      * Actualiza el contenido de un listado Hash, reemplazando el objeto ubicado
      * en la clave entregada por el nuevo objeto entregado
-     * @param dato
-     * @param clave
+     * @param dato      Objeto que sera ingresado
+     * @param clave     Clave del objeto a reemplazar
      * @return
      */
     private boolean updateListHash(Object dato, BigDecimal clave){
@@ -60,7 +55,7 @@ public class ListHash {
 
     /**
      * Obtiene un objeto desde el listado hash, mediante una clave
-     * @param clave
+     * @param clave     Clave del objeto a buscar
      * @return
      */
     private Object getObjectHash(BigDecimal clave){
@@ -72,10 +67,11 @@ public class ListHash {
      * datos del objeto "hsCmp", colocandolos en los campos que correspondan,
      * segun la definicion de la clase entregada. Se necesita que la clase
      * poseea los metodos getter y setter para asociar los campos.
-     *
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
+     * @return
+     * @throws ExceptionHandler
      */
     public Object getBean(Class nameClass, HashCampo hsCmp)throws ExceptionHandler{
         Object sld = null;
@@ -144,11 +140,11 @@ public class ListHash {
      * registros contenidos en el objeto "hsCmp", colocandolos en los campos
      * que correspondan, segun la definicion de la clase entregada. Se necesita
      * que la clase poseea los metodos getter y setter para asociar los campos.
-     *
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
      * @return
+     * @throws ExceptionHandler
      */
     public ArrayList getListBean(Class nameClass, HashCampo hsCmp) throws ExceptionHandler{
         ArrayList arr = new ArrayList();
@@ -218,7 +214,7 @@ public class ListHash {
      * @param type  Tipo al cual debe ser convertirse un dato
      * @param obj   String que contiene el valor que debe ser convertido
      * @return
-     * @throws ClassNotFoundException
+     * @throws ExceptionHandler
      */
     private Object getTypeValueCampo(Class type, String obj) throws ExceptionHandler{
         Object sld = null;

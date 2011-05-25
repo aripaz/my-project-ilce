@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.conection;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -42,7 +36,7 @@ public class ConSession {
 
      /**
      * Obtiene el IDQUERY desde el properties de queries
-     * @param key   clave que se esta buscando
+     * @param key   Clave que se esta buscando
      * @return
      * @throws ExceptionHandler
      */
@@ -119,7 +113,6 @@ public class ConSession {
     public User getUser(User usuario) throws ExceptionHandler{
         User usr = new User();
         try{
-            //String user, String password
             String[] strData = new String[2];
             strData[0] = usuario.getLogin();
             strData[1] = usuario.getPassword();
@@ -231,9 +224,8 @@ public class ConSession {
     /**
      * Obtiene los datos que se ingresaran al XML de Session, segun el usuario.
      * Se utiliza como parametro de entrada el campo claveEmpleado, desde el
-     * Bean User.
-     * En ObjectData se coloca un objeto Bean del tipo User, con los datos que
-     * se obtuvieron.
+     * Bean User.En ObjectData se coloca un objeto Bean del tipo User, con los
+     * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
      * @return
       * @throws ExceptionHandler
@@ -258,9 +250,8 @@ public class ConSession {
     /**
      * Obtiene los datos que se ingresaran al XML de Menu, segun el usuario.
      * Se utiliza como parametro de entrada el campo clavePerfil, desde el
-     * Bean User.
-     * En ObjectData se coloca un objeto Bean del tipo User, con los datos que
-     * se obtuvieron.
+     * Bean User. En ObjectData se coloca un objeto Bean del tipo User, con los
+     * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
      * @return
      * @throws ExceptionHandler
@@ -304,10 +295,16 @@ public class ConSession {
         return hsCmp;
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public boolean insertUser(User user){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public boolean deleteUser(User user){
         throw new UnsupportedOperationException("Not supported yet.");
     }

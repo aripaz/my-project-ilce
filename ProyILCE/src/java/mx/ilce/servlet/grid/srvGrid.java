@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.grid;
 
 import java.io.IOException;
@@ -40,46 +35,50 @@ public class srvGrid extends HttpServlet {
         HashMap hsForm = null;
         Validation val = new Validation();
         try {
-            AdminForm admForm = new AdminForm();
-            HashMap hs = admForm.getFormulario(request);
-
-            hsForm = (HashMap) hs.get("FORM");  //Datos
-
-            String claveForma = (String) hsForm.get("$cf");
-            String dp = (String) hsForm.get("$dp");
-            String tipoAccion = "select";
-            String strWhere = (String) hsForm.get("$w");
-
-            ArrayList arrVal = new ArrayList();
-            arrVal.add("$cf");
-            arrVal.add("$dp");
-
-            List lstVal = val.validationForm(arrVal, hsForm);
-            String blOK = (String) lstVal.get(0);
-            if ("false".equals(blOK)){
-                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            if (!val.validateUser(request)){
+                val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                String[] strData = getArrayData(hsForm);
+                AdminForm admForm = new AdminForm();
+                HashMap hs = admForm.getFormulario(request);
 
-                Forma forma = (Forma) request.getSession().getAttribute("forma");
-                Aplicacion apl = new Aplicacion();
-                if ((forma !=null)&&(apl!=null)){
-                    apl.addForma(Integer.valueOf(claveForma),forma.getForma(Integer.valueOf(claveForma)));
-                    apl.setDisplay(dp);
-                    apl.setClaveForma(Integer.valueOf(claveForma));
-                    apl.setTipoAccion(tipoAccion);
-                    apl.setStrWhereQuery(strWhere);
-                    apl.setArrayData(strData);
-                    apl.mostrarForma();
-                    String numPage = (String) hsForm.get("numPage"); // admForm.getStringRequest("numPage",request);
-                    String numRows = (String) hsForm.get("numRows"); //admForm.getStringRequest("numRows",request);
-                    apl.setNumPage(numPage);
-                    apl.setNumRows(numRows);
-                    StringBuffer xmlForma = apl.getXmlEntidad();
+                hsForm = (HashMap) hs.get("FORM");  //Datos
 
-                    request.getSession().setAttribute("xmlGrid", xmlForma);
+                String claveForma = (String) hsForm.get("$cf");
+                String dp = (String) hsForm.get("$dp");
+                String tipoAccion = "select";
+                String strWhere = (String) hsForm.get("$w");
+
+                ArrayList arrVal = new ArrayList();
+                arrVal.add("$cf");
+                arrVal.add("$dp");
+
+                List lstVal = val.validationForm(arrVal, hsForm);
+                String blOK = (String) lstVal.get(0);
+                if ("false".equals(blOK)){
+                        val.executeErrorValidation(lstVal, this.getClass(), request, response);
+                }else{
+                    String[] strData = getArrayData(hsForm);
+
+                    Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    Aplicacion apl = new Aplicacion();
+                    if ((forma !=null)&&(apl!=null)){
+                        apl.addForma(Integer.valueOf(claveForma),forma.getForma(Integer.valueOf(claveForma)));
+                        apl.setDisplay(dp);
+                        apl.setClaveForma(Integer.valueOf(claveForma));
+                        apl.setTipoAccion(tipoAccion);
+                        apl.setStrWhereQuery(strWhere);
+                        apl.setArrayData(strData);
+                        apl.mostrarForma();
+                        String numPage = (String) hsForm.get("numPage"); 
+                        String numRows = (String) hsForm.get("numRows"); 
+                        apl.setNumPage(numPage);
+                        apl.setNumRows(numRows);
+                        StringBuffer xmlForma = apl.getXmlEntidad();
+
+                        request.getSession().setAttribute("xmlGrid", xmlForma);
+                    }
+                    request.getRequestDispatcher("/resource/jsp/xmlGrid.jsp").forward(request, response);
                 }
-                request.getRequestDispatcher("/resource/jsp/xmlGrid.jsp").forward(request, response);
             }
         }catch (ExceptionHandler eh){
             try{
@@ -96,6 +95,12 @@ public class srvGrid extends HttpServlet {
         }
     } 
 
+    /**
+     * Genera un Array con la data obtenida desde el formulario, cuando esta
+     * data corresponde a las que poseen los nombres $1, $2, $3, etc
+     * @param hsForm    Datos capturados desde el formulario
+     * @return
+     */
     private String[] getArrayData(HashMap hsForm){
         String[] strSal = null;
         int numMaxParam = 10;
@@ -103,7 +108,7 @@ public class srvGrid extends HttpServlet {
         ArrayList lst = new ArrayList();
         boolean seguir = true;
         for (int i=1;i<numMaxParam&&seguir;i++){
-            String strData = (String) hsForm.get("$"+i);//admForm.getStringRequest("$"+i,request);
+            String strData = (String) hsForm.get("$"+i);
             if (strData!=null){
                 lst.add(strData);
             }else{

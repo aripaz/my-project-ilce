@@ -1,6 +1,5 @@
 package mx.ilce.component;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import mx.ilce.bean.Campo;
@@ -33,24 +32,24 @@ import org.w3c.dom.NamedNodeMap;
 public class AdminXML {
     private static File WORKING_DIRECTORY;
     private int numRow=0;
-    private boolean deleteIncreement=false;
+    private boolean deleteIncrement=false;
 
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe ignorar o no
      * los datos de tipo Increement
      * @return
      */
-    public boolean isDeleteIncreement() {
-        return deleteIncreement;
+    public boolean isDeleteIncrement() {
+        return deleteIncrement;
     }
 
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se deben ignorar o no
      * los datos del tipo increment
-     * @param deleteIncreement
+     * @param deleteIncreement  Estado a aplicar a la variable
      */
-    public void setDeleteIncreement(boolean deleteIncreement) {
-        this.deleteIncreement = deleteIncreement;
+    public void setDeleteIncrement(boolean deleteIncrement) {
+        this.deleteIncrement = deleteIncrement;
     }
 
     /**
@@ -79,7 +78,7 @@ public class AdminXML {
     /**
      * Obtiene el menu en formato XML que le corresponde al usuario conectado
      * segun su perfil
-     * @param user
+     * @param user  Objeto User con los datos del usuariuo conectado
      * @return
      * @throws ExceptionHandler
      */
@@ -104,7 +103,7 @@ public class AdminXML {
 
     /**
      * Entrega los tab en formato XML que le corresponden segun el perfil entregado
-     * @param perfil
+     * @param perfil    Objeto Perfil con los datos del perfil del usuariuo conectado
      * @return
      * @throws ExceptionHandler
      */
@@ -169,7 +168,7 @@ public class AdminXML {
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
                 boolean seguir = true;
-                if (this.isDeleteIncreement()){
+                if (this.isDeleteIncrement()){
                     if (cmp.getIsIncrement()){
                         seguir = false;
                     }
@@ -199,7 +198,7 @@ public class AdminXML {
                 str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
-                    if (!this.isDeleteIncreement() && !cmp.getIsIncrement()){
+                    if (!this.isDeleteIncrement() && !cmp.getIsIncrement()){
                         str.append("\t<cell>");
                         str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
                         str.append("</cell>\n");
@@ -288,7 +287,7 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
                     boolean seguir = true;
-                    if (this.isDeleteIncreement()){
+                    if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
@@ -379,9 +378,9 @@ public class AdminXML {
     /**
      * Entrega un XML en base a la Forma indicada y con la estructura de los 
      * datos, pero sin datos
-     * @param hsData
-     * @param lstCampos
-     * @param idForma
+     * @param hsData    Data para la generacion del XML
+     * @param lstCampos     Listado de Campos a considerar desde la Data
+     * @param idForma   ID de la Forma utilizada
      * @return
      * @throws ExceptionHandler
      */
@@ -401,7 +400,7 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) lstCmp.get(j) ;
                     boolean seguir = true;
-                    if (this.isDeleteIncreement()){
+                    if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
@@ -592,8 +591,8 @@ public class AdminXML {
      * Se asume que la query esta bien estructurada, es decir, se requiere
      * que los parametros esten en forma secuencial (Ej: %1 %2 %3 ... ) para
      * ubicar en forma correcta los datos
-     * @param query
-     * @param lst
+     * @param query     Query donde se colocara la Data
+     * @param lst   Listado con la Data
      * @return
      * @throws ExceptionHandler
      */
@@ -658,7 +657,7 @@ public class AdminXML {
     /**
      * Obtiene un Documento XML, a partir del nombre solicitado. Se asume que
      * los archivos XML estan en la ruta resource/xml/[nombre archivo]
-     * @param fileName
+     * @param fileName  Nombre del archivo
      * @return
      * @throws ExceptionHandler
      */
@@ -696,9 +695,9 @@ public class AdminXML {
      * Recorre un archivo XML y va reemplazando los datos del XML por el que le
      * corresponde segun el resultado de la query entregada en el objeto hsCmp.
      * Se utiliza cuando es un registro unico.
-     * @param e
-     * @param level
-     * @param hsCmp
+     * @param e     Nodo de inicio de la lectura de datos
+     * @param level     Nivel en que se encuentra la lectura
+     * @param hsCmp     Conjunto de datos que seran analizados
      * @return
      * @throws ExceptionHandler
      */
@@ -767,9 +766,10 @@ public class AdminXML {
      * Recorre un archivo XML y va reemplazando los datos del XML por el que le
      * corresponde segun el resultado de la query entregada en el objeto hsCmp.
      * Se utiliza cuando son mas de un registro
-     * @param e
-     * @param level
-     * @param hsCmp
+     * @param e     Nodo de inicio de la lectura de datos
+     * @param level     Nivel en que se encuentra la lectura
+     * @param hsCmp     Conjunto de datos que seran analizados
+     * @param register  Numero del registor en que se vera la lectura
      * @return
      * @throws ExceptionHandler
      */
@@ -874,7 +874,7 @@ public class AdminXML {
     /**
      * Metodo para reemplazar los acentos que viene en configuracion HTML por
      * el texto correspondiente
-     * @param data
+     * @param data  String que sera recorrido para la revison de loa acentos
      * @return
      * @throws ExceptionHandler
      */
@@ -912,7 +912,7 @@ public class AdminXML {
     /**
      * Transforma el texto del tipo en Java a el tipo que le corresponde en
      * el XML
-     * @param strData
+     * @param strData   String que sera analizado
      * @return
      */
     private String castTypeJavaToXML(String strData){
@@ -939,27 +939,32 @@ public class AdminXML {
         return sld;
     }
 
-    private static void print(String s, int level){
-        String str ="";
-        for (int i=level; i>0; i--){
-            str = str + "\t";
-        }
-    }
-
 /******************** METODOS DE LA ENTIDAD ******************************/
 
+    /**
+     * NO IMPLEMENTADA
+     */
     private StringBuffer getXMLByList(List lst){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     private StringBuffer getDataByXML(StringBuffer str){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     private boolean validateXML(StringBuffer xml){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADA
+     */
     private List getListByXML(StringBuffer xml, List lst){
         throw new UnsupportedOperationException("Not supported yet.");
     }

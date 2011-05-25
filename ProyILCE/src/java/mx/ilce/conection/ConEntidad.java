@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.conection;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
@@ -104,10 +97,16 @@ public class ConEntidad {
         }
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public void obtieneEntidad(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public List obtieneMenu(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -168,7 +167,7 @@ public class ConEntidad {
      * Obtiene la data generada a partir de la Query entregada y los parametros
      * de entrada que deben utilizarce con la Query
      * @param strQuery  Query que se desea ejecutar
-     * @param strData   datos de entrada para la query
+     * @param strData   Datos de entrada para la query
      * @return
      * @throws ExceptionHandler
      */
@@ -185,7 +184,7 @@ public class ConEntidad {
 
     /**
      * Entrega el campo PK de una Tabla
-     * @param tabla     nombre de la tabla donde se buscara el PK
+     * @param tabla     Nombre de la tabla donde se buscara el PK
      * @return
      * @throws ExceptionHandler
      */
@@ -280,7 +279,7 @@ public class ConEntidad {
 
     /**
      * Asigna la query contenida en el objeto
-     * @param query
+     * @param query     Texto de la query
      */
     public void setQuery(String query) {
         this.query = query;
@@ -296,7 +295,7 @@ public class ConEntidad {
 
     /**
      * Asigna el objeto de tipo HashCampo
-     * @param hashCampo
+     * @param hashCampo     HashCampo a asignar
      */
     public void setHashCampo(HashCampo hashCampo) {
         this.hashCampo = hashCampo;
@@ -312,7 +311,7 @@ public class ConEntidad {
 
     /**
      * Asigna el campoForma
-     * @param campoForma
+     * @param campoForma    CampoForma a asignar
      */
     public void setCampoForma(CampoForma campoForma) {
         this.campoForma = campoForma;

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.controller;
 
 import java.util.ArrayList;
@@ -17,7 +12,7 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
- *  Clase pra la implementacion de los metodos asociados a la aplicacion
+ *  Clase para la implementacion de los metodos asociados a la aplicacion
  * @author ccatrilef
  */
 public class Aplicacion extends Entidad {
@@ -70,7 +65,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @param cleanIncrement
+     * @param cleanIncrement    Estado de la validacion
      */
     public void setCleanIncrement(boolean cleanIncrement) {
         this.cleanIncrement = cleanIncrement;
@@ -86,7 +81,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el Array de data a ingresar al objeto
-     * @param arrayData
+     * @param arrayData     Data a asignar
      */
     public void setArrayData(String[] arrayData) {
         this.arrayData = arrayData;
@@ -102,7 +97,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el numero de pagina que se debe visualizar en la aplicacion
-     * @param numPage
+     * @param numPage   Numero de pagina, por defecto es 1
      */
     public void setNumPage(String numPage) {
         if ((numPage==null)||("".equals(numPage))) {
@@ -121,7 +116,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el numero de filas que se deben desplegar
-     * @param numRows
+     * @param numRows   Numero de filas, por defecto es 10
      */
     public void setNumRows(String numRows) {
         if ((numRows==null)||("".equals(numRows))){
@@ -140,7 +135,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el texto adicional que se incluira en la query
-     * @param strWhereQuery
+     * @param strWhereQuery     Estructura de query adicional
      */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = strWhereQuery;
@@ -156,7 +151,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna la clave de la forma
-     * @param claveForma
+     * @param claveForma    Clave de la forma
      */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
@@ -172,7 +167,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el display de la forma (HEADER o BODY) que se debe utilizar
-     * @param display
+     * @param display   Display a utilizar
      */
     public void setDisplay(String display) {
         this.display = display;
@@ -188,7 +183,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el tipo de accion que se esta efectuando con la Forma
-     * @param tipoAccion
+     * @param tipoAccion    Tipo de accion declarada
      */
     public void setTipoAccion(String tipoAccion) {
         this.tipoAccion = tipoAccion;
@@ -204,7 +199,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el Alias del MenuMostrarEntidad
-     * @param aliasMenuMostrarEntidad
+     * @param aliasMenuMostrarEntidad   Alias utilizado
      */
     public void setAliasMenuMostrarEntidad(String aliasMenuMostrarEntidad) {
         this.aliasMenuMostrarEntidad = aliasMenuMostrarEntidad;
@@ -220,7 +215,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el Alias del MenuNuevaEntidad
-     * @param aliasMenuNuevaEntidad
+     * @param aliasMenuNuevaEntidad     Alias utilizado
      */
     public void setAliasMenuNuevaEntidad(String aliasMenuNuevaEntidad) {
         this.aliasMenuNuevaEntidad = aliasMenuNuevaEntidad;
@@ -236,7 +231,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el nombre de la aplicacion
-     * @param aplicacion
+     * @param aplicacion    Nombre de la aplicacion
      */
     public void setAplicacion(String aplicacion) {
         this.aplicacion = aplicacion;
@@ -252,7 +247,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna la clave de la aplicacion
-     * @param claveAplicacion
+     * @param claveAplicacion   Clave de la aplicacion
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -268,7 +263,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna la clave de la Forma principal
-     * @param claveFormaPrincipal
+     * @param claveFormaPrincipal   Clave de la forma principal
      */
     public void setClaveFormaPrincipal(Integer claveFormaPrincipal) {
         this.claveFormaPrincipal = claveFormaPrincipal;
@@ -284,50 +279,80 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna la descripcion
-     * @param descripcion
+     * @param descripcion   Descripcion asignada
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
-/******* OPERACIONES DE ENTIDAD ******/
+//************** OPERACIONES DE ENTIDAD **********
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler ingresarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler editarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+     /**
+     * NO IMPLEMENTADO
+     */
     public ExecutionHandler eliminarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion mostrarResultado(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion ingresarBusquedaSencilla(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion ingresarBusquedaAvanzada() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion mostrarPanel(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion guardarBusqueda(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion rescatarBusqueda(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
     public Aplicacion eliminarBusqueda() {
         throw new UnsupportedOperationException("Not supported yet.");
     }    
@@ -455,7 +480,7 @@ public class Aplicacion extends Entidad {
                 }
             }
             if (this.isCleanIncrement()){
-                adm.setDeleteIncreement(cleanIncrement);
+                adm.setDeleteIncrement(cleanIncrement);
             }
             List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());

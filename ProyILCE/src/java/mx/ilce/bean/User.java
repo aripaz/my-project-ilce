@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mx.ilce.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
+ *  Clase implementada para contener los datos del User
  * @author ccatrilef
  */
 public class User implements Serializable {
@@ -29,6 +25,9 @@ public class User implements Serializable {
     private String email;
 
 //------------ CONSTRUCTOR -----------------
+    /**
+     * Constructor basico del User, inicializa las variables basicas
+     */
     public User() {
         this.login = "";
         this.nombre = "";
@@ -37,42 +36,82 @@ public class User implements Serializable {
     }
 
 //------------ GETTER Y SETTER --------------
+    /**
+     * Obtiene la clave de area del User
+     * @return
+     */
     public Integer getClaveArea() {
         return claveArea;
     }
 
+    /**
+     * Asigna la clave de area del User
+     * @param claveArea
+     */
     public void setClaveArea(Integer claveArea) {
         this.claveArea = claveArea;
     }
 
+    /**
+     * Obtiene la clave de empleado del user
+     * @return
+     */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
     }
 
+    /**
+     * Asigna la clave de empleado del user
+     * @param claveEmpleado
+     */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
     }
 
+    /**
+     * Obtiene la clave de perfil del user
+     * @return
+     */
     public Integer getClavePerfil() {
         return clavePerfil;
     }
 
+    /**
+     * Asigna la clave de perfil del user
+     * @param clavePerfil
+     */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
     }
 
+    /**
+     * Obtiene el email del user
+     * @return
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Asigna el email del user
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Obtiene la palabra de login del user
+     * @return
+     */
     public String getLogin() {
         return login;
     }
 
+    /**
+     * Asigna la palabra de login del user
+     * @param login
+     */
     public void setLogin(String login) {
         this.login = login;
     }
@@ -221,7 +260,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene en un string los datos asignados del usuario
+     * Entrega en formato String el contenido del objeto
      * @return
      */
     @Override

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -44,69 +39,74 @@ public class srvFormaUpdate extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
-            //Obtenemos los datos del formulario
-            AdminForm admF = new AdminForm();
-            HashMap hs = admF.getFormulario(request);
-
-            HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
-            HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
-            HashMap hsFormQuery = new HashMap();
-
-            String claveForma = (String) hsForm.get("$cf");
-            String pk = (String) hsForm.get("$pk");
-            String tipoAccion = (String) hsForm.get("$ta");
-
-            ArrayList arrVal = new ArrayList();
-            arrVal.add("$cf");
-            arrVal.add("$pk");
-            arrVal.add("$ta");
-
-            List lstVal = val.validationForm(arrVal, hsForm);
-            String blOK = (String) lstVal.get(0);
-            if ("false".equals(blOK)){
-                    val.executeErrorValidation(lstVal, this.getClass(), request, response);
+            if (!val.validateUser(request)){
+                val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                Forma forma = (Forma) request.getSession().getAttribute("forma");
-                forma.setPk(pk);
-                forma.setClaveForma(Integer.valueOf(claveForma));
-                forma.setTipoAccion(tipoAccion);
-                List lstForma = forma.getForma(Integer.valueOf(claveForma));
+                //Obtenemos los datos del formulario
+                AdminForm admF = new AdminForm();
+                HashMap hs = admF.getFormulario(request);
 
-                //Analizamos segun la forma obtenida
-                boolean obligatorioOk = true;
-                if ((!lstForma.isEmpty())&&(obligatorioOk)){
-                    Iterator it = lstForma.iterator();
-                    while ((it.hasNext())&&(obligatorioOk)){
-                        CampoForma cmp = (CampoForma) it.next();
-                        String dato = null;
-                        if (!"file".equals(cmp.getTipoControl())){
-                            dato = (String) hsForm.get(cmp.getCampo());
-                        }else{
-                            //Si es NULL, por el formato del formulario no se subio el archivo
-                            if (hsFile!=null){
-                                dato = (String) hsFile.get(cmp.getCampo());
+                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+                HashMap hsFile = (HashMap) hs.get("FILE");  //Archivos
+                HashMap hsFormQuery = new HashMap();
+
+                String claveForma = (String) hsForm.get("$cf");
+                String pk = (String) hsForm.get("$pk");
+                String tipoAccion = (String) hsForm.get("$ta");
+
+                ArrayList arrVal = new ArrayList();
+                arrVal.add("$cf");
+                arrVal.add("$pk");
+                arrVal.add("$ta");
+
+                List lstVal = val.validationForm(arrVal, hsForm);
+                String blOK = (String) lstVal.get(0);
+                if ("false".equals(blOK)){
+                        val.executeErrorValidation(lstVal, this.getClass(), request, response);
+                }else{
+                    Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    forma.setPk(pk);
+                    forma.setClaveForma(Integer.valueOf(claveForma));
+                    forma.setTipoAccion(tipoAccion);
+                    List lstForma = forma.getForma(Integer.valueOf(claveForma));
+
+                    //Analizamos segun la forma obtenida
+                    boolean obligatorioOk = true;
+                    if ((!lstForma.isEmpty())&&(obligatorioOk)){
+                        Iterator it = lstForma.iterator();
+                        while ((it.hasNext())&&(obligatorioOk)){
+                            CampoForma cmp = (CampoForma) it.next();
+                            String dato = null;
+                            if (!"file".equals(cmp.getTipoControl())){
+                                dato = (String) hsForm.get(cmp.getCampo());
+                            }else{
+                                //Si es NULL, por el formato del formulario no se subio el archivo
+                                if (hsFile!=null){
+                                    dato = (String) hsFile.get(cmp.getCampo());
+                                }
+                            }
+                            dato = val.replaceComillas(dato);
+                            if ((dato==null) && (cmp.getObligatorio()==1)) {
+                                obligatorioOk=false;
+                            }else{
+                                hsFormQuery.put(cmp.getCampo(), dato);
                             }
                         }
-                        if ((dato==null) && (cmp.getObligatorio()==1)) {
-                            obligatorioOk=false;
-                        }else{
-                            hsFormQuery.put(cmp.getCampo(), dato);
+                    }
+                    ExecutionHandler ex = new ExecutionHandler();
+                    List lstData = new ArrayList();
+                    if (obligatorioOk){
+                        lstData.add(hsFormQuery);
+                        lstData.add(forma);
+                        if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
+                            ex = forma.editarEntidad(lstData);
                         }
+                        ex.setExecutionOK(true);
+                    }else{
+                        //Si hubo falla se eliminan los archivo subidos
+                        ex.setExecutionOK(false);
+                        AdminFile.deleFileFromServer(hsFile);
                     }
-                }
-                ExecutionHandler ex = new ExecutionHandler();
-                List lstData = new ArrayList();
-                if (obligatorioOk){
-                    lstData.add(hsFormQuery);
-                    lstData.add(forma);
-                    if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
-                        ex = forma.editarEntidad(lstData);
-                    }
-                    ex.setExecutionOK(true);
-                }else{
-                    //Si hubo falla se eliminan los archivo subidos
-                    ex.setExecutionOK(false);
-                    AdminFile.deleFileFromServer(hsFile);
                 }
             }
         }catch (ExceptionHandler eh){

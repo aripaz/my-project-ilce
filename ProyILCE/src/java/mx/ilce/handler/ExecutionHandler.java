@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.handler;
 
 import java.io.Serializable;
@@ -10,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- *  Clase implementada para manejar la ejecucion de la aplicacion. POsee diversos
+ *  Clase implementada para manejar la ejecucion de la aplicacion. Posee diversos
  * metodos que facilitan el traslado de mensajes y datos
  * @author ccatrilef
  */
@@ -43,7 +38,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el Object a ingresar al Objeto
-     * @param objectData
+     * @param objectData     Entrada del tipo Object
      */
     public void setObjectData(Object objectData) {
         this.objectData = objectData;
@@ -58,15 +53,15 @@ public class ExecutionHandler implements Serializable{
     }
 
     /**
-     * Asigna el Listada a ingresar al Objeto
-     * @param listData
+     * Asigna el ListData a ingresar al Objeto
+     * @param listData  Entrada con el listado a ingresar
      */
     public void setListData(List listData) {
         this.listData = listData;
     }
 
     /**
-     * Indica si la ejecucion se realizo de manera correcta(TRUE) o no (FALSE)
+     * Indica si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
      * @return
      */
     public boolean isExecutionOK() {
@@ -74,8 +69,8 @@ public class ExecutionHandler implements Serializable{
     }
 
     /**
-     * Asigna si la ejecucion se realizo de manera correcta(TRUE) o no (FALSE)
-     * @param executionOK
+     * Asigna si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
+     * @param executionOK   Entrada con TRUE o FALSE
      */
     public void setExecutionOK(boolean executionOK) {
         this.executionOK = executionOK;
@@ -90,8 +85,8 @@ public class ExecutionHandler implements Serializable{
     }
 
     /**
-     * Asigna el ID de la execucion
-     * @param idExecution
+     * Asigna el ID de la ejecucion
+     * @param idExecution   Entrada con el ID de la Ejecucion
      */
     public void setIdExecution(BigDecimal idExecution) {
         this.idExecution = idExecution;
@@ -106,8 +101,8 @@ public class ExecutionHandler implements Serializable{
     }
 
     /**
-     * asigna el texto de respuesta de la ejecucion
-     * @param textExecution
+     * Asigna el texto de respuesta de la ejecucion
+     * @param textExecution     Texto de la respuesta
      */
     public void setTextExecution(String textExecution) {
         this.textExecution = textExecution;
@@ -123,15 +118,14 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el titulo dado a la ejecucion
-     * @param titleExecution
+     * @param titleExecution    Titulo de la respuesta
      */
     public void setTitleExecution(String titleExecution) {
         this.titleExecution = titleExecution;
     }
 
     /**
-     * Convierte a un String el contenido del Objeto
-     * @return
+     * Metodo que lleva a un formato String el contenido del objeto
      */
     @Override
     public String toString() {

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
-import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
@@ -17,8 +16,8 @@ import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
- *
- * @author vaio
+ *  Servlet implementado pata manejar el ingreso del usuario
+ * @author ccatrilef
  */
 public class srvLogin extends HttpServlet {
 

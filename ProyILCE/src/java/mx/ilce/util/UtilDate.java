@@ -1,9 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Clase encargada de calcular la fecha, incluyendo las horas, minutos y
@@ -38,9 +37,9 @@ public class UtilDate{
     /**
      * Constructor donde se inicializa con los parametros de entrada, los datos
      * de la clase
-     * @param dia
-     * @param mes
-     * @param anio
+     * @param dia    Dato con el dia a asignar
+     * @param mes    Dato con el mes a asignar
+     * @param anio   Dato con el año a asignar
      */
     public UtilDate(int dia, int mes, int anio) {
         this.dia = dia;
@@ -54,12 +53,12 @@ public class UtilDate{
     /**
      * Constructor donde se inicializa con los parametros de entreda los datos
      * de la clase
-     * @param dia
-     * @param mes
-     * @param anio
-     * @param hour
-     * @param min
-     * @param sec
+     * @param dia    Dato con el dia a asignar
+     * @param mes    Dato con el mes a asignar
+     * @param anio   Dato con el año a asignar
+     * @param hour   Dato con la hora a asignar
+     * @param min    Dato con el minuto a asignar
+     * @param sec    Dato con el segundo a asignar
      */
     public UtilDate(int dia, int mes, int anio, int hour, int min, int sec) {
         this.dia = dia;
@@ -91,12 +90,18 @@ public class UtilDate{
         String strDia = String.valueOf(this.dia);
         String strMes = String.valueOf(this.mes);
         String strAnio = String.valueOf(this.anio);
-
-        if (this.dia<10){
-            strDia = "0"+strDia;
-        }
-        if (this.mes<10){
-            strMes = "0"+strMes;
+        String str = strDia+"/"+strMes+"/"+strAnio;
+        if (isFechaValida(str)){
+            if (this.dia<10){
+                strDia = "0"+strDia;
+            }
+            if (this.mes<10){
+                strMes = "0"+strMes;
+            }
+        }else{
+            strDia="00";
+            strMes="00";
+            strAnio="0000";
         }
         return strDia+separador+strMes+separador+strAnio;
     }
@@ -112,21 +117,30 @@ public class UtilDate{
         String strHour = String.valueOf(this.hour);
         String strMin = String.valueOf(this.min);
         String strSec = String.valueOf(this.sec);
-
-        if (this.dia<10){
-            strDia = "0"+strDia;
-        }
-        if (this.mes<10){
-            strMes = "0"+strMes;
-        }
-        if (this.hour<10){
-            strHour = "0"+strHour;
-        }
-        if (this.min<10){
-            strMin = "0"+strMin;
-        }
-        if (this.sec<10){
-            strSec = "0"+strSec;
+        String str = strDia+"/"+strMes+"/"+strAnio;
+        if (isFechaValida(str)){
+            if (this.dia<10){
+                strDia = "0"+strDia;
+            }
+            if (this.mes<10){
+                strMes = "0"+strMes;
+            }
+            if (this.hour<10){
+                strHour = "0"+strHour;
+            }
+            if (this.min<10){
+                strMin = "0"+strMin;
+            }
+            if (this.sec<10){
+                strSec = "0"+strSec;
+            }
+        }else{
+            strDia="00";
+            strMes="00";
+            strAnio="0000";
+            strHour="00";
+            strMin="00";
+            strSec="00";
         }
         return strDia+separador+strMes+separador+strAnio+separador+
                 " "+strHour+":"+strMin+":"+strSec;
@@ -135,7 +149,7 @@ public class UtilDate{
     /**
      * Entrega la fecha que contiene la clase en el formato solicitado
      * AMD=AAAA/MM/DD, DMA=DD/MM/AAAA
-     * @param frm
+     * @param frm    Formato que se desea para la fecha AMD, DMA
      * @return
      */
     public String getFecha(formato frm){
@@ -143,17 +157,23 @@ public class UtilDate{
         String strDia = String.valueOf(this.dia);
         String strMes = String.valueOf(this.mes);
         String strAnio = String.valueOf(this.anio);
-
-        if (this.dia<10){
-            strDia = "0"+strDia;
-        }
-        if (this.mes<10){
-            strMes = "0"+strMes;
-        }
-        if (frm.equals(frm.AMD)){
-            sld = strAnio+separador+strMes+separador+strDia;
+        String str = strDia+"/"+strMes+"/"+strAnio;
+        if (isFechaValida(str)){
+            if (this.dia<10){
+                strDia = "0"+strDia;
+            }
+            if (this.mes<10){
+                strMes = "0"+strMes;
+            }
+            if (frm.equals(frm.AMD)){
+                sld = strAnio+separador+strMes+separador+strDia;
+            }else{
+                sld = strDia+separador+strMes+separador+strAnio;
+            }
         }else{
-            sld = strDia+separador+strMes+separador+strAnio;
+            strDia="00";
+            strMes="00";
+            strAnio="0000";
         }
         return sld;
     }
@@ -161,7 +181,7 @@ public class UtilDate{
     /**
      * Entrega la fecha que contiene la clase en el formato solicitado
      * AMD=AAAA/MM/DD hh:mm:ss, DMA=DD/MM/AAAA hh:mm:ss
-     * @param frm
+     * @param frm    Formato que se desea para la fecha AMD, DMA
      * @return
      */
     public String getFechaHMS(formato frm){
@@ -172,21 +192,30 @@ public class UtilDate{
         String strHour = String.valueOf(this.hour);
         String strMin = String.valueOf(this.min);
         String strSec = String.valueOf(this.sec);
-
-        if (this.dia<10){
-            strDia = "0"+strDia;
-        }
-        if (this.mes<10){
-            strMes = "0"+strMes;
-        }
-        if (this.hour<10){
-            strHour="0"+strHour;
-        }
-        if (this.min<10){
-            strMin="0"+strMin;
-        }
-        if (this.sec<10){
-            strSec = "0"+strSec;
+        String str = strDia+"/"+strMes+"/"+strAnio;
+        if (isFechaValida(str)){
+            if (this.dia<10){
+                strDia = "0"+strDia;
+            }
+            if (this.mes<10){
+                strMes = "0"+strMes;
+            }
+            if (this.hour<10){
+                strHour="0"+strHour;
+            }
+            if (this.min<10){
+                strMin="0"+strMin;
+            }
+            if (this.sec<10){
+                strSec = "0"+strSec;
+            }
+        }else{
+            strDia="00";
+            strMes="00";
+            strAnio="0000";
+            strHour="00";
+            strMin="00";
+            strSec="00";
         }
         if (frm.equals(frm.AMD)){
             sld = strAnio+separador+strMes+separador+strDia;
@@ -246,5 +275,21 @@ public class UtilDate{
         String sld = getFechaHMS(frm);
         sld = sld.replaceAll("/", separador);
         return sld;
+    }
+    
+    /**
+     * Metodo para validar si una fecha es correcta
+     * @param fechax    Fecha que se va a validar
+     * @return
+     */
+    public boolean isFechaValida(String fechax) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fechax);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 }

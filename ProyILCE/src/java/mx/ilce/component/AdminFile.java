@@ -159,8 +159,8 @@ public class AdminFile {
     /**
      * Obtiene el valor de una palabra clave (key), desde un arreglo de
      * properties
-     * @param prop
-     * @param strKey
+     * @param prop      Listado de properties obtenido desde el archivo de configuracion
+     * @param strKey    Palabra usada como Key para la busqueda dentro del propertie
      * @return
      */
     public static String getKey(Properties prop, String key) throws ExceptionHandler{
@@ -179,8 +179,8 @@ public class AdminFile {
     /**
      * Entrega el id de la query que le corresponde segun el archivo de
      * configuracion.
-     * @param prop
-     * @param key
+     * @param prop  Listado de properties obtenido desde el archivo de configuracion
+     * @param key   Palabra usada como Key para la busqueda dentro del propertie
      * @return
      */
     public static Integer getIdQuery(Properties prop, String key) throws ExceptionHandler{
@@ -202,7 +202,7 @@ public class AdminFile {
      * Borra un archivo desde el servidor. Antes de borrar el archivo, se valida
      * que la ruta que se entrega corresponda con el de la configuracion, destinada
      * a los archivos enviados por el usuario
-     * @param hsFile
+     * @param hsFile    HashMap con los datos del archivo
      * @return
      */
     public static boolean deleFileFromServer(HashMap hsFile) throws ExceptionHandler{
