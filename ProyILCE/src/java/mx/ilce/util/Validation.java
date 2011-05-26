@@ -63,12 +63,12 @@ public class Validation {
     }
 
     /**
-     * Se utiliza para ejecutar el despliegue de error para cuando se valido que
+     * Metodo para ejecutar el despliegue de error para cuando se valido que
      * un formulario no esta completo en la data exigida
-     * @param lstVal
-     * @param clase
-     * @param request
-     * @param response
+     * @param lstVal    Data enviada
+     * @param clase     Clase donde se produjo el error
+     * @param request   Request de la session HTML
+     * @param response  Response de la session HTML
      * @throws ServletException
      * @throws IOException
      */
@@ -96,11 +96,39 @@ public class Validation {
     }
 
     /**
+     * Metodo para ejecutar el despliegue de error cuando no se obtiene data de la 
+     * consulta enviada
+     * @param dataVal   Data enviada
+     * @param clase     Clase donde se produjo el error
+     * @param message   Mensaje enviado
+     * @param request   Request de la session HTML
+     * @param response  Response de la session HTML
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void executeErrorEmptyData(String dataVal, Class clase, String message) throws ExceptionHandler {
+        try{
+            ExceptionHandler eh = new ExceptionHandler(dataVal,
+                    clase.getClass(),
+                    "Error de Respuesta Vacia",message);
+            eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
+            eh.setLogFile(true);
+            eh.writeToFile();
+            StringBuffer xmlError = eh.getXmlError();
+            throw eh;
+        }catch (Exception es){
+            ExceptionHandler eh2 = new ExceptionHandler(es,clase.getClass(),this.getTextMessage());
+            StringBuffer xmlError = eh2.getXmlError();
+            throw eh2;
+        }
+    }
+
+    /**
      * Se utiliza para ejecutar el despliegue de error cuando se atrapo una
      * excepcion del tipo ExceptionHandler
      * @param eh    ExceptionHandler atrapada
-     * @param request
-     * @param response
+     * @param request   Request de la session HTML
+     * @param response  Response de la session HTML
      * @throws Exception
      */
     public void executeErrorHandler(ExceptionHandler eh, HttpServletRequest request, HttpServletResponse response)
@@ -121,8 +149,8 @@ public class Validation {
      * Se utiliza para ejecutar el despliegue de error cuando se atrapo una
      * excepcion del tipo Exception
      * @param es    Exception atrapada
-     * @param request
-     * @param response
+     * @param request   Request de la session HTML
+     * @param response  Response de la session HTML
      * @throws ServletException
      * @throws IOException
      */
@@ -169,7 +197,7 @@ public class Validation {
 
     /**
      * Valida que esten en memoria el user y el perfil del usuario conectado
-     * @param request
+     * @param request   Request de la session HTML
      * @return
      * @throws ServletException
      * @throws IOException
@@ -192,9 +220,9 @@ public class Validation {
     /**
      * Se utiliza para ejecutar el despliegue de error para cuando se valido que
      * un usuario no esta validamente conectado.
-     * @param clase
-     * @param request
-     * @param response
+     * @param clase     Clase donde se produjo el error
+     * @param request   Request de la session HTML
+     * @param response  Response de la session HTML
      * @throws ServletException
      * @throws IOException
      */
