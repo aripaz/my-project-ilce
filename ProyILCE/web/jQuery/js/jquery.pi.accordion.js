@@ -95,7 +95,7 @@
                                         oGridHeader=$("span.ui-jqgrid-title, #grid_" +nAplicacion + "_" + nEntidad);
                                         nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
                                         nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                                        $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad +"'>(Quitar filtro)</a>");
+                                        $(oGridHeader[0]).append("<a style='margin-left:10px' href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad +"'>(Quitar filtro)</a>");
 
                                         //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                                         $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).click(function() {
@@ -104,8 +104,10 @@
                                             $(this).remove();
                                         });
                                     }
-                                    $("#grid_"+nAplicacion+"_"+nEntidad).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
                                 }
+
+                               $("#grid_"+nAplicacion+"_"+nEntidad).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
+                               
                             }
                             else {
 
@@ -171,6 +173,11 @@
                 
                 var sBusquedas="<br>";
                 var nAplicacion="";
+                //Limpia los div appQris para evitar duplicidad al recargar
+                $(".appMenu",$("#apps_menu")).each(function(){
+                    $("#appQries_" +this.id.split("_")[1]).html("<br />");
+                })
+                
                 $(xmlGs).find("registro").each( function(){
                     nClave=$(this).find("clave_parametro")[0].firstChild.data;
                     sParametro=$(this).find("parametro")[0].firstChild.data
@@ -233,7 +240,7 @@
         //Construye menu de acuerdo a configuración recuperada
         for (i=0;i<$.fn.appmenu.options.menu.length;i++) {
             sHtml+="<h3><a href='#' >" + $.fn.appmenu.options.menu[i].aplicacion + "</a></h3>" +
-                "<div>";
+                "<div id='mnuApp_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "' class='appMenu'>";
             for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
                 if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
                     tipoliga="newEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
