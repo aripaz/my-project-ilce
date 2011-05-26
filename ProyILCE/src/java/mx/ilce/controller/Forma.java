@@ -13,6 +13,7 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
+import mx.ilce.util.Validation;
 
 /**   
  * Clase para la implementacion de los metodos asociados a Forma.
@@ -547,10 +548,12 @@ public class Forma extends Entidad{
             ConSession con = new ConSession();
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
+            Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
                 //Obtenemos el IDQUERY de la forma entregada
+                Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -572,7 +575,22 @@ public class Forma extends Entidad{
                         }else{
                             xmlForma = admXML.getFormaByData(hsCmp,lstF,this.getClaveForma(),this.getTipoAccion());
                         }
+                    }else{
+                        StringBuffer strEmpty = new StringBuffer();
+                        strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                        strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                        strEmpty.append("PK: ").append(this.getPk()).append(", ");
+                        strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
+                        val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
+                                "No se encontro datos para la forma, accion y PK solicitada");
                     }
+                }else{
+                    StringBuffer strEmpty = new StringBuffer();
+                    strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                    strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                    strEmpty.append("ID QUERY: ").append(idQuery);
+                    val.executeErrorEmptyData(strEmpty.toString(), this.getClass(), 
+                            "No se encontro datos para la forma y accion solicitada");
                 }
             } 
             this.setXmlEntidad(xmlForma);
@@ -601,10 +619,12 @@ public class Forma extends Entidad{
             ConEntidad con = new ConEntidad();
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
+            Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
+                HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -623,7 +643,21 @@ public class Forma extends Entidad{
                         }else{
                             xmlForma = admXML.getFormaByData(hsCmp, lstF,this.getClaveForma(), this.getTipoAccion());
                         }
+                    }else{
+                        StringBuffer strEmpty = new StringBuffer();
+                        strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                        strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                        strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
+                        val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
+                                "No se encontro datos para la forma y accion solicitada");
                     }
+                }else{
+                    StringBuffer strEmpty = new StringBuffer();
+                    strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                    strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                    strEmpty.append("ID QUERY: ").append(idQuery);
+                    val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
+                            "No se encontro datos para la forma y accion solicitada");
                 }
             }
             this.setXmlEntidad(xmlForma);
@@ -645,10 +679,12 @@ public class Forma extends Entidad{
             ConEntidad con = new ConEntidad();
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
+            Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
+                HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData);
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -668,7 +704,21 @@ public class Forma extends Entidad{
                         }else{
                             xmlForma = admXML.getFormaByData(hsCmp, lstF, this.getClaveForma(),this.getTipoAccion());
                         }
+                    }else{
+                        StringBuffer strEmpty = new StringBuffer();
+                        strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                        strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                        strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
+                        val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
+                                "No se encontro datos para la forma y accion solicitada");
                     }
+                }else{
+                    StringBuffer strEmpty = new StringBuffer();
+                    strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
+                    strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
+                    strEmpty.append("ID QUERY: ").append(String.valueOf(idQuery));
+                    val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
+                            "No se encontro datos para la forma y accion solicitada");
                 }
             }
             this.setXmlEntidad(xmlForma);
