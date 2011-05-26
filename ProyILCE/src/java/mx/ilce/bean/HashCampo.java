@@ -244,7 +244,7 @@ public class HashCampo implements Serializable  {
     }
 
 
-//CONSTRUCTORES
+//******* CONSTRUCTORES
 
     /**
      * Constructor de la clase, donde se le entregan los distintos elementos
