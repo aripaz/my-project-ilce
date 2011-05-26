@@ -267,7 +267,7 @@ public class ConEntidad {
         return hsCmp;
     }
 
-/********************* GETTER AND SETTER ******************/
+//********************* GETTER AND SETTER ******************
 
     /**
      * Obtiene la query contenida en el objeto
