@@ -22,17 +22,12 @@ $(document).ready(function() {
         closeableto:100
     });
     
-    //Debe recuperarse el valor de perfil a partir de una cookie o un bean
-    nPerfil=1;
-    //Crea menú de aplicaciones de acuerdo al perfil  
-
-    $("#apps_menu").appmenu({
-        perfil:nPerfil
-    });
-
     //Crea el menú de sesión
     $("#session_menu").sessionmenu();
 
+    //Crea menú de aplicaciones de acuerdo al perfil
+    $("#apps_menu").appmenu({
+             xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp"});
 
 
 }); //close $(

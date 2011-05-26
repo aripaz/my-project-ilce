@@ -19,49 +19,39 @@
             sortname:"",
             tab:"",
             insertarEnEscritorio:"1",
-            width:"650"
+            width:"650",
+            height:"",
+            openKardex:false
         };
 
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
+            
             $.fn.appgrid.options = $.extend($.fn.appgrid.settings, opc);
-            /*$.fn.appgrid.options.app=this.id.split("_")[1];
-            $.fn.appgrid.options.entidad=this.id.split("_")[2];*/
             var nApp=$.fn.appgrid.options.app;
             var nEntidad=$.fn.appgrid.options.entidad;
             var suffix =  "_" + nApp + "_" + nEntidad;
+            //Registra el grid como habilitado para abrir kardex
+            if ($.fn.appgrid.options.openKardex)
+                $("#_vk_").val($("#_vk_").val()+"," +suffix);
+
             obj = $(this);
-            var nForma = obj.attr(name)
+            var nForma = obj.attr(name);
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
-            $(this).append("<div id='gridContainer" + suffix + "'><table width='100%' id='grid" + suffix + "'>" +
-                       "</table><div id='pager" + suffix +"'></div></div>");
-
-            /*$("#advanced_search_" + nApp).hide();
-            $("#advanced_search_" + nApp).form({
-                                     aplicacion: nApp,
-                                     forma:nEntidad,
-                                     modo:"lookup",
-                                     pk:0
-            });
-
-            //Habilita mecanismo para expandir / colapsar el formulario de búsqueda avanzada
-            $("#lnkBusqueda_" +nApp).click(function(){
-                    nApp=this.id.split("_")[1];
-                    $("#simple_search_"+ nApp).slideToggle();
-                    $("#advanced_search_"+ nApp).slideToggle();
-             });*/
+            $(this).html("<table width='100%' id='grid" + suffix + "'>" +
+                       "</table><div id='pager" + suffix +"'></div>");
 
              $.fn.appgrid.getGridDefinition();
         });
 
     };
 
-    $.fn.appgrid.getGridDefinition = function(obj){
+    $.fn.appgrid.getGridDefinition = function(){
          $.ajax(
             {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters, 
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -82,23 +72,40 @@
                 var nApp=$.fn.appgrid.options.app;
                 var nEntidad=$.fn.appgrid.options.entidad;
 
+                /* Agrega la liga para quitar filtro desde el contructor    */
+                if ($.fn.appgrid.options.wsParameters!="") 
+                    $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nApp + "_" + nEntidad+"'>(Quitar filtro)</a>";
+                
                 var oGrid=$("#grid" + suffix).jqGrid(
-                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&w=" + $.fn.appgrid.options.wsParameters,
+                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
                             datatype: "xml",
                             colNames:$.fn.appgrid.options.colNames,
                             colModel:$.fn.appgrid.options.colModel,
                             rowNum:10,
                             autowidth: true,
+                            height:$.fn.appgrid.options.height,
                             rowList:[10,20,30],
                             pager: jQuery('#pager' + suffix),
                             sortname:  $.fn.appgrid.options.sortname+suffix,
                             viewrecords: true,
                             sortorder: "desc",
                             ondblClickRow: function(id){
-                                  //inicializa valiable de tabs
-                                  $.fn.appgrid.openKardex(id);
+                                  var openKardex=false;
+                                  var aValidKardex= $("#_vk_").val().split(",");
+                                  for (var i=0;i<=aValidKardex.length-1;i++) {
+                                      if (aValidKardex[i]==suffix){
+                                          openKardex=true;
+                                          break;
+                                      }
+                                  }
+
+                                  if (openKardex) {
+                                     var nApp=this.id.split("_")[1];
+                                     var nForm=this.id.split("_")[2];
+                                     $.fn.appgrid.openKardex(nApp,nForm,id);
+                                  }
                             },
-                            caption:"Aplicaciones"}).navGrid('#pager' + suffix,
+                            caption:$.fn.appgrid.options.titulo}).navGrid('#pager' + suffix,
                                                     {edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,
                                                                                                    {caption:"",
                                                                                                      buttonicon:"ui-icon-plus",
@@ -150,20 +157,52 @@
                                                                                                         {caption:"", 
                                                                                                          buttonicon:"ui-icon-document",
                                                                                                          onClickButton:  function() {
+                                                                                                            var nApp=this.id.split("_")[1];
+                                                                                                            var nForm=this.id.split("_")[2];
                                                                                                             nRow=$(this).getGridParam('selrow');
                                                                                                             if (nRow) {
                                                                                                                 nPK= $(this).getCell(nRow,0);
-                                                                                                                $.fn.appgrid.openKardex(nPK); }
+                                                                                                                $.fn.appgrid.openKardex(nApp,nForm,nPK); }
                                                                                                             else
                                                                                                                alert('Seleccione un registro');
                                                                                                           },
                                                                                                       position: "last",title:"Abrir kardex",cursor: "pointer"});
+
                if ($.fn.appgrid.options.insertarEnEscritorio=="1")
-                $("#grid" + suffix).jqGrid().navGrid('#pager' + suffix).navButtonAdd("#pager" + suffix,{caption:"Insertar en escritorio",
+                $("#grid" + suffix).jqGrid().navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,{caption:"Insertar en escritorio",
                                                                                                          onClickButton:  function() {
                                                                                                              alert('Por implementar');
                                                                                                           },
                                                                                                       position: "last",title:"",cursor: "pointer"});
+                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                if ($.fn.appgrid.options.wsParameters!="") {
+                    $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
+                        nApp=this.id.split("_")[2];
+                        nForma=this.id.split("_")[3];
+                        var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                        $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nForma + "&$dp=body"}).trigger("reloadGrid")
+                        $(this).remove();
+                    });
+                }
+
+
+               //remueve toolbar por default
+               $($("#pager" + suffix + "_left")[0].children[1]).remove();
+
+               //Verifica si es posible abrir el kardex desde el toolbar
+                var openKardex=false;
+                aValidKardex=$("#_vk_").val().split(",");
+                for (var i=0;i<=aValidKardex.length-1;i++) {
+                  if (aValidKardex[i]==suffix){
+                      openKardex=true;
+                      break;
+                  }
+                }
+
+                //Remueve el botón de kardex si no está especificado en el constructor
+                if (!openKardex)    
+                    $(".ui-icon-document", $("#pager"+suffix)).remove()
+               
                /* Finaliza implementación de grid */
             },
             error:function(xhr,err){
@@ -191,9 +230,7 @@
              iCol++;
         });
 
-    $.fn.appgrid.openKardex = function(id) {
-         var nApp=$.fn.appgrid.options.app;
-         var nEntidad=$.fn.appgrid.options.entidad;
+    $.fn.appgrid.openKardex = function(nApp, nEntidad, id) {
          var suffix =  "_" + nApp + "_" + nEntidad;
 
          var $tabs = $('#tabs').tabs({
@@ -206,25 +243,21 @@
          }
          else {
              oGrid=$('#grid'+ suffix);
-             sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(oGrid.getGridParam('selrow'),1);
+             var nRow=oGrid.getGridParam('selrow');
+             sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(nRow,1);
              sEntidad=$('#grid'+ suffix).jqGrid()[0].id.split("_")[2];
              $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
              //Crea la interfaz de la aplicación abierta
              $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "'>" +
                  "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer'></div>" +
-                 "<div id='frm" + suffix + "_" + id +"' class='formContainer'></div>" +
+                 "<div id='divForeignGrids" + suffix + "_" + id +"' class='gridContainer'></div>" +
                  "</div>");
              $("#tvApp" + suffix + "_" + id).treeMenu({
-                 app:$.fn.appgrid.options.app,
-                 entidad:$.fn.appgrid.options.entidad,
+                 app:nApp,
+                 entidad:nEntidad,
                  pk:id
             });
-            /*$("#tabEditEntity"+suffix+"_"+id).apptab({
-            entidad:$.fn.appgrid.options.entidad,
-            pk:id,
-            app:$.fn.appgrid.options.app
-        });*/
 
             }
         }

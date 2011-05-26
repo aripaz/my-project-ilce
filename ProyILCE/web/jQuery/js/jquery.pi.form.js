@@ -238,15 +238,28 @@
                                 // Significa que la desea guardar
                                 if (document.getElementById("$b").value!="") {
                                     sBusqueda=document.getElementById("$b").value;
-                                    postConfig = "$cf=1&$ta=insert&pk=0"+
+                                    postConfig = "$cf=1&$ta=insert&$pk=0"+
                                     "&clave_aplicacion=" + $.fn.form.options.aplicacion +
                                     "&clave_empleado="+ $("#_ce_").val() +
                                     "&parametro=menu.busqueda."+$.fn.form.options.forma+"."+sBusqueda +
-                                    "&valor=" +escape(sData);
+                                    "&valor=" +escape(sData.substring(0,sData.length-1));
                                     $.post("srvFormaInsert", postConfig);
 
+                                    oGridHeader=$("span.ui-jqgrid-title, #grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma);
+                                    nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
+                                    nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
+                                    $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma +"'>(Quitar filtro)</a>");
+
+                                    //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                                    $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
+                                        var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                                        $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body"}).trigger("reloadGrid")
+                                        $(this).remove();
+                                    });
+                                    
                                     // Aqui va método del accordion para actualizarlo
-                                    $("#apps_menu").appmenu().getSearchs($.fn.form.options.aplicacion)
+                                    $("#apps_menu").appmenu().appmenu.getSearchs($.fn.form.options.aplicacion)
+
                                 }
 
                                 sData = sData.substring(0,sData.length-1)

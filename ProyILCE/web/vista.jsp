@@ -1,9 +1,9 @@
 <%@ page import="mx.ilce.bean.User" %>
 <%
-/*User user = (User) request.getSession().getAttribute("user");
+User user = (User) request.getSession().getAttribute("user");
 if (user == null){
  request.getRequestDispatcher("/index.jsp");
-}*/
+}
 %>
 <html>
     <head>
@@ -29,13 +29,14 @@ if (user == null){
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.foreign_grid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.field_toolbar.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.grid.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.pi.tree.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.treeMenu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
 
     </head>
@@ -67,5 +68,8 @@ if (user == null){
                 </div>
             </div>
         </div>
+        <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
+        <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
+        <input type="hidden" name="_vk_" id="_vk_" value="" />
     </body>
 </html>
