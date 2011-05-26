@@ -64,7 +64,7 @@
                                 modo:"update",
                                 titulo: $.fn.fieldtoolbar.options.titulo_editar,
                                 columnas:1,
-                                pk: $.fn.fieldtoolbar.options.pk,
+                                pk: nPK,
                                 height:"500",
                                 width:"500"});
              })

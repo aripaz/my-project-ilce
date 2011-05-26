@@ -7,6 +7,7 @@
 
         $.fn.appmenu.settings = {
             xmlUrl : "", //"/ProyILCE/xml_tests/widget.accordion.xml",
+            usuario:"",
             menu: [/*{aplicacion:"", elementos_menu:[{etiqueta:"", entidad:"", funcion:""}]}*/]
         };
 
@@ -73,7 +74,7 @@
                         else {
                             link_id="#showEntity_" + nAplicacion + "_" + nEntidad;}
 
-                        $(link_id).click(function(e) {
+                        $(link_id).click(function(e, data) {
                             //Verifica si existe
                             var nAplicacion=this.id.split("_")[1];
                             var nEntidad=this.id.split("_")[2];
@@ -82,6 +83,29 @@
                             if ($("#tab"+this.id).length) {
                                 //Selecciona el tab correspondiente
                                 $tabs.tabs( "select", "#tab"+this.id);
+
+                                //Recarga el grid por si tiene algún filtro
+                                if (data==undefined){
+                                    data="";
+                                   $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).remove();
+                                }
+                                else {
+                                    //Si no existe el link para quitar filtro, lo establece
+                                    if ($("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).length==0) {
+                                        oGridHeader=$("span.ui-jqgrid-title, #grid_" +nAplicacion + "_" + nEntidad);
+                                        nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
+                                        nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
+                                        $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad +"'>(Quitar filtro)</a>");
+
+                                        //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                                        $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).click(function() {
+                                            var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                                            $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body"}).trigger("reloadGrid")
+                                            $(this).remove();
+                                        });
+                                    }
+                                    $("#grid_"+nAplicacion+"_"+nEntidad).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
+                                }
                             }
                             else {
 
@@ -100,21 +124,28 @@
                                     $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
                                     $tabs.tabs( "select", "#tab"+this.id);
                                     oTabPanel=$("#tab"+this.id);
-                                    var sLeyendaNuevoRegistro=$.fn.appmenu.options.menu[nAplicacion-1].elementos_menu[0].etiqueta;
+                                    var sLeyendaNuevoRegistro=$("#newEntity_" + nAplicacion + "_" + nEntidad ).text();
                                     var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
+
                                     $("#tab"+this.id).appgrid({app: nAplicacion,
                                                                entidad: nEntidad,
-                                                               leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro]});
-
+                                                               wsParameters:data,
+                                                               titulo:sTitulo,
+                                                               height:"70%",
+                                                               leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
+                                                               openKardex:true
+                                                           });
                                 }
                             }
                         });
 
                     }
 
-                    //Incluye los queries almacenados de cada aplicacion
-                    $.fn.appmenu.getSearchs(nAplicacion)
                  }
+
+                 //Incluye los queries almacenados de cada aplicacion
+                 $.fn.appmenu.getSearchs()
+
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -122,10 +153,10 @@
             });
     };
 
-   $.fn.appmenu.getSearchs = function(nApp) {
+   $.fn.appmenu.getSearchs = function() {
        $.ajax(
             {
-            url: "srvForma?$cf=1&$ta=select&$w=clave_aplicacion=" + nApp + "%20AND%20clave_empleado=" + $("#_ce_").val() + " AND parametro%20like%20%27menu.busqueda.%%27",
+            url: "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("clave_empleado=" +$("#_ce_").val()+ " AND parametro like 'menu.busqueda.%'"),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -138,7 +169,8 @@
                  else 
                     xmlGs = data;
                 
-                var sBusquedas="";
+                var sBusquedas="<br>";
+                var nAplicacion="";
                 $(xmlGs).find("registro").each( function(){
                     nClave=$(this).find("clave_parametro")[0].firstChild.data;
                     sParametro=$(this).find("parametro")[0].firstChild.data
@@ -149,15 +181,16 @@
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div><a href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "'>" + sEtiqueta + "</a></div>";
 
-                    $("#appQries_"+nApp).append(sBusquedas);
+                    $("#appQries_"+nAplicacion).append(sBusquedas);
 
                     $("#lnkBusqueda_" + sSuffix).click(function(){
                         nAplicacion=this.id.split("_")[1];
                         nForma=this.id.split("_")[2];
                         sValor=this.id.split("_")[4];
-                        $("#showEntity_" + nAplicacion + "_" + nForma).click();
-                        $("grid_" + nAplicacion + "_" + nForma).jqGrid("setGridParam",{url:"srvGrid?$cf=" + nForma + "&$w=" + $(this).attr("data") + "&dp=body"}).trigger("reloadGrid");
-
+                        /*var newE = $.Event('click');
+                        newE.gridFilter=$(this).attr("data");*/
+                        data=$(this).attr("data");
+                        $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
                     });                    
                 });
 

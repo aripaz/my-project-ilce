@@ -69,6 +69,7 @@
                     }
                     
                 });
+               
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -107,9 +108,7 @@
                   '</td>' +
                   '<td><img src="' + $.fn.sessionmenu.options.foto + '" width="75" height="86" border="1" /></td>' +
                   '</tr>'+
-                '</table>'+
-                "<input type='hidden' id='_ce_' name='_ce_' value='" + $.fn.sessionmenu.options.empleado + "' />"+
-                "<input type='hidden' id='_cp_' name='_ce_' value='" + $.fn.sessionmenu.options.perfil + "' />"
+                '</table>';
         return sHtml;
     }
 
