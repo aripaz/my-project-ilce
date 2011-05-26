@@ -329,13 +329,20 @@
 
 
                 sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
-                sRenglon +="<option selected='selected'></option>";
+                sRenglon+="<option ";
+                if ($.fn.form.options.modo=='insert')
+                    sRenglon+="selected='selected'>";
+                sRenglon +="</option>";
+
                 oCamposForaneos=oCampo.find('registro_' + oCampo[0].nodeName)
                 
                 oCamposForaneos.each(
                 function(){
                     oCampoForaneo=$(this);
-                    sRenglon +="<option value='" + oCampoForaneo.children()[0].childNodes[0].data  +"' >" + oCampoForaneo.children()[1].childNodes[0].data + "</option>";
+                    sRenglon +="<option ";
+                    if ($.fn.form.options.modo=='update' && oCampo[0].childNodes[0].data==oCampoForaneo.children()[0].childNodes[0].data)
+                                sRenglon +="selected='selected'";
+                    sRenglon +=" value='" + oCampoForaneo.children()[0].childNodes[0].data  +"' >" + oCampoForaneo.children()[1].childNodes[0].data + "</option>";
                 }
             )
                                 

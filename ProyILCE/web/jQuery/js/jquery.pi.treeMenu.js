@@ -7,7 +7,7 @@
     $.fn.treeMenu = function(opc){
 
         $.fn.treeMenu.settings = {
-            xmlUrl : "http://localhost:8088/ProyILCE/srvFormaSearch",
+            xmlUrl : "srvFormaSearch",
             app: "",
             entidad:"",
             pk:""
