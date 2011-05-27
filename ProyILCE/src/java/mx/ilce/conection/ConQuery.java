@@ -337,8 +337,8 @@ class ConQuery {
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
-                    hsCmp.addCampo(cmp);
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                    hsCmp.addCampo(cmp);
                 }
                 int i=0;
                 while (rs.next()){
@@ -426,8 +426,8 @@ class ConQuery {
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
-                    hsCmp.addCampo(cmp);
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                    hsCmp.addCampo(cmp);                    
                 }
                 int i=0;
                 while (rs.next()){
@@ -525,8 +525,8 @@ class ConQuery {
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
-                    hsCmp.addCampo(cmp);
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                    hsCmp.addCampo(cmp);
                 }
                 int i=0;
                 while (rs.next()){
@@ -675,8 +675,8 @@ class ConQuery {
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
-                    hsCmp.addCampo(cmp);
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                    hsCmp.addCampo(cmp);
                 }
                 int i=0;
                 while (rs.next()){
@@ -846,11 +846,8 @@ class ConQuery {
                                               Integer.valueOf(i),
                                               rstm.getColumnTypeName(i));
                         cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
-                        if (rstm.isAutoIncrement(i)){
-                            cmp.setIsIncrement(true);
-                        }
-                        hsCmp.addCampo(cmp);
                         cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                        hsCmp.addCampo(cmp);
                     }
                     int i=0;
                     while (rs.next()){
@@ -945,8 +942,8 @@ class ConQuery {
                     Campo cmp = new Campo(rstm.getColumnName(i),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
-                    hsCmp.addCampo(cmp);
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
+                    hsCmp.addCampo(cmp);
                 }
                 int i=0;
                 while (rs.next()){
