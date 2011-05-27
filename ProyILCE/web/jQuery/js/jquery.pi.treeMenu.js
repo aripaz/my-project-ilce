@@ -25,7 +25,7 @@
     $.fn.treeMenu.getTreeDefinition=function(obj) {
         $.ajax(
         {
-            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$ta=relationship",
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -39,7 +39,6 @@
                 else
                     xmlGT = data;
 
-                var sNodeParentId="";
                 var oTypes = {
                     "max_depth" : -2,
                     "max_children" : -2,
@@ -81,9 +80,9 @@
                   if (this.parentNode.parentNode.parentNode.id==obj.id)
                     return;
                 
-                    //Abre ajax con relationship de entidad foranea
+                    //Abre ajax pidiendo los hijos de la forma
                     $.ajax({
-                            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + this.parentNode.id + "&$ta=relationship",
+                            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + this.parentNode.id + "&$ta=children",
                             dataType: ($.browser.msie) ? "text" : "xml",
                             success:  function(data){
                                 if (typeof data == "string") {
