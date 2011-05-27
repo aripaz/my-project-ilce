@@ -549,7 +549,7 @@ public class AdminXML {
             //obtenemos la query de la forma entregada
             String[] strDataQ = new String[2];
             strDataQ[0] =strData[0];
-            strDataQ[1] ="select";
+            strDataQ[1] ="foreign";
             HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ);
             Campo cmpQ = hsCmpQ.getCampoByName("claveconsulta");
             HashMap dq = hsCmpQ.getListData();
