@@ -139,31 +139,35 @@ public class srvForma extends HttpServlet {
                 while (it.hasNext()){
                     CampoForma cmp = (CampoForma) it.next();
                     String strData = (String) hsForm.get(cmp.getCampo());
-                    strCampos[i][0]= cmp.getCampo();
-                    strCampos[i++][1]= strData;
-                    nameTable = cmp.getTabla();
-                    strQuery.append(cmp.getCampo()).append(",");
-                }
-                strQuery.delete(strQuery.length()-1, strQuery.length());
-                strQuery.append(" from ").append(nameTable).append(" where 1=2");
-                ConEntidad con = new ConEntidad();
-                HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
-                if (hsCmp.getLengthCampo()>0){
-                    for (int j=0;j<i;j++){
-                        Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);
-                        if ( (strCampos[j][1]!=null) && (!"".equals(strCampos[j][1])) )  {
-                            if ("java.lang.String".equals(cmp.getTypeDataAPL()))
-                            {
-                                str.append(strCampos[j][0]).append(" = ").append(("'"+strCampos[j][1]+"'"));
-                            }else{
-                                str.append(strCampos[j][0]).append(" = ").append(strCampos[j][1]);
-                            }
-                            str.append(" AND ");
-                        }
+                    if (strData!=null){
+                        strCampos[i][0]= cmp.getCampo();
+                        strCampos[i++][1]= strData;
+                        nameTable = cmp.getTabla();
+                        strQuery.append(cmp.getCampo()).append(",");
                     }
-                    if (str.length()>=4){
-                        if (str.substring(str.length()-4, str.length()).trim().equals("AND")) {
-                            str.delete(str.length()-4, str.length());    
+                }
+                if (i>0){
+                    strQuery.delete(strQuery.length()-1, strQuery.length());
+                    strQuery.append(" from ").append(nameTable).append(" where 1=2");
+                    ConEntidad con = new ConEntidad();
+                    HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
+                    if (hsCmp.getLengthCampo()>0){
+                        for (int j=0;j<i;j++){
+                            Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);
+                            if ( (strCampos[j][1]!=null) && (!"".equals(strCampos[j][1])) )  {
+                                if ("java.lang.String".equals(cmp.getTypeDataAPL()))
+                                {
+                                    str.append(strCampos[j][0]).append(" = ").append(("'"+strCampos[j][1]+"'"));
+                                }else{
+                                    str.append(strCampos[j][0]).append(" = ").append(strCampos[j][1]);
+                                }
+                                str.append(" AND ");
+                            }
+                        }
+                        if (str.length()>=4){
+                            if (str.substring(str.length()-4, str.length()).trim().equals("AND")) {
+                                str.delete(str.length()-4, str.length());
+                            }
                         }
                     }
                 }
