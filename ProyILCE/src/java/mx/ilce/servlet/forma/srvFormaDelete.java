@@ -50,12 +50,11 @@ public class srvFormaDelete extends HttpServlet {
 
                 String claveForma = (String) hsForm.get("$cf");
                 String pk = (String) hsForm.get("$pk");
-                String tipoAccion = (String) hsForm.get("$ta");
+                String tipoAccion = "delete";
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$pk");
-                arrVal.add("$ta");
 
                 List lstVal = val.validationForm(arrVal, hsForm);
                 String blOK = (String) lstVal.get(0);
@@ -96,7 +95,7 @@ public class srvFormaDelete extends HttpServlet {
                         lstData.add(hsFormQuery);
                         lstData.add(forma);
                         if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
-                            ex = forma.editarEntidad(lstData);
+                            ex = forma.eliminarEntidad(lstData);
                         }
                         ex.setExecutionOK(true);
                     }else{
