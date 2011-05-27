@@ -144,7 +144,6 @@ public class srvFormaSearch extends HttpServlet {
                     ConEntidad con = new ConEntidad();
                     HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
                     if (hsCmp.getLengthCampo()>0){
-                    //if (true){
                         for (int j=0;j<i;j++){
                             Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);
                             if ( (strCampos[j][1]!=null) && (!"".equals(strCampos[j][1])) )  {
