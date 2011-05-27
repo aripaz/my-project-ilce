@@ -174,7 +174,11 @@ public class AdminXML {
                     }
                 }
                 if (seguir){
-                    str.append(("<"+cmp.getNombreDB()+">\n"));
+                    str.append(("<"+cmp.getNombreDB()));
+                    if (cmp.getIsIncrement()){
+                        str.append((" autoincrement=\"TRUE\""));
+                    }
+                    str.append((">\n"));
                     if (cmp.getNombreDB()!=null){
                         CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                         if (cmpAux!=null){
@@ -237,7 +241,11 @@ public class AdminXML {
             str.append("<column_definition>\n");
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
-                str.append(("<"+cmp.getNombreDB()+">\n"));
+                str.append(("<"+cmp.getNombreDB()));
+                if (cmp.getIsIncrement()){
+                    str.append((" autoincrement=\"TRUE\""));
+                }
+                str.append((">\n"));
                 if (cmp.getNombreDB()!=null){
                     CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                     if (cmpAux!=null){
@@ -294,7 +302,11 @@ public class AdminXML {
                     }
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                         + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
+                                         + castTypeJavaToXML(cmp.getTypeDataAPL())));
+                        if (cmp.getIsIncrement()){
+                            str.append((" autoincrement=\"TRUE\""));
+                        }
+                        str.append(("\">"));
                         str.append(("<![CDATA["));
                         str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
                         str.append("]]>\n");
@@ -375,6 +387,17 @@ public class AdminXML {
         return str;
     }
 
+    private String getCampoIncrement(List lstCmp){
+        String sld = "";
+        if ((lstCmp!=null)&&(lstCmp.isEmpty())){
+            Iterator it = lstCmp.iterator();
+            while (it.hasNext()){
+
+            }
+        }
+        return sld;
+    }
+
     /**
      * Entrega un XML en base a la Forma indicada y con la estructura de los 
      * datos, pero sin datos
@@ -407,7 +430,11 @@ public class AdminXML {
                     }
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                         + castTypeJavaToXML(cmp.getTypeDataAPL()) +"\">"));
+                                         + castTypeJavaToXML(cmp.getTypeDataAPL())));
+                        if (cmp.getIsIncrement()){
+                            str.append((" autoincrement=\"TRUE\""));
+                        }
+                        str.append(("\">"));
                         str.append("<![CDATA[]]>\n");
                         if (cmp.getNombreDB()!=null){
                             CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
