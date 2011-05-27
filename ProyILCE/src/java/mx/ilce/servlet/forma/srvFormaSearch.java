@@ -70,7 +70,7 @@ public class srvFormaSearch extends HttpServlet {
 
                         String[] strData = getArrayData(hsForm);
                         forma.setArrayData(strData);
-                        String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
+                        String whereForm = "";//getWhereData(hs, forma.getForma(forma.getClaveForma()));
                         forma.setStrWhereQuery("");
                         if ((strWhere!=null) && (strWhere.trim().length()>0)){
                             if ((whereForm!=null) && (whereForm.trim().length()>0)){
@@ -128,6 +128,7 @@ public class srvFormaSearch extends HttpServlet {
                 String nameTable ="";
                 Iterator it = lstForma.iterator();
                 int i=0;
+                /*
                 while (it.hasNext()){
                     CampoForma cmp = (CampoForma) it.next();
                     String strData = (String) hsForm.get(cmp.getCampo());
@@ -137,10 +138,11 @@ public class srvFormaSearch extends HttpServlet {
                     strQuery.append(cmp.getCampo()).append(",");
                 }
                 strQuery.delete(strQuery.length()-1, strQuery.length());
-                strQuery.append(" from ").append(nameTable).append(" where 1=2");
+                strQuery.append(" from ").append(nameTable).append(" where 1=2");*/
                 ConEntidad con = new ConEntidad();
                 HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
-                if (hsCmp.getLengthCampo()>0){
+                //if (hsCmp.getLengthCampo()>0){
+                if (true){
                     for (int j=0;j<i;j++){
                         Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);
                         if ( (strCampos[j][1]!=null) && (!"".equals(strCampos[j][1])) )  {
