@@ -82,11 +82,7 @@ public class srvFormaDelete extends HttpServlet {
                                     dato = (String) hsFile.get(cmp.getCampo());
                                 }
                             }
-                            if ((dato==null) && (cmp.getObligatorio()==1)) {
-                                obligatorioOk=false;
-                            }else{
-                                hsFormQuery.put(cmp.getCampo(), dato);
-                            }
+                            hsFormQuery.put(cmp.getCampo(), dato);
                         }
                     }
                     ExecutionHandler ex = new ExecutionHandler();
