@@ -158,7 +158,7 @@
    $.fn.appmenu.getSearchs = function() {
        $.ajax(
             {
-            url: "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("clave_empleado=" +$("#_ce_").val()+ " AND parametro like 'menu.busqueda.%'"),
+            url: "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("c.clave_empleado=" +$("#_ce_").val()+ " AND c.parametro like 'menu.busqueda.%'"),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {

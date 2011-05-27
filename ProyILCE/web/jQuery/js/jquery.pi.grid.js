@@ -51,7 +51,7 @@
     $.fn.appgrid.getGridDefinition = function(){
          $.ajax(
             {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters, 
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -75,9 +75,20 @@
                 /* Agrega la liga para quitar filtro desde el contructor    */
                 if ($.fn.appgrid.options.wsParameters!="") 
                     $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nApp + "_" + nEntidad+"'>(Quitar filtro)</a>";
-                
+
+                /*Crea cadena a partir de objeto xml*/
+                /*var sXML="";
+                if (window.ActiveXObject)
+                    sXML = xml;
+                // code for Mozilla, Firefox, Opera, etc.
+                else
+                   sXML = (new XMLSerializer()).serializeToString(xml);*/
+
+
                 var oGrid=$("#grid" + suffix).jqGrid(
-                            {url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
+                           {//datatype: "xmlstring",
+                            //datastr: sXML,
+                            url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
                             datatype: "xml",
                             colNames:$.fn.appgrid.options.colNames,
                             colModel:$.fn.appgrid.options.colModel,
