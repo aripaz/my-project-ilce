@@ -168,15 +168,16 @@ public class AdminXML {
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
                 boolean seguir = true;
+                /*
                 if (this.isDeleteIncrement()){
                     if (cmp.getIsIncrement()){
                         seguir = false;
                     }
-                }
+                }*/
                 if (seguir){
                     str.append(("<"+cmp.getNombreDB()));
                     if (cmp.getIsIncrement()){
-                        str.append((" autoincrement=\"TRUE\""));
+                        str.append((" autoincrement=\"TRUE\" "));
                     }
                     str.append((">\n"));
                     if (cmp.getNombreDB()!=null){
@@ -243,7 +244,7 @@ public class AdminXML {
                 cmp = (Campo) lstCmp.get(i) ;
                 str.append(("<"+cmp.getNombreDB()));
                 if (cmp.getIsIncrement()){
-                    str.append((" autoincrement=\"TRUE\""));
+                    str.append((" autoincrement=\"TRUE\" "));
                 }
                 str.append((">\n"));
                 if (cmp.getNombreDB()!=null){
@@ -295,18 +296,20 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
                     boolean seguir = true;
+                    /*
                     if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
-                    }
+                    }*/
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                         + castTypeJavaToXML(cmp.getTypeDataAPL())));
+                                         + castTypeJavaToXML(cmp.getTypeDataAPL())
+                                         + "\""));
                         if (cmp.getIsIncrement()){
-                            str.append((" autoincrement=\"TRUE\""));
+                            str.append((" autoincrement=\"TRUE\" "));
                         }
-                        str.append(("\">"));
+                        str.append((">"));
                         str.append(("<![CDATA["));
                         str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
                         str.append("]]>\n");
@@ -423,18 +426,20 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) lstCmp.get(j) ;
                     boolean seguir = true;
+                    /*
                     if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
-                    }
+                    }*/
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
-                                         + castTypeJavaToXML(cmp.getTypeDataAPL())));
+                                         + castTypeJavaToXML(cmp.getTypeDataAPL())
+                                         + "\""));
                         if (cmp.getIsIncrement()){
-                            str.append((" autoincrement=\"TRUE\""));
+                            str.append((" autoincrement=\"TRUE\" "));
                         }
-                        str.append(("\">"));
+                        str.append((">"));
                         str.append("<![CDATA[]]>\n");
                         if (cmp.getNombreDB()!=null){
                             CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
@@ -532,10 +537,7 @@ public class AdminXML {
             ConEntidad con = new ConEntidad();
             HashCampo hsData = con.getDataByQuery(query, strData);
             List lstCmp = hsData.getListCampos();
-
             HashMap hsDat = hsData.getListData();
-
-
             if (!hsDat.isEmpty()){
                 for(int i=0;i<hsDat.size();i++){
                     ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
