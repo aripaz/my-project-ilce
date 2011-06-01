@@ -37,8 +37,27 @@ public class Forma extends Entidad{
     private String[] arrayData;
     private HashMap formData;
     private ArrayList formName;
+    private boolean includeForaneo=true;
 
     /************** GETTER Y SETTER ***************/
+
+    /**
+     * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
+     * listado del foraneo
+     * @return
+     */
+    public boolean isIncludeForaneo() {
+        return includeForaneo;
+    }
+
+    /**
+     * Asigna con TRUE o FALSE si al ir formando el XML se debe incluir o no el
+     * listado del foraneo
+     * @param includeForaneo
+     */
+    public void setIncludeForaneo(boolean includeForaneo) {
+        this.includeForaneo = includeForaneo;
+    }
 
     /**
      * Obtiene el FormData
@@ -568,7 +587,9 @@ public class Forma extends Entidad{
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
-                            admXML.setDeleteIncrement(cleanIncrement);
+                            admXML.setDeleteIncrement(true);
+                        }else{
+                            admXML.setDeleteIncrement(false);
                         }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),this.getTipoAccion());
@@ -697,7 +718,14 @@ public class Forma extends Entidad{
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
-                            admXML.setDeleteIncrement(cleanIncrement);
+                            admXML.setDeleteIncrement(true);
+                        }else{
+                            admXML.setDeleteIncrement(false);
+                        }
+                        if (!this.isIncludeForaneo()){
+                            admXML.setIncludeForaneo(false);
+                        }else{
+                            admXML.setIncludeForaneo(true);
                         }
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),this.getTipoAccion());
