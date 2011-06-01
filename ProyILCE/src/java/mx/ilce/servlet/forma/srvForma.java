@@ -88,11 +88,12 @@ public class srvForma extends HttpServlet {
                             }
                             forma.ingresarBusquedaAvanzada();
                         }else{
+                            /*
                             if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
                                 forma.setCleanIncrement(true);
-                            }else{
+                            }else{*/
                                 forma.setCleanIncrement(false);
-                            }
+                            //}
                             forma.mostrarForma();
                         }
                         StringBuffer xmlForma = forma.getXmlEntidad();
