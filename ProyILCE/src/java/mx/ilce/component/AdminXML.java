@@ -187,12 +187,6 @@ public class AdminXML {
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
                 boolean seguir = true;
-                /*
-                if (this.isDeleteIncrement()){
-                    if (cmp.getIsIncrement()){
-                        seguir = false;
-                    }
-                }*/
                 if (seguir){
                     str.append(("<"+cmp.getNombreDB()));
                     if (cmp.getIsIncrement()){
@@ -222,11 +216,9 @@ public class AdminXML {
                 str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
-                    if (!this.isDeleteIncrement() && !cmp.getIsIncrement()){
-                        str.append("\t<cell>");
-                        str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
-                        str.append("</cell>\n");
-                    }
+                    str.append("\t<cell>");
+                    str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
+                    str.append("</cell>\n");
                 }
                 str.append("</row>\n");
             }
