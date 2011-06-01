@@ -353,6 +353,7 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -442,6 +443,7 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -541,6 +543,7 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -691,6 +694,7 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -862,6 +866,7 @@ class ConQuery {
                                                   itCmp.getTypeDataDB(),
                                                   castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                                   getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                            cmp.setIsIncrement(itCmp.getIsIncrement());
                             lstData.add(cmp);
                         }
                         hsCmp.addListData(lstData,i++);
