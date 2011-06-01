@@ -90,6 +90,8 @@ public class srvForma extends HttpServlet {
                         }else{
                             if ("UPDATE".equals(((tipoAccion==null)?"":tipoAccion).trim().toUpperCase())){
                                 forma.setCleanIncrement(true);
+                            }else{
+                                forma.setCleanIncrement(false);
                             }
                             forma.mostrarForma();
                         }
@@ -139,7 +141,7 @@ public class srvForma extends HttpServlet {
                 while (it.hasNext()){
                     CampoForma cmp = (CampoForma) it.next();
                     String strData = (String) hsForm.get(cmp.getCampo());
-                    if (strData!=null){
+                    if ((strData!=null)&&(!"".equals(strData))) {
                         strCampos[i][0]= cmp.getCampo();
                         strCampos[i++][1]= strData;
                         nameTable = cmp.getTabla();

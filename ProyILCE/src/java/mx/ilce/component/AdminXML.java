@@ -33,6 +33,25 @@ public class AdminXML {
     private static File WORKING_DIRECTORY;
     private int numRow=0;
     private boolean deleteIncrement=false;
+    private boolean includeForaneo=true;
+
+    /**
+     * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
+     * listado del foraneo
+     * @return
+     */
+    public boolean isIncludeForaneo() {
+        return includeForaneo;
+    }
+
+    /**
+     * Asigna con TRUE o FALSE si al ir formando el XML se debe incluir o no el
+     * listado del foraneo
+     * @param includeForaneo
+     */
+    public void setIncludeForaneo(boolean includeForaneo) {
+        this.includeForaneo = includeForaneo;
+    }
 
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe ignorar o no
@@ -296,12 +315,11 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
                     boolean seguir = true;
-                    /*
                     if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
-                    }*/
+                    }
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
                                          + castTypeJavaToXML(cmp.getTypeDataAPL())
@@ -344,15 +362,17 @@ public class AdminXML {
                                         str.append(" agrega_registro=\"true\"");
                                     }
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
-                                    String[] strData = new String[2];
-                                    strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                    strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
-                                    StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
-                                    if (!"".equals(strForaneo.toString())){
-                                        str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                        str.append((" source=\"\">\n"));
-                                        str.append(strForaneo);
-                                        str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                    if (this.isIncludeForaneo()){
+                                        String[] strData = new String[2];
+                                        strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
+                                        strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
+                                        if (!"".equals(strForaneo.toString())){
+                                            str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
+                                            str.append((" source=\"\">\n"));
+                                            str.append(strForaneo);
+                                            str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                        }
                                     }
                                     str.append("\t\t</foraneo>\n");
                                 }
@@ -426,12 +446,11 @@ public class AdminXML {
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) lstCmp.get(j) ;
                     boolean seguir = true;
-                    /*
                     if (this.isDeleteIncrement()){
                         if (cmp.getIsIncrement()){
                             seguir = false;
                         }
-                    }*/
+                    }
                     if (seguir){
                         str.append(("\t<"+ cmp.getNombreDB() + " tipo_dato=\""
                                          + castTypeJavaToXML(cmp.getTypeDataAPL())
@@ -475,12 +494,14 @@ public class AdminXML {
                                     String[] strData = new String[2];
                                     strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                     //strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
-                                    StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
-                                    if (!"".equals(strForaneo.toString())){
-                                        str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                        str.append((" source=\"\">\n"));
-                                        str.append(strForaneo);
-                                        str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                    if (this.isIncludeForaneo()){
+                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
+                                        if (!"".equals(strForaneo.toString())){
+                                            str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
+                                            str.append((" source=\"\">\n"));
+                                            str.append(strForaneo);
+                                            str.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
+                                        }
                                     }
                                     str.append("\t\t</foraneo>\n");
                                 }
