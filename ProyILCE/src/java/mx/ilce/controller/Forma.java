@@ -511,28 +511,30 @@ public class Forma extends Entidad{
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
                 String valor = (String) hsForm.get(cmpFL.getCampo());
-                // si es autoIncremental, no se necesita enviar
-                if (!cmpHS.getIsIncrement()){
-                    if ((valor!=null)&&(!"".equals(valor))){
-                        boolean isString = false;
-                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
-                            isString = true;
+                if (cmpHS!=null){
+                    // si es autoIncremental, no se necesita enviar
+                    if (!cmpHS.getIsIncrement()){
+                        if ((valor!=null)&&(!"".equals(valor))){
+                            boolean isString = false;
+                            if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                                isString = true;
+                            }
+                            strQuery.append(cmpFL.getCampo()).append("=");
+                            if (isString){
+                                strQuery.append("'");
+                                strQuery.append(valor);
+                                strQuery.append("' AND ");
+                            }else{
+                                strQuery.append(valor).append(" AND ");
+                            }
                         }
-                        strQuery.append(cmpFL.getCampo()).append("=");
-                        if (isString){
-                            strQuery.append("'");
-                            strQuery.append(valor);
-                            strQuery.append("' AND ");
-                        }else{
-                            strQuery.append(valor).append(" AND ");
+                        if ((valor==null)&&(cmpFL.getObligatorio()==1)){
+                            //error
+                            System.err.append("Error");
                         }
+                    }else{
+                        strCampoPK = cmpFL.getCampo();
                     }
-                    if ((valor==null)&&(cmpFL.getObligatorio()==1)){
-                        //error
-                        System.err.append("Error");
-                    }
-                }else{
-                    strCampoPK = cmpFL.getCampo();
                 }
             }
             strQuery.append(strCampoPK);
