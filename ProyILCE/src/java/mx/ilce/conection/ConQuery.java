@@ -1076,6 +1076,8 @@ class ConQuery {
             if (strType!=null){
                 if (strType.toUpperCase().equals("CHAR")){
                     sld = rs.getString(codigo.intValue());
+                }else if (strType.toUpperCase().equals("NVARCHAR")){
+                    sld = rs.getString(codigo.intValue());
                 }else if (strType.toUpperCase().equals("VARCHAR")){
                     sld = rs.getString(codigo.intValue());
                 }else if(strType.toUpperCase().equals("INT") ){
@@ -1106,6 +1108,8 @@ class ConQuery {
             if (strType.toUpperCase().equals("CHAR")){
                 sld = "java.lang.String";
             }else if (strType.toUpperCase().equals("VARCHAR")){
+                sld = "java.lang.String";
+            }else if (strType.toUpperCase().equals("NVARCHAR")){
                 sld = "java.lang.String";
             }else if(strType.toUpperCase().equals("INT") ){
                 sld = "java.lang.Integer";
