@@ -497,8 +497,8 @@ public final class ExceptionHandler extends Throwable {
      * Asigna el texto de error al campo textError
      * @param textError     Texto que contiene el Error entregado
      */
-    private void setTextError(String textError) {
-        this.textError.append(textError);
+    public void setTextError(String textError) {
+        this.textError.append((textError==null)?"":textError);
     }
 
     /**
@@ -514,7 +514,7 @@ public final class ExceptionHandler extends Throwable {
      * @param textMessage   Texto que contiene el Mensaje enregado
      */
     private void setTextMessage(String textMessage) {
-        this.textMessage.append(textMessage);
+        this.textMessage.append((textMessage==null)?"":textMessage);
     }
 
     /**

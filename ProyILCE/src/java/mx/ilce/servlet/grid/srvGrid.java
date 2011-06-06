@@ -62,19 +62,30 @@ public class srvGrid extends HttpServlet {
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
                     Aplicacion apl = new Aplicacion();
                     if ((forma !=null)&&(apl!=null)){
-                        apl.addForma(Integer.valueOf(claveForma),forma.getForma(Integer.valueOf(claveForma)));
-                        apl.setDisplay(dp);
-                        apl.setClaveForma(Integer.valueOf(claveForma));
-                        apl.setTipoAccion(tipoAccion);
-                        apl.setStrWhereQuery(strWhere);
-                        apl.setArrayData(strData);
-                        apl.mostrarForma();
-                        String numPage = (String) hsForm.get("numPage"); 
-                        String numRows = (String) hsForm.get("numRows"); 
-                        apl.setNumPage(numPage);
-                        apl.setNumRows(numRows);
-                        StringBuffer xmlForma = apl.getXmlEntidad();
+                        List lstF = forma.getForma(Integer.valueOf(claveForma));
+                        StringBuffer xmlForma = new StringBuffer();
+                        if (lstF!=null){
+                            apl.addForma(Integer.valueOf(claveForma),lstF);
+                            apl.setDisplay(dp);
+                            apl.setClaveForma(Integer.valueOf(claveForma));
+                            apl.setTipoAccion(tipoAccion);
+                            apl.setStrWhereQuery(strWhere);
+                            apl.setArrayData(strData);
+                            apl.mostrarForma();
+                            String numPage = (String) hsForm.get("numPage");
+                            String numRows = (String) hsForm.get("numRows");
+                            apl.setNumPage(numPage);
+                            apl.setNumRows(numRows);
+                            xmlForma = apl.getXmlEntidad();
+                        }else{
+                            Exception e = new Exception();
+                            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Error de Permiso");
+                            eh.setTextError("No existe en el perfil la Forma solicitada");
+                            eh.setStringData("ID FORMA: "+ claveForma);
+                            eh.setSeeStringData(true);
 
+                            xmlForma = eh.getXmlError();
+                        }
                         request.getSession().setAttribute("xmlGrid", xmlForma);
                     }
                     request.getRequestDispatcher("/resource/jsp/xmlGrid.jsp").forward(request, response);
