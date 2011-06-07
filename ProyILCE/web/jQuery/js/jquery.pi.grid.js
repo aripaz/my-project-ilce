@@ -21,7 +21,11 @@
             insertarEnEscritorio:"1",
             width:"650",
             height:"",
-            openKardex:false
+            openKardex:false,
+            loadMode:"",
+            removeGridTitle:false,
+            inQueue:false
+
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -41,7 +45,7 @@
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
             $(this).html("<table width='100%' id='grid" + suffix + "'>" +
-                       "</table><div id='pager" + suffix +"'></div>");
+                         "</table><div id='pager" + suffix +"'><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
              $.fn.appgrid.getGridDefinition();
         });
@@ -83,13 +87,16 @@
                 // code for Mozilla, Firefox, Opera, etc.
                 else
                    sXML = (new XMLSerializer()).serializeToString(xml);*/
-
+                if ($.fn.appgrid.options.loadMode=='delayed')
+                   sDataType="local";
+                else
+                   sDataType="xml"
 
                 var oGrid=$("#grid" + suffix).jqGrid(
                            {//datatype: "xmlstring",
                             //datastr: sXML,
                             url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
-                            datatype: "xml",
+                            datatype: sDataType,
                             colNames:$.fn.appgrid.options.colNames,
                             colModel:$.fn.appgrid.options.colModel,
                             rowNum:10,
@@ -99,7 +106,7 @@
                             pager: jQuery('#pager' + suffix),
                             sortname:  $.fn.appgrid.options.sortname+suffix,
                             viewrecords: true,
-                            sortorder: "desc",
+                            sortorder: "desc",                            
                             ondblClickRow: function(id){
                                   var openKardex=false;
                                   var aValidKardex= $("#_vk_").val().split(",");
@@ -178,14 +185,16 @@
                                                                                                                alert('Seleccione un registro');
                                                                                                           },
                                                                                                       position: "last",title:"Abrir kardex",cursor: "pointer"});
-
+               //Remueve del dom el loader
+               $("#loader"+ suffix).remove();
                if ($.fn.appgrid.options.insertarEnEscritorio=="1")
                 $("#grid" + suffix).jqGrid().navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,{caption:"Insertar en escritorio",
                                                                                                          onClickButton:  function() {
                                                                                                              alert('Por implementar');
                                                                                                           },
                                                                                                       position: "last",title:"",cursor: "pointer"});
-                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+
+               //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                 if ($.fn.appgrid.options.wsParameters!="") {
                     $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
                         nApp=this.id.split("_")[2];
@@ -213,8 +222,17 @@
                 //Remueve el botón de kardex si no está especificado en el constructor
                 if (!openKardex)    
                     $(".ui-icon-document", $("#pager"+suffix)).remove()
-               
+
+               //Verifica si el grid está en una cola
+               if ($.fn.appgrid.options.inQueue)
+                   //$('.foreign_grids:first').gridqueue({height: $('#_gq_').val()+'%'})
+                   setTimeout("$('.foreign_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",2000);
+
+               if ($.fn.appgrid.options.removeGridTitle)
+                     $('.ui-jqgrid-titlebar',oGrid).remove();
+
                /* Finaliza implementación de grid */
+
             },
             error:function(xhr,err){
                 alert("Error al recuperar definición de grid\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);

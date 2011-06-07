@@ -77,54 +77,25 @@
                 );
 
                 $("#" + obj.id+ " a").live("click", function(e) {
-                  if (this.parentNode.parentNode.parentNode.id==obj.id)
-                    return;
-                
-                    //Abre ajax pidiendo los hijos de la forma
-                    $.ajax({
-                            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + this.parentNode.id + "&$ta=children",
-                            dataType: ($.browser.msie) ? "text" : "xml",
-                            success:  function(data){
-                                if (typeof data == "string") {
-                                    xmlRel = new ActiveXObject("Microsoft.XMLDOM");
-                                    xmlRel.async = false;
-                                    xmlRel.validateOnParse="true";
-                                    xmlRel.loadXML(data);
-                                    if (xmlRel.parseError.errorCode>0)
-                                        alert("Error de compilación xml:" + xmlRel.parseError.errorCode +"\nParse reason:" + xmlRel.parseError.reason + "\nLinea:" + xmlGT.parseError.line);
-                                }
-                                else
-                                    xmlRel = data;
+                  var sNodeId=this.parentNode.id;
+                  var sTitulo=$.trim(this.text);
+                  var nApp=sNodeId.split("-")[1];
+                  var nForma=sNodeId.split("-")[2];
+                  var sW=sNodeId.split("-").length>3?sNodeId.split("-")[3]:"";
+                  
+                  //Llama grids
+                  if (nForma==undefined) return false;
 
-                               //Crea html de tables para formar grids
-                               var sHtml="";
-                               var i=0;
+                   $(obj.nextSibling).appgrid({app: nApp,
+                      entidad: nForma,
+                      wsParameters: sW,
+                      titulo:sTitulo,
+                      leyendas:["Nuevo registro", "Edición de registro"],
+                      height:"75%"
+                   });
 
-                               $(xmlRel).find("registro").each(function() {
-                                  nApp=$('clave_aplicacion:first',this).text().split("\n")[0];
-                                  nForm=$('clave_forma:first',this).text().split("\n")[0];
-                                  nRel=$('llave_primaria:first',this).text().split("\n")[0]+"="+nForm;
-                                  sTitulo=$('forma:first',this).text().split("\n")[0];
-                                  if  (i==0)
-                                      sHtml+= "<div id='sGrid_" + nApp + "_" + nForm + "' app='" + nApp +"' form='" + nForm + "' rel='' titulo='" + sTitulo +"' class='foreign_grids'></div>";
-                                  else
-                                      sHtml+= "<div id='sGrid_" + nApp + "_" + nForm + "' app='" + nApp +"' form='" + nForm + "' rel='" +nRel + "' titulo='" + sTitulo +"' class='foreign_grids'></div>";
-                                  i++;
-                               });
-
-                               $(obj.nextSibling).html(sHtml);
-
-                               //Llama grids
-                               oForeignGrids=$(".foreign_grids");
-                               nSize=75/oForeignGrids.length;
-                               oForeignGrids.foreign_grid({height:nSize+"%"});
-
-                            },
-                           error:function(xhr,err){
-                                alert("Error al recuperar definición de relación de entidades foraneas\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                                alert("responseText: "+xhr.responseText);}
                     });
-                 })
+
             },
             error:function(xhr,err){
                 alert("Error al recuperar definición de arbol\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
