@@ -13,11 +13,9 @@
             pk:""
         };
 
-        // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
-        $.fn.treeMenu.options = $.extend($.fn.treeMenu.settings, opc);
-
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
+            $.fn.treeMenu.options = $.extend($.fn.treeMenu.settings, opc);
             $.fn.treeMenu.getTreeDefinition(this);
         });
     }
@@ -25,7 +23,7 @@
     $.fn.treeMenu.getTreeDefinition=function(obj) {
         $.ajax(
         {
-            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$ta=children",
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -90,6 +88,7 @@
                       entidad: nForma,
                       wsParameters: sW,
                       titulo:sTitulo,
+                      showFilterLink:false,
                       leyendas:["Nuevo registro", "Edición de registro"],
                       height:"75%"
                    });

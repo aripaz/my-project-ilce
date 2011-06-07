@@ -315,11 +315,11 @@
             
             //Genera liga para forma foranea
             var nFormaForanea=$(this).find('foraneo').attr("clave_forma");
-                        
+            var nEditaForaneos=$(this).find('foraneo').attr("agrega_registro");
             if (nFormaForanea!=undefined) {
                 sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
-                if ($.fn.form.options.modo!="lookup") {
+                if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted'}
                 else {
                     sRenglon+='class="singleInput'}                   
@@ -351,7 +351,7 @@
             )
                                 
                 sRenglon +='</select>';
-                if ($.fn.form.options.modo!="lookup") {
+                if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon +="<div class='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' class='fieldToolbar'></div>";
                 }
                 
