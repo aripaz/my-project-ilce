@@ -139,6 +139,8 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
     overflow:auto;
     float: left;
     width: 75%;
+    margin-left:5px
+
 }
 
 .treeProfiles {
@@ -166,4 +168,12 @@ td.etiqueta_perfil {
 
 .ui-tabs {
     overflow: auto;
+}
+
+.active_filter {
+    background-color:silver;
+}
+
+.link_toolbar {
+     height: 15px;
 }
