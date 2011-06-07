@@ -24,6 +24,7 @@
             openKardex:false,
             loadMode:"",
             removeGridTitle:false,
+            showFilterLink:true,
             inQueue:false
 
         };
@@ -77,7 +78,7 @@
                 var nEntidad=$.fn.appgrid.options.entidad;
 
                 /* Agrega la liga para quitar filtro desde el contructor    */
-                if ($.fn.appgrid.options.wsParameters!="") 
+                if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink)
                     $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nApp + "_" + nEntidad+"'>(Quitar filtro)</a>";
 
                 /*Crea cadena a partir de objeto xml*/
@@ -195,7 +196,7 @@
                                                                                                       position: "last",title:"",cursor: "pointer"});
 
                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                if ($.fn.appgrid.options.wsParameters!="") {
+                if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink) {
                     $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
                         nApp=this.id.split("_")[2];
                         nForma=this.id.split("_")[3];
