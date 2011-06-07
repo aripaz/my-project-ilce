@@ -10,20 +10,39 @@ public class CampoForma implements Serializable  {
 
     private Integer claveCampo;
     private Integer claveForma;
-    private String tabla;
+    private Integer clavePerfil;
     private String campo;
     private String aliasCampo;
     private Integer obligatorio;
     private String tipoControl;
     private String evento;
-    private String foraneo;
+    private Integer claveFormaForanea;
     private String filtroForaneo;
+    private Integer editaFormaForanea;
     private String ayuda;
     private Integer datoSensible;
     private Integer activo;
     private Integer tamano;
-    private Integer claveFormaForanea;
+
+    private String tabla;
+    private String foraneo;
     private String typeData;
+
+    public Integer getClavePerfil() {
+        return clavePerfil;
+    }
+
+    public void setClavePerfil(Integer clavePerfil) {
+        this.clavePerfil = clavePerfil;
+    }
+
+    public Integer getEditaFormaForanea() {
+        return editaFormaForanea;
+    }
+
+    public void setEditaFormaForanea(Integer editaFormaForanea) {
+        this.editaFormaForanea = editaFormaForanea;
+    }
 
     /**
      * Obtiene el nombre del tipo de dato del CampoForma
