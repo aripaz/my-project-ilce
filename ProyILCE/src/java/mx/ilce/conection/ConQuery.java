@@ -326,7 +326,8 @@ class ConQuery {
                 for(int i=1;i<=arrData.length;i++){
                     String strData = arrData[i-1];
                     if (strData != null){
-                        query = query.replaceFirst("%"+i, strData);
+                        //query = query.replaceFirst("%"+i, strData);
+                        query = query.replaceAll("%"+i, strData);
                     }
                 }
                 rs = ps.executeQuery(query);
@@ -514,7 +515,8 @@ class ConQuery {
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){
-                            query = query.replaceFirst("%"+i, strData);
+                            //query = query.replaceFirst("%"+i, strData);
+                            query = query.replaceAll("%"+i, strData);
                         }
                     }
                 }
@@ -839,7 +841,8 @@ class ConQuery {
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){
-                            query = query.replaceFirst("%"+i, strData);
+                            //query = query.replaceFirst("%"+i, strData);
+                            query = query.replaceAll("%"+i, strData);
                         }
                     }
                     rs = st.executeQuery(query);
