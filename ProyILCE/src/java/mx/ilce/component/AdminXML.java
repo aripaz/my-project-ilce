@@ -348,10 +348,11 @@ public class AdminXML {
                                 }
                                 if (cmpAux.getClaveFormaForanea()!=null){
                                     str.append("\t\t<foraneo");
-                                    if ("SELECT".equals(tipoAccion.toUpperCase())){
-                                        str.append(" agrega_registro=\"false\"");
-                                    }else{
+                                    if ((cmpAux.getEditaFormaForanea()!=null)&&
+                                            ("1".equals(String.valueOf(cmpAux.getEditaFormaForanea())))){
                                         str.append(" agrega_registro=\"true\"");
+                                    }else{
+                                        str.append(" agrega_registro=\"false\"");
                                     }
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     if (this.isIncludeForaneo()){
@@ -476,11 +477,13 @@ public class AdminXML {
                                             + "]]></evento>\n"));
                                 }
                                 if (cmpAux.getClaveFormaForanea()!=null){
-                                    str.append("\t\t<foraneo");
-                                    if ("SELECT".equals(tipoAccion.toUpperCase())){
-                                        str.append(" agrega_registro=\"false\"");
-                                    }else{
+                                    str.append("\t\t<foraneo");                                    
+                                    //if ("SELECT".equals(tipoAccion.toUpperCase())){
+                                    if ((cmpAux.getEditaFormaForanea()!=null)&&
+                                            ("1".equals(String.valueOf(cmpAux.getEditaFormaForanea())))){
                                         str.append(" agrega_registro=\"true\"");
+                                    }else{
+                                        str.append(" agrega_registro=\"false\"");
                                     }
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     String[] strData = new String[2];
