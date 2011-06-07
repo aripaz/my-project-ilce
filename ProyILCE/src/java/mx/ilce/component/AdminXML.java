@@ -348,7 +348,7 @@ public class AdminXML {
                                 }
                                 if (cmpAux.getClaveFormaForanea()!=null){
                                     str.append("\t\t<foraneo");
-                                    if ((cmpAux.getEditaFormaForanea()!=null)&&
+                                    if ((cmpAux.getEditaFormaForanea()==null)&&
                                             ("1".equals(String.valueOf(cmpAux.getEditaFormaForanea())))){
                                         str.append(" agrega_registro=\"true\"");
                                     }else{
@@ -479,7 +479,7 @@ public class AdminXML {
                                 if (cmpAux.getClaveFormaForanea()!=null){
                                     str.append("\t\t<foraneo");                                    
                                     //if ("SELECT".equals(tipoAccion.toUpperCase())){
-                                    if ((cmpAux.getEditaFormaForanea()!=null)&&
+                                    if ((cmpAux.getEditaFormaForanea()==null)&&
                                             ("1".equals(String.valueOf(cmpAux.getEditaFormaForanea())))){
                                         str.append(" agrega_registro=\"true\"");
                                     }else{
