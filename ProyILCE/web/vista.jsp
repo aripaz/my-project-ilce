@@ -21,6 +21,7 @@ if (user == null){
         <!-- jqGrid -->
         <script src="jQuery/js/grid.locale-es.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+        <script src="jQuery/js/grid.subgrid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jstree.js"  type="text/javascript"></script>
 
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
@@ -29,7 +30,7 @@ if (user == null){
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.pi.foreign_grid.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.gridqueue.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.field_toolbar.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
@@ -71,5 +72,7 @@ if (user == null){
         <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
         <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
         <input type="hidden" name="_vk_" id="_vk_" value="" />
+        <input type="hidden" name="_gq_" id="_gq_" value="" />
+        <input type="hidden" name="_ts_" id="_ts_" value="" />
     </body>
 </html>
