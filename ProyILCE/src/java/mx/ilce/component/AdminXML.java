@@ -477,8 +477,7 @@ public class AdminXML {
                                             + "]]></evento>\n"));
                                 }
                                 if (cmpAux.getClaveFormaForanea()!=null){
-                                    str.append("\t\t<foraneo");                                    
-                                    //if ("SELECT".equals(tipoAccion.toUpperCase())){
+                                    str.append("\t\t<foraneo");
                                     if ((cmpAux.getEditaFormaForanea()!=null)&&
                                             ("1".equals(String.valueOf(cmpAux.getEditaFormaForanea())))){
                                         str.append(" agrega_registro=\"true\"");
