@@ -8,7 +8,9 @@
         $.fn.appmenu.settings = {
             xmlUrl : "", //"/ProyILCE/xml_tests/widget.accordion.xml",
             usuario:"",
-            menu: [/*{aplicacion:"", elementos_menu:[{etiqueta:"", entidad:"", funcion:""}]}*/]
+            menu: [/*{aplicacion:"", elementos_menu:[{etiqueta:"", entidad:"", funcion:""}]}*/],
+            ts:""
+
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -18,7 +20,7 @@
         return this.each( function(){
              obj = $(this);
              if ($.fn.appmenu.options.xmlUrl!="") {
-                 obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>")
+                 obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>"); $.fn.appmenu.options.ts="U2FsdGVkX1+K/UZ+8JLyZRxlM2+sjv0subeoJS4mtaQ=";
                  $.fn.appmenu.ajax(obj);
              }
         });
@@ -54,7 +56,7 @@
                 //Crea el control tab aqui, puesto que desde este control se va a manipular
                 var $tabs = $('#tabs').tabs({
                     tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
-                    });
+                });
 
                 $( "#tabs span.ui-icon-close" ).live( "click", function() {
 			var index = $( "li", $tabs ).index( $( this ).parent() );
@@ -145,6 +147,28 @@
 
                  }
 
+                //Mecanismo para forzar a que el DOM no se cargue del cache
+                // ya que esto hace que se dupliquen los ids de los grid en cola
+                if ($("#_ts_").val()!="") {
+                    $.post("srvFormaSearch?$cf=1&$ta=select&$w=parametro='cache-pragma'", function(data) {
+                         if (typeof data == "string") {
+                             xmlCache = new ActiveXObject("Microsoft.XMLDOM");
+                             xmlCache.async = false;
+                             xmlCache.validateOnParse="true";
+                             xmlCache.loadXML(data);
+                             if (xmlCache.parseError.errorCode>0) {
+                                    alert("Error de compilación xml:" + xmlCache.parseError.errorCode +"\nParse reason:" + xmlCache.parseError.reason + "\nLinea:" + xmlCache.parseError.line);}
+                            }
+                             else {
+                                xmlCache = data;}
+
+                            h=$(xmlCache).find("valor").text();
+                            if (h!=undefined)
+                                $("#_ts_").val(h);
+                            else
+                                $("#_ts_").val($.fn.appmenu.options.ts);
+                    });
+                 }
                  //Incluye los queries almacenados de cada aplicacion
                  $.fn.appmenu.getSearchs()
 
@@ -186,10 +210,16 @@
                     nAplicacion =$(this).find("clave_aplicacion")[0].firstChild.data;
                     sValor=escape($(this).find("valor")[0].firstChild.data);
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
-                    sBusquedas="<div><a href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "'>" + sEtiqueta + "</a></div>";
+                    sBusquedas="<div class='link_toolbar'>"+
+                               "<a href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sEtiqueta + "</a>"+
+                               "<div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div>" +
+                               "</div>";
 
                     $("#appQries_"+nAplicacion).append(sBusquedas);
 
+                    //Oculta botones
+                    $(".ui-icon-close", "#appQries_"+nAplicacion).hide();
+                    //Hace bind del liga del búsqueda
                     $("#lnkBusqueda_" + sSuffix).click(function(){
                         nAplicacion=this.id.split("_")[1];
                         nForma=this.id.split("_")[2];
@@ -200,6 +230,26 @@
                         $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
                     });                    
                 });
+
+                //Hace bind con los divs padres del link en el evento hover
+                $(".link_toolbar").hover(
+                    function () {
+                    //$(this).addClass('active_filter');
+                    $(".closeLnkFiltro",this).show();
+                    },
+                    function () {
+                    //$(this).removeClass('active_filter');
+                    $(".closeLnkFiltro",this).hide();
+                    }
+                );
+
+                //Hace bind del botón de búsqueda
+                $(".closeLnkFiltro").click(function(){
+                    if (!confirm('¿Desea borrar el filtro seleccionado?')) return false;
+                      $.post("srvFormaDelete","$cf=1&$pk=" + $(this).attr("pk"));
+                      $(this).parent().remove();
+                });
+
 
             }
        });

@@ -93,7 +93,7 @@
 
     $.fn.form.ajax_profiles =function(obj){
         $.ajax({
-            url:'srvGrid?$cf=5&$dp=body',
+            url:'srvGrid?$cf=5&$dp=body&$w=a.clave_aplicacion='+$.fn.form.options.aplicacion,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -288,12 +288,16 @@
         var sSuffix= '_' + $.fn.form.options.aplicacion  + '_' + $.fn.form.options.forma + "_" + $.fn.form.options.pk;;
         var oCampos= $(xml).find("registro").children();
         var tabIndex=1;
-        oCampos.each(
-        function(){
+        var bAutoIncrement=false;
+        oCampos.each(function(){
             oCampo=$(this);
             sTipoCampo= oCampo.attr("tipo_dato").toLowerCase();
+            bAutoIncrement=(oCampo.attr("autoincrement")!=undefined)?true:false;
             //Genera etiqueta
             sAlias= oCampo.find('alias_campo').text();
+
+            if (bAutoIncrement) return true;
+
             if (sAlias!='') {
                 sRenglon += '<td class="etiqueta_forma" id="td_' +oCampo[0].nodeName + sSuffix + '">' +sAlias;
             }
