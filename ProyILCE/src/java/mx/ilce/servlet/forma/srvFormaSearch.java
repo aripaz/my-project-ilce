@@ -67,8 +67,15 @@ public class srvFormaSearch extends HttpServlet {
                         forma.setPk(pk);
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
-
                         String[] strData = getArrayData(hsForm);
+                        if (pk!=null){
+                            String[] strDataAdic = new String[strData.length+1];
+                            strDataAdic[0]=pk;
+                            for(int i=0;i<strData.length;i++){
+                                strDataAdic[i+1]=strData[i];
+                            }
+                            strData = strDataAdic;
+                        }
                         forma.setArrayData(strData);
                         String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
                         forma.setStrWhereQuery("");
