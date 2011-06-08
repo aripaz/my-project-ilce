@@ -21,6 +21,15 @@ public class HashCampo implements Serializable  {
     private HashMap listCampoByName;
     private HashMap listAlias;
     private Object objData;
+    private String pkData;
+
+    public String getPkData() {
+        return pkData;
+    }
+
+    public void setPkData(String pkData) {
+        this.pkData = pkData;
+    }
 
     /**
      * Agregamos un registro (linea) al listado de Data
