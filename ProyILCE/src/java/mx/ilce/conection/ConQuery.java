@@ -1091,6 +1091,8 @@ class ConQuery {
                     sld = String.valueOf(rs.getString(codigo.intValue()));
                 }else if (strType.toUpperCase().equals("TEXT")){
                     sld = rs.getString(codigo.intValue());
+                }else{
+                    sld = rs.getString(codigo.intValue());
                 }
             }
         }catch(SQLException es){
@@ -1121,6 +1123,8 @@ class ConQuery {
             }else if(strType.toUpperCase().equals("BIT") ){
                 sld = "java.lang.Integer";
             }else if(strType.toUpperCase().equals("TEXT") ){
+                sld = "mx.ilce.bean.Text";
+            }else{
                 sld = "java.lang.String";
             }
         }

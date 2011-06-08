@@ -169,6 +169,9 @@ public class ListHash {
                                 //entregamos el tipo de datos Java que le corresponde al dato
                                 //asociado al metodo
                                 Class tipoDato = Class.forName(cmp.getTypeDataAPL());
+                                if (tipoDato.getSimpleName().equals("Text")){
+                                    tipoDato = String.class;
+                                }
                                 //obtenemos el metodo en un objeto
                                 Method mtd = clase.getMethod(met[i].getName(), tipoDato);
                                 Object[] paramDato = new Object[1];
@@ -234,6 +237,11 @@ public class ListHash {
             }else if(type.getSimpleName().equals("Date") ){
                 if ((obj != null) && (!"null".equals(obj))){
                     sld = Date.valueOf(obj) ;
+                }
+            }else {
+                sld = String.valueOf(obj);
+                if ("null".equals(sld)){
+                    sld = null;
                 }
             }
         }catch (ClassNotFoundException e1){
