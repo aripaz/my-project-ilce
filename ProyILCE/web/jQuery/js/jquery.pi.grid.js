@@ -137,7 +137,7 @@
                                                                                                                              pk:0,
                                                                                                                              height:400,
                                                                                                                              width:500});
-                                                                                                            $(this).trigger("reloadGrid");
+                                                                                                            //$(this).trigger("reloadGrid");
                                                                                                         },
                                                                                                      position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
                                                                                                         {caption:"",
@@ -154,7 +154,7 @@
                                                                                                                             pk:nPK,
                                                                                                                             height:"500",
                                                                                                                             width:"500"});
-                                                                                                                $(this).trigger("reloadGrid");
+                                                                                                                //$(this).trigger("reloadGrid");
                                                                                                             }
                                                                                                             else {
                                                                                                                 alert('Seleccione un registro');
@@ -170,7 +170,7 @@
                                                                                                                                titulo: "B&uacute;squeda de registros",
                                                                                                                                columnas:1,
                                                                                                                                pk:0});
-                                                                                                            $(this).trigger("reloadGrid");
+                                                                                                            //$(this).trigger("reloadGrid");
                                                                                                           },
                                                                                                       position: "last",title:"Filtrar",cursor: "pointer"}).navButtonAdd("#pager" + suffix,
                                                                                                         {caption:"", 

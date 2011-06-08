@@ -170,8 +170,8 @@
                     });
                  }
                  //Incluye los queries almacenados de cada aplicacion
-                 $.fn.appmenu.getSearchs()
-
+                 $.fn.appmenu.getSearchs();
+                 
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
