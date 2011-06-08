@@ -359,7 +359,8 @@ public class Forma extends Entidad{
                 if (!cmpHS.getIsIncrement()){
                     if (valor!=null){
                         boolean isString = false;
-                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
                             isString = true;
                         }
                         strCampos.append(cmpFL.getCampo()).append(",");
@@ -439,7 +440,8 @@ public class Forma extends Entidad{
                 if (!cmpHS.getIsIncrement()){
                     if (valor!=null){
                         boolean isString = false;
-                        if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
                             isString = true;
                         }
                         strQuery.append(cmpFL.getCampo()).append("=");
@@ -516,7 +518,8 @@ public class Forma extends Entidad{
                     if (!cmpHS.getIsIncrement()){
                         if ((valor!=null)&&(!"".equals(valor))){
                             boolean isString = false;
-                            if ("java.lang.String".equals(cmpHS.getTypeDataAPL())){
+                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
                                 isString = true;
                             }
                             strQuery.append(cmpFL.getCampo()).append("=");
@@ -585,6 +588,7 @@ public class Forma extends Entidad{
                     strData[0]= this.getPk();
                     //ejecutamos la QUERY que se obtuvo al buscar la forma
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strData);
+                    hsCmp.setPkData(this.getPk());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
