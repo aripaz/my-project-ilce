@@ -26,7 +26,7 @@
             var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
             obj = $(this);
 
-            if ($.fn.form.options.aplicacion=="1" && $.fn.form.options.modo!='lookup')
+            if ($.fn.form.options.aplicacion=="1" && $.fn.form.options.forma=="2" && $.fn.form.options.modo!='lookup')
                 sTabs="<div id='formTab_" + suffix +"'>"+
                         "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
                             "<li><a href='#divFormPerfiles_" + suffix +"'>Perfiles de seguridad</a></li></ul>"+
@@ -317,7 +317,7 @@
             var nFormaForanea=$(this).find('foraneo').attr("clave_forma");
             var nEditaForaneos=$(this).find('foraneo').attr("agrega_registro");
             if (nFormaForanea!=undefined) {
-                sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
+                sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ' + oCampo.find('evento').text() + ' ';
                 
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted'}
