@@ -5,10 +5,17 @@ import com.oreilly.servlet.multipart.MultipartParser;
 import com.oreilly.servlet.multipart.ParamPart;
 import com.oreilly.servlet.multipart.Part;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.UtilDate;
@@ -35,6 +42,7 @@ public class AdminForm {
      * el servidor.
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
+     * @throws ExceptionHandler
      */
     public HashMap getFormulario(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
@@ -43,6 +51,9 @@ public class AdminForm {
             if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0))
             {
                 hs = getFormularioMultiPart(request);
+            }else if ((contentType != null) && (contentType.indexOf("application/x-www-form-urlencoded") >= 0)){
+                //otro(request);
+                hs = getFormularioWwwForm(request);
             }else{
                 hs = getFormularioSimple(request);
             }
@@ -60,6 +71,7 @@ public class AdminForm {
      * realizandose la copia en el servidor
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
+     * @throws ExceptionHandler
      */
     private HashMap getFormularioSimple(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
@@ -92,9 +104,10 @@ public class AdminForm {
      * datos del formulario (arrayFORM) y un arreglo con los nombres de los
      * campos de archivo (arrayFILE). Cuando los archivos que se indican
      * existen, se genera una copia en el servidor y se entrega en el Hash, el
-     * nombre y ruta del archivo.
+     * nombre y ruta del archivo. Se usa para formularios del tipo multipart/form-data
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return
+     * @throws ExceptionHandler
      */
     private HashMap getFormularioMultiPart(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
@@ -151,6 +164,80 @@ public class AdminForm {
             hs.put("arrayFILE", arrayFILE);
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario multipart");
+        }
+        return hs;
+    }
+
+    /**
+     * Entrega un Hash con el contenido de un formulario, en el Hash de
+     * datos (FORM) y un arreglo con los nombres de los campos de datos del
+     * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
+     * como otro dato mas, no generandose el hash con los datos de archivo ni
+     * realizandose la copia en el servidor. Se usa para formularios del tipo
+     * application/x-www-form-urlencoded
+     * @param request
+     * @return
+     * @throws ExceptionHandler
+     */
+    private HashMap getFormularioWwwForm(HttpServletRequest request) throws ExceptionHandler{
+        ServletInputStream instream = null;
+        HashMap hs = null;
+        try {
+            ArrayList arrayFORM = new ArrayList();
+            int inputLen, offset;
+            boolean dataRemaining=true;
+            boolean existData=false;
+            byte[] postedBytes = null;
+            String postedBody;
+            int length = request.getContentLength();
+            instream = request.getInputStream();
+            if (length>0){
+                postedBytes = new byte[length];
+                offset = 0;
+                while(dataRemaining) {
+                    inputLen = instream.read (postedBytes,
+                    offset,
+                    length - offset);
+                    if (inputLen <= 0) {
+                        throw new IOException ("read error");
+                    }
+                    offset += inputLen;
+                    if((length-offset) ==0) {
+                        dataRemaining=false;
+                    }
+                }
+                postedBody = new String (postedBytes);
+                StringTokenizer st = new StringTokenizer(postedBody, "&");
+                String key=null;
+                String val=null;
+
+                HashMap hsForm = new HashMap();
+                while (st.hasMoreTokens()) {
+                    String pair = (String)st.nextToken();
+                    int pos = pair.indexOf('=');
+                    if (pos == -1) {
+                        throw new IllegalArgumentException();
+                    }
+                    key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
+                    val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
+                    hsForm.put(key, val);
+                    arrayFORM.add(key);
+                    existData=true;
+                }
+                if (existData){
+                    hs = new HashMap();
+                    hs.put("FORM", hsForm);
+                    hs.put("arrayFORM", arrayFORM);
+                }
+            }
+        } catch (IOException ex) {
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el formulario x-www-form-urlencoded");
+        } finally {
+            try {
+                instream.close();
+            } catch (IOException ex) {
+                throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el formulario multipart, al cerrar ServletInputStream");
+            }
         }
         return hs;
     }
