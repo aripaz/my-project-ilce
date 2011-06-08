@@ -219,7 +219,8 @@ public class AdminForm {
                         throw new IllegalArgumentException();
                     }
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
-                    val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
+                    //val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
+                    val = pair.substring(pos+1,pair.length());
                     hsForm.put(key, val);
                     arrayFORM.add(key);
                     existData=true;
