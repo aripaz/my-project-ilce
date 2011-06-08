@@ -966,6 +966,9 @@ public class AdminXML {
         }else
         if ("java.lang.Integer".equals(strData)){
             strSld = "integer";
+        }else
+        if ("mx.ilce.bean.Text".equals(strData)){
+            strSld = "text";
         }
         return strSld;
     }
