@@ -229,48 +229,39 @@ if (window.ActiveXObject) // for IE
 	}
 }
 
-function setXMLInSelect(sSelect, q) {
+function setXMLInSelect3(sSelect,pk) {
+var httpRequest;
 if (window.ActiveXObject) // for IE 
-	{ 
-		var objDOM=new ActiveXObject("Microsoft.XMLDOM");
-	} 
-	else if (window.XMLHttpRequest) // for other browsers 
-	{ 
-		var objDOM=document.implementation.createDocument("","",null) 
-	} 	
+    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+else if (window.XMLHttpRequest) // for other browsers 
+    httpRequest = new XMLHttpRequest();
 
-	objDOM.async=false;
-	var s='panel_control/getXML.asp?q=' + q
-	objDOM.load(s);
-	var x = objDOM.getElementsByTagName('row');
+var s="srvFormaSearch?$cf=-2&$ta=update&$pk="+pk
+httpRequest.open('GET',s, false);
+httpRequest.send(null);
 
-	//Llena una lista a partir de un archivo XML
-	//Obtiene el nombre del select y lo transforma en objeto
-	var aSelect=sSelect.split(",");
-	for (a=0;a<aSelect.length;a++) {
-		
-		var oSelect=document.getElementById(aSelect[a]);
-		//var oSelect=eval('window.document.form1.' + aSelect[a]); 
-		
-		if (oSelect!=null) {
+var x = httpRequest.responseXML.getElementsByTagName('registro');
 
-		//Elimina los elementos de la lista
-		oSelect.options.length=0
+//Llena una lista a partir de un archivo XML
+//Obtiene el nombre del select y lo transforma en objeto
 		
-		/*for (m=oSelect.options.length-1;m>0;m--) {
-			oSelect.options[m]=null
-		}*/
-		
-		//Carga en un objeto el XML
-		//Siempre deja la primera opci�n vac�a
-		var addOption = new Option('',''); 
-		oSelect.options[oSelect.length] = addOption;
-		for (i=0;i<x.length;i++) {
-			 addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[0].childNodes[0].nodeValue); 
-			 oSelect.options[oSelect.length] = addOption;
-			}
-	  	} 
-	}
+var oSelect=document.getElementById(sSelect);
+//var oSelect=eval('window.document.form1.' + aSelect[a]);
+
+if (oSelect!=null) {
+
+//Elimina los elementos de la lista
+oSelect.options.length=0
+
+//Carga en un objeto el XML
+//Siempre deja la primera opcion vacia
+var addOption = new Option('','');
+oSelect.options[oSelect.length] = addOption;
+for (i=0;i<x.length;i++) {
+         addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
+         oSelect.options[oSelect.length] = addOption;
+        }
+}
 }
 
 function emailCheck (emailStr) {
@@ -389,3 +380,46 @@ function removeHTMLTags(s){
 
 }
 
+function setXMLInSelect(sSelect, q) {
+if (window.ActiveXObject) // for IE
+	{
+		var objDOM=new ActiveXObject("Microsoft.XMLDOM");
+	}
+	else if (window.XMLHttpRequest) // for other browsers
+	{
+		var objDOM=document.implementation.createDocument("","",null)
+	}
+
+	objDOM.async=false;
+	var s='panel_control/getXML.asp?q=' + q
+	objDOM.load(s);
+	var x = objDOM.getElementsByTagName('row');
+
+	//Llena una lista a partir de un archivo XML
+	//Obtiene el nombre del select y lo transforma en objeto
+	var aSelect=sSelect.split(",");
+	for (a=0;a<aSelect.length;a++) {
+
+		var oSelect=document.getElementById(aSelect[a]);
+		//var oSelect=eval('window.document.form1.' + aSelect[a]);
+
+		if (oSelect!=null) {
+
+		//Elimina los elementos de la lista
+		oSelect.options.length=0
+
+		/*for (m=oSelect.options.length-1;m>0;m--) {
+			oSelect.options[m]=null
+		}*/
+
+		//Carga en un objeto el XML
+		//Siempre deja la primera opci�n vac�a
+		var addOption = new Option('','');
+		oSelect.options[oSelect.length] = addOption;
+		for (i=0;i<x.length;i++) {
+			 addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[0].childNodes[0].nodeValue);
+			 oSelect.options[oSelect.length] = addOption;
+			}
+	  	}
+	}
+}

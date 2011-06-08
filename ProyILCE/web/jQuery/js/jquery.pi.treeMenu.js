@@ -46,14 +46,23 @@
                 oRegistros = $(xmlGT).find("registro")
                 
                 var sTypes="";
+                //Se define la estructura del árbol de acuerdo a la aplicación
                 var sXML="";
+
+                //Se reemplaza el parámetro de la aplicación
+                
                 oRegistros.each( function() {
                    sTypes+= '"'+$.trim($(this).find('tabla').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().replace('\n','')) + '"}},';
                    nClaveNodo= $.trim($(this).find('clave_forma').text().replace('\n',''));
                    sTabla=$.trim($(this).find('tabla').text().replace('\n',''));
                    sForma=$.trim($(this).find('forma').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
                    nClaveNodoPadre=$.trim($(this).find('clave_forma_padre').text().replace('\n',''));
-                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sTabla +"' state='open'><content><name><![CDATA[" + sForma + "]]></name></content></item>";
+                   if (sTabla=='aplicacion')
+                       sState='open'
+                   else
+                       sState='closed'
+
+                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sTabla +"' state='" + sState + "'><content><name><![CDATA[" + sForma + "]]></name></content></item>";
                 });
 
                 sXML="<root>" + sXML + "</root>";
@@ -89,6 +98,7 @@
                       wsParameters: sW,
                       titulo:sTitulo,
                       showFilterLink:false,
+                      inQueue:false,
                       leyendas:["Nuevo registro", "Edición de registro"],
                       height:"75%"
                    });
