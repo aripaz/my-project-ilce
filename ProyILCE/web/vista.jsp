@@ -30,6 +30,7 @@ if (user == null){
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.gridqueue.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.field_toolbar.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
