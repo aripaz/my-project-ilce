@@ -177,3 +177,8 @@ td.etiqueta_perfil {
 .link_toolbar {
      height: 15px;
 }
+
+#tabUser {
+    height: 90%; margin: 1px;
+
+}
