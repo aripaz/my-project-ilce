@@ -359,6 +359,9 @@ public class AdminXML {
                                         String[] strData = new String[2];
                                         strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                         strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                        if ((cmpAux.getFiltroForaneo()==null)&&(hsData.getPkData()!=null)){
+                                            strData[1] = hsData.getPkData();
+                                        }
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                         if (!"".equals(strForaneo.toString())){
                                             str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
@@ -488,6 +491,9 @@ public class AdminXML {
                                     String[] strData = new String[2];
                                     strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                     //strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                    if (hsData.getPkData()!=null){
+                                        strData[1]=hsData.getPkData();
+                                    }
                                     if (this.isIncludeForaneo()){
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                         if (!"".equals(strForaneo.toString())){
