@@ -29,5 +29,7 @@ $(document).ready(function() {
     $("#apps_menu").appmenu({
              xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp"});
 
+    //Inicializa el escritorio
+    $("#tabUser").desktop();
 
 }); //close $(

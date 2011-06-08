@@ -25,6 +25,7 @@
              obj = $(this);
              obj.html("<div align='center' class='cargando' ><br /><br />Cargando informaci&oacute;n...  <br /><img src='img/loading.gif' /></div>")
              $.fn.sessionmenu.ajax(obj);
+             
         });
 
     };
@@ -60,11 +61,15 @@
                     else {
                          $tabs.tabs( "add", "#tabConfiguracion", "Configuraci&oacute;n");
                          $tabs.tabs( "select", "#tabConfiguracion");
+
                          $("#tabConfiguracion").appgrid({app: 1,
                                               entidad: 1,
-                                              wsParameters:"clave_empleado=" + $.fn.sessionmenu.options.empleado,
+                                              wsParameters:"e.clave_empleado=" + $.fn.sessionmenu.options.empleado,
                                               titulo:"Par&aacute;metros de configuraci&oacute;n",
-                                              leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});;
+                                              inQueue:false,
+                                              height:"75%",
+                                              showFilterLink:false,
+                                              leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
 
                     }
                     
