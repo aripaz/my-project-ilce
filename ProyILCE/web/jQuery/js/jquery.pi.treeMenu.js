@@ -10,7 +10,9 @@
             xmlUrl : "srvFormaSearch",
             app: "",
             entidad:"",
-            pk:""
+            pk:"",
+            behaviour:"",
+            originalForm:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -20,7 +22,7 @@
         });
     }
 
-    $.fn.treeMenu.getTreeDefinition=function(obj) {
+    $.fn.treeMenu.getTreeDefinition=function(o) {
         $.ajax(
         {
             url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
@@ -52,25 +54,30 @@
                 //Se reemplaza el parámetro de la aplicación
                 
                 oRegistros.each( function() {
-                   sTypes+= '"'+$.trim($(this).find('tabla').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().replace('\n','')) + '"}},';
-                   nClaveNodo= $.trim($(this).find('clave_forma').text().replace('\n',''));
-                   sTabla=$.trim($(this).find('tabla').text().replace('\n',''));
-                   sForma=$.trim($(this).find('forma').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
-                   nClaveNodoPadre=$.trim($(this).find('clave_forma_padre').text().replace('\n',''));
-                   if (sTabla=='aplicacion')
+                   sTypes+= '"'+$.trim($(this).find('rel').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().replace('\n','')) + '"}},';
+                   nClaveNodo= $.trim($(this).find('clave_nodo').text().replace('\n',''));
+                   sRel=$.trim($(this).find('rel').text().replace('\n',''));
+                   sTextoNodo=$.trim($(this).find('texto_nodo').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
+                   nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''));
+                   if (sRel=='aplicacion')
                        sState='open'
                    else
                        sState='closed'
 
-                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sTabla +"' state='" + sState + "'><content><name><![CDATA[" + sForma + "]]></name></content></item>";
+                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel +"' state='" + sState + "'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
                 });
 
                 sXML="<root>" + sXML + "</root>";
                 sTypes="{"+sTypes.substring(0,sTypes.length-1)+"}";
                 oTypes.types = $.parseJSON(sTypes);
 
-                $(obj).jstree({
-                    "plugins" : [ "themes", "contextmenu", "xml_data","types","ui" ],
+                if ($.fn.treeMenu.options.behaviour=='kardex')
+                    aPlugins="themes,contextmenu,xml_data,types,ui".split(",");
+                else
+                    aPlugins="themes,contextmenu,xml_data,types,ui,checkbox".split(",");
+                
+                $(o).jstree({
+                    "plugins" : aPlugins,
                     "xml_data" : {
                         "data" : sXML
                     },
@@ -83,33 +90,114 @@
                     }
                 );
 
-                $("#" + obj.id+ " a").live("click", function(e) {
-                  var sNodeId=this.parentNode.id;
-                  var sTitulo=$.trim(this.text);
-                  var nApp=sNodeId.split("-")[1];
-                  var nForma=sNodeId.split("-")[2];
-                  var sW=sNodeId.split("-").length>3?sNodeId.split("-")[3]:"";
-                  
-                  //Llama grids
-                  if (nForma==undefined) return false;
+                if ($.fn.treeMenu.options.behaviour=='profile' && $.fn.treeMenu.options.pk>0)
+                   $.fn.treeMenu.getAppProfiles(o);
+                else if ($.fn.treeMenu.options.behaviour=='profile')
+                    $(o).jstree('check_node', $('#perfil-1'));
+                    
 
-                   $(obj.nextSibling).appgrid({app: nApp,
-                      entidad: nForma,
-                      wsParameters: sW,
-                      titulo:sTitulo,
-                      showFilterLink:false,
-                      inQueue:false,
-                      leyendas:["Nuevo registro", "Edición de registro"],
-                      height:"75%"
-                   });
+               
+                $("#" + o.id+ " a").live("click", function(e) {
+                   if ($.fn.treeMenu.options.behaviour=='kardex') {
+                      var sNodeId=this.parentNode.id;
+                      var sTitulo=$.trim(this.text);
+                      var nApp=sNodeId.split("-")[1];
+                      var nForma=sNodeId.split("-")[2];
+                      var sW=sNodeId.split("-").length>3?sNodeId.split("-")[3]:"";
 
-                    });
+                      //Llama grids
+                      if (nForma==undefined) return false;
+
+                       $(o.nextSibling).appgrid({app: nApp,
+                          entidad: nForma,
+                          wsParameters: sW,
+                          titulo:sTitulo,
+                          showFilterLink:false,
+                          inQueue:false,
+                          leyendas:["Nuevo registro", "Edición de registro"],
+                          height:"75%"
+                       });
+                    }
+
+                    if (($.fn.treeMenu.options.behaviour=='profile')) {
+                        if (this.parentNode.id='perfil-1'){
+                            if(!$.jstree._reference('#' + o.id).is_checked ('#perfil-1')) {
+                                alert ('No es posible quitar acceso al Administrador');
+                                $.jstree._reference('#' + o.id).check_node('#perfil-1');
+                            }
+                        }
+                    }
+                 });
 
             },
             error:function(xhr,err){
                 alert("Error al recuperar definición de arbol\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
                 alert("responseText: "+xhr.responseText);}
             });
-    };
-   
+ };
+
+$.fn.treeMenu.getAppProfiles=function(o) {
+
+        $.ajax(
+        {
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf=10&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
+            dataType: ($.browser.msie) ? "text" : "xml",
+            success:  function(data){
+                if (typeof data == "string") {
+                    xmlAP = new ActiveXObject("Microsoft.XMLDOM");
+                    xmlAP.async = false;
+                    xmlAP.validateOnParse="true";
+                    xmlAP.loadXML(data);
+                    if (xmlAP.parseError.errorCode>0)
+                        alert("Error de compilación xml:" + xmlAP.parseError.errorCode +"\nParse reason:" + xmlAP.parseError.reason + "\nLinea:" + xmlAP.parseError.line);
+                }
+                else
+                    xmlAP = data;
+
+                // Recorre el arbol y va marcando los registros que encuentra
+                $(o).find('li.jstree-unchecked').each(function(){
+                   sClaveNodo=this.id;
+                   nClaveRegistro=this.id.split("-")[1];
+                   sTipoNodo=$(this).attr("rel");
+                   sTipoPermiso=this.id.split("-")[2];
+                   
+                   if ($.fn.treeMenu.options.originalForm=="2"){   // Forma aplicacion
+                        oRegistros=$(xmlAP).find('registro');
+                        oRegistros.each( function() {
+                           nClaveP=oRegistros.find('clave_perfil').text().split("\n")[0];
+                            if (nClaveRegistro==nClaveP && sTipoNodo=='Perfiles') {
+                                $.jstree._reference('#' + o.id).check_node('#' + sClaveNodo);
+                                return false;
+                            }
+
+                        });
+
+                   }
+                   else {
+                        if (sTipoPermiso==undefined)
+                            return true;
+
+                        oRegistros=$(xmlAP).find('registro');
+                        oRegistros.each( function() {
+                            nClaveP=oRegistros.find('clave_permiso').text().split("\n")[0];
+                            nValorPermiso=$(xmlAP).find(sTipoPermiso).text().split("\n")[0];
+
+
+                            if (nClaveRegistro==nClaveP && sTipoNodo=='permiso' && nValorPermiso=="1") {
+                                $.jstree._reference('#' + o.id).check_node('#' + sClaveNodo);
+                                return false;
+                            }
+
+
+                        });
+
+
+                   }
+                });
+            },
+            error:function(xhr,err){
+                alert("Error al recuperar definición de arbol\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                alert("responseText: "+xhr.responseText);}
+            });
+ };
 })(jQuery);
