@@ -63,7 +63,7 @@
                 sBusqueda = "<span class='formButton'> Guardar filtro como: </span><input name='$b' id='$b' value='' class='formButton' />&nbsp;&nbsp;";
             }
 
-            sTabs+="<br><div align='right'><table><tr><td id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
+            sTabs+="<br><div align='right'><table><tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
             sBusqueda +
             "<input type='button' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></td></tr></table></div>";
               
