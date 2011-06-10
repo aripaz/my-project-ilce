@@ -226,7 +226,6 @@
 
                //Verifica si el grid está en una cola
                if ($.fn.appgrid.options.inQueue)
-                   //$('.foreign_grids:first').gridqueue({height: $('#_gq_').val()+'%'})
                    setTimeout("$('.foreign_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",2000);
 
                if ($.fn.appgrid.options.removeGridTitle)
@@ -279,14 +278,15 @@
              $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
              //Crea la interfaz de la aplicación abierta
-             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "'>" +
-                 "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer'></div>" +
+             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
+                 "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer '></div>" +
                  "<div id='divForeignGrids" + suffix + "_" + id +"' class='gridContainer'></div>" +
                  "</div>");
              $("#tvApp" + suffix + "_" + id).treeMenu({
                  app:nApp,
                  entidad:nEntidad,
-                 pk:id
+                 pk:id,
+                 behaviour:'kardex'
             });
 
             }
