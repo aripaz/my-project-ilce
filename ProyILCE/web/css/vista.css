@@ -7,7 +7,8 @@ font-size:80%;
 #search {width: 98%; }
 form.forma {font-size: 1em !important; width: 100%; margin:5px; }
 .ui-widget button {font-size: 12px !important; font-family:Verdana, Arial, Helvetica, sans-serif !important }
-table.forma { width: 100%; margin:5px;}
+table.forma { width: 100%; margin:0px;}
+form.forma { width: 100%; margin:5px;}
 h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
 td.etiqueta_forma {width: 24.5%; font-size: .80em; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right  }
 div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
@@ -146,7 +147,7 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 .treeProfiles {
     border: 1px solid gray;
     float: none;
-    height:65%;
+    height:200px;
     overflow: auto;
     width: 100%;
     background-color:white;
@@ -179,6 +180,11 @@ td.etiqueta_perfil {
 }
 
 #tabUser {
-    height: 90%; margin: 1px;
+    height: 85%; margin: 1px;
 
+}
+
+td.estatus_bar {
+    font-size: 10px;
+    font-family:  Verdana, Arial, Helvetica, sans-serif !important
 }
