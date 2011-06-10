@@ -71,11 +71,11 @@ public class srvGrid extends HttpServlet {
                             apl.setTipoAccion(tipoAccion);
                             apl.setStrWhereQuery(strWhere);
                             apl.setArrayData(strData);
-                            apl.mostrarForma();
-                            String numPage = (String) hsForm.get("numPage");
-                            String numRows = (String) hsForm.get("numRows");
+                            String numPage = (String) hsForm.get("page");
+                            String numRows = (String) hsForm.get("rows");
                             apl.setNumPage(numPage);
                             apl.setNumRows(numRows);
+                            apl.mostrarForma();
                             xmlForma = apl.getXmlEntidad();
                         }else{
                             Exception e = new Exception();
