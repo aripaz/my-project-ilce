@@ -542,12 +542,24 @@ public class Forma extends Entidad{
                     }
                 }
             }
-            strQuery.append(strCampoPK);
-            strQuery.append(" = ").append(pkInsert);
+            if (pkInsert!=null){
+                if (pkInsert.trim().length()>0){
+                    strQuery.append(strCampoPK);
+                    strQuery.append(" = ").append(pkInsert);
+                }
+            }
             if (forma.getStrWhereQuery()!=null){
                 String strWhere = forma.getStrWhereQuery().trim();
                 if (strWhere.length()>0){
-                    strQuery.append(" AND ").append(strWhere);
+                    if (pkInsert!=null){
+                        if (pkInsert.trim().length()>0){
+                            strQuery.append(" AND ").append(strWhere);
+                        }else{
+                            strQuery.append(strWhere);
+                        }
+                    }else{
+                        strQuery.append(strWhere);
+                    }
                 }
             }
             strQuery.append("");
