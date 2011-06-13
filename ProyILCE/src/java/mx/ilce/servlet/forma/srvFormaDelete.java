@@ -55,8 +55,11 @@ public class srvFormaDelete extends HttpServlet {
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
-                arrVal.add("$pk");
 
+                if ((pk==null)&&(strWhere==null)){
+                    arrVal.add("$pk");
+                    arrVal.add("$w");
+                }
                 List lstVal = val.validationForm(arrVal, hsForm);
                 String blOK = (String) lstVal.get(0);
                 if ("false".equals(blOK)){
