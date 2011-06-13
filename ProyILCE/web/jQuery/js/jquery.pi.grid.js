@@ -108,8 +108,9 @@
                             sortname:  $.fn.appgrid.options.sortname+suffix,
                             viewrecords: true,
                             sortorder: "desc",                            
-                            ondblClickRow: function(id){
-                                  var openKardex=false;
+                            onClickRow: function(id){
+                                    alert('Hola mundo');
+                                  /*var openKardex=false;
                                   var aValidKardex= $("#_vk_").val().split(",");
                                   for (var i=0;i<=aValidKardex.length-1;i++) {
                                       if (aValidKardex[i]==suffix){
@@ -122,7 +123,7 @@
                                      var nApp=this.id.split("_")[1];
                                      var nForm=this.id.split("_")[2];
                                      $.fn.appgrid.openKardex(nApp,nForm,id);
-                                  }
+                                  }*/
                             },
                             caption:$.fn.appgrid.options.titulo}).navGrid('#pager' + suffix,
                                                     {edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,
@@ -279,14 +280,13 @@
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
              //Crea la interfaz de la aplicación abierta
              $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
-                 "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer '></div>" +
+                 "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer' behaviour='kardex'></div>" +
                  "<div id='divForeignGrids" + suffix + "_" + id +"' class='gridContainer'></div>" +
                  "</div>");
              $("#tvApp" + suffix + "_" + id).treeMenu({
                  app:nApp,
                  entidad:nEntidad,
-                 pk:id,
-                 behaviour:'kardex'
+                 pk:id
             });
 
             }

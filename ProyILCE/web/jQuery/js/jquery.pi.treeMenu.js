@@ -10,9 +10,7 @@
             xmlUrl : "srvFormaSearch",
             app: "",
             entidad:"",
-            pk:"",
-            behaviour:"",
-            originalForm:""
+            pk:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -71,7 +69,7 @@
                 sTypes="{"+sTypes.substring(0,sTypes.length-1)+"}";
                 oTypes.types = $.parseJSON(sTypes);
 
-                if ($.fn.treeMenu.options.behaviour=='kardex')
+                if ($(o).attr("behaviour")=='kardex')
                     aPlugins="themes,contextmenu,xml_data,types,ui".split(",");
                 else
                     aPlugins="themes,contextmenu,xml_data,types,ui,checkbox".split(",");
@@ -90,15 +88,15 @@
                     }
                 );
 
-                if ($.fn.treeMenu.options.behaviour=='profile' && $.fn.treeMenu.options.pk>0)
+                if ($(o).attr("behaviour")=='profile' && $.fn.treeMenu.options.pk>0)
                    $.fn.treeMenu.getAppProfiles(o);
-                else if ($.fn.treeMenu.options.behaviour=='profile')
+                else if ($(o).attr("behaviour")=='profile')
                     $(o).jstree('check_node', $('#perfil-1'));
                     
 
                
                 $("#" + o.id+ " a").live("click", function(e) {
-                   if ($.fn.treeMenu.options.behaviour=='kardex') {
+                   if ($(o).attr("behaviour")=='kardex') {
                       var sNodeId=this.parentNode.id;
                       var sTitulo=$.trim(this.text);
                       var nApp=sNodeId.split("-")[1];
@@ -119,8 +117,8 @@
                        });
                     }
 
-                    if (($.fn.treeMenu.options.behaviour=='profile')) {
-                        if (this.parentNode.id='perfil-1'){
+                    if (($(o).attr("behaviour")=='profile')) {
+                        if (this.parentNode.id=='perfil-1'){
                             if(!$.jstree._reference('#' + o.id).is_checked ('#perfil-1')) {
                                 alert ('No es posible quitar acceso al Administrador');
                                 $.jstree._reference('#' + o.id).check_node('#perfil-1');
@@ -161,7 +159,7 @@ $.fn.treeMenu.getAppProfiles=function(o) {
                    sTipoNodo=$(this).attr("rel");
                    sTipoPermiso=this.id.split("-")[2];
                    
-                   if ($.fn.treeMenu.options.originalForm=="2"){   // Forma aplicacion
+                   if ($(o).attr("originalForm")=="2"){   // Forma aplicacion
                         oRegistros=$(xmlAP).find('registro');
                         oRegistros.each( function() {
                            nClaveP=oRegistros.find('clave_perfil').text().split("\n")[0];

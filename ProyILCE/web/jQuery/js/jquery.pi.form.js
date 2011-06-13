@@ -36,7 +36,7 @@
                 "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
                 "<img src='img/loading.gif' /></div>"+
                 "</div>"+
-                "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles_" + suffix +"' class='treeProfiles'></div></div>"+
+                "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles_" + suffix +"' class='treeProfiles' behaviour='profile' originalForm='" + $.fn.form.options.forma + "'></div></div>"+
                 "</div>"
             else {
 
@@ -60,11 +60,10 @@
                 sButtonCaption='Guardar';
             else {
                 sButtonCaption='Buscar'
-                sBusqueda = "<span class='formButton'> Guardar filtro como: </span><input name='$b' id='$b' value='' class='formButton' />&nbsp;&nbsp;";
+                sBusqueda = "<tr><td class='etiqueta_forma' style='width:50%'>Guardar filtro como: </td><td class='etiqueta_forma'><input name='$b' id='$b' value='' class='singleInput' /></td></tr>";
             }
 
-            sTabs+="<br><div align='right'><table><tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
-            sBusqueda +
+            sTabs+="<br><div align='right'><table>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
             "<input type='button' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></td></tr></table></div>";
               
             obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>");
@@ -97,9 +96,7 @@
         obj.treeMenu({
             app:"1",
             entidad:($.fn.form.options.forma=="3")?"14":"5",
-            pk:$.fn.form.options.pk,
-            behaviour:'profile',
-            originalForm:$.fn.form.options.forma
+            pk:$.fn.form.options.pk
         });
     }
 
@@ -153,7 +150,7 @@
                     //Deshabilita el botón guardar
                     $("#btnGuardar_"+formSuffix).disabled=true;
                     //Actualiza el estatus bar
-                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>Validando informacion...");
+                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
 
                     var sWS="";
                     var oCampos;
@@ -177,6 +174,7 @@
                         if (!bCompleto) return false;
 
                         //Preparando la información para enviarla via POST
+                        $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando informacion...");
                         sWS="srvFormaInsert";
 
                         oCampos = oForm.serializeArray();
@@ -198,8 +196,42 @@
                                     return false;
                                 }
 
-                                //Envía perfiles asociados a la forma
+                                $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando perfiles de seguridad...");
+                                //Envía perfiles asociados a la forma aplicación
                                 if ($.fn.form.options.forma=="2") {
+                                    //Se deben borrar los perfiles anteriores!!
+
+                                    $("#divFormProfiles_" + formSuffix).find('li.jstree-checked').each(function(){
+                                      sData='clave_perfil='+this.id.split("-")[1]+"&clave_aplicacion=" + data + "&activo=1&$cf=10&$pk=0&$ta="+ $.fn.form.options.modo;
+                                      $.post(sWS, sData);
+                                    });
+                                }
+
+                                //Envía perfiles asociados a la forma forma
+
+                                if ($.fn.form.options.forma=="3") {
+                                    //Se deben borrar los permisos anteriores!!
+                                    //Se necesita recuperar los perfiles padres
+                                    oPerfiles=$("ul","#divFormProfiles_" + formSuffix);
+                                    $(oPerfiles).each(function(){
+                                        oPerfil=this.children;
+                                        $(oPerfil).each(function(){
+                                            nPerfil=$(this)[0].id.split("-")[1];
+                                            if ($(this).attr("rel")=='perfil') {
+                                                nActualizar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-actualizar")?"1":"0";
+                                                nEliminar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-eliminar")?"1":"0";
+                                                nInsertar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-insertar")?"1":"0";
+                                                nMostrar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-mostrar")?"1":"0";
+                                                nMostrarInfoSensible=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-mostrar_informacion_sensible")?"1":"0";
+                                                sData ="clave_forma="+data+ "&clave_perfil="+nPerfil+"&mostrar="+nMostrar+"&insertar="+nInsertar+"&actualizar="+nActualizar+"&eliminar=" +nEliminar+"&mostrar_informacion_sensible="+nMostrarInfoSensible+"&$cf=14&$pk=0&$ta=insert";
+                                                $.post(sWS, sData);
+                                            }
+                                            else return true;
+
+                                        });
+                                    });
+                                    //y barrer los hijos para recuperar los datos
+                                    // Los nodos padres son los li's que están en el primer ul
                                     $("#divFormProfiles_" + formSuffix).find('li.jstree-checked').each(function(){
                                       sData='clave_perfil='+this.id.split("-")[1]+"&clave_aplicacion=" + data + "&activo=1&$cf=10&$pk=0&$ta="+ $.fn.form.options.modo;
                                       $.post(sWS, sData);
