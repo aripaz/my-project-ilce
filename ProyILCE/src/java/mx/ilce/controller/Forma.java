@@ -436,25 +436,27 @@ public class Forma extends Entidad{
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
                 String valor = (String) hsForm.get(cmpFL.getCampo());
-                // si es autoIncremental, no se necesita enviar
-                if (!cmpHS.getIsIncrement()){
-                    if (valor!=null){
-                        boolean isString = false;
-                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
-                            isString = true;
+                if (cmpHS!=null){
+                    // si es autoIncremental, no se necesita enviar
+                    if (!cmpHS.getIsIncrement()){
+                        if (valor!=null){
+                            boolean isString = false;
+                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                    ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                                isString = true;
+                            }
+                            strQuery.append(cmpFL.getCampo()).append("=");
+                            if (isString){
+                                strQuery.append("'");
+                                strQuery.append((valor==null)?"":valor);
+                                strQuery.append("',");
+                            }else{
+                                strQuery.append(valor).append(",");
+                            }
                         }
-                        strQuery.append(cmpFL.getCampo()).append("=");
-                        if (isString){
-                            strQuery.append("'");
-                            strQuery.append((valor==null)?"":valor);
-                            strQuery.append("',");
-                        }else{
-                            strQuery.append(valor).append(",");
-                        }
+                    }else{
+                        strCampoPK = cmpFL.getCampo();
                     }
-                }else{
-                    strCampoPK = cmpFL.getCampo();
                 }
             }
             strQuery.delete(strQuery.length()-1,strQuery.length());
@@ -542,6 +544,12 @@ public class Forma extends Entidad{
             }
             strQuery.append(strCampoPK);
             strQuery.append(" = ").append(pkInsert);
+            if (forma.getStrWhereQuery()!=null){
+                String strWhere = forma.getStrWhereQuery().trim();
+                if (strWhere.length()>0){
+                    strQuery.append(" AND ").append(strWhere);
+                }
+            }
             strQuery.append("");
 
             conE.setQuery(strQuery.toString());
@@ -913,5 +921,59 @@ public class Forma extends Entidad{
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener la Forma, mediante el ID de la query");
         }
         return lst;
+    }
+
+    private String castAcent(String data) throws ExceptionHandler {
+        String str = "";
+        try{
+            int pos =0;
+            if (data!=null){
+                String paso=data;
+                if (paso.contains("Á")){
+                    paso=paso.replaceAll("Á","'+char(193)+'");
+                }
+                if (paso.contains("É")){
+                    paso=paso.replaceAll("É","'+char(201)+'");
+                }
+                if (paso.contains("Í")){
+                    paso=paso.replaceAll("Í","'+char(205)+'");
+                }
+                if (paso.contains("Ñ")){
+                    paso=paso.replaceAll("Ñ","'+char(209)+'");
+                }
+                if (paso.contains("Ó")){
+                    paso=paso.replaceAll("Ó","'+char(211)+'");
+                }
+                if (paso.contains("Ú")){
+                    paso=paso.replaceAll("Ú","'+char(218)+'");
+                }
+                if (paso.contains("Ü")){
+                    paso=paso.replaceAll("Ü","'+char(220)+'");
+                }
+                if (paso.contains("á")){
+                    paso=paso.replaceAll("á","'+char(225)+'");
+                }
+                if (paso.contains("é")){
+                    paso=paso.replaceAll("é","'+char(233)+'");
+                }
+                if (paso.contains("í")){
+                    paso=paso.replaceAll("í","'+char(237)+'");
+                }
+                if (paso.contains("ñ")){
+                    paso=paso.replaceAll("ñ","'+char(241)+'");
+                }
+                if (paso.contains("ó")){
+                    paso=paso.replaceAll("ó","'+char(243)+'");
+                }
+                if (paso.contains("ú")){
+                    paso=paso.replaceAll("ú","'+char(250)+'");
+                }
+            }else{
+                str=data;
+            }
+        }catch(Exception e){
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para reemplazar los acentos de: "+data);
+        }
+        return str;
     }
 }

@@ -50,6 +50,7 @@ public class srvFormaDelete extends HttpServlet {
 
                 String claveForma = (String) hsForm.get("$cf");
                 String pk = (String) hsForm.get("$pk");
+                String strWhere = (String) hsForm.get("$w");
                 String tipoAccion = "delete";
 
                 ArrayList arrVal = new ArrayList();
@@ -65,6 +66,7 @@ public class srvFormaDelete extends HttpServlet {
                     forma.setPk(pk);
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
+                    forma.setStrWhereQuery(strWhere);
                     List lstForma = forma.getForma(Integer.valueOf(claveForma));
 
                     //Analizamos segun la forma obtenida
