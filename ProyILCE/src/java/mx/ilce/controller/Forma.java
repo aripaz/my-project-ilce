@@ -514,13 +514,16 @@ public class Forma extends Entidad{
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
-                String valor = (String) hsForm.get(cmpFL.getCampo());
+                //String valor = (String) hsForm.get(cmpFL.getCampo());
                 if (cmpHS!=null){
                     // si es autoIncremental, no se necesita enviar
-                    if (!cmpHS.getIsIncrement()){
+                    if (cmpHS.getIsIncrement()){
+                        strCampoPK = cmpFL.getCampo();
+                    }
+                    /*if (!cmpHS.getIsIncrement()){
                         if ((valor!=null)&&(!"".equals(valor))){
                             boolean isString = false;
-                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                           if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
                                 ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
                                 isString = true;
                             }
@@ -539,21 +542,27 @@ public class Forma extends Entidad{
                         }
                     }else{
                         strCampoPK = cmpFL.getCampo();
-                    }
+                    }*/
                 }
             }
             if (pkInsert!=null){
-                if (pkInsert.trim().length()>0){
-                    strQuery.append(strCampoPK);
-                    strQuery.append(" = ").append(pkInsert);
+                if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                    if (strCampoPK !=null){
+                        strQuery.append(strCampoPK);
+                        strQuery.append(" = ").append(pkInsert);
+                    }
                 }
             }
             if (forma.getStrWhereQuery()!=null){
                 String strWhere = forma.getStrWhereQuery().trim();
                 if (strWhere.length()>0){
                     if (pkInsert!=null){
-                        if (pkInsert.trim().length()>0){
-                            strQuery.append(" AND ").append(strWhere);
+                        if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                            if (strCampoPK !=null){
+                                strQuery.append(" AND ").append(strWhere);
+                            }else{
+                                strQuery.append(strWhere);
+                            }
                         }else{
                             strQuery.append(strWhere);
                         }
@@ -573,8 +582,10 @@ public class Forma extends Entidad{
             ex = new ExecutionHandler();
             if (intHs.equals(1)){
                 ex.setExecutionOK(true);
+                ex.setObjectData(intHs);
             }else{
                 ex.setExecutionOK(false);
+                ex.setObjectData(intHs);
             }
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el DELETE de la Forma");
