@@ -242,6 +242,16 @@
                     $(".closeLnkFiltro",this).hide();
                     }
                 );
+                
+                //Hace bind con los botones de cerrar en el evento hover
+                $(".closeLnkFiltro").hover(
+                    function () {
+                    $(this).addClass('ui-state-default ui-corner-all');
+                    },
+                    function () {
+                    $(this).removeClass('active_filter');
+                    }
+                );
 
                 //Hace bind del botón de búsqueda
                 $(".closeLnkFiltro").click(function(){
