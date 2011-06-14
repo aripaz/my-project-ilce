@@ -95,15 +95,19 @@ public class srvFormaDelete extends HttpServlet {
                     if (obligatorioOk){
                         lstData.add(hsFormQuery);
                         lstData.add(forma);
-                        if (!"0".equals(forma.getPk())){     // No Es un nuevo elemento
-                            ex = forma.eliminarEntidad(lstData);
-                        }
+                        ex = forma.eliminarEntidad(lstData);
                         ex.setExecutionOK(true);
+                        if (forma.getPk().equals("0")){
+                            forma.setPk("1");
+                        }
                     }else{
                         //Si hubo falla se eliminan los archivo subidos
                         ex.setExecutionOK(false);
                         AdminFile.deleFileFromServer(hsFile);
                     }
+                    Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
+                    request.getSession().setAttribute("xmlTab", String.valueOf(xml));
+                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
             }
         }catch (ExceptionHandler eh){
