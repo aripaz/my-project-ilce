@@ -197,10 +197,6 @@
                 
                 var sBusquedas="<br>";
                 var nAplicacion="";
-                //Limpia los div appQris para evitar duplicidad al recargar
-                $(".appMenu",$("#apps_menu")).each(function(){
-                    $("#appQries_" +this.id.split("_")[1]).html("<br><span class='app_search_title'>Mis filtros<span>>><br />");
-                })
                 
                 $(xmlGs).find("registro").each( function(){
                     nClave=$(this).find("clave_parametro")[0].firstChild.data;
@@ -268,54 +264,30 @@
    }
 
     $.fn.appmenu.handleAccordion = function(xml){
-        var i=0;
-        var aInsertar ={};
-        var aMostrar={};
+        sHtml="";
 
         $(xml).find("registro").each(function(){
-            var nAplicacion=$(this).find("clave_aplicacion").text();
-            var nEntidad=$(this).find("clave_forma").text();
-            var sAliasNuevaEntidad=$(this).find("alias_menu_nueva_entidad").text();
-            var sAliasMostrarEntidad=$(this).find("alias_menu_mostrar_entidad").text();
-            if ($(this).find("insertar").text()=="1") {
-                aInsertar={etiqueta: sAliasNuevaEntidad,
-                           entidad: nEntidad,
-                           aplicacion:nAplicacion,
-                           funcion:"insertar"};
-            }
+            nAplicacion=$(this).find("clave_aplicacion").text();
+            sTituloAplicacion=$(this).find("aplicacion").text()
+            nEntidad=$(this).find("clave_forma").text();
+            sAliasNuevaEntidad=$(this).find("alias_menu_nueva_entidad").text();
+            sAliasMostrarEntidad=$(this).find("alias_menu_mostrar_entidad").text();
+            nInsertar = $(this).find("insertar").text();
+            nMostrar = $(this).find("mostrar").text();
 
-            if ($(this).find("mostrar").text()=="1") {
-                aMostrar={etiqueta:sAliasMostrarEntidad,
-                          entidad:nEntidad,
-                          aplicacion:nAplicacion,
-                          funcion:"mostrar"};
-            }
+            sHtml+="<h3><a href='#' class='appMenuTitle' >" + sTituloAplicacion + "</a></h3>" +
+                "<div id='mnuApp_" + nAplicacion + "' >";
 
-            $.fn.appmenu.options.menu[i]={clave_aplicacion: nAplicacion,
-                                          aplicacion:$(this).find("aplicacion").text(),
-                                          elementos_menu:[aInsertar,aMostrar]};
-            i++;
+            if (nInsertar=="1")
+                   sHtml+="<div class='appMenu'><a href='#' id='newEntity_" + nAplicacion + "_" + nEntidad + "' class='appMenu'>"+sAliasNuevaEntidad+"</a></div>";
+
+            if (nMostrar=="1")
+                   sHtml+="<div class='appMenu'><a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad + "' class='appMenu'>"+sAliasMostrarEntidad+"</a></div>";
+
+            sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros<span>>><br /></div></div>";
+
         })
-        
-        var sHtml=""
 
-        //Construye menu de acuerdo a configuración recuperada
-        for (i=0;i<$.fn.appmenu.options.menu.length;i++) {
-            sHtml+="<h3><a href='#' class='appMenuTitle' >" + $.fn.appmenu.options.menu[i].aplicacion + "</a></h3>" +
-                "<div id='mnuApp_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "' >";
-            for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
-                if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                    tipoliga="newEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
-                }
-                else {
-                    tipoliga="showEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
-                }
-
-                sHtml+="<div class='appMenu'><a href='#' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "' class='appMenu'>"+$.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";
-            }
-            
-            sHtml+="<div id='appQries_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "'><br /></div></div>"
-        }
         return sHtml;
     }
     
