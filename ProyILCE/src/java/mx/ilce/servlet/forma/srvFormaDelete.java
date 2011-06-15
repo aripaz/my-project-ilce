@@ -80,6 +80,9 @@ public class srvFormaDelete extends HttpServlet {
                     if ("0".equals(forma.getPk())){
                         forma.setPk("1");
                     }
+                    if (!ex.isExecutionOK()){
+                        ex.setObjectData(Integer.valueOf(0));
+                    }
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     request.getSession().setAttribute("xmlTab", String.valueOf(xml));
                     request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);

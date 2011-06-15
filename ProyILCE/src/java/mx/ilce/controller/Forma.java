@@ -508,7 +508,11 @@ public class Forma extends Entidad{
             List lstForma = forma.getForma(claveFormaInsert);
 
             if (lstForma==null){
-                lstForma = forma.getForma(claveFormaInsert);
+                String[] arrayData = new String[2];
+                arrayData[0]=String.valueOf(claveFormaInsert);
+                arrayData[1]="insert";
+                lstForma = forma.getNewFormaById(arrayData);
+                Thread.sleep(100);
             }
             if (lstForma!=null){
                 CampoForma cmpF = (CampoForma) lstForma.get(0);
@@ -575,6 +579,7 @@ public class Forma extends Entidad{
                 }
             }else{
                 ex = new ExecutionHandler();
+                ex.setExecutionOK(false);
                 ex.setObjectData(Integer.valueOf(0));
                 ex.setTextExecution("No se encuentra el listado de la Forma");
             }
