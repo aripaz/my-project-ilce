@@ -199,7 +199,7 @@
                 var nAplicacion="";
                 //Limpia los div appQris para evitar duplicidad al recargar
                 $(".appMenu",$("#apps_menu")).each(function(){
-                    $("#appQries_" +this.id.split("_")[1]).html("<br />");
+                    $("#appQries_" +this.id.split("_")[1]).html("<br><span class='app_search_title'>Mis filtros<span>>><br />");
                 })
                 
                 $(xmlGs).find("registro").each( function(){
@@ -211,8 +211,8 @@
                     sValor=escape($(this).find("valor")[0].firstChild.data);
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div class='link_toolbar'>"+
-                               "<a href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sEtiqueta + "</a>"+
-                               "<div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div>" +
+                               "<a class='appMenu' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sEtiqueta + "</a>"+
+                               "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
                                "</div>";
 
                     $("#appQries_"+nAplicacion).append(sBusquedas);
@@ -246,10 +246,12 @@
                 //Hace bind con los botones de cerrar en el evento hover
                 $(".closeLnkFiltro").hover(
                     function () {
-                    $(this).addClass('ui-state-default ui-corner-all');
+                    $(this).parent().addClass('ui-state-default');
+                    $(this).parent().addClass('ui-corner-all');
                     },
                     function () {
-                    $(this).removeClass('active_filter');
+                    $(this).parent().removeClass('ui-state-default');
+                    $(this).parent().removeClass('ui-corner-all');
                     }
                 );
 
@@ -299,8 +301,8 @@
 
         //Construye menu de acuerdo a configuración recuperada
         for (i=0;i<$.fn.appmenu.options.menu.length;i++) {
-            sHtml+="<h3><a href='#' >" + $.fn.appmenu.options.menu[i].aplicacion + "</a></h3>" +
-                "<div id='mnuApp_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "' class='appMenu'>";
+            sHtml+="<h3><a href='#' class='appMenuTitle' >" + $.fn.appmenu.options.menu[i].aplicacion + "</a></h3>" +
+                "<div id='mnuApp_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "' >";
             for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
                 if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
                     tipoliga="newEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
@@ -309,7 +311,7 @@
                     tipoliga="showEntity_" + $.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion + "_";
                 }
 
-                sHtml+="<div><a href='#' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "'>"+$.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";
+                sHtml+="<div class='appMenu'><a href='#' id='" + tipoliga+$.fn.appmenu.options.menu[i].elementos_menu[k].entidad + "' class='appMenu'>"+$.fn.appmenu.options.menu[i].elementos_menu[k].etiqueta+"</a></div>";
             }
             
             sHtml+="<div id='appQries_" + $.fn.appmenu.options.menu[i].clave_aplicacion + "'><br /></div></div>"
