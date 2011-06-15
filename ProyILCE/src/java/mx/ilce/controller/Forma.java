@@ -308,7 +308,14 @@ public class Forma extends Entidad{
      * @return
      */
     public List getForma(Integer key){
-        List hs = (List) this.hsForma.get(key);
+        List hs = null;
+        if (this.hsForma.containsKey(key)){
+            hs = (List) this.hsForma.get(key);
+        }else{
+            if (hsForma.containsKey(key)){
+                hs = (List) hsForma.get(key);
+            }
+        }
         return hs;
     }
 
@@ -493,75 +500,83 @@ public class Forma extends Entidad{
         ExecutionHandler ex = null;
         try{
             List lstData = (List) data;
-
-            HashMap hsForm = (HashMap) lstData.get(0);
             Forma forma = (Forma) lstData.get(1);
 
             String pkInsert = forma.getPk();
             Integer claveFormaInsert = forma.getClaveForma();
 
-            List lstForma = forma.getForma(Integer.valueOf(claveFormaInsert));
-            CampoForma cmpF = (CampoForma) lstForma.get(0);
-            String tabla = cmpF.getTabla();
+            List lstForma = forma.getForma(claveFormaInsert);
 
-            ConEntidad conE = new ConEntidad();
-            String query = "select * from " + tabla;
-            String[] strData = new String[0];
-            HashCampo hsCmp = conE.getDataByQuery(query, strData);
-            StringBuffer strQuery = new StringBuffer();
-            strQuery.append("delete from ").append(tabla).append(" where ");
-            String strCampoPK = "";
-            for (int i=0;i<lstForma.size();i++){
-                CampoForma cmpFL = (CampoForma) lstForma.get(i);
-                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
-                if (cmpHS!=null){
-                    // si es autoIncremental, no se necesita enviar
-                    if (cmpHS.getIsIncrement()){
-                        strCampoPK = cmpFL.getCampo();
+            if (lstForma==null){
+                lstForma = forma.getForma(claveFormaInsert);
+            }
+            if (lstForma!=null){
+                CampoForma cmpF = (CampoForma) lstForma.get(0);
+                String tabla = cmpF.getTabla();
+
+                ConEntidad conE = new ConEntidad();
+                String query = "select * from " + tabla;
+                String[] strData = new String[0];
+                HashCampo hsCmp = conE.getDataByQuery(query, strData);
+                StringBuffer strQuery = new StringBuffer();
+                strQuery.append("delete from ").append(tabla).append(" where ");
+                String strCampoPK = "";
+                for (int i=0;i<lstForma.size();i++){
+                    CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                    Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                    if (cmpHS!=null){
+                        // si es autoIncremental, no se necesita enviar
+                        if (cmpHS.getIsIncrement()){
+                            strCampoPK = cmpFL.getCampo();
+                        }
                     }
                 }
-            }
-            if (pkInsert!=null){
-                if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
-                    if (strCampoPK !=null){
-                        strQuery.append(strCampoPK);
-                        strQuery.append(" = ").append(pkInsert);
+                if (pkInsert!=null){
+                    if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                        if (strCampoPK !=null){
+                            strQuery.append(strCampoPK);
+                            strQuery.append(" = ").append(pkInsert);
+                        }
                     }
                 }
-            }
-            if (forma.getStrWhereQuery()!=null){
-                String strWhere = forma.getStrWhereQuery().trim();
-                if (strWhere.length()>0){
-                    if (pkInsert!=null){
-                        if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
-                            if (strCampoPK !=null){
-                                strQuery.append(" AND ").append(strWhere);
+                if (forma.getStrWhereQuery()!=null){
+                    String strWhere = forma.getStrWhereQuery().trim();
+                    if (strWhere.length()>0){
+                        if (pkInsert!=null){
+                            if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                                if (strCampoPK !=null){
+                                    strQuery.append(" AND ").append(strWhere);
+                                }else{
+                                    strQuery.append(strWhere);
+                                }
                             }else{
                                 strQuery.append(strWhere);
                             }
                         }else{
                             strQuery.append(strWhere);
                         }
-                    }else{
-                        strQuery.append(strWhere);
                     }
                 }
-            }
-            strQuery.append("");
+                strQuery.append("");
 
-            conE.setQuery(strQuery.toString());
-            conE.setCampoForma(cmpF);
-            conE.eliminaEntidad();
+                conE.setQuery(strQuery.toString());
+                conE.setCampoForma(cmpF);
+                conE.eliminaEntidad();
 
-            HashCampo hs = conE.getHashCampo();
-            Integer intHs = (Integer) hs.getObjData();
-            ex = new ExecutionHandler();
-            if (intHs.equals(1)){
-                ex.setExecutionOK(true);
-                ex.setObjectData(intHs);
+                HashCampo hs = conE.getHashCampo();
+                Integer intHs = (Integer) hs.getObjData();
+                ex = new ExecutionHandler();
+                if (intHs.equals(1)){
+                    ex.setExecutionOK(true);
+                    ex.setObjectData(intHs);
+                }else{
+                    ex.setExecutionOK(false);
+                    ex.setObjectData(intHs);
+                }
             }else{
-                ex.setExecutionOK(false);
-                ex.setObjectData(intHs);
+                ex = new ExecutionHandler();
+                ex.setObjectData(Integer.valueOf(0));
+                ex.setTextExecution("No se encuentra el listado de la Forma");
             }
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el DELETE de la Forma");

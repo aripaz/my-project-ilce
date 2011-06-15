@@ -1,5 +1,6 @@
 package mx.ilce.controller;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
@@ -9,7 +10,7 @@ import mx.ilce.handler.ExecutionHandler;
  * clases que heredaran de ella
  * @author ccatrilef
  */
-public abstract class Entidad {
+public abstract class Entidad implements Serializable{
 
     private BigDecimal idEntidad;
     private StringBuffer xmlEntidad;
