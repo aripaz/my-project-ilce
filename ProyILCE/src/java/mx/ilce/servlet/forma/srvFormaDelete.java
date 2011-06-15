@@ -70,40 +70,15 @@ public class srvFormaDelete extends HttpServlet {
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
                     forma.setStrWhereQuery(strWhere);
-                    List lstForma = forma.getForma(Integer.valueOf(claveForma));
 
-                    //Analizamos segun la forma obtenida
-                    boolean obligatorioOk = true;
-                    if ((!lstForma.isEmpty())&&(obligatorioOk)){
-                        Iterator it = lstForma.iterator();
-                        while ((it.hasNext())&&(obligatorioOk)){
-                            CampoForma cmp = (CampoForma) it.next();
-                            String dato = null;
-                            if (!"file".equals(cmp.getTipoControl())){
-                                dato = (String) hsForm.get(cmp.getCampo());
-                            }else{
-                                //Si es NULL, por el formato del formulario no se subio el archivo
-                                if (hsFile!=null){
-                                    dato = (String) hsFile.get(cmp.getCampo());
-                                }
-                            }
-                            hsFormQuery.put(cmp.getCampo(), dato);
-                        }
-                    }
                     ExecutionHandler ex = new ExecutionHandler();
                     List lstData = new ArrayList();
-                    if (obligatorioOk){
-                        lstData.add(hsFormQuery);
-                        lstData.add(forma);
-                        ex = forma.eliminarEntidad(lstData);
-                        ex.setExecutionOK(true);
-                        if (forma.getPk().equals("0")){
-                            forma.setPk("1");
-                        }
-                    }else{
-                        //Si hubo falla se eliminan los archivo subidos
-                        ex.setExecutionOK(false);
-                        AdminFile.deleFileFromServer(hsFile);
+
+                    lstData.add(hsFormQuery);
+                    lstData.add(forma);
+                    ex = forma.eliminarEntidad(lstData);
+                    if ("0".equals(forma.getPk())){
+                        forma.setPk("1");
                     }
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     request.getSession().setAttribute("xmlTab", String.valueOf(xml));

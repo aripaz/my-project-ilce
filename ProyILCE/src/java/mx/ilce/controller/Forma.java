@@ -514,35 +514,11 @@ public class Forma extends Entidad{
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
-                //String valor = (String) hsForm.get(cmpFL.getCampo());
                 if (cmpHS!=null){
                     // si es autoIncremental, no se necesita enviar
                     if (cmpHS.getIsIncrement()){
                         strCampoPK = cmpFL.getCampo();
                     }
-                    /*if (!cmpHS.getIsIncrement()){
-                        if ((valor!=null)&&(!"".equals(valor))){
-                            boolean isString = false;
-                           if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
-                                isString = true;
-                            }
-                            strQuery.append(cmpFL.getCampo()).append("=");
-                            if (isString){
-                                strQuery.append("'");
-                                strQuery.append(valor);
-                                strQuery.append("' AND ");
-                            }else{
-                                strQuery.append(valor).append(" AND ");
-                            }
-                        }
-                        if ((valor==null)&&(cmpFL.getObligatorio()==1)){
-                            //error
-                            System.err.append("Error");
-                        }
-                    }else{
-                        strCampoPK = cmpFL.getCampo();
-                    }*/
                 }
             }
             if (pkInsert!=null){
