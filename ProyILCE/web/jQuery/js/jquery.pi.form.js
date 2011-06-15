@@ -244,7 +244,7 @@
                                 var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
                                 $("#dlgModal_"+ suffix).dialog("destroy");
                                 $("#dlgModal_"+ suffix).remove();
-                                $("#grid_" + suffix).jqGrid().trigger("reloadGrid");
+                                $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid().trigger("reloadGrid");
                             }
                         });
                     }
