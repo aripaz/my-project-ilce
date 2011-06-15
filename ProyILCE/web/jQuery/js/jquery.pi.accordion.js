@@ -65,18 +65,10 @@
                 
                 //Hace el binding de las ligas con sus eventos
                 //seleccionando todas las ligas
+                $("a.appMenu").each( function(){
+                    link_id="#"+this.id;
 
-                for (i=0;i<$.fn.appmenu.options.menu.length;i++) {
-                
-                    for (var k=0;k<$.fn.appmenu.options.menu[i].elementos_menu.length;k++) {
-                        var nEntidad=$.fn.appmenu.options.menu[i].elementos_menu[k].entidad;
-                        var nAplicacion=$.fn.appmenu.options.menu[i].elementos_menu[k].aplicacion;
-                        if ($.fn.appmenu.options.menu[i].elementos_menu[k].funcion=="insertar") {
-                            link_id="#newEntity_" + nAplicacion + "_" + nEntidad;}
-                        else {
-                            link_id="#showEntity_" + nAplicacion + "_" + nEntidad;}
-
-                        $(link_id).click(function(e, data) {
+                    $(link_id).click(function(e, data) {
                             //Verifica si existe
                             var nAplicacion=this.id.split("_")[1];
                             var nEntidad=this.id.split("_")[2];
@@ -109,7 +101,7 @@
                                 }
 
                                $("#grid_"+nAplicacion+"_"+nEntidad).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
-                               
+
                             }
                             else {
 
@@ -142,10 +134,9 @@
                                 }
                             }
                         });
+                });
 
-                    }
 
-                 }
 
                 //Mecanismo para forzar a que el DOM no se cargue del cache
                 // ya que esto hace que se dupliquen los ids de los grid en cola
@@ -279,10 +270,10 @@
                 "<div id='mnuApp_" + nAplicacion + "' >";
 
             if (nInsertar=="1")
-                   sHtml+="<div class='appMenu'><a href='#' id='newEntity_" + nAplicacion + "_" + nEntidad + "' class='appMenu'>"+sAliasNuevaEntidad+"</a></div>";
+                   sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='newEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasNuevaEntidad+"</a></div>";
 
             if (nMostrar=="1")
-                   sHtml+="<div class='appMenu'><a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad + "' class='appMenu'>"+sAliasMostrarEntidad+"</a></div>";
+                   sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='showEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasMostrarEntidad+"</a></div>";
 
             sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros<span>>><br /></div></div>";
 
