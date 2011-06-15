@@ -372,10 +372,18 @@ public class Forma extends Entidad{
                         }
                         strCampos.append(cmpFL.getCampo()).append(",");
                         if (isString){
-                            strValues.append("'");
-                            strValues.append((valor==null)?"":valor);
-                            strValues.append("',");
+                            if("".equals(valor)){
+                                valor = "null";
+                                strValues.append(valor).append(",");
+                            }else{
+                                strValues.append("'");
+                                strValues.append((valor==null)?"":valor);
+                                strValues.append("',");
+                            }
                         }else{
+                            if("".equals(valor)){
+                                valor = "null";
+                            }
                             strValues.append(valor).append(",");
                         }
                     }
@@ -454,10 +462,18 @@ public class Forma extends Entidad{
                             }
                             strQuery.append(cmpFL.getCampo()).append("=");
                             if (isString){
-                                strQuery.append("'");
-                                strQuery.append((valor==null)?"":valor);
-                                strQuery.append("',");
+                                if("".equals(valor)){
+                                    valor = "null";
+                                    strQuery.append(valor).append(",");
+                                }else{
+                                    strQuery.append("'");
+                                    strQuery.append((valor==null)?"":valor);
+                                    strQuery.append("',");
+                                }
                             }else{
+                                if("".equals(valor)){
+                                    valor = "null";
+                                }
                                 strQuery.append(valor).append(",");
                             }
                         }

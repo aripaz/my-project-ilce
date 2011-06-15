@@ -5,14 +5,19 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.bean.User;
 import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Aplicacion;
 import mx.ilce.controller.Forma;
+import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -133,6 +138,30 @@ public class srvGrid extends HttpServlet {
             }
         }
         return strSal;
+    }
+
+    private void actualizarData(HttpServletRequest request){
+        try {
+            User user = (User) request.getSession().getAttribute("user");
+            Perfil perfil = new Perfil();
+            LoginHandler lg = perfil.login(user);
+            if (lg.isLogin()) {
+                user = (User) lg.getObjectData();
+                if (user != null) {
+                    List lst = perfil.getLstAplicacion();
+                    Forma forma = new Forma();
+                    forma.getFormasByAplications(lst);
+                    request.getSession().setAttribute("perfil", perfil);
+                    request.getSession().setAttribute("forma", forma);
+                }
+            }
+        } catch (ExceptionHandler ex) {
+            try {
+                throw new ExceptionHandler(ex, this.getClass(), "Problemas al actualizar datos del usuario");
+            } catch (ExceptionHandler ex1) {
+                Logger.getLogger(srvGrid.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

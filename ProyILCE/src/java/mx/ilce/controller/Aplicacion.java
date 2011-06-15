@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import mx.ilce.bean.Campo;
+import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
@@ -376,7 +377,15 @@ public class Aplicacion extends Entidad {
      * @return
      */
     public List getForma(Integer key){
-        List hs = (List) this.hsForma.get(key);
+        //List hs = (List) this.hsForma.get(key);
+        List hs = null;
+        if (this.hsForma.containsKey(key)){
+            hs = (List) this.hsForma.get(key);
+        }else{
+            if (hsForma.containsKey(key)){
+                hs = (List) hsForma.get(key);
+            }
+        }
         return hs;
     }
 
@@ -488,5 +497,49 @@ public class Aplicacion extends Entidad {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header y Body Grid");
         }
         return strSld;
+    }
+
+    /**
+     * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
+     * no esta configurada la forma, pero se tiene la query con la consulta para
+     * completarla. Obviamente no estan disponibles todos los datos, pero si los
+     * basicos para construir el XML.
+     * @param arrayData     Arreglo de datos con los datos de la forma que se
+     * quiere obtener
+     * @return
+     * @throws ExceptionHandler
+     */
+    public ArrayList getNewFormaById(String[] arrayData) throws ExceptionHandler {
+        ArrayList lst = new ArrayList();
+        try{
+            ConEntidad con = new ConEntidad();
+            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData);
+            Campo cmp = hsCmp.getCampoByName("consulta");
+            HashMap dq = hsCmp.getListData();
+            if (!dq.isEmpty()){
+                ArrayList arr = (ArrayList)dq.get(0);
+                Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
+                String[] strSPlit2 = strSplit[1].split(" ");
+                String tabla = strSPlit2[0];
+
+                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), arrayData);
+                List lstCmp = (List) hsCmpList.getListCampos();
+                for (int i=0;i<lstCmp.size();i++){
+                    Campo cmpArr = (Campo) lstCmp.get(i);
+                    if (!cmpArr.getIsIncrement()){
+                        CampoForma cmpF = new CampoForma();
+                        cmpF.setTipoControl("text");
+                        cmpF.setCampo(cmpArr.getNombreDB());
+                        cmpF.setTabla(tabla);
+                        cmpF.setTypeData(cmpArr.getTypeDataAPL());
+                        lst.add(cmpF);
+                    }
+                }
+            }
+        }catch(Exception e){
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener la Forma, mediante el ID de la query");
+        }
+        return lst;
     }
 }
