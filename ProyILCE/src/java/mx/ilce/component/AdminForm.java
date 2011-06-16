@@ -198,6 +198,7 @@ public class AdminForm {
             String postedBody;
             int length = request.getContentLength();
             instream = request.getInputStream();
+
             if (length>0){
                 postedBytes = new byte[length];
                 offset = 0;
@@ -235,6 +236,8 @@ public class AdminForm {
                     hs.put("FORM", hsForm);
                     hs.put("arrayFORM", arrayFORM);
                 }
+            }else{
+                hs = getFormularioSimple(request);
             }
         } catch (IOException ex) {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el formulario x-www-form-urlencoded");
