@@ -958,10 +958,9 @@ public class Forma extends Entidad{
         return lst;
     }
 
-    private String castAcent(String data) throws ExceptionHandler {
+    private StringBuffer castAcent(String data) throws ExceptionHandler {
         String str = "";
         try{
-            int pos =0;
             if (data!=null){
                 String paso=data;
                 if (paso.contains("Á")){
@@ -1003,12 +1002,13 @@ public class Forma extends Entidad{
                 if (paso.contains("ú")){
                     paso=paso.replaceAll("ú","'+char(250)+'");
                 }
+                str=paso;
             }else{
                 str=data;
             }
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para reemplazar los acentos de: "+data);
         }
-        return str;
+        return new StringBuffer(str);
     }
 }
