@@ -58,7 +58,6 @@
             {
             url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
-            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xml = new ActiveXObject("Microsoft.XMLDOM");

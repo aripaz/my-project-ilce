@@ -26,7 +26,6 @@
             {
             url: $.fn.desktop.options.xmlUrl,
             dataType: ($.browser.msie) ? "text" : "xml",
-            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xmlConfig = new ActiveXObject("Microsoft.XMLDOM");

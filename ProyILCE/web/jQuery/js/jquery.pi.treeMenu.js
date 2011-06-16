@@ -144,7 +144,6 @@ $.fn.treeMenu.getAppProfiles=function(o) {
         {
             url: $.fn.treeMenu.options.xmlUrl + "?$cf="+nCF+"&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
-            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                 if (typeof data == "string") {
                     xmlAP = new ActiveXObject("Microsoft.XMLDOM");

@@ -105,7 +105,6 @@
         {
             url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk,
             dataType: ($.browser.msie) ? "text" : "xml",
-            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                 if (typeof data == "string") {
                     xml = new ActiveXObject("Microsoft.XMLDOM");
@@ -190,7 +189,6 @@
                         $.ajax({
                             type: "POST",
                             url: sWS,
-                            contentType: "application/x-www-form-urlencoded",
                             data:sData,
                             success: function(data){
                                 if (data=='0') {
