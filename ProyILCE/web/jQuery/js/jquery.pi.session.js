@@ -35,6 +35,7 @@
             {
             url: $.fn.sessionmenu.options.xmlUrl,
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xml = new ActiveXObject("Microsoft.XMLDOM");
