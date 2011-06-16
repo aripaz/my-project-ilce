@@ -84,7 +84,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             HashCampo hsCmp = con.getUserXML(user);
             Document document = getDocumentXML("widget.session.xml");
             str.append(listNode(document,0,hsCmp));
@@ -105,7 +105,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             HashCampo hsCmp = con.getMenuXML(user);
 
             Document document = getDocumentXML("widget.accordion.xml");
@@ -130,7 +130,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try {
             ConSession con = new ConSession();
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             HashCampo hsCmp = con.getTabForma(perfil);
             Document document = getDocumentXML("widget.tabs.xml");
             str.append("<qry>");
@@ -162,7 +162,7 @@ public class AdminXML {
                 throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try {
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
@@ -243,7 +243,7 @@ public class AdminXML {
                 throws ExceptionHandler {
         StringBuffer str = new StringBuffer();
         try{
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
@@ -295,7 +295,7 @@ public class AdminXML {
             Integer idForma, String tipoAccion) throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try {
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
@@ -430,7 +430,7 @@ public class AdminXML {
             Integer idForma, String tipoAccion) throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try {
-            str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
             //HashMap hsDat = hsData.getListData();

@@ -48,6 +48,9 @@ public class AdminForm {
         HashMap hs = null;
         try{
             String contentType = request.getContentType();
+            /*if (request.getCharacterEncoding()==null){
+                request.setCharacterEncoding("UTF-8");
+            }*/
             if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0))
             {
                 hs = getFormularioMultiPart(request);
@@ -84,7 +87,9 @@ public class AdminForm {
                 while (enumData.hasMoreElements()){
                     String strEnum = (String) enumData.nextElement();
                     String[] strData = request.getParameterValues(strEnum);
-                    hsForm.put(strEnum, strData[0]);
+                    String value = strData[0];
+                    value = castCodeNoUtf8(value);
+                    hsForm.put(strEnum, value);
                     arrayFORM.add(strEnum);
                 }
                 hs = new HashMap();
@@ -137,6 +142,7 @@ public class AdminForm {
                     if (hsForm==null){
                         hsForm = new HashMap();
                     }
+                    value = castCodeNoUtf8(value);
                     hsForm.put(name, value);
                     arrayFORM.add(name);
                 }else if (part.isFile()) {
@@ -219,6 +225,7 @@ public class AdminForm {
                     }
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
                     val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
+                    val = castCodeNoUtf8(val);
                     hsForm.put(key, val);
                     arrayFORM.add(key);
                     existData=true;
@@ -260,5 +267,54 @@ public class AdminForm {
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener los datos de un campo en el request");
         }
         return data;
+    }
+
+    private String castCodeNoUtf8(String data){
+        String str = "";
+        if (data!=null){
+            str = data;
+            if (str.contains("Ã¡")){
+                str = str.replaceAll("Ã¡", "á");
+            }
+            if (str.contains("Ã€")){
+                str = str.replaceAll("Ã€", "Á");
+            }
+            if (str.contains("Ã©")){
+                str = str.replaceAll("Ã©", "é");
+            }
+            if (str.contains("Ã‰")){
+                str = str.replaceAll("Ã‰", "É");
+            }
+            if (str.contains("Ã­")){
+                str = str.replaceAll("Ã­", "í");
+            }
+            if (str.contains("Ã*")){
+                str = str.replaceAll("Ã*", "Í");
+            }
+            if (str.contains("Ã³")){
+                str = str.replaceAll("Ã³", "ó");
+            }
+            if (str.contains("Ã“")){
+                str = str.replaceAll("Ã“", "Ó");
+            }
+            if (str.contains("Ãº")){
+                str = str.replaceAll("Ãº", "ú");
+            }
+            if (str.contains("Ãš")){
+                str = str.replaceAll("Ãš", "Ú");
+            }
+            if (str.contains("Ã±")){
+                str = str.replaceAll("Ã±", "ñ");
+            }
+            if (str.contains("Ã‘")){
+                str = str.replaceAll("Ã‘", "Ñ");
+            }
+            if (str.contains("Ã\ufffd")){
+                str = str.replaceAll("Ã\ufffd", "Á");
+            }
+        }else{
+            str = data;
+        }
+        return str;
     }
 }
