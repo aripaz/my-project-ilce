@@ -25,6 +25,7 @@
         {
             url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                 if (typeof data == "string") {
                     xmlGT = new ActiveXObject("Microsoft.XMLDOM");
@@ -93,7 +94,6 @@
                 else if ($(o).attr("behaviour")=='profile')
                     $(o).jstree('check_node', $('#perfil-1'));
                     
-
                
                 $("#" + o.id+ " a").live("click", function(e) {
                    if ($(o).attr("behaviour")=='kardex') {
@@ -135,11 +135,16 @@
  };
 
 $.fn.treeMenu.getAppProfiles=function(o) {
+        if ($(o).attr("originalForm")=="2")
+            nCF=10;
+        else
+            nCF=14;
 
         $.ajax(
         {
-            url: $.fn.treeMenu.options.xmlUrl + "?$cf=10&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf="+nCF+"&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                 if (typeof data == "string") {
                     xmlAP = new ActiveXObject("Microsoft.XMLDOM");
@@ -157,7 +162,7 @@ $.fn.treeMenu.getAppProfiles=function(o) {
                    sClaveNodo=this.id;
                    nClaveRegistro=this.id.split("-")[1];
                    sTipoNodo=$(this).attr("rel");
-                   sTipoPermiso=this.id.split("-")[2];
+                   sClaveNodoHijo=this.id.split("-")[2];
                    
                    if ($(o).attr("originalForm")=="2"){   // Forma aplicacion
                         oRegistros=$(xmlAP).find('registro');
@@ -172,21 +177,18 @@ $.fn.treeMenu.getAppProfiles=function(o) {
 
                    }
                    else {
-                        if (sTipoPermiso==undefined)
+                        if (sClaveNodoHijo==undefined)
                             return true;
 
                         oRegistros=$(xmlAP).find('registro');
                         oRegistros.each( function() {
-                            nClaveP=oRegistros.find('clave_permiso').text().split("\n")[0];
-                            nValorPermiso=$(xmlAP).find(sTipoPermiso).text().split("\n")[0];
-
-
-                            if (nClaveRegistro==nClaveP && sTipoNodo=='permiso' && nValorPermiso=="1") {
+                            nPerfil=$(this).find('clave_perfil').text().split("\n")[0]; //clave_permiso
+                            nPermiso=$(this).find('clave_permiso').text().split("\n")[0]; //clave_permiso
+                            
+                            if (nClaveRegistro==nPerfil && nPermiso==sClaveNodoHijo && sTipoNodo=='permiso') {
                                 $.jstree._reference('#' + o.id).check_node('#' + sClaveNodo);
                                 return false;
                             }
-
-
                         });
 
 

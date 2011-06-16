@@ -95,7 +95,7 @@
 
         obj.treeMenu({
             app:"1",
-            entidad:($.fn.form.options.forma=="3")?"14":"5",
+            entidad:($.fn.form.options.forma=="3")?"16":"5",
             pk:$.fn.form.options.pk
         });
     }
@@ -105,6 +105,7 @@
         {
             url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk,
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                 if (typeof data == "string") {
                     xml = new ActiveXObject("Microsoft.XMLDOM");
@@ -189,6 +190,7 @@
                         $.ajax({
                             type: "POST",
                             url: sWS,
+                            contentType: "application/x-www-form-urlencoded",
                             data:sData,
                             success: function(data){
                                 if (data=='0') {
@@ -209,34 +211,25 @@
                                 }
 
                                 //Envía perfiles asociados a la forma forma
-
                                 if ($.fn.form.options.forma=="3") {
                                     //Se necesita recuperar los perfiles padres
-                                    oPerfiles=$("ul","#divFormProfiles_" + formSuffix);
-                                    $(oPerfiles).each(function(){
-                                        oPerfil=this.children;
-                                        $(oPerfil).each(function(){
-                                            nPerfil=$(this)[0].id.split("-")[1];
-                                            //Se deben borrar los permisos anteriores!!
-                                            $.post('srvFormaDelete','$w=clave_forma='+$.fn.form.options.pk+"&clave_perfil="+nPerfil);
-                                            if ($(this).attr("rel")=='perfil') {
-                                                nActualizar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-actualizar")?"1":"0";
-                                                nEliminar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-eliminar")?"1":"0";
-                                                nInsertar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-insertar")?"1":"0";
-                                                nMostrar=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-mostrar")?"1":"0";
-                                                nMostrarInfoSensible=$.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-mostrar_informacion_sensible")?"1":"0";
-                                                sData ="clave_forma="+data+ "&clave_perfil="+nPerfil+"&mostrar="+nMostrar+"&insertar="+nInsertar+"&actualizar="+nActualizar+"&eliminar=" +nEliminar+"&mostrar_informacion_sensible="+nMostrarInfoSensible+"&$cf=14&$pk=0&$ta=insert";
-                                                $.post(sWS, sData);
-                                            }
-                                            else return true;
+                                    oPermisos=$("#divFormProfiles_" + formSuffix).find('li');
+                                    oPermisos.each(function(){
+                                       
+                                       sNodoId=this.id;
+                                       sTipoNodo=sNodoId.split("-")[0];
+                                       nPerfil=sNodoId.split("-")[1];
+                                       nPermiso=sNodoId.split("-")[2];
 
-                                        });
-                                    });
-                                    //y barrer los hijos para recuperar los datos
-                                    // Los nodos padres son los li's que están en el primer ul
-                                    $("#divFormProfiles_" + formSuffix).find('li.jstree-checked').each(function(){
-                                      sData='clave_perfil='+this.id.split("-")[1]+"&clave_aplicacion=" + data + "&activo=1&$cf=10&$pk=0&$ta="+ $.fn.form.options.modo;
-                                      $.post(sWS, sData);
+                                       if (sTipoNodo=="perfil") ///Se deben borrar los permisos anteriores
+                                             $.post('srvFormaDelete','$cf=14&$w=clave_forma='+$.fn.form.options.pk+"&clave_perfil="+nPerfil);
+
+                                       if (sTipoNodo=="permiso") {
+                                           if ($.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-" + nPermiso))
+                                                sData ="clave_forma="+data+ "&clave_perfil="+nPerfil+"&clave_permiso="+nPermiso+"&$cf=14&$pk=0&$ta=insert";
+                                                $.post(sWS, sData);
+                                       }
+                                      
                                     });
                                 }
 

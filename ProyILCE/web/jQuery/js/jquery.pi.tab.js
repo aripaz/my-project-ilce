@@ -31,6 +31,7 @@
             {
             url: $.fn.apptab.options.xmlUrl,
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xml = new ActiveXObject("Microsoft.XMLDOM");
@@ -109,6 +110,7 @@
             {
             url: "xml_tests/foreign_grids.xml?entidad=", //$.fn.apptab.options.xmlUrl + "?nForm=" + nForm,
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xml = new ActiveXObject("Microsoft.XMLDOM");

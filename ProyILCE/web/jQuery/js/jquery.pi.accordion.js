@@ -32,6 +32,7 @@
             {
             url: $.fn.appmenu.options.xmlUrl,
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xml = new ActiveXObject("Microsoft.XMLDOM");
@@ -175,6 +176,7 @@
             {
             url: "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("c.clave_empleado=" +$("#_ce_").val()+ " AND c.parametro like 'menu.busqueda.%'"),
             dataType: ($.browser.msie) ? "text" : "xml",
+            contentType: "application/x-www-form-urlencoded",
             success:  function(data){
                  if (typeof data == "string") {
                  xmlGs = new ActiveXObject("Microsoft.XMLDOM");
