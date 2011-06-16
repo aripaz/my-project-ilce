@@ -124,6 +124,7 @@ public class AdminForm {
             ArrayList arrayFILE = new ArrayList();
 
             MultipartParser mp = new MultipartParser(request, maxPostSize,true,true);
+            mp.setEncoding("UTF-8");
             Part part;
             while ((part = mp.readNextPart()) != null) {
                 if (hs==null){
@@ -195,9 +196,7 @@ public class AdminForm {
                 postedBytes = new byte[length];
                 offset = 0;
                 while(dataRemaining) {
-                    inputLen = instream.read (postedBytes,
-                    offset,
-                    length - offset);
+                    inputLen = instream.read (postedBytes, offset,length-offset);
                     if (inputLen <= 0) {
                         throw new IOException ("read error");
                     }
@@ -219,8 +218,7 @@ public class AdminForm {
                         throw new IllegalArgumentException();
                     }
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
-                    //val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
-                    val = pair.substring(pos+1,pair.length());
+                    val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
                     hsForm.put(key, val);
                     arrayFORM.add(key);
                     existData=true;
