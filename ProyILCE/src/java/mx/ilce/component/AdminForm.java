@@ -225,7 +225,22 @@ public class AdminForm {
                         throw new IllegalArgumentException();
                     }
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
-                    val = java.net.URLDecoder.decode(pair.substring(pos+1,pair.length()),"UTF-8");
+                    val = pair.substring(pos+1,pair.length());
+                    try{
+                        val = java.net.URLDecoder.decode(val,"UTF-8");
+                    }catch(IllegalArgumentException e){
+                        if (val.contains("%")){
+                            String[] strVal = val.split("%");
+                            String[] paso = new String[strVal.length];
+                            for (int i=0;i<strVal.length;i++){
+                                paso[i] = java.net.URLDecoder.decode(strVal[i],"UTF-8");
+                            }
+                            val = paso[0];
+                            for (int i=1;i<strVal.length;i++){
+                                val = val + "%" + paso[i];
+                            }
+                        }
+                    }
                     val = castCodeNoUtf8(val);
                     hsForm.put(key, val);
                     arrayFORM.add(key);
