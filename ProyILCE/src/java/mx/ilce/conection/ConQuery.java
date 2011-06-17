@@ -27,6 +27,59 @@ import mx.ilce.handler.LogHandler;
  */
 class ConQuery {
     private Connection conn;
+    private String idPerson;
+    private String fecha;
+    private String ip;
+    private String browser;
+    private String logDB;
+
+    private String getLogDB() {
+        return logDB;
+    }
+
+    private void setLogDB(String logDB) {
+        this.logDB = logDB;
+    }
+
+    public String getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(String browser) {
+        this.browser = browser;
+    }
+
+    public Connection getConn() {
+        return conn;
+    }
+
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getIdPerson() {
+        return idPerson;
+    }
+
+    public void setIdPerson(String idPerson) {
+        this.idPerson = idPerson;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     /**
      * COnstructor Basico
@@ -43,6 +96,8 @@ class ConQuery {
         StringBuffer strConexion = new StringBuffer();
         try {
             Properties prop = AdminFile.leerConfig();
+
+            setLogDB(AdminFile.getKey(prop,AdminFile.LOGDB));
 
             String server = AdminFile.getKey(prop,"SERVER");
             String base = AdminFile.getKey(prop,"BASE");
@@ -91,6 +146,7 @@ class ConQuery {
             if (validateInsert(campoForma.getTabla(), arrData)){
                 getConexion();
                 st = this.conn.createStatement();
+                this.conn.setAutoCommit(true);
                 int res = st.executeUpdate(arrData, Statement.RETURN_GENERATED_KEYS);
                 rs = st.getGeneratedKeys();
                 if (res!=0){
@@ -120,6 +176,7 @@ class ConQuery {
         }finally{
             try{
                 LogHandler log = new LogHandler();
+                log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 textData.append(("QUERY: "+arrData));
@@ -193,6 +250,7 @@ class ConQuery {
         }finally{
             try{
                 LogHandler log = new LogHandler();
+                log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 textData.append(("QUERY: "+arrData));
@@ -263,6 +321,7 @@ class ConQuery {
         }finally{
             try{
                 LogHandler log = new LogHandler();
+                log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 textData.append(("QUERY: "+arrData));
@@ -1163,4 +1222,6 @@ class ConQuery {
         }
         return sld.toString();
     }
+
+   // private void setLogDB
 }
