@@ -17,6 +17,7 @@ public class ConEntidad {
 
     private Properties prop = null;
     private String query = "";
+    private String queryDel = "";
     private HashCampo hashCampo = new HashCampo();
     private CampoForma campoForma = new CampoForma();
 
@@ -94,6 +95,16 @@ public class ConEntidad {
             this.hashCampo = hs;
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para Editar la Entidad");
+        }
+    }
+
+    public void ingresarDataPermisos() throws ExceptionHandler{
+        try {
+            ConQuery con = new ConQuery();
+            HashCampo hs = con.executeDeleteInsert(this.campoForma,this.queryDel,this.query);
+            this.hashCampo = hs;
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Borrar y Agregar Permisos de la Entidad");
         }
     }
 
@@ -268,6 +279,14 @@ public class ConEntidad {
     }
 
 //********************* GETTER AND SETTER ******************
+
+    public String getQueryDel() {
+        return queryDel;
+    }
+
+    public void setQueryDel(String queryDel) {
+        this.queryDel = queryDel;
+    }
 
     /**
      * Obtiene la query contenida en el objeto

@@ -330,6 +330,135 @@ public class Forma extends Entidad{
     }
 
 /************** METODOS ENTIDAD ****************/
+
+    /**
+     *
+     * @param data
+     * @return
+     * @throws ExceptionHandler
+     */
+    public ExecutionHandler ingresarDataPermisos(Object data) throws ExceptionHandler{
+        ExecutionHandler ex = null;
+        try{
+            List lstData = (List) data;
+            HashMap hsForm = (HashMap) lstData.get(0);
+            Forma forma = (Forma) lstData.get(1);
+            Integer claveFormaInsert = forma.getClaveForma();
+
+            List lstForma = forma.getForma(Integer.valueOf(claveFormaInsert));
+            CampoForma cmpF = (CampoForma) lstForma.get(0);
+            String tabla = cmpF.getTabla();
+
+            String pkInsert = forma.getPk();
+
+            ConEntidad conE = new ConEntidad();
+            String query = "select * from " + tabla;
+            String[] strData = new String[0];
+            HashCampo hsCmp = conE.getDataByQuery(query, strData);
+            StringBuffer strQuery = new StringBuffer();
+            StringBuffer strCampos = new StringBuffer("(");
+            StringBuffer strValues = new StringBuffer("(");
+            for (int i=0;i<lstForma.size();i++){
+                CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                String valor = (String) hsForm.get(cmpFL.getCampo());
+                // si es autoIncremental, no se necesita enviar
+                if (!cmpHS.getIsIncrement()){
+                    if (valor!=null){
+                        boolean isString = false;
+                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                            isString = true;
+                        }
+                        strCampos.append(cmpFL.getCampo()).append(",");
+                        if (isString){
+                            if("".equals(valor)){
+                                valor = "null";
+                                strValues.append(valor).append(",");
+                            }else{
+                                strValues.append("'");
+                                strValues.append((valor==null)?"":valor);
+                                strValues.append("',");
+                            }
+                        }else{
+                            if("".equals(valor)){
+                                valor = "null";
+                            }
+                            strValues.append(valor).append(",");
+                        }
+                    }
+                }
+            }
+            strCampos.delete(strCampos.length()-1 ,strCampos.length());
+            strCampos.append(")");
+            strValues.delete(strValues.length()-1 ,strValues.length());
+            strValues.append(")");
+            strQuery.append("insert into ").append(tabla);
+            strQuery.append(" ").append(strCampos);
+            strQuery.append(" values ");
+            strQuery.append(strValues);
+            strQuery.append("");
+
+            conE.setQuery(strQuery.toString());
+            conE.setCampoForma(cmpF);
+
+            StringBuffer strQueryDel = new StringBuffer();
+            strQueryDel.append("delete from ").append(tabla).append(" where ");
+            String strCampoPK = "";
+            for (int i=0;i<lstForma.size();i++){
+                CampoForma cmpFL = (CampoForma) lstForma.get(i);
+                Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
+                if (cmpHS!=null){
+                    // si es autoIncremental, no se necesita enviar
+                    if (cmpHS.getIsIncrement()){
+                        strCampoPK = cmpFL.getCampo();
+                    }
+                }
+            }
+            if (pkInsert!=null){
+                if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                    if (strCampoPK !=null){
+                        strQueryDel.append(strCampoPK);
+                        strQueryDel.append(" = ").append(pkInsert);
+                    }
+                }
+            }
+            if (forma.getStrWhereQuery()!=null){
+                String strWhere = forma.getStrWhereQuery().trim();
+                if (strWhere.length()>0){
+                    if (pkInsert!=null){
+                        if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
+                            if (strCampoPK !=null){
+                                strQueryDel.append(" AND ").append(strWhere);
+                            }else{
+                                strQueryDel.append(strWhere);
+                            }
+                        }else{
+                            strQueryDel.append(strWhere);
+                        }
+                    }else{
+                        strQueryDel.append(strWhere);
+                    }
+                }
+            }
+            strQueryDel.append("");
+            conE.setQueryDel(strQueryDel.toString());
+
+            HashCampo hs = conE.getHashCampo();
+            Integer intHs = (Integer) hs.getObjData();
+            ex = new ExecutionHandler();
+            if (!intHs.equals(0)){
+                ex.setExecutionOK(true);
+                ex.setObjectData(intHs);
+            }else{
+                ex.setExecutionOK(false);
+            }
+        }catch(Exception e){
+            throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar Data y Permisos");
+        }
+        return ex;
+    }
+
     /**
      * Se ingresa una entidad del tipo Forma, para que quede disponible
      * para la aplicacion.
@@ -528,7 +657,7 @@ public class Forma extends Entidad{
                 arrayData[0]=String.valueOf(claveFormaInsert);
                 arrayData[1]="insert";
                 lstForma = forma.getNewFormaById(arrayData);
-                Thread.sleep(100);
+                //Thread.sleep(50);
             }
             if (lstForma!=null){
                 CampoForma cmpF = (CampoForma) lstForma.get(0);

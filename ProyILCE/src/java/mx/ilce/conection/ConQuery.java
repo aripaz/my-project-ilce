@@ -342,6 +342,74 @@ class ConQuery {
         return hsCmp;
     }
 
+    public HashCampo executeDeleteInsert(CampoForma campoForma, String qryDelete, String qryInsert) throws ExceptionHandler{
+        HashCampo hsCmp = new HashCampo();
+        Statement st = null;
+        ResultSet rs = null;
+        try{
+            Integer increment =Integer.valueOf(-1);
+            if (validateDelete(campoForma.getTabla(), qryDelete)){
+                getConexion();
+                st = this.conn.createStatement();
+                increment = st.executeUpdate(qryDelete);
+            }
+            if (increment>0){
+                increment =Integer.valueOf(-1);
+                if (validateInsert(campoForma.getTabla(), qryInsert)){
+                    getConexion();
+                    st = this.conn.createStatement();
+                    this.conn.setAutoCommit(true);
+                    int res = st.executeUpdate(qryInsert, Statement.RETURN_GENERATED_KEYS);
+                    rs = st.getGeneratedKeys();
+                    if (res!=0){
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+                        if (rs.next()) {
+                            do {
+                                for (int i=1; i<=columnCount; i++) {
+                                    String key = rs.getString(i);
+                                    increment = Integer.valueOf(key);
+                                }
+                            } while(rs.next());
+                        }
+                    }
+                }
+                hsCmp.setObjData(increment);
+            }
+        }catch(SQLException e){
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
+            eh.setStringData("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert);
+            eh.setSeeStringData(true);
+            throw eh;
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
+            eh.setStringData("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert);
+            eh.setSeeStringData(true);
+            throw eh;
+        }finally{
+            try{
+                LogHandler log = new LogHandler();
+                log.setBoolSel(false);
+                StringBuffer textData=new StringBuffer();
+                textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
+                textData.append(("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert));
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                            new StringBuffer("executeDeleteInsert"),textData);
+            }catch(Exception ex){
+                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+            }
+            try{
+                if (st!=null){
+                    st.close();
+                }
+                this.conn.close();
+            }catch(SQLException es){
+                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+            }
+        }
+        return hsCmp;
+    }
+
     /**
      * Metodo para validar que se esta ejecutando una instruccion Delete, en la
      * tabla que corresponde, con la query entregada
