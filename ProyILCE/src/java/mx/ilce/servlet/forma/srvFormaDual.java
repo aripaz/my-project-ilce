@@ -127,11 +127,11 @@ public class srvFormaDual extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvFormaInsert");
+                val.setTextMessage("Problemas en la execucion del Error de srvFormaDual");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvFormaInsert");
+            val.setTextMessage("Problemas en la execucion de srvFormaDual");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
@@ -157,7 +157,7 @@ public class srvFormaDual extends HttpServlet {
             try {
                 throw new ExceptionHandler(ex, this.getClass(), "Problemas al actualizar datos del usuario");
             } catch (ExceptionHandler ex1) {
-                Logger.getLogger(srvFormaInsert.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(srvFormaDual.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
     }
