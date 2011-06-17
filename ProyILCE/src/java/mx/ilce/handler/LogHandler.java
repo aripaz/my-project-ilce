@@ -19,6 +19,15 @@ public class LogHandler {
     private String time;
     private StringBuffer textMessage = new StringBuffer("");
     private StringBuffer textData = new StringBuffer("");
+    private boolean boolSelect=true;
+
+    public boolean isBoolSelect() {
+        return boolSelect;
+    }
+
+    public void setBoolSel(boolean boolSelect) {
+        this.boolSelect = boolSelect;
+    }
 
     /**
      * Constructor basico de la clase, inicializa las variables Time y DateFile
@@ -43,7 +52,11 @@ public class LogHandler {
         setTextData(textData);
         setTextMessage(textMessage);
         if (this.rutaFile!=null){
-            sld = writeToFile();
+            if (this.isBoolSelect()){
+                sld = writeToFile();
+            }else{
+                sld = writeToFile("OPER");
+            }
         }
         return sld;
     }
@@ -158,6 +171,34 @@ public class LogHandler {
         }
         return sld;
     }
+
+    private boolean writeToFile(String oper){
+        boolean sld = true;
+        String strNameFile = "";
+        try{
+            File directorio = new File(this.getRutaFile());
+            if (!directorio.exists()){
+                sld = false;
+            }
+            if (!directorio.isDirectory()){
+                sld = false;
+            }
+            strNameFile = strNameFile.concat(getDateFile()+oper);
+            strNameFile = strNameFile.concat(".log");
+            StringBuffer strTexto = new StringBuffer();
+            strTexto.append("\nFECHA: ").append(this.getTime());
+            strTexto.append("\nMENSAJE: ").append(this.getTextMessage());
+            strTexto.append("\nLOG DATA:\n").append(this.getTextData());
+            strTexto.append("\n****************\n");
+            if (sld){
+                sld = guardarArchivo(strTexto, strNameFile);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return sld;
+    }
+
 
     /**
      * Escribe el archivo de Log con la data entregada y el nombre señalado
