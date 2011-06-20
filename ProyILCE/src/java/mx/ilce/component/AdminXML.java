@@ -228,7 +228,7 @@ public class AdminXML {
                 str.append("<permisos>\n");
                 if (!hsDatPerm.isEmpty()){
                     for (int i=0;i<hsDatPerm.size();i++){
-                        str.append("\t<row>\n");
+                        str.append("\t<permiso>\n");
                         ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
                         for (int j=0;j<lstCamp.size();j++){
                             Campo cmpCol = (Campo) lstCamp.get(j);
@@ -237,7 +237,7 @@ public class AdminXML {
                             str.append(cmpAux.getValor()).append("]]</");
                             str.append(cmpCol.getNombreDB()).append(">\n");
                         }
-                        str.append("\t</row>\n");
+                        str.append("\t</permiso>\n");
                     }
                 }
                 str.append("</permisos>\n");
@@ -313,7 +313,7 @@ public class AdminXML {
                 str.append("<permisos>\n");
                 if (!hsDatPerm.isEmpty()){
                     for (int i=0;i<hsDatPerm.size();i++){
-                        str.append("\t<row>\n");
+                        str.append("\t<permiso>\n");
                         ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
                         for (int j=0;j<lstCamp.size();j++){
                             Campo cmpCol = (Campo) lstCamp.get(j);
@@ -322,7 +322,7 @@ public class AdminXML {
                             str.append(cmpAux.getValor()).append("]]</");
                             str.append(cmpCol.getNombreDB()).append(">\n");
                         }
-                        str.append("\t</row>\n");
+                        str.append("\t</permiso>\n");
                     }
                 }
                 str.append("</permisos>\n");
