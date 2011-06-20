@@ -63,9 +63,14 @@ public class srvGrid extends HttpServlet {
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
                     String[] strData = getArrayData(hsForm);
-
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
+                   
                     Aplicacion apl = new Aplicacion();
+
+                    User user = (User) request.getSession().getAttribute("user");
+                    user.getClaveEmpleado();
+                    apl.setClaveEmpleado(Integer.valueOf(user.getClaveEmpleado()));
+
                     if ((forma !=null)&&(apl!=null)){
                         List lstF = forma.getForma(Integer.valueOf(claveForma));
                         StringBuffer xmlForma = new StringBuffer();
