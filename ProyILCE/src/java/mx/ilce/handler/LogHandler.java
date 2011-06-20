@@ -19,7 +19,16 @@ public class LogHandler {
     private String time;
     private StringBuffer textMessage = new StringBuffer("");
     private StringBuffer textData = new StringBuffer("");
+    private String strQuery;
     private boolean boolSelect=true;
+
+    public String getStrQuery() {
+        return strQuery;
+    }
+
+    public void setStrQuery(String strQuery) {
+        this.strQuery = strQuery;
+    }
 
     public boolean isBoolSelect() {
         return boolSelect;
@@ -57,6 +66,17 @@ public class LogHandler {
             }else{
                 sld = writeToFile("OPER");
             }
+        }
+        return sld;
+    }
+
+    public boolean logWarning(String rutaFile,StringBuffer textMessage, StringBuffer textData){
+        boolean sld =false;
+        setRutaFile(rutaFile);
+        setTextData(textData);
+        setTextMessage(textMessage);
+        if (this.rutaFile!=null){
+           sld = writeToFile("WARNING");
         }
         return sld;
     }
@@ -161,7 +181,8 @@ public class LogHandler {
             StringBuffer strTexto = new StringBuffer();
             strTexto.append("\nFECHA: ").append(this.getTime());
             strTexto.append("\nMENSAJE: ").append(this.getTextMessage());
-            strTexto.append("\nLOG DATA:\n").append(this.getTextData());
+            strTexto.append("\nQUERY:\n").append(this.strQuery);
+            strTexto.append("\n\nDATA:\n").append(this.getTextData());
             strTexto.append("\n****************\n");
             if (sld){
                 sld = guardarArchivo(strTexto, strNameFile);
@@ -188,7 +209,8 @@ public class LogHandler {
             StringBuffer strTexto = new StringBuffer();
             strTexto.append("\nFECHA: ").append(this.getTime());
             strTexto.append("\nMENSAJE: ").append(this.getTextMessage());
-            strTexto.append("\nLOG DATA:\n").append(this.getTextData());
+            strTexto.append("\nQUERY:\n").append(this.strQuery);
+            strTexto.append("\n\nDATA:\n").append(this.getTextData());
             strTexto.append("\n****************\n");
             if (sld){
                 sld = guardarArchivo(strTexto, strNameFile);
@@ -364,8 +386,7 @@ public class LogHandler {
                 strMin="00";
                 strSec="00";
             }
-            return strDia+separador+strMes+separador+strAnio+separador+
-            " "+strHour+":"+strMin+":"+strSec;
+            return strDia+separador+strMes+separador+strAnio+" "+strHour+":"+strMin+":"+strSec;
         }
 
         /**

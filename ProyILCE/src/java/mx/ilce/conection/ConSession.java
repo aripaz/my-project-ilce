@@ -72,6 +72,7 @@ public class ConSession {
 
             ConQuery connQ = new ConQuery();
             //validamos user y password
+            connQ.setEnableDataLog(false);
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
@@ -119,6 +120,7 @@ public class ConSession {
 
             ConQuery connQ = new ConQuery();
             //validamos user y password
+            connQ.setEnableDataLog(false);
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
