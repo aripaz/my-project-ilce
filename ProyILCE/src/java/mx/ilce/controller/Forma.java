@@ -644,6 +644,17 @@ public class Forma extends Entidad{
                     }
                 }
             }
+            if ((strCampoPK ==null)||("".equals(strCampoPK))){
+                List lst = hsCmp.getListCampos();
+                boolean seguir = true;
+               for (int i=0;i<lst.size()&&seguir;i++){
+                   Campo cmp = (Campo) lst.get(i);
+                   if (cmp.getIsIncrement()){
+                       strCampoPK = cmp.getNombreDB();
+                       seguir=false;
+                   }
+               }
+            }
             strQuery.delete(strQuery.length()-1,strQuery.length());
             strQuery.append(" where ").append(strCampoPK);
             strQuery.append(" = ").append(pkInsert);
