@@ -16,6 +16,7 @@ import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.User;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
+import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
@@ -98,8 +99,8 @@ public class srvFormaUpdate extends HttpServlet {
                             }
                         }
                     }
-                    ExecutionHandler ex = new ExecutionHandler();
                     List lstData = new ArrayList();
+                    ExecutionHandler ex = new ExecutionHandler();
                     if (obligatorioOk){
                         lstData.add(hsFormQuery);
                         lstData.add(forma);
@@ -112,8 +113,12 @@ public class srvFormaUpdate extends HttpServlet {
                         ex.setExecutionOK(false);
                         AdminFile.deleFileFromServer(hsFile);
                     }
+                    actualizarData(request);
+                    Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
+                    AdminXML admXML = new AdminXML();
+                    request.getSession().setAttribute("xmlTab", admXML.salidaXML(String.valueOf(xml)));
+                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
-                actualizarData(request);
             }
         }catch (ExceptionHandler eh){
             try{
