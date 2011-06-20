@@ -16,6 +16,7 @@ import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.User;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
+import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
@@ -125,7 +126,8 @@ public class srvFormaInsert extends HttpServlet {
                     actualizarData(request);
 
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
-                    request.getSession().setAttribute("xmlTab", String.valueOf(xml));
+                    AdminXML admXML = new AdminXML();
+                    request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf(xml)));
                     request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
             }
