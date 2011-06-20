@@ -18,6 +18,7 @@ import mx.ilce.handler.ExecutionHandler;
  */
 public class Aplicacion extends Entidad {
 
+    private Integer claveEmpleado;
     private Integer claveAplicacion;
     private String aplicacion;
     private Integer claveFormaPrincipal;
@@ -55,6 +56,14 @@ public class Aplicacion extends Entidad {
     }
 
 /********* GETTER Y SETTER *********/
+
+    public Integer getClaveEmpleado() {
+        return claveEmpleado;
+    }
+
+    public void setClaveEmpleado(Integer claveEmpleado) {
+        this.claveEmpleado = claveEmpleado;
+    }
 
     /**
      * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
@@ -452,8 +461,16 @@ public class Aplicacion extends Entidad {
                         hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),strData);
                     }
                 }
+                if (this.getClaveEmpleado()!=null){
+                    HashCampo hsCmpPerm = new HashCampo();
+                    strData = new String[2];
+                    strData[0] = String.valueOf(this.getClaveEmpleado());
+                    strData[1] = String.valueOf(this.getClaveForma());
+                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                    adm.setHashPermisoForma(hsCmpPerm);
+                }
             }
-             List lstF = (List) this.getForma(this.getClaveForma());
+            List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridColumByData(hsCmp,lstF);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header Grid");
@@ -486,6 +503,14 @@ public class Aplicacion extends Entidad {
                     strData = new String[1];
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
                     hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
+                }
+                if (this.getClaveEmpleado()!=null){
+                    HashCampo hsCmpPerm = new HashCampo();
+                    strData = new String[2];
+                    strData[0] = String.valueOf(this.getClaveEmpleado());
+                    strData[1] = String.valueOf(this.getClaveForma());
+                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                    adm.setHashPermisoForma(hsCmpPerm);
                 }
             }
             if (this.isCleanIncrement()){

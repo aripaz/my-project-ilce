@@ -13,6 +13,7 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
+import mx.ilce.handler.LogHandler;
 import mx.ilce.util.Validation;
 
 /**   
@@ -487,6 +488,9 @@ public class Forma extends Entidad{
             StringBuffer strQuery = new StringBuffer();
             StringBuffer strCampos = new StringBuffer("(");
             StringBuffer strValues = new StringBuffer("(");
+            HashMap hsCmpProcesados = new HashMap();
+            HashMap hsCmpRepetidos = new HashMap();
+            Integer intRep = 0;
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
@@ -494,26 +498,31 @@ public class Forma extends Entidad{
                 // si es autoIncremental, no se necesita enviar
                 if (!cmpHS.getIsIncrement()){
                     if (valor!=null){
-                        boolean isString = false;
-                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
-                            isString = true;
-                        }
-                        strCampos.append(cmpFL.getCampo()).append(",");
-                        if (isString){
-                            if("".equals(valor)){
-                                valor = "null";
-                                strValues.append(valor).append(",");
+                        if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
+                            hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
+                            boolean isString = false;
+                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                    ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                                isString = true;
+                            }
+                            strCampos.append(cmpFL.getCampo()).append(",");
+                            if (isString){
+                                if("".equals(valor)){
+                                    valor = "null";
+                                    strValues.append(valor).append(",");
+                                }else{
+                                    strValues.append("'");
+                                    strValues.append((valor==null)?"":valor);
+                                    strValues.append("',");
+                                }
                             }else{
-                                strValues.append("'");
-                                strValues.append((valor==null)?"":valor);
-                                strValues.append("',");
+                                if("".equals(valor)){
+                                    valor = "null";
+                                }
+                                strValues.append(valor).append(",");
                             }
                         }else{
-                            if("".equals(valor)){
-                                valor = "null";
-                            }
-                            strValues.append(valor).append(",");
+                            hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                         }
                     }
                 }
@@ -540,6 +549,22 @@ public class Forma extends Entidad{
                 ex.setObjectData(intHs);
             }else{
                 ex.setExecutionOK(false);
+            }
+            if (!hsCmpRepetidos.isEmpty()){
+                StringBuffer campos = new StringBuffer();
+                for (int i=0;i<intRep;i++){
+                    campos.append((String) hsCmpRepetidos.get(Integer.valueOf(i)));
+                    campos.append(" || ");
+                }
+                LogHandler log = new LogHandler();
+                log.setBoolSel(false);
+                StringBuffer textData=new StringBuffer();
+                textData.append("ALERTA, EXISTEN CAMPOS REPETIDOS EN LA FORMA\n");
+                textData.append(("FORMA: "+claveFormaInsert)).append("\n");
+                textData.append(("QUERY: "+strQuery)).append("\n");
+                textData.append(("CAMPOS: "+campos));
+                log.logWarning(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                            new StringBuffer("editarEntidad"),textData);
             }
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el INSERT de la Forma");
@@ -576,6 +601,9 @@ public class Forma extends Entidad{
             StringBuffer strQuery = new StringBuffer();
             strQuery.append("update ").append(tabla).append(" set ");
             String strCampoPK = "";
+            HashMap hsCmpProcesados = new HashMap();
+            HashMap hsCmpRepetidos = new HashMap();
+            Integer intRep = 0;
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
@@ -584,26 +612,31 @@ public class Forma extends Entidad{
                     // si es autoIncremental, no se necesita enviar
                     if (!cmpHS.getIsIncrement()){
                         if (valor!=null){
-                            boolean isString = false;
-                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                    ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
-                                isString = true;
-                            }
-                            strQuery.append(cmpFL.getCampo()).append("=");
-                            if (isString){
-                                if("".equals(valor)){
-                                    valor = "null";
-                                    strQuery.append(valor).append(",");
+                            if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
+                                hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
+                                boolean isString = false;
+                                if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
+                                        ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                                    isString = true;
+                                }
+                                strQuery.append(cmpFL.getCampo()).append("=");
+                                if (isString){
+                                    if("".equals(valor)){
+                                        valor = "null";
+                                        strQuery.append(valor).append(",");
+                                    }else{
+                                        strQuery.append("'");
+                                        strQuery.append((valor==null)?"":valor);
+                                        strQuery.append("',");
+                                    }
                                 }else{
-                                    strQuery.append("'");
-                                    strQuery.append((valor==null)?"":valor);
-                                    strQuery.append("',");
+                                    if("".equals(valor)){
+                                        valor = "null";
+                                    }
+                                    strQuery.append(valor).append(",");
                                 }
                             }else{
-                                if("".equals(valor)){
-                                    valor = "null";
-                                }
-                                strQuery.append(valor).append(",");
+                                hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                             }
                         }
                     }else{
@@ -627,6 +660,22 @@ public class Forma extends Entidad{
                 ex.setExecutionOK(true);
             }else{
                 ex.setExecutionOK(false);
+            }
+            if (!hsCmpRepetidos.isEmpty()){
+                StringBuffer campos = new StringBuffer();
+                for (int i=0;i<intRep;i++){
+                    campos.append((String) hsCmpRepetidos.get(Integer.valueOf(i)));
+                    campos.append(" || ");
+                }
+                LogHandler log = new LogHandler();
+                log.setBoolSel(false);
+                StringBuffer textData=new StringBuffer();
+                textData.append("ALERTA, EXISTEN CAMPOS REPETIDOS EN LA FORMA\n");
+                textData.append(("FORMA: "+claveFormaInsert)).append("\n");
+                textData.append(("QUERY: "+strQuery)).append("\n");
+                textData.append(("CAMPOS: "+campos));
+                log.logWarning(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                            new StringBuffer("editarEntidad"),textData);
             }
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el UPDATE de la Forma");
