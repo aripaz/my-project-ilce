@@ -34,6 +34,16 @@ public class AdminXML {
     private int numRow=0;
     private boolean deleteIncrement=false;
     private boolean includeForaneo=true;
+    private HashCampo hashPermisoForma;
+
+
+    public HashCampo getHashPermisoForma() {
+        return hashPermisoForma;
+    }
+
+    public void setHashPermisoForma(HashCampo hashPermisoForma) {
+        this.hashPermisoForma = hashPermisoForma;
+    }
 
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
@@ -211,6 +221,27 @@ public class AdminXML {
                 }
             }
             str.append("</column_definition>\n");
+            if (this.getHashPermisoForma()!=null){
+                HashCampo hsPerm = this.getHashPermisoForma();
+                HashMap hsDatPerm = hsPerm.getListData();
+                List lstCamp = hsPerm.getListCampos();
+                str.append("<permisos>\n");
+                if (!hsDatPerm.isEmpty()){
+                    for (int i=0;i<hsDatPerm.size();i++){
+                        str.append("\t<row>\n");
+                        ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
+                        for (int j=0;j<lstCamp.size();j++){
+                            Campo cmpCol = (Campo) lstCamp.get(j);
+                            Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append(">![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]</");
+                            str.append(cmpCol.getNombreDB()).append(">\n");
+                        }
+                        str.append("\t</row>\n");
+                    }
+                }
+                str.append("</permisos>\n");
+            }
             for(int i=regIni;i<hsDat.size();i++){
                 ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                 str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
@@ -275,6 +306,27 @@ public class AdminXML {
                 str.append(("</"+cmp.getNombreDB()+">\n"));
             }
             str.append("</column_definition>\n");
+            if (this.getHashPermisoForma()!=null){
+                HashCampo hsPerm = this.getHashPermisoForma();
+                HashMap hsDatPerm = hsPerm.getListData();
+                List lstCamp = hsPerm.getListCampos();
+                str.append("<permisos>\n");
+                if (!hsDatPerm.isEmpty()){
+                    for (int i=0;i<hsDatPerm.size();i++){
+                        str.append("\t<row>\n");
+                        ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
+                        for (int j=0;j<lstCamp.size();j++){
+                            Campo cmpCol = (Campo) lstCamp.get(j);
+                            Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append(">![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]</");
+                            str.append(cmpCol.getNombreDB()).append(">\n");
+                        }
+                        str.append("\t</row>\n");
+                    }
+                }
+                str.append("</permisos>\n");
+            }
             str.append("</rows>");
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML con las columnas de Grid");
@@ -882,6 +934,16 @@ public class AdminXML {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para completar el XML con los datos");
         }
         return str;
+    }
+
+    public String salidaXML(String data){
+        StringBuffer str = new StringBuffer();
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+        str.append("<qry>\n");
+        str.append("<resultado>").append(data).append("</resultado>\n");
+        str.append("<qry>\n");
+
+        return str.toString();
     }
 
     /**

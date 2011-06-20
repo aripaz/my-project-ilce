@@ -72,6 +72,14 @@ public class AdminFile {
      * Ruta del server para depositar los archivos de Log
      */
     public static String LOGFILESERVER = "LOGFILESERVER";
+
+    /**
+     * tabla para el log de operaciones
+     */
+    public static String LOGDB = "LOGDB";
+
+    public static String PERMISOS = "PERMISOS";
+
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
      * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la

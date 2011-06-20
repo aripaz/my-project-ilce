@@ -38,6 +38,7 @@ public final class ExceptionHandler extends Throwable {
     private boolean seeStringData;
     private boolean logFile;
     private String rutaFile;
+    private String strQuery;
 
     /**
      * Constructor Basico
@@ -209,6 +210,9 @@ public final class ExceptionHandler extends Throwable {
                 if ((this.stringData!=null)&&(!"".equals(this.stringData))){
                     strTexto.append("\nDATA ADICIONAL:\n").append(this.getStringData());
                 }
+                if ((this.strQuery!=null)&&(!"".equals(this.strQuery))){
+                    strTexto.append("\nQUERY:\n").append(this.getStrQuery());
+                }
                 strTexto.append("\nTRAZA\n-------------\n").append(this.getSecuenceError());
                 strTexto.append("\n****************\n");
                 if (sld){
@@ -231,28 +235,28 @@ public final class ExceptionHandler extends Throwable {
         StringBuffer str = new StringBuffer();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
         str.append("<error>\n");
-        str.append("<row>");
-        str.append("ERROR:");
+        str.append("<general>");
         str.append(this.getTextMessage());
-        str.append("</row>").append("\n");
-        str.append("<row>");
-        str.append("FECHA:");
+        str.append("</general>").append("\n");
+        str.append("<fecha>");
         str.append(this.getTime("-"));
-        str.append("</row>").append("\n");
-        str.append("<row>");
-        str.append("DESCRIPCION:");
+        str.append("</fecha>").append("\n");
+        str.append("<descripcion>");
         str.append(this.getTextError());
-        str.append("</row>").append("\n");
-        str.append("<row>");
-        str.append("TIPO:");
+        str.append("</descripcion>").append("\n");
+        str.append("<tipo>");
         str.append(this.getTypeError());
-        str.append("</row>").append("\n");
+        str.append("</tipo>").append("\n");
         if (this.seeStringData()){
+            if ((this.strQuery!=null) && (!"".equals(this.strQuery))) {
+                str.append("<query>");
+                str.append(this.getStrQuery());
+                str.append("<query>").append("\n");
+            }
             if ((this.stringData!=null) && (!"".equals(this.stringData))) {
-                str.append("<row>");
-                str.append("DATA ADICIONAL:");
+                str.append("<dataAdicional>");
                 str.append(this.getStringData());
-                str.append("</row>").append("\n");
+                str.append("</dataAdicional>").append("\n");
             }
         }
         str.append("</error>");
@@ -312,7 +316,7 @@ public final class ExceptionHandler extends Throwable {
      */
     private StringBuffer getStringSecuenceError(){
         StringBuffer sld = new StringBuffer();
-        sld.append("CLASE\t,METODO\t,LINEA\t,ARCHIVO\n");
+        sld.append("ARCHIVO\t,LINEA\t,METODO\t,CLASE\n");
         if ((arrClass!=null) && (!arrClass.isEmpty())){
 
             for (int i=0;i<arrClass.size();i++){
@@ -327,6 +331,14 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /******** GETTER AND SETTER ***********/
+
+    public String getStrQuery() {
+        return strQuery;
+    }
+
+    public void setStrQuery(String strQuery) {
+        this.strQuery = strQuery;
+    }
 
     /**
      * Metodo para ver si se debe considerar la data incluida en el campo
@@ -820,8 +832,7 @@ public final class ExceptionHandler extends Throwable {
                 strMin="00";
                 strSec="00";
             }
-            return strDia+separador+strMes+separador+strAnio+separador+
-            " "+strHour+":"+strMin+":"+strSec;
+            return strDia+separador+strMes+separador+strAnio+" "+strHour+":"+strMin+":"+strSec;
         }
 
         /**

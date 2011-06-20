@@ -32,6 +32,15 @@ class ConQuery {
     private String ip;
     private String browser;
     private String logDB;
+    private boolean enableDataLog=true;
+
+    public boolean isEnableDataLog() {
+        return enableDataLog;
+    }
+
+    public void setEnableDataLog(boolean enableDataLog) {
+        this.enableDataLog = enableDataLog;
+    }
 
     private String getLogDB() {
         return logDB;
@@ -137,17 +146,17 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeInsert(CampoForma campoForma, String arrData) throws ExceptionHandler{
+    public HashCampo executeInsert(CampoForma campoForma, String strQuery) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
         try{
             Integer increment =Integer.valueOf(-1);
-            if (validateInsert(campoForma.getTabla(), arrData)){
+            if (validateInsert(campoForma.getTabla(), strQuery)){
                 getConexion();
                 st = this.conn.createStatement();
                 this.conn.setAutoCommit(true);
-                int res = st.executeUpdate(arrData, Statement.RETURN_GENERATED_KEYS);
+                int res = st.executeUpdate(strQuery, Statement.RETURN_GENERATED_KEYS);
                 rs = st.getGeneratedKeys();
                 if (res!=0){
                     ResultSetMetaData rsmd = rs.getMetaData();
@@ -165,12 +174,12 @@ class ConQuery {
             hsCmp.setObjData(increment);
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar INSERT");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar INSERT");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -179,7 +188,7 @@ class ConQuery {
                 log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
-                textData.append(("QUERY: "+arrData));
+                log.setStrQuery(strQuery);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("executeInsert"),textData);
             }catch(Exception ex){
@@ -226,25 +235,25 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeUpdate(CampoForma campoForma, String arrData) throws ExceptionHandler{
+    public HashCampo executeUpdate(CampoForma campoForma, String strQuery) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         try{
             Integer increment =Integer.valueOf(-1);
-            if (validateUpdate(campoForma.getTabla(), arrData)){
+            if (validateUpdate(campoForma.getTabla(), strQuery)){
                 getConexion();
                 st = this.conn.createStatement();
-                increment = st.executeUpdate(arrData);
+                increment = st.executeUpdate(strQuery);
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar UPDATE");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar UPDATE");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -253,7 +262,7 @@ class ConQuery {
                 log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
-                textData.append(("QUERY: "+arrData));
+                log.setStrQuery(strQuery);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("executeUpdate"),textData);
             }catch(Exception ex){
@@ -297,25 +306,25 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeDelete(CampoForma campoForma, String arrData) throws ExceptionHandler{
+    public HashCampo executeDelete(CampoForma campoForma, String strQuery) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         try{
             Integer increment =Integer.valueOf(-1);
-            if (validateDelete(campoForma.getTabla(), arrData)){
+            if (validateDelete(campoForma.getTabla(), strQuery)){
                 getConexion();
                 st = this.conn.createStatement();
-                increment = st.executeUpdate(arrData);
+                increment = st.executeUpdate(strQuery);
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStringData("QUERY: "+arrData);
+            eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -324,7 +333,7 @@ class ConQuery {
                 log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
-                textData.append(("QUERY: "+arrData));
+                log.setStrQuery(strQuery);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("executeDelete"),textData);
             }catch(Exception ex){
@@ -378,12 +387,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStringData("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert);
+            eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStringData("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert);
+            eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -392,7 +401,7 @@ class ConQuery {
                 log.setBoolSel(false);
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
-                textData.append(("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert));
+                log.setStrQuery(("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert));
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("executeDeleteInsert"),textData);
             }catch(Exception ex){
@@ -445,9 +454,11 @@ class ConQuery {
         Statement ps = null;
         ResultSet rs = null;
         String query = "";
+        String queryLog = "";
         try{
             getConexion();
             query = getQueryById(idQuery);
+            queryLog = query;
             if ((!"".equals(query)) && (arrData != null)){
                 ps =this.conn.createStatement();
                 for(int i=1;i<=arrData.length;i++){
@@ -489,12 +500,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -502,8 +513,12 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query)).append("\n");
-                textData.append(("DATA: "+arrayToString(arrData)));
+                if (this.isEnableDataLog()){
+                    log.setStrQuery(query);
+                    textData.append(("ENTRADA: "+arrayToString(arrData)));
+                }else{
+                    log.setStrQuery(queryLog);
+                }
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),textData);
             }catch(Exception ex){
@@ -579,12 +594,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con WHERE enviado");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con WHERE enviado");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -592,8 +607,8 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query)).append("\n");
-                textData.append(("WHERE: "+whereData.toString()));
+                textData.append(("WHERE: "+whereData));
+                log.setStrQuery(query);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhere"),textData);
             }catch(Exception ex){
@@ -680,12 +695,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con WHERE y DATA enviada");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con WHERE y DATA enviada");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -693,9 +708,9 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query)).append("\n");
-                textData.append(("DATA: "+arrayToString(arrData))).append("\n");
+                textData.append(("ENTRADA: "+arrayToString(arrData))).append("\n");
                 textData.append(("WHERE: "+whereData.toString()));
+                log.setStrQuery(query);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhereAndData"),textData);
             }catch(Exception ex){
@@ -831,12 +846,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos por ID de Query");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos por ID de Query");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -844,7 +859,7 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query));
+                log.setStrQuery(query);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),textData);
             }catch(Exception ex){
@@ -1005,20 +1020,20 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos mediante query");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos mediante query");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
-                textData.append(("QUERY: "+query)).append("\n");
-                textData.append(("DATA: "+ arrayToString(arrData)));
+                textData.append(("ENTRADA: "+ arrayToString(arrData)));
+                log.setStrQuery(query);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataByQuery"),textData);
             }catch(Exception ex){
@@ -1100,12 +1115,12 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de los datos");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de los datos");
-            eh.setStringData("QUERY: "+query);
+            eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -1113,8 +1128,8 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query)).append("\n");
                 textData.append(("DATA: "+ arrayToString(arrData)));
+                log.setStrQuery(query);
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataParam"),textData);
             }catch(Exception ex){
@@ -1160,20 +1175,22 @@ class ConQuery {
             }
         }catch(Exception e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtener QUERY por su ID");
-            eh.setStringData("QUERY: "+query.toString()+"\nID QUERY: "+idQuery);
+            eh.setStrQuery(query.toString());
+            eh.setStringData("ID QUERY: "+idQuery);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
+            /*
             try{
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("ID: "+idQuery)).append("\n");
-                textData.append(("QUERY: "+query.toString()));
+                log.setStrQuery(query.toString());
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
                             new StringBuffer("getQueryById"),textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
-            }
+            }*/
             try{
                 if (rs!=null){
                     rs.close();
@@ -1267,7 +1284,7 @@ class ConQuery {
         StringBuffer sld= new StringBuffer();
         if (strData!=null){
             for (int i=0;i<strData.length;i++){
-                sld.append("nro ").append(i).append(": ").append(strData[i]).append("\n");
+                sld.append("nro ").append(i+1).append(": ").append(strData[i]).append("\n");
             }
         }
         return sld.toString();
