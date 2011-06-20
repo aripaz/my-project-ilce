@@ -941,7 +941,7 @@ public class AdminXML {
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
         str.append("<qry>\n");
         str.append("<resultado>").append(data).append("</resultado>\n");
-        str.append("</qry>\n");
+        str.append("</qry>");
 
         return str.toString();
     }
