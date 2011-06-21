@@ -172,6 +172,9 @@ public class ListHash {
                                 if (tipoDato.getSimpleName().equals("Text")){
                                     tipoDato = String.class;
                                 }
+                                if (tipoDato.getSimpleName().equals("BIT")){
+                                    tipoDato = Integer.class;
+                                }
                                 //obtenemos el metodo en un objeto
                                 Method mtd = clase.getMethod(met[i].getName(), tipoDato);
                                 Object[] paramDato = new Object[1];
