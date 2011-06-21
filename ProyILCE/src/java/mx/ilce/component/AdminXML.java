@@ -1040,7 +1040,7 @@ public class AdminXML {
         }else if ("mx.ilce.bean.Text".equals(strData)){
             strSld = "text";
         }else if ("mx.ilce.bean.BIT".equals(strData)){
-            strSld = "BIT";
+            strSld = "bit";
         }
         return strSld;
     }
