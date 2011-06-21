@@ -408,11 +408,13 @@ public class AdminXML {
                                     }
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     if (this.isIncludeForaneo()){
-                                        String[] strData = new String[2];
+                                        String[] strData = new String[3];
                                         strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
                                         strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
-                                        if ((cmpAux.getFiltroForaneo()==null)&&(hsData.getPkData()!=null)){
-                                            strData[1] = hsData.getPkData();
+                                        if (hsData.getPkData()!=null){
+                                            strData[2] = hsData.getPkData();
+                                        }else{
+                                            strData[2] = cmpAux.getFiltroForaneo();
                                         }
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                         if (!"".equals(strForaneo.toString())){
@@ -540,11 +542,13 @@ public class AdminXML {
                                         str.append(" agrega_registro=\"false\"");
                                     }
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
-                                    String[] strData = new String[2];
+                                    String[] strData = new String[3];
                                     strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                    //strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                    strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
                                     if (hsData.getPkData()!=null){
-                                        strData[1]=hsData.getPkData();
+                                        strData[2]=hsData.getPkData();
+                                    }else{
+                                        strData[2] = String.valueOf(cmpAux.getFiltroForaneo());
                                     }
                                     if (this.isIncludeForaneo()){
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
@@ -659,7 +663,7 @@ public class AdminXML {
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmpQ.getCodigo()-1);
                     String[] strDataFiltro = new String[1];
-                    strDataFiltro[0] = strData[1];
+                    strDataFiltro[0] = strData[2];
                     //ejecutamos la query, con el filtro entregado
                     hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro);
                 }
