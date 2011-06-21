@@ -32,6 +32,10 @@
         <servlet-name>srvFormaDual</servlet-name>
         <servlet-class>mx.ilce.servlet.forma.srvFormaDual</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>srvSendMail</servlet-name>
+        <servlet-class>mx.ilce.mail.srvSendMail</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -63,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>srvFormaDual</servlet-name>
         <url-pattern>/srvFormaDual</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvSendMail</servlet-name>
+        <url-pattern>/srvSendMail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
