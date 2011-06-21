@@ -233,8 +233,8 @@ public class AdminXML {
                         for (int j=0;j<lstCamp.size();j++){
                             Campo cmpCol = (Campo) lstCamp.get(j);
                             Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
-                            str.append("\t\t<").append(cmpCol.getNombreDB()).append(">![CDATA[");
-                            str.append(cmpAux.getValor()).append("]]</");
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append("><![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]></");
                             str.append(cmpCol.getNombreDB()).append(">\n");
                         }
                         str.append("\t</permiso>\n");
@@ -318,8 +318,8 @@ public class AdminXML {
                         for (int j=0;j<lstCamp.size();j++){
                             Campo cmpCol = (Campo) lstCamp.get(j);
                             Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
-                            str.append("\t\t<").append(cmpCol.getNombreDB()).append(">![CDATA[");
-                            str.append(cmpAux.getValor()).append("]]</");
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append("><![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]></");
                             str.append(cmpCol.getNombreDB()).append(">\n");
                         }
                         str.append("\t</permiso>\n");
