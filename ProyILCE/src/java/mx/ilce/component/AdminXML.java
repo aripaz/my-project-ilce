@@ -1035,12 +1035,12 @@ public class AdminXML {
         String strSld = "";
         if ("java.lang.String".equals(strData)){
             strSld = "string";
-        }else
-        if ("java.lang.Integer".equals(strData)){
+        }else if ("java.lang.Integer".equals(strData)){
             strSld = "integer";
-        }else
-        if ("mx.ilce.bean.Text".equals(strData)){
+        }else if ("mx.ilce.bean.Text".equals(strData)){
             strSld = "text";
+        }else if ("mx.ilce.bean.BIT".equals(strData)){
+            strSld = "BIT";
         }
         return strSld;
     }
