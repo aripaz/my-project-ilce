@@ -110,7 +110,7 @@ public class AdminFile {
         } catch(URISyntaxException u){
             throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de configuracion");
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para Ingresar el INSERT de la Forma");
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de configuracion");
         }finally{
             try{
                 if (is != null){
@@ -199,7 +199,7 @@ public class AdminFile {
             if (e.hasMoreElements()){
                 str = prop.getProperty(key);
             }
-            sld = sld.valueOf(str);
+            sld = Integer.valueOf(str);
 	}catch(Exception e){
             throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener el ID de la Query");
 	}
@@ -219,8 +219,7 @@ public class AdminFile {
             if (hsFile!=null){
                 if (!hsFile.isEmpty()){
                     Properties prop = AdminFile.leerConfig();
-                    AdminFile adm = new AdminFile();
-                    String FileServerPath = adm.getKey(prop, AdminFile.FILESERVER);
+                    String FileServerPath = AdminFile.getKey(prop, AdminFile.FILESERVER);
                     Collection col = hsFile.values();
                     Iterator it = col.iterator();
                     while (it.hasNext()){
