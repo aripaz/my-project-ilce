@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 /**
  * Manejador de Exception general, que permite unificar las respuestas generales
@@ -96,7 +98,17 @@ public final class ExceptionHandler extends Throwable {
         setTypeError(obj.getClass().getSimpleName());
         setTextMessage(message);
 
-        if (getTypeError().equals(InvocationTargetException.class.getSimpleName())){
+        if (getTypeError().equals(AddressException.class.getSimpleName())){
+            AddressException e = (AddressException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(MessagingException.class.getSimpleName())){
+            MessagingException e = (MessagingException)obj;
+            setTextError(e.getMessage());
+            getStackTrace(e.getStackTrace(),clase);
+            setSecuenceError(getStringSecuenceError().toString());
+        }else if (getTypeError().equals(InvocationTargetException.class.getSimpleName())){
             InvocationTargetException e = (InvocationTargetException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
