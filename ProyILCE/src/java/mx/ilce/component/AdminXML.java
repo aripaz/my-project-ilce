@@ -215,6 +215,9 @@ public class AdminXML {
                             if (cmpAux.getTamano()!=null){
                                 str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
                             }
+                            if (cmpAux.getDatoSensible()!=null){
+                                str.append(("\t<dato_sensible>"+cmpAux.getDatoSensible()+"</dato_sensible>\n"));
+                            }
                         }
                     }
                     str.append(("</"+cmp.getNombreDB()+">\n"));
@@ -300,6 +303,9 @@ public class AdminXML {
                         }
                         if (cmpAux.getTamano()!=null){
                             str.append(("\t<tamano>"+cmpAux.getTamano()+"</tamano>\n"));
+                        }
+                        if (cmpAux.getDatoSensible()!=null){
+                            str.append(("\t<dato_sensible>"+cmpAux.getDatoSensible()+"</dato_sensible>\n"));
                         }
                     }
                 }
