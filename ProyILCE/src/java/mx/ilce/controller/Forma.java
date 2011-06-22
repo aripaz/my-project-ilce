@@ -39,8 +39,17 @@ public class Forma extends Entidad{
     private HashMap formData;
     private ArrayList formName;
     private boolean includeForaneo=true;
+    private Integer claveEmpleado;
 
     /************** GETTER Y SETTER ***************/
+
+    public Integer getClaveEmpleado() {
+        return claveEmpleado;
+    }
+
+    public void setClaveEmpleado(Integer claveEmpleado) {
+        this.claveEmpleado = claveEmpleado;
+    }
 
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
@@ -823,6 +832,14 @@ public class Forma extends Entidad{
                     hsCmp.setPkData(this.getPk());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        if (this.getClaveEmpleado()!=null){
+                            HashCampo hsCmpPerm = new HashCampo();
+                            strData = new String[2];
+                            strData[0] = String.valueOf(this.getClaveEmpleado());
+                            strData[1] = String.valueOf(this.getClaveForma());
+                            hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                            admXML.setHashPermisoForma(hsCmpPerm);
+                        }
                         admXML.setHsForm(this.getFormData());
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
@@ -955,6 +972,14 @@ public class Forma extends Entidad{
                     HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()), strWhere, strData);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        if (this.getClaveEmpleado()!=null){
+                            HashCampo hsCmpPerm = new HashCampo();
+                            strData = new String[2];
+                            strData[0] = String.valueOf(this.getClaveEmpleado());
+                            strData[1] = String.valueOf(this.getClaveForma());
+                            hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                            admXML.setHashPermisoForma(hsCmpPerm);
+                        }
                         admXML.setHsForm(this.getFormData());
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
