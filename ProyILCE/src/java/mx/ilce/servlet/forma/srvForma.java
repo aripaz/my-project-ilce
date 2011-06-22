@@ -77,7 +77,7 @@ public class srvForma extends HttpServlet {
                         if ((strWhere!=null)&&(!"".equals(strWhere))){
                             String[] strData = getArrayData(hsForm);
                             forma.setArrayData(strData);
-
+                            forma.setFormData(hsForm);
                             String whereForm = getWhereData(hs, forma.getForma(forma.getClaveForma()));
                             forma.setStrWhereQuery("");
                             if ((strWhere!=null) && (strWhere.trim().length()>0)){

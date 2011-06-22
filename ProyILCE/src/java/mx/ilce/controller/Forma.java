@@ -823,6 +823,7 @@ public class Forma extends Entidad{
                     hsCmp.setPkData(this.getPk());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        admXML.setHsForm(this.getFormData());
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
                             admXML.setDeleteIncrement(true);
@@ -954,6 +955,7 @@ public class Forma extends Entidad{
                     HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()), strWhere, strData);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        admXML.setHsForm(this.getFormData());
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
                             admXML.setDeleteIncrement(true);

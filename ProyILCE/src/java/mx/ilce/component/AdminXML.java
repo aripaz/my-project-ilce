@@ -35,7 +35,15 @@ public class AdminXML {
     private boolean deleteIncrement=false;
     private boolean includeForaneo=true;
     private HashCampo hashPermisoForma;
+    private HashMap hsForm;
 
+    public HashMap getHsForm() {
+        return hsForm;
+    }
+
+    public void setHsForm(HashMap hsForm) {
+        this.hsForm = hsForm;
+    }
 
     public HashCampo getHashPermisoForma() {
         return hashPermisoForma;
@@ -416,12 +424,20 @@ public class AdminXML {
                                     if (this.isIncludeForaneo()){
                                         String[] strData = new String[3];
                                         strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                        strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                        strData[1] = "";//String.valueOf(cmpAux.getFiltroForaneo());
                                         if (hsData.getPkData()!=null){
                                             strData[2] = hsData.getPkData();
                                         }else{
                                             strData[2] = cmpAux.getFiltroForaneo();
                                         }
+                                        HashMap dataForm = this.getHsForm();
+                                        if((dataForm!=null)&&(!dataForm.isEmpty())&&(cmpAux.getFiltroForaneo()!=null) ){
+                                            String datoForaneo = (String) dataForm.get(cmpAux.getFiltroForaneo());
+                                            if ((datoForaneo!=null)&&(!"".equals(datoForaneo))){
+                                                strData[1]=datoForaneo;
+                                            }
+                                        }
+
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                         if (!"".equals(strForaneo.toString())){
                                             str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
@@ -550,13 +566,20 @@ public class AdminXML {
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     String[] strData = new String[3];
                                     strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                    strData[1] = String.valueOf(cmpAux.getFiltroForaneo());
+                                    strData[1] = "";//String.valueOf(cmpAux.getFiltroForaneo());
                                     if (hsData.getPkData()!=null){
                                         strData[2]=hsData.getPkData();
                                     }else{
                                         strData[2] = String.valueOf(cmpAux.getFiltroForaneo());
                                     }
                                     if (this.isIncludeForaneo()){
+                                        HashMap dataForm = this.getHsForm();
+                                        if((dataForm!=null)&&(!dataForm.isEmpty())&&(cmpAux.getFiltroForaneo()!=null) ){
+                                            String datoForaneo = (String) dataForm.get(cmpAux.getFiltroForaneo());
+                                            if ((datoForaneo!=null)&&(!"".equals(datoForaneo))){
+                                                strData[1]=datoForaneo;
+                                            }
+                                        }
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
                                         if (!"".equals(strForaneo.toString())){
                                             str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
@@ -671,7 +694,13 @@ public class AdminXML {
                     String[] strDataFiltro = new String[1];
                     strDataFiltro[0] = strData[2];
                     //ejecutamos la query, con el filtro entregado
-                    hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro);
+                    if ("".equals(strData[1])){
+                        hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro);
+                    }else{
+                        hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
+                                                                    strData[1],
+                                                                    strDataFiltro);
+                    }
                 }
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
