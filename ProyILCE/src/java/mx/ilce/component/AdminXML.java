@@ -367,6 +367,27 @@ public class AdminXML {
             HashMap hsDat = hsData.getListData();
 
             str.append("<qry>\n");
+            if (this.getHashPermisoForma()!=null){
+                HashCampo hsPerm = this.getHashPermisoForma();
+                HashMap hsDatPerm = hsPerm.getListData();
+                List lstCamp = hsPerm.getListCampos();
+                str.append("<permisos>\n");
+                if (!hsDatPerm.isEmpty()){
+                    for (int i=0;i<hsDatPerm.size();i++){
+                        str.append("\t<permiso>\n");
+                        ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
+                        for (int j=0;j<lstCamp.size();j++){
+                            Campo cmpCol = (Campo) lstCamp.get(j);
+                            Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append("><![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]></");
+                            str.append(cmpCol.getNombreDB()).append(">\n");
+                        }
+                        str.append("\t</permiso>\n");
+                    }
+                }
+                str.append("</permisos>\n");
+            }
             for(int i=0;i<hsDat.size();i++){
                 ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                 str.append(("<registro id='"+String.valueOf(i+1)+"'>\n"));
@@ -512,6 +533,27 @@ public class AdminXML {
             //HashMap hsDat = hsData.getListData();
 
             str.append("<qry>\n");
+            if (this.getHashPermisoForma()!=null){
+                HashCampo hsPerm = this.getHashPermisoForma();
+                HashMap hsDatPerm = hsPerm.getListData();
+                List lstCamp = hsPerm.getListCampos();
+                str.append("<permisos>\n");
+                if (!hsDatPerm.isEmpty()){
+                    for (int i=0;i<hsDatPerm.size();i++){
+                        str.append("\t<permiso>\n");
+                        ArrayList lstData = (ArrayList) hsDatPerm.get(Integer.valueOf(i));
+                        for (int j=0;j<lstCamp.size();j++){
+                            Campo cmpCol = (Campo) lstCamp.get(j);
+                            Campo cmpAux = (Campo) lstData.get(cmpCol.getCodigo()-1);
+                            str.append("\t\t<").append(cmpCol.getNombreDB()).append("><![CDATA[");
+                            str.append(cmpAux.getValor()).append("]]></");
+                            str.append(cmpCol.getNombreDB()).append(">\n");
+                        }
+                        str.append("\t</permiso>\n");
+                    }
+                }
+                str.append("</permisos>\n");
+            }
             for(int i=0;i<1;i++){
                 //ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                 str.append(("<registro id='"+String.valueOf(i)+"'>\n"));

@@ -71,6 +71,8 @@ public class srvForma extends HttpServlet {
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
                     if (forma !=null){
+                        User user = (User) request.getSession().getAttribute("user");
+                        forma.setClaveEmpleado(user.getClaveEmpleado());
                         forma.setPk(pk);
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
