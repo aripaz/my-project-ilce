@@ -1,21 +1,19 @@
-<%--
+<%-- 
     Document   : index
-    Created on : 24/03/2011, 11:06:02 AM
-    Author     : Omar Flores
+    Created on : 22/06/2011, 05:04:57 PM
+    Author     : USUARIO
 --%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>ILCE</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
     </head>
-    <script type="text/javascript" >
-    function goLogin(){
-        document.main.action = '<%=request.getContextPath()%>/login.jsp';
-        document.main.submit();
-    }
-    </script>
-
-    <body bgcolor="#F4F9FF" onLoad="goLogin();">
-        <form action="" method="post" name="main"></form>
+    <body>
+        <h1>Hello World!</h1>
     </body>
 </html>
