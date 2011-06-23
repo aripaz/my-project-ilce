@@ -94,7 +94,7 @@
                                         //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                                         $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).click(function() {
                                             var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
-                                            $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body"}).trigger("reloadGrid")
+                                            $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"}).trigger("reloadGrid")
                                             $(this).remove();
                                         });
                                     }
