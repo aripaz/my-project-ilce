@@ -66,12 +66,12 @@ public class srvLogin extends HttpServlet {
                 }else{
                     lg.setTextExecution("Error en obtención de datos del Usuario, aunque se logro Login");
                     request.getSession().setAttribute("loginHand",lg);
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
             }else{
                 lg.setTextExecution("Usuario o password incorrecto, verifique");
                 request.getSession().setAttribute("loginHand",lg);
-                request.getRequestDispatcher("/login.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         }catch (ExceptionHandler eh){
             try{
