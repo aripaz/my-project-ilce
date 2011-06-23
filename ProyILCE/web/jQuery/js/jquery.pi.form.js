@@ -24,52 +24,10 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
-
+            $("body").addClass('wait');
             obj = $(this);
-
-            /*var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
-            if ($.fn.form.options.aplicacion=="1" && 
-                ($.fn.form.options.forma=="2" || $.fn.form.options.forma=="3") &&
-                $.fn.form.options.modo!='lookup')
-                sTabs="<div id='formTab_" + suffix +"'>"+
-                "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
-                "<li><a href='#divFormPerfiles_" + suffix +"'>Perfiles de seguridad</a></li></ul>"+
-                "<div id='divFormGeneral_" + suffix +"'>" +
-                "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
-                "<img src='img/loading.gif' /></div>"+
-                "</div>"+
-                "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles_" + suffix +"' class='treeProfiles' behaviour='profile' originalForm='" + $.fn.form.options.forma + "'></div></div>"+
-                "</div>"
-            else {
-
-                if ($.fn.form.options.modo!='lookup')
-                    sTituloTab="General"
-                else
-                    sTituloTab="Seleccione los criterios de b&uacute;queda"
-
-                sTabs="<div id='formTab_" + suffix + "'>"+
-                "<ul><li><a href='#divFormGeneral_" + suffix +"'>" + sTituloTab + "</a></li></ul>"+
-                "<div id='divFormGeneral_" + suffix +"'>" +
-                "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
-                "<img src='img/loading.gif' /></div>"+
-                "</div>"+
-                "</div>";
-            }
-
-            var sBusqueda="";
-            if ($.fn.form.options.modo!='lookup')
-                sButtonCaption='Guardar';
-            else {
-                sButtonCaption='Buscar'
-                sBusqueda = "<tr><td class='etiqueta_forma' style='width:50%'>Guardar filtro como: </td><td class='etiqueta_forma'><input name='$b' id='$b' value='' class='singleInput' /></td></tr>";
-            }
-
-            sTabs+="<br><div align='right'><table style='width:100%'>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
-            "<input type='button' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></td></tr></table></div>";
-              
-            obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>"); */
             $.fn.form.ajax();          
-
+            $("body").removeClass('wait');
         });
  
     };
@@ -342,6 +300,20 @@
                             alert("Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
                         }
                         else {
+                            oGridHeader=$("span.ui-jqgrid-title, #grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma);
+                            nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
+                            nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
+                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma +"'>(Quitar filtro)</a>");
+
+                            //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                            $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
+                                var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                                $(sGridId).jqGrid('setGridParam',{
+                                    url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body&page=1"
+                                    }).trigger("reloadGrid")
+                                $(this).remove();
+                            });
+
                             // Si el usuario le dió un nombre a la consulta
                             // Significa que la desea guardar
                             if (document.getElementById("$b").value!="") {
@@ -352,20 +324,6 @@
                                 "&parametro=menu.busqueda."+$.fn.form.options.forma+"."+sBusqueda +
                                 "&valor=" +escape(sData.substring(0,sData.length-1));
                                 $.post("srvFormaInsert", postConfig);
-
-                                oGridHeader=$("span.ui-jqgrid-title, #grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma);
-                                nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
-                                nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                                $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma +"'>(Quitar filtro)</a>");
-
-                                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                                $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
-                                    var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
-                                    $(sGridId).jqGrid('setGridParam',{
-                                        url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body"
-                                        }).trigger("reloadGrid")
-                                    $(this).remove();
-                                });
                                     
                                 // Aqui va método del accordion para actualizarlo
                                 $("#apps_menu").appmenu().appmenu.getSearchs($.fn.form.options.aplicacion)

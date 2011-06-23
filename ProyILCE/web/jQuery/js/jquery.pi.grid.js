@@ -43,7 +43,11 @@
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
-            $(this).html("<table width='100%' id='grid" + suffix + "' openkardex='" + $.fn.appgrid.options.openKardex + "'>" +
+            $(this).html("<table width='100%' id='grid" + suffix +
+                         "' titulo='" + $.fn.appgrid.options.titulo +
+                         "' wsParameters='"+ $.fn.appgrid.options.wsParameters +
+                         "' openkardex='" + $.fn.appgrid.options.openKardex +
+                         "' leyendas='" + $.fn.appgrid.options.leyendas[0] + "," + $.fn.appgrid.options.leyendas[1]+ "'>" +
                          "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
              $.fn.appgrid.getGridDefinition();
@@ -131,7 +135,7 @@
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
                                 height:400,
-                                width:500}); },
+                                width:500});},
                         position: "last",
                         title:"Nuevo registro",
                         cursor: "pointer"});
@@ -156,7 +160,6 @@
                                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
                                                 height:"500",
                                                 width:"500"});
-                                    //$(this).trigger("reloadGrid");
                                 }
                                 else {
                                     alert('Seleccione el registro a editar');
@@ -228,11 +231,37 @@
                //Remueve del dom el loader
                $("#loader"+ suffix).remove();
                if ($.fn.appgrid.options.insertarEnEscritorio=="1")
+
                     oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false})
                         .navButtonAdd("#pager" + suffix,{
                             caption:"Insertar en escritorio",
                             onClickButton:  function() {
-                                alert('Por implementar');
+                                nApp=this.id.split("_")[1];
+                                nForma=this.id.split("_")[2];
+                                postConfig = "$cf=1&$ta=insert&$pk=0"+
+                                "&clave_aplicacion=" + nApp +
+                                "&clave_empleado="+ $("#_ce_").val() +
+                                "&parametro=escritorio.grid"+
+                                "&valor=" +escape("app:"+nApp+
+                                                  ",entidad:" + nForma +
+                                                  ",wsParameters:" + oGrid.attr("wsParameters") +
+                                                  ",titulo:" + oGrid.attr("titulo") +
+                                                  ",leyendas:" + oGrid.attr("leyendas") +
+                                                  ",openKardex:" + oGrid.attr("openKardex")
+                                                  );
+                                $.post("srvFormaInsert", postConfig);
+
+                                //Inserta el html para agragar el grid en el escritorio
+                                $("#tabUser").append("<div class='queued_grids' app='" + nApp +
+                                    "' form='" + nForma +
+                                    "' wsParameters='" + oGrid.attr("wsParameters") +
+                                    "' titulo='" + oGrid.attr("titulo") +
+                                    "' leyendas='" + oGrid.attr("leyendas") +
+                                    "' openKardex='" + oGrid.attr("openKardex") + "'></div>");
+
+                                setTimeout("$('.queued_grids:first').gridqueue()",2000);
+                                alert("Se agregó el grid al escritorio");
+
                             },
                             position: "last",
                             title:"",
@@ -262,7 +291,7 @@
 
                //Verifica si el grid está en una cola
                if ($.fn.appgrid.options.inQueue)
-                   setTimeout("$('.foreign_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",2000);
+                   setTimeout("$('.queued_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",2000);
 
                if ($.fn.appgrid.options.removeGridTitle)
                      $('.ui-jqgrid-titlebar',oGrid).remove();

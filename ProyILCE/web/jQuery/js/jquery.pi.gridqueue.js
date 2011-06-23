@@ -15,7 +15,7 @@
              obj = $(this);
              obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>")
              $.fn.gridqueue.getGridConfig(obj);
-             obj.removeClass("foreign_grids");
+             obj.removeClass("queued_grids");
              obj.addClass("gridContainer");
         });
 
@@ -24,9 +24,9 @@
 $.fn.gridqueue.getGridConfig= function(obj){
       obj.appgrid({app: obj.attr("app"),
           entidad: obj.attr("form"),
-          wsParameters: obj.attr("rel"),
+          wsParameters: obj.attr("wsParameters"),
           titulo:obj.attr("titulo"),
-          leyendas:["Nuevo registro", "Edición de registro"],
+          leyendas:obj.attr("leyendas").split(","),
           height:$.fn.gridqueue.options.height,
           removeGridTitle:true,
           inQueue:true
