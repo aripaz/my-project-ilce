@@ -309,7 +309,7 @@
                             $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
                                 var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
                                 $(sGridId).jqGrid('setGridParam',{
-                                    url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body&page=1"
+                                    url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body"
                                     }).trigger("reloadGrid")
                                 $(this).remove();
                             });
@@ -332,7 +332,7 @@
 
                             sData = sData.substring(0,sData.length-1)
                             $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$w=" + escape(sData)+ "&$dp=body"
+                                url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$w=" + escape(sData)+ "&$dp=body&page=1"
                                 }).trigger("reloadGrid")
                             $("#dlgModal_"+ formSuffix).dialog("destroy");
                             $("#dlgModal_"+ formSuffix).remove();
