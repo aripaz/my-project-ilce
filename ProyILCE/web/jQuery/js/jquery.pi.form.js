@@ -10,7 +10,8 @@
             aplicacion:"",
             forma:"",
             pk:"",
-            xmlUrl : "srvForma", //"xml_tests/forma.app.xml"
+            xmlUrl : "srvForma", //"xml_tests/forma.app.xml",
+            filtroForaneo: "",
             columnas: 2,
             modo:"",
             top: 122,
@@ -23,9 +24,10 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
-            var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
+
             obj = $(this);
 
+            /*var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
             if ($.fn.form.options.aplicacion=="1" && 
                 ($.fn.form.options.forma=="2" || $.fn.form.options.forma=="3") &&
                 $.fn.form.options.modo!='lookup')
@@ -52,7 +54,6 @@
                 "<img src='img/loading.gif' /></div>"+
                 "</div>"+
                 "</div>";
-
             }
 
             var sBusqueda="";
@@ -66,26 +67,8 @@
             sTabs+="<br><div align='right'><table style='width:100%'>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
             "<input type='button' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></td></tr></table></div>";
               
-            obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>");
-            $.fn.form.ajax($("#divFormGeneral_" + suffix));
-            $("#btnGuardar_"+ suffix).click(function() {
-                $("#form_" + suffix).submit();
-
-            })
-
-            $("#dlgModal_"+ suffix).dialog({
-                modal: true,
-                /*height:$.fn.form.options.height, */
-                top:$.fn.form.options.top,
-                width:$.fn.form.options.width,
-                close: function(event, ui) {
-                    $(this).dialog("destroy");
-                    $(this).remove();
-                }
-            });
-                                      
-            $("#formTab_" + suffix).tabs();
-
+            obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>"); */
+            $.fn.form.ajax();          
 
         });
  
@@ -100,10 +83,13 @@
         });
     }
 
-    $.fn.form.ajax = function(obj){
+    $.fn.form.ajax = function(){
+        //Crea clave unica para forma
+        var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+
         $.ajax(
         {
-            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk,
+            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk + "&" + $.fn.form.options.filtroForaneo,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -118,10 +104,89 @@
                 else {
                     xml = data;
                 }
-                obj.html($.fn.form.handleForm(xml));
 
-                //Crea clave unica para forma
-                var formSuffix =$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+                /* Procesamiento de permisos */
+                var sPermiso="";
+                var oPermisos=$(xml).find("clave_permiso");
+                oPermisos.each( function() {
+                    sPermiso+=$(this).text()+",";
+                })
+                sPermiso=sPermiso.substr(0,sPermiso.length-1);
+
+                if (sPermiso.indexOf("2")==-1 && $.fn.form.options.modo=='insert') {
+                    alert("Su perfil no cuenta con permisos para insertar registros de esta forma, consulte al administrador del sistema");
+                    return false;
+                }
+
+                if (sPermiso.indexOf("3")==-1 && $.fn.form.options.modo=='update') {
+                    alert("Su perfil no cuenta con permisos para actualizar registros de esta forma, consulte al administrador del sistema");
+                    return false;
+                }
+
+                /* Creación de la forma hasta que el webservice se ejecute exitosamente */
+                var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
+                if ($.fn.form.options.aplicacion=="1" &&
+                    ($.fn.form.options.forma=="2" || $.fn.form.options.forma=="3") &&
+                    $.fn.form.options.modo!='lookup')
+                    sTabs="<div id='formTab_" + suffix +"' security='" + sPermiso + "'>"+
+                          "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
+                          "<li><a href='#divFormPerfiles_" + suffix +"'>Perfiles de seguridad</a></li></ul>"+
+                          "<div id='divFormGeneral_" + suffix +"' >" +
+                          "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
+                          "<img src='img/loading.gif' /></div>"+
+                          "</div>"+
+                          "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles_" + suffix +"' class='treeProfiles' behaviour='profile' originalForm='" + $.fn.form.options.forma + "'></div></div>"+
+                          "</div>";
+                else {
+
+                    if ($.fn.form.options.modo!='lookup')
+                        sTituloTab="General";
+                    else
+                        sTituloTab="Seleccione los criterios de b&uacute;queda";
+
+                    sTabs="<div id='formTab_" + suffix + "' security='" + sPermiso + "'>"+
+                    "<ul><li><a href='#divFormGeneral_" + suffix +"'>" + sTituloTab + "</a></li></ul>"+
+                    "<div id='divFormGeneral_" + suffix +"'>" +
+                    "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
+                    "<img src='img/loading.gif' /></div>"+
+                    "</div>"+
+                    "</div>";
+                }
+
+                var sBusqueda="";
+                if ($.fn.form.options.modo!='lookup')
+                    sButtonCaption='Guardar';
+                else {
+                    sButtonCaption='Buscar'
+                    sBusqueda = "<tr><td class='etiqueta_forma' style='width:50%'>Guardar filtro como: </td><td class='etiqueta_forma'><input name='$b' id='$b' value='' class='singleInput' /></td></tr>";
+                }
+
+                sTabs+="<br><div align='right'><table style='width:100%'>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +suffix+"' class='estatus_bar'>&nbsp;</td><td align='right'><input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "'>" +
+                "<input type='button' class='formButton' id='btnGuardar_" + suffix +"'   value='" + sButtonCaption + "'/></td></tr></table></div>";
+
+                obj.append("<div id='dlgModal_"+ suffix + "' title='" + $.fn.form.options.titulo +"'>" + sTabs + "</div>");
+
+                /*--- */
+                $("#divFormGeneral_" + suffix).html($.fn.form.handleForm(xml));
+                /* Inclusión de nuevo código*/
+                 $("#btnGuardar_"+ suffix).click(function() {
+                    $("#form_" + suffix).submit();
+                 })
+
+                $("#dlgModal_"+ suffix).dialog({
+                    modal: true,
+                    /*height:$.fn.form.options.height, */
+                    top:$.fn.form.options.top,
+                    width:$.fn.form.options.width,
+                    close: function(event, ui) {
+                        $(this).dialog("destroy");
+                        $(this).remove();
+                    }
+                });
+
+                $("#formTab_" + suffix).tabs();
+                /**/
+    
 
                 if ($.fn.form.options.modo!='lookup')
                     $.fn.form.getProfileTree($("#divFormProfiles_" + formSuffix));
@@ -171,7 +236,10 @@
                             }
                         });
 
-                        if (!bCompleto) return false;
+                        if (!bCompleto){
+                            $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique    ");
+                            return false;
+                        }
 
                         //Preparando la información para enviarla via POST
                         $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando informacion...");
@@ -190,21 +258,32 @@
                             type: "POST",
                             url: sWS,
                             data:sData,
+                            dataType: ($.browser.msie) ? "text" : "xml",
                             success: function(data){
-                                if (data=='0') {
-                                    alert('Error al insertar registro');
-                                    return false;
+                                 if (typeof data == "string") {
+                                    xmlResult = new ActiveXObject("Microsoft.XMLDOM");
+                                    xmlResult.async = false;
+                                    xmlResult.validateOnParse="true";
+                                    xmlResult.loadXML(data);
+                                    if (xmlResult.parseError.errorCode>0) {
+                                        alert("Error de compilación xml:" + xmlResult.parseError.errorCode +"\nParse reason:" + xmlResult.parseError.reason + "\nLinea:" + xmlResult.parseError.line);
+                                    }
+                                }
+                                else {
+                                    xmlResult = data;
                                 }
 
+                                sResultado=$(xmlResult).find("resultado").text();
+                                
                                 $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando perfiles de seguridad...");
                                 //Envía perfiles asociados a la forma aplicación
                                 if ($.fn.form.options.forma=="2") {
                                     $("#divFormProfiles_" + formSuffix).find('li.jstree-checked').each(function(){
                                       //Se deben borrar los perfiles anteriores!!
                                       nPerfil=this.id.split("-")[1]
-                                      $.post('srvFormaDelete','$cf=10&$w=clave_aplicacion='+data+" AND clave_perfil="+nPerfil);
-                                      sData='clave_perfil='+nPerfil+"&clave_aplicacion=" + data + "&activo=1&$cf=10&$pk=0&$ta=insert";
-                                      $.post(sWS, sData);
+                                      $.post('srvFormaDelete','$cf=10&$w=clave_aplicacion='+sResultado+" AND clave_perfil="+nPerfil);
+                                      sData='clave_perfil='+nPerfil+"&clave_aplicacion=" + sResultado + "&activo=1&$cf=10&$pk=0&$ta=insert";
+                                      setTimeout("$.post('"+sWS+"','"+ sData+ "')",1000);
                                     });
                                 }
 
@@ -224,7 +303,7 @@
 
                                        if (sTipoNodo=="permiso") {
                                            if ($.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-" + nPermiso))
-                                                sData ="clave_forma="+data+ "&clave_perfil="+nPerfil+"&clave_permiso="+nPermiso+"&$cf=14&$pk=0&$ta=insert";
+                                                sData ="clave_forma="+sResultado+ "&clave_perfil="+nPerfil+"&clave_permiso="+nPermiso+"&$cf=14&$pk=0&$ta=insert";
                                                 $.post(sWS, sData);
                                        }
                                       
@@ -236,7 +315,11 @@
                                 $("#dlgModal_"+ suffix).dialog("destroy");
                                 $("#dlgModal_"+ suffix).remove();
                                 $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid().trigger("reloadGrid");
-                            }
+                            },
+                        error:function(xhr,err){
+                            $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
+                            alert("Error al actualizar registro: \n"+ +xhr.responseText);
+                        }
                         });
                     }
                     else {
@@ -306,6 +389,7 @@
 
             },
             error:function(xhr,err){
+                $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
                 alert("responseText: "+xhr.responseText);
             }
@@ -319,6 +403,7 @@
         var sSuffix= '_' + $.fn.form.options.aplicacion  + '_' + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         var oCampos= $(xml).find("registro").children();
         var tabIndex=1;
+        bVDS=$("#formTab" + sSuffix).attr("security").indexOf("5")!=-1?true:false;
         var bAutoIncrement=false;
         oCampos.each(function(){
             oCampo=$(this);
@@ -326,8 +411,10 @@
             bAutoIncrement=(oCampo.attr("autoincrement")!=undefined)?true:false;
             //Genera etiqueta
             sAlias= oCampo.find('alias_campo').text();
+            bDatoSensible=oCampo.find('dato_sensible').text();
 
             if (bAutoIncrement) return true;
+            if (bDatoSensible=="1" && !bVDS) return true;
 
             if (sAlias!='') {
                 sRenglon += '<td class="etiqueta_forma" id="td_' +oCampo[0].nodeName + sSuffix + '">' +sAlias;
@@ -370,8 +457,8 @@
                 sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
                 sRenglon+="<option ";
                 if ($.fn.form.options.modo=='insert')
-                    sRenglon+="selected='selected'>";
-                sRenglon +="</option>";
+                    sRenglon+="selected='selected' ";
+                sRenglon +="></option>";
 
                 oCamposForaneos=oCampo.find('registro_' + oCampo[0].nodeName)
                 
@@ -409,21 +496,21 @@
                     oCampo.find('evento').text() +
                     '>' + oCampo[0].childNodes[0].data + '</textarea></td>|';
                 }
-                else if ($(this).find('tipo_control').text()!="") {
+                else if ($(this).find('tipo_control').text()=="checkbox" || sTipoCampo=="bit") {
                     sRenglon += '<td class="etiqueta_forma">' +
-                    '<input tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
+                    '<div style="width:1px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
+                    '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
 
                     // Establece la marca de obligatorio con la seudoclase obligatorio
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
-                        sRenglon+='class="singleInput"';
+                        sRenglon+='class="singleInput" ';
                     }
                     else {
-                        sRenglon+='class="singleInput obligatorio"';
+                        sRenglon+='class="singleInput obligatorio" ';
                     }
 
-                    sRenglon+=' type="' + oCampo.find('tipo_control').text() + '" value="' + oCampo[0].childNodes[0].data + '" ' +
-                    oCampo.find('evento').text() +
-                    ' /></td>|';
+                    sRenglon+=(oCampo[0].childNodes[0].data=='1')?'selected="selected" ':''
+                    sRenglon+=oCampo.find('evento').text() + ' /></div></td>|';
                 }
                 else {
                     sRenglon += '<td class="etiqueta_forma">' + 
