@@ -38,7 +38,6 @@
                  else {
                     xmlConfig= data;}
                 obj.html($.fn.desktop.handleSession(xmlConfig));
-
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -49,18 +48,17 @@
     $.fn.desktop.handleSession = function(xml){
         var sFondo="";
         $(xml).find("registro").each(function(){
-            //Carga los datos del xml en la variable de coniguración
+            //Carga los datos del xml en la variable de configuración
             sParametro=$(this).find("parametro").text().split("\n")[0];
             if (sParametro=='escritorio.imagen de fondo') {
                sFondo=$(this).find("valor").text().split("\n")[0];
                if (sFondo!='')
                    obj.css('background-image', 'url('+sFondo+')');
-                   obj.html("");
             }
 
 
         })
-
+        obj.html("");
     }
 
 })(jQuery);

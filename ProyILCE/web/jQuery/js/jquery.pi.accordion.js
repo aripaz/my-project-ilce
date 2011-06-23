@@ -111,7 +111,6 @@
                                                                        modo:"insert",
                                                                        titulo: sTitulo,
                                                                        columnas:1,
-                                                                       pk:0,
                                                                        height:400,
                                                                        width:500
                                                                    });
@@ -125,6 +124,7 @@
 
                                     $("#tab"+this.id).appgrid({app: nAplicacion,
                                                                entidad: nEntidad,
+                                                               pk:0,
                                                                wsParameters:data,
                                                                titulo:sTitulo,
                                                                height:"70%",
@@ -272,7 +272,7 @@
             if (nInsertar=="1")
                    sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='newEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasNuevaEntidad+"</a></div>";
 
-            if (nMostrar=="1")
+            //if (nMostrar=="1")
                    sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='showEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasMostrarEntidad+"</a></div>";
 
             sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros<span>>><br /></div></div>";

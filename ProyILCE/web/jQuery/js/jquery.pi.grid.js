@@ -35,18 +35,16 @@
             $.fn.appgrid.options = $.extend($.fn.appgrid.settings, opc);
             var nApp=$.fn.appgrid.options.app;
             var nEntidad=$.fn.appgrid.options.entidad;
+            var nPK=$.fn.appgrid.options.pk;
             var suffix =  "_" + nApp + "_" + nEntidad;
-            //Registra el grid como habilitado para abrir kardex
-            if ($.fn.appgrid.options.openKardex)
-                $("#_vk_").val($("#_vk_").val()+"," +suffix);
 
             obj = $(this);
             var nForma = obj.attr(name);
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
-            $(this).html("<table width='100%' id='grid" + suffix + "'>" +
-                         "</table><div id='pager" + suffix +"'><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
+            $(this).html("<table width='100%' id='grid" + suffix + "' openkardex='" + $.fn.appgrid.options.openKardex + "'>" +
+                         "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
              $.fn.appgrid.getGridDefinition();
         });
@@ -56,7 +54,7 @@
     $.fn.appgrid.getGridDefinition = function(){
          $.ajax(
             {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                  if (typeof data == "string") {
@@ -71,11 +69,16 @@
                     xml = data;}
                 $.fn.appgrid.handleGridDefinition(xml);
 
+                if ($.fn.appgrid.options.colModel==null) {
+                    obj.html("<div class='etiqueta_perfil' align='center'><br><br><br><br><br>Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema<br><br><br><br><br></div>");
+                    return true;
+                }
+
                 var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
 
                 /* Inicia implementación del grid */
                 var nApp=$.fn.appgrid.options.app;
-                var nEntidad=$.fn.appgrid.options.entidad;
+                var nEntidad=$.fn.appgrid.options.entidad.split('-')[0];
 
                 /* Agrega la liga para quitar filtro desde el contructor    */
                 if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink)
@@ -91,7 +94,7 @@
                 if ($.fn.appgrid.options.loadMode=='delayed')
                    sDataType="local";
                 else
-                   sDataType="xml"
+                   sDataType="xml";
 
                 var oGrid=$("#grid" + suffix).jqGrid(
                            {//datatype: "xmlstring",
@@ -108,93 +111,132 @@
                             sortname:  $.fn.appgrid.options.sortname+suffix,
                             viewrecords: true,
                             sortorder: "desc",                            
-                            onClickRow: function(id){
-                                    alert('Hola mundo');
-                                  /*var openKardex=false;
-                                  var aValidKardex= $("#_vk_").val().split(",");
-                                  for (var i=0;i<=aValidKardex.length-1;i++) {
-                                      if (aValidKardex[i]==suffix){
-                                          openKardex=true;
-                                          break;
-                                      }
-                                  }
+                            caption:$.fn.appgrid.options.titulo})
 
-                                  if (openKardex) {
-                                     var nApp=this.id.split("_")[1];
-                                     var nForm=this.id.split("_")[2];
-                                     $.fn.appgrid.openKardex(nApp,nForm,id);
-                                  }*/
-                            },
-                            caption:$.fn.appgrid.options.titulo}).navGrid('#pager' + suffix,
-                                                    {edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,
-                                                                                                   {caption:"",
-                                                                                                     buttonicon:"ui-icon-plus",
-                                                                                                     onClickButton:function() {
-                                                                                                             $("body").form({aplicacion: nApp,
-                                                                                                                             forma:nEntidad,
-                                                                                                                             modo:"insert",
-                                                                                                                             titulo: $.fn.appgrid.options.leyendas[0],
-                                                                                                                             columnas:1,
-                                                                                                                             pk:0,
-                                                                                                                             height:400,
-                                                                                                                             width:500});
-                                                                                                            //$(this).trigger("reloadGrid");
-                                                                                                        },
-                                                                                                     position: "last", title:"Nuevo registro", cursor: "pointer"}).navButtonAdd("#pager" + suffix,
-                                                                                                        {caption:"",
-                                                                                                          buttonicon:"ui-icon-pencil",
-                                                                                                          onClickButton:function() {
-                                                                                                            nRow=$(this).getGridParam('selrow');
-                                                                                                            if (nRow) {
-                                                                                                                nPK= $(this).getCell(nRow,0);
-                                                                                                                $("body").form({aplicacion: nApp,
-                                                                                                                            forma:nEntidad,
-                                                                                                                            modo:"update",
-                                                                                                                            titulo: $.fn.appgrid.options.leyendas[1],
-                                                                                                                            columnas:1,
-                                                                                                                            pk:nPK,
-                                                                                                                            height:"500",
-                                                                                                                            width:"500"});
-                                                                                                                //$(this).trigger("reloadGrid");
-                                                                                                            }
-                                                                                                            else {
-                                                                                                                alert('Seleccione un registro');
-                                                                                                            }
-                                                                                                          },
-                                                                                                     position: "last", title:"Editar registro",  cursor: "pointer"}).navButtonAdd("#pager" + suffix,
-                                                                                                        {caption:"",
-                                                                                                         buttonicon:"ui-icon-search",
-                                                                                                         onClickButton:  function() {
-                                                                                                               $("body").form({aplicacion: nApp,
-                                                                                                                               forma:nEntidad,
-                                                                                                                               modo:"lookup",
-                                                                                                                               titulo: "B&uacute;squeda de registros",
-                                                                                                                               columnas:1,
-                                                                                                                               pk:0});
-                                                                                                            //$(this).trigger("reloadGrid");
-                                                                                                          },
-                                                                                                      position: "last",title:"Filtrar",cursor: "pointer"}).navButtonAdd("#pager" + suffix,
-                                                                                                        {caption:"", 
-                                                                                                         buttonicon:"ui-icon-document",
-                                                                                                         onClickButton:  function() {
-                                                                                                            var nApp=this.id.split("_")[1];
-                                                                                                            var nForm=this.id.split("_")[2];
-                                                                                                            nRow=$(this).getGridParam('selrow');
-                                                                                                            if (nRow) {
-                                                                                                                nPK= $(this).getCell(nRow,0);
-                                                                                                                $.fn.appgrid.openKardex(nApp,nForm,nPK); }
-                                                                                                            else
-                                                                                                               alert('Seleccione un registro');
-                                                                                                          },
-                                                                                                      position: "last",title:"Abrir kardex",cursor: "pointer"});
+                //Va estableciendo botones de acuerdo a permisos
+                sP=$("#pager"+suffix).attr("security");
+
+                if (sP.indexOf("2")>-1) { 
+                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd("#pager" + suffix,{
+                        caption:"",
+                        buttonicon:"ui-icon-plus",
+                        onClickButton:function() {
+                            nEditingApp=this.id.split("-")[1];
+                            $("body").form({aplicacion: nApp,
+                                forma:nEntidad,
+                                modo:"insert",
+                                titulo: $.fn.appgrid.options.leyendas[0],
+                                columnas:1,
+                                pk:0,
+                                filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                height:400,
+                                width:500}); },
+                        position: "last",
+                        title:"Nuevo registro",
+                        cursor: "pointer"});
+                }
+
+                if (sP.indexOf("3")>-1) {
+                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd("#pager" + suffix,{
+                        caption:"",
+                        buttonicon:"ui-icon-pencil",
+                        onClickButton:function() {
+                                nRow=$(this).getGridParam('selrow');
+                                if (nRow) {
+                                    nPK= $(this).getCell(nRow,0);
+                                    nEditingApp=this.id.split("-")[1];
+                                    $("body").form({aplicacion: nApp,
+                                                forma:nEntidad,
+                                                modo:"update",
+                                                titulo: $.fn.appgrid.options.leyendas[1],
+                                                columnas:1,
+                                                pk:nPK,
+                                                filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                                height:"500",
+                                                width:"500"});
+                                    //$(this).trigger("reloadGrid");
+                                }
+                                else {
+                                    alert('Seleccione el registro a editar');
+                                }
+                              },
+                         position: "last", title:"Editar registro",  cursor: "pointer"});
+               }
+
+              if (sP.indexOf("4")>-1) { 
+                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd("#pager" + suffix,{
+                        caption:"",
+                        buttonicon:"ui-icon-trash",
+                        onClickButton:function() {
+                                nRow=$(this).getGridParam('selrow');
+                                if (nRow) {
+                                    nPK= $(this).getCell(nRow,0);
+                                    if (confirm("¿Está seguro que desea eliminar el registro? No es posible deshacer esta acción.")){
+                                        $.ajax(
+                                            {url: "srvFormaDelete?$cf="+ nEntidad + "&$pk="+ nPK,
+                                             dataType: "text",
+                                             success:  function(data){                                                
+                                                oGrid.jqGrid('delRowData',nRow);
+                                            },
+                                            error:function(xhr,err){
+                                                alert("Error al eliminar registro");}
+                                         });                                                
+                                    }
+                                }
+                                else {
+                                    alert('Seleccione el registro a eliminar');
+                                }
+                        },
+                        position: "last", title:"Eliminar registro",  cursor: "pointer"});
+               }
+                        
+                   
+              oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd("#pager" + suffix,{
+                        caption:"",
+                        buttonicon:"ui-icon-search",
+                        onClickButton:  function() {
+                               $("body").form({aplicacion: nApp,
+                                               forma:nEntidad,
+                                               modo:"lookup",
+                                               titulo: "Filtrado de registros",
+                                               columnas:1,
+                                               pk:0});
+                        },
+                        position: "last",title:"Filtrar",cursor: "pointer"});
+
+              oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd("#pager" + suffix,{
+                        caption:"",
+                        buttonicon:"ui-icon-document",
+                        onClickButton:  function() {
+                            var nApp=this.id.split("_")[1];
+                            var nForm=this.id.split("_")[2];
+                            var nGridPK=this.id.split("_")[3];
+                            nRow=$(this).getGridParam('selrow');
+                            if (nRow) {
+                                nPK= $(this).getCell(nRow,0);
+                                $.fn.appgrid.openKardex(nApp,nForm,nPK);}
+                            else
+                               alert('Seleccione un registro');
+                          },
+             position: "last",title:"Abrir kardex",cursor: "pointer"});
+
                //Remueve del dom el loader
                $("#loader"+ suffix).remove();
                if ($.fn.appgrid.options.insertarEnEscritorio=="1")
-                $("#grid" + suffix).jqGrid().navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false}).navButtonAdd("#pager" + suffix,{caption:"Insertar en escritorio",
-                                                                                                         onClickButton:  function() {
-                                                                                                             alert('Por implementar');
-                                                                                                          },
-                                                                                                      position: "last",title:"",cursor: "pointer"});
+                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false})
+                        .navButtonAdd("#pager" + suffix,{
+                            caption:"Insertar en escritorio",
+                            onClickButton:  function() {
+                                alert('Por implementar');
+                            },
+                            position: "last",
+                            title:"",
+                            cursor: "pointer"});
 
                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                 if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink) {
@@ -208,21 +250,14 @@
                 }
 
 
-               //remueve toolbar por default
-               $($("#pager" + suffix + "_left")[0].children[1]).remove();
-
-               //Verifica si es posible abrir el kardex desde el toolbar
-                var openKardex=false;
-                aValidKardex=$("#_vk_").val().split(",");
-                for (var i=0;i<=aValidKardex.length-1;i++) {
-                  if (aValidKardex[i]==suffix){
-                      openKardex=true;
-                      break;
-                  }
-                }
+               //remueve los botones refresh agregados por default
+               $("table","#pager" + suffix + "_left").each( function(){
+                    if($(this).index()>0)
+                        $(this).remove();
+               });
 
                 //Remueve el botón de kardex si no está especificado en el constructor
-                if (!openKardex)    
+                if (oGrid.attr("openKardex")!="true")
                     $(".ui-icon-document", $("#pager"+suffix)).remove()
 
                //Verifica si el grid está en una cola
@@ -245,12 +280,28 @@
         var iCol=0;
         var oColumnas=$(xml).find("column_definition");
         $.fn.appgrid.options.sortname=oColumnas.children()[0];
-        
+
+        var sPermiso="";
+        var oPermisos=$(xml).find("clave_permiso");
+        oPermisos.each( function() {
+             sPermiso+=$(this).text()+",";
+        })
+        sPermiso=sPermiso.substr(0,sPermiso.length-1);
+
+        if (sPermiso.indexOf("1")==-1) {
+            $.fn.appgrid.options.colModel=null;
+            return true;
+        }
+
         oTamano=oColumnas.find('tamano');
         oAlias= oColumnas.find('alias_campo');
+        var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
         oAlias.each( function() {
-             suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
+             
              var sParent=$(this).parent()[0].tagName;
+             if (sPermiso.indexOf("5")==-1 && $($(this).parent()).find("dato_sensible").text()=="1")
+                 return true;
+             if (sParent=='column_definition') return true;
              oColumna={name:sParent+suffix,
                        index:sParent+suffix,
                        width:$(oTamano[iCol]).text()
@@ -259,6 +310,10 @@
              $.fn.appgrid.options.colModel[iCol]=oColumna;
              iCol++;
         });
+
+
+        $("#pager"+ suffix).attr("security", sPermiso) ;
+    }
 
     $.fn.appgrid.openKardex = function(nApp, nEntidad, id) {
          var suffix =  "_" + nApp + "_" + nEntidad;
@@ -291,6 +346,4 @@
 
             }
         }
-
-    }
 })(jQuery);
