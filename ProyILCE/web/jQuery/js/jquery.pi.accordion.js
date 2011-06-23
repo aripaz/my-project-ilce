@@ -109,6 +109,7 @@
                                     $("body").form({aplicacion: nAplicacion,
                                                                        forma:nEntidad,
                                                                        modo:"insert",
+                                                                       pk:0,
                                                                        titulo: sTitulo,
                                                                        columnas:1,
                                                                        height:400,
@@ -246,7 +247,7 @@
                 $(".closeLnkFiltro").click(function(){
                     if (!confirm('¿Desea borrar el filtro seleccionado?')) return false;
                       $.post("srvFormaDelete","$cf=1&$pk=" + $(this).attr("pk"));
-                      $(this).parent().remove();
+                      $(this).parent().parent().remove();
                 });
 
 
