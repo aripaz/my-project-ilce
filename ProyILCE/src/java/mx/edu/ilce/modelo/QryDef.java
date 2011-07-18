@@ -20,6 +20,30 @@ public class QryDef {
     private ArrayList<ArrayList> rows;
     private String error;
 
+    public void setAccion(String accion) {
+        this.accion = accion;
+    }
+
+    public void setColumnDefinition(ArrayList<FieldDef> columnDefinition) {
+        this.columnDefinition = columnDefinition;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRows(ArrayList<ArrayList> rows) {
+        this.rows = rows;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getAccion() {
         return accion;
     }
@@ -45,9 +69,9 @@ public class QryDef {
     }
 
     public QryDef(int id, String accion, String w ) {
-        this.id = id;
-        this.accion = accion;
-        this.columnDefinition = new ArrayList<FieldDef>();
+        setId(id);
+        setAccion(accion);
+        setColumnDefinition(new ArrayList<FieldDef>());
 
         ConnDef oDb = new ConnDef();
 
@@ -58,15 +82,15 @@ public class QryDef {
         int nCols;
         try {
             /* Recupera source del qry */
-            this.source = oDb.getQryById(this.id, this.accion);
+            setSource( oDb.getQryById(this.id, this.accion));
 
-            if (this.source.equals("")) {
+            if (getSource().equals("")) {
                 this.error=oDb.getError();
                 return;
             }
 
-            if (this.source.toLowerCase().contains("where")&& !w.equals(""))
-                this.source+=" and " + w;
+            if (getSource().toLowerCase().contains("where")&& !w.equals(""))
+                setSource(getSource()+" and " + w);
             else if (!w.equals(""))
                 this.source+=" where  " + w;
             
@@ -77,10 +101,10 @@ public class QryDef {
                 return;
             }
 
-            for (int i = 1; i <= oRs.getMetaData().getColumnCount(); i++) {
-                fdCampo = new FieldDef(oRs.getMetaData().getColumnName(i), oRs.getMetaData().getColumnTypeName(i), oRs.getMetaData().isAutoIncrement(i));
-                rsFieldDictionary = oDb.getRs("SELECT * FROM campo_forma WHERE clave_forma=" + this.id + " AND campo='" + fdCampo.getName() + "'");
-                if (rsFieldDictionary.next()) {
+            for (int i = 0; i < oRs.getMetaData().getColumnCount(); i++) {
+                fdCampo = new FieldDef(oRs.getMetaData().getColumnName(i+1), oRs.getMetaData().getColumnTypeName(i+1), oRs.getMetaData().isAutoIncrement(i+1));
+                rsFieldDictionary = oDb.getRs("SELECT * FROM campo_forma WHERE clave_forma=" + getId() + " AND campo='" + fdCampo.getName() + "'");
+                    if (rsFieldDictionary.next()) {
                     fdCampo.setAlias(rsFieldDictionary.getString("alias_campo"));
                     fdCampo.setObligatorio(rsFieldDictionary.getByte("obligatorio"));
                     fdCampo.setTipo_control(rsFieldDictionary.getString("tipo_control"));
@@ -96,11 +120,11 @@ public class QryDef {
             }
             /* Recupera datos del qry */
             nCols = oRs.getMetaData().getColumnCount();
-            this.rows = new ArrayList<ArrayList>();
+            setRows( new ArrayList<ArrayList>());
             while (oRs.next()) {
                 ArrayList<Object> row = new ArrayList<Object>();
-                for (int i = 1; i <= nCols; i++) {
-                    row.add(oRs.getObject(i));
+                for (int i = 0; i < nCols; i++) {
+                    row.add(oRs.getObject(i+1));
                 }
                 this.rows.add(row);
             }
@@ -115,9 +139,9 @@ public class QryDef {
     }
 
     public static void main(String args[]) {
-        QryDef configuracion = new QryDef(1, "select"," where x=2");
+        QryDef configuracion = new QryDef(2, "select","");
         //Verifica error en el constructor
-        if (!configuracion.error.equals("")) {
+        if (configuracion.error!=null) {
             System.out.println(configuracion.error);
             return;
         }
@@ -125,7 +149,7 @@ public class QryDef {
         ArrayList<FieldDef> cd = configuracion.getColumnDefinition();
         ArrayList<ArrayList> d = configuracion.getRows();
 
-        if  (!configuracion.error.equals("")) {
+        if  (configuracion.error!=null) {
             System.out.println("Error de conectividad: " + configuracion.error );
             return;
         }
@@ -136,9 +160,10 @@ public class QryDef {
 
         System.out.println("*** Fin de definición de columnas ***");
         System.out.println("*** Inicio de datos ***");
-        int i = 0;
+        int i=0;
         for (ArrayList r : d) {
             System.out.println("");
+            i=0;
             for (Object sd : r) {
                  System.out.println(cd.get(i).name + ": "+ sd.toString());
                  i++;
