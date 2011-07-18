@@ -126,6 +126,7 @@
                                     $("#tab"+this.id).appgrid({app: nAplicacion,
                                                                entidad: nEntidad,
                                                                pk:0,
+                                                               editingApp:nAplicacion,
                                                                wsParameters:data,
                                                                titulo:sTitulo,
                                                                height:"70%",

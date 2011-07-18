@@ -18,15 +18,16 @@
             colModel: [{}],
             sortname:"",
             tab:"",
-            insertarEnEscritorio:"1",
+            insertInDesktopEnabled:"1",
             width:"650",
             height:"",
             openKardex:false,
             loadMode:"",
             removeGridTitle:false,
             showFilterLink:true,
-            inQueue:false
-
+            inQueue:false,
+            inDesktop:false,
+            editingApp:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -43,12 +44,14 @@
 
              //Verifica si el objeto padre es un tabEntity
              //Si así es toma de su id el sufijo app + entidad principal + entidad foranea
-            $(this).html("<table width='100%' id='grid" + suffix +
+            sGridName=($.fn.appgrid.options.inDesktop)?"desktop":"";
+            $(this).html("<table width='100%' id='" +  sGridName + "grid"+ suffix +
                          "' titulo='" + $.fn.appgrid.options.titulo +
                          "' wsParameters='"+ $.fn.appgrid.options.wsParameters +
                          "' openkardex='" + $.fn.appgrid.options.openKardex +
+                         "' editingApp='" + $.fn.appgrid.options.editingApp +
                          "' leyendas='" + $.fn.appgrid.options.leyendas[0] + "," + $.fn.appgrid.options.leyendas[1]+ "'>" +
-                         "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
+                         "</table><div id='" + sGridName + "pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
              $.fn.appgrid.getGridDefinition();
         });
@@ -100,7 +103,8 @@
                 else
                    sDataType="xml";
 
-                var oGrid=$("#grid" + suffix).jqGrid(
+                sGridName=($.fn.appgrid.options.inDesktop)?"desktop":"";
+                var oGrid=$("#" + sGridName + "grid" + suffix).jqGrid(
                            {//datatype: "xmlstring",
                             //datastr: sXML,
                             url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
@@ -110,23 +114,23 @@
                             rowNum:10,
                             autowidth: true,
                             height:$.fn.appgrid.options.height,
-                            rowList:[10,20,30],
-                            pager: jQuery('#pager' + suffix),
+                            rowList:[25,50,100],
+                            pager: jQuery('#' + sGridName + 'pager' + suffix),
                             sortname:  $.fn.appgrid.options.sortname+suffix,
                             viewrecords: true,
                             sortorder: "desc",                            
                             caption:$.fn.appgrid.options.titulo})
 
                 //Va estableciendo botones de acuerdo a permisos
-                sP=$("#pager"+suffix).attr("security");
+                sP=$("#" + sGridName + "pager"+suffix).attr("security");
 
                 if (sP.indexOf("2")>-1) { 
-                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
-                    .navButtonAdd("#pager" + suffix,{
+                    oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                         caption:"",
                         buttonicon:"ui-icon-plus",
                         onClickButton:function() {
-                            nEditingApp=this.id.split("-")[1];
+                            nEditingApp=$(this).attr("editingApp");
                             $("body").form({aplicacion: nApp,
                                 forma:nEntidad,
                                 modo:"insert",
@@ -142,15 +146,15 @@
                 }
 
                 if (sP.indexOf("3")>-1) {
-                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
-                    .navButtonAdd("#pager" + suffix,{
+                    oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                         caption:"",
                         buttonicon:"ui-icon-pencil",
                         onClickButton:function() {
                                 nRow=$(this).getGridParam('selrow');
                                 if (nRow) {
                                     nPK= $(this).getCell(nRow,0);
-                                    nEditingApp=this.id.split("-")[1];
+                                    nEditingApp=$(this).attr("editingApp");
                                     $("body").form({aplicacion: nApp,
                                                 forma:nEntidad,
                                                 modo:"update",
@@ -169,8 +173,8 @@
                }
 
               if (sP.indexOf("4")>-1) { 
-                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
-                    .navButtonAdd("#pager" + suffix,{
+                    oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                         caption:"",
                         buttonicon:"ui-icon-trash",
                         onClickButton:function() {
@@ -197,8 +201,8 @@
                }
                         
                    
-              oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
-                    .navButtonAdd("#pager" + suffix,{
+              oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                         caption:"",
                         buttonicon:"ui-icon-search",
                         onClickButton:  function() {
@@ -211,14 +215,13 @@
                         },
                         position: "last",title:"Filtrar",cursor: "pointer"});
 
-              oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false})
-                    .navButtonAdd("#pager" + suffix,{
+              oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false})
+                    .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                         caption:"",
                         buttonicon:"ui-icon-document",
                         onClickButton:  function() {
                             var nApp=this.id.split("_")[1];
                             var nForm=this.id.split("_")[2];
-                            var nGridPK=this.id.split("_")[3];
                             nRow=$(this).getGridParam('selrow');
                             if (nRow) {
                                 nPK= $(this).getCell(nRow,0);
@@ -230,10 +233,10 @@
 
                //Remueve del dom el loader
                $("#loader"+ suffix).remove();
-               if ($.fn.appgrid.options.insertarEnEscritorio=="1")
+               if ($.fn.appgrid.options.insertInDesktopEnabled=="1")
 
-                    oGrid.navGrid('#pager' + suffix,{edit:false,add:false,del:false,search:false, view:false})
-                        .navButtonAdd("#pager" + suffix,{
+                    oGrid.navGrid('#' + sGridName + 'pager' + suffix,{edit:false,add:false,del:false,search:false, view:false})
+                        .navButtonAdd('#' + sGridName + 'pager' + suffix,{
                             caption:"Insertar en escritorio",
                             onClickButton:  function() {
                                 nApp=this.id.split("_")[1];
@@ -246,19 +249,29 @@
                                                   ",entidad:" + nForma +
                                                   ",wsParameters:" + oGrid.attr("wsParameters") +
                                                   ",titulo:" + oGrid.attr("titulo") +
-                                                  ",leyendas:" + oGrid.attr("leyendas") +
-                                                  ",openKardex:" + oGrid.attr("openKardex")
+                                                  ",leyendas:" + oGrid.attr("leyendas").replace(",", "/") +
+                                                  ",openKardex:" + oGrid.attr("openKardex") +
+                                                  ",editingApp:" + oGrid.attr("editingApp") +
+                                                  ",inDesktop:true"
                                                   );
                                 $.post("srvFormaInsert", postConfig);
 
                                 //Inserta el html para agragar el grid en el escritorio
-                                $("#tabUser").append("<div class='queued_grids' app='" + nApp +
-                                    "' form='" + nForma +
-                                    "' wsParameters='" + oGrid.attr("wsParameters") +
-                                    "' titulo='" + oGrid.attr("titulo") +
-                                    "' leyendas='" + oGrid.attr("leyendas") +
-                                    "' openKardex='" + oGrid.attr("openKardex") + "'></div>");
 
+                                $('#isotope').append("<div class='queued_grids'" +
+                                     " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
+                                     " app='" + nApp + "' " +
+                                     " form='" + nForma + "' " +
+                                     " wsParameters='" + oGrid.attr("wsParameters") + "' " +
+                                     " titulo='" + oGrid.attr("titulo") + "' " +
+                                     " leyendas='" +oGrid.attr("leyendas")+ "' "  +
+                                     " openKardex='" + oGrid.attr("openKardex") + "' " +
+                                     " inDesktop='true'" +
+                                     " class='queued_grids'," +
+                                     " insertInDesktopEnabled='0'></div>"+
+                                     "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
+                                 );
+                                     
                                 setTimeout("$('.queued_grids:first').gridqueue()",2000);
                                 alert("Se agregó el grid al escritorio");
 
@@ -272,7 +285,7 @@
                     $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
                         nApp=this.id.split("_")[2];
                         nForma=this.id.split("_")[3];
-                        var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                        var sGridId="#" + sGridName + "grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
                         $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nForma + "&$dp=body"}).trigger("reloadGrid")
                         $(this).remove();
                     });
@@ -280,7 +293,7 @@
 
 
                //remueve los botones refresh agregados por default
-               $("table","#pager" + suffix + "_left").each( function(){
+               $("table","#"  + sGridName + "pager" + suffix + "_left").each( function(){
                     if($(this).index()>0)
                         $(this).remove();
                });
@@ -341,7 +354,7 @@
         });
 
 
-        $("#pager"+ suffix).attr("security", sPermiso) ;
+        $("#" + sGridName + "pager"+ suffix).attr("security", sPermiso) ;
     }
 
     $.fn.appgrid.openKardex = function(nApp, nEntidad, id) {
@@ -356,10 +369,10 @@
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
          }
          else {
-             oGrid=$('#grid'+ suffix);
+             oGrid=$('#' + sGridName + 'grid'+ suffix);
              var nRow=oGrid.getGridParam('selrow');
              sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(nRow,1);
-             sEntidad=$('#grid'+ suffix).jqGrid()[0].id.split("_")[2];
+             sEntidad=$('#' + sGridName + 'grid'+ suffix).jqGrid()[0].id.split("_")[2];
              $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
              $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
              //Crea la interfaz de la aplicación abierta

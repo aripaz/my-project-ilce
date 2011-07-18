@@ -62,13 +62,14 @@
                          $tabs.tabs( "add", "#tabConfiguracion", "Configuraci&oacute;n");
                          $tabs.tabs( "select", "#tabConfiguracion");
 
-                         $("#tabConfiguracion").appgrid({app: 1,
-                                              entidad: 1,
+                         $("#tabConfiguracion").appgrid({app: "1",
+                                              entidad: "1",
                                               wsParameters:"e.clave_empleado=" + $.fn.sessionmenu.options.empleado,
                                               titulo:"Par&aacute;metros de configuraci&oacute;n",
                                               inQueue:false,
                                               height:"75%",
                                               showFilterLink:false,
+                                              editingApp:"1",
                                               leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
 
                     }

@@ -6,7 +6,7 @@
     $.fn.gridqueue = function(opc){
 
         $.fn.gridqueue.settings = {
-            height:"100%"
+            height:"250px"
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -16,7 +16,7 @@
              obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>")
              $.fn.gridqueue.getGridConfig(obj);
              obj.removeClass("queued_grids");
-             obj.addClass("gridContainer");
+             obj.addClass("desktopGridContainer");
         });
 
  };
@@ -27,9 +27,13 @@ $.fn.gridqueue.getGridConfig= function(obj){
           wsParameters: obj.attr("wsParameters"),
           titulo:obj.attr("titulo"),
           leyendas:obj.attr("leyendas").split(","),
+          inDesktop:obj.attr("indesktop"),
           height:$.fn.gridqueue.options.height,
+          openKardex:obj.attr("openKardex"),
           removeGridTitle:true,
-          inQueue:true
+          inQueue:true,
+          insertInDesktopEnabled:0,
+          editingApp:"1"
      });
 
 }
