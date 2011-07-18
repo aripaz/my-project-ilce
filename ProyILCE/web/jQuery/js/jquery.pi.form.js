@@ -262,7 +262,7 @@
                                        if (sTipoNodo=="permiso") {
                                            if ($.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#permiso-" + nPerfil + "-" + nPermiso))
                                                 sData ="clave_forma="+sResultado+ "&clave_perfil="+nPerfil+"&clave_permiso="+nPermiso+"&$cf=14&$pk=0&$ta=insert";
-                                                $.post(sWS, sData);
+                                                setTimeout("$.post('" + sWS+"','"+ sData +"')",1000);
                                        }
                                       
                                     });
@@ -467,7 +467,7 @@
                         sRenglon+='class="singleInput obligatorio" ';
                     }
 
-                    sRenglon+=(oCampo[0].childNodes[0].data=='1')?'selected="selected" ':''
+                    sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':''
                     sRenglon+=oCampo.find('evento').text() + ' /></div></td>|';
                 }
                 else {

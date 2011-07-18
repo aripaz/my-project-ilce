@@ -107,7 +107,8 @@
                       if (nForma==undefined) return false;
 
                        $(o.nextSibling).appgrid({app: nApp,
-                          entidad: nForma + "-" + o.id.split("_")[3],
+                          entidad: nForma,
+                          editingApp: o.id.split("_")[3],
                           pk: $.fn.treeMenu.options.pk,
                           wsParameters: sW,
                           titulo:sTitulo,
