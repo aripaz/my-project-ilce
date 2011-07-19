@@ -352,16 +352,44 @@ function sDate(dDate) {
 
 	sDate= nYear;
 	if (nMonth<10) {
-		sDate= sDate + '/0' + nMonth; }
+		sDate= sDate + '0' + nMonth; }
 	else {
-		sDate= sDate + '/' + nMonth;  }
+		sDate= sDate + nMonth;  }
 
 	if (nDay<10) {
-		sDate=sDate + '/0' + nDay; }
+		sDate=sDate + '0' + nDay; }
 	else {
-		sDate=sDate + '/' + nDay; }
+		sDate=sDate + nDay; }
 
 	return sDate
+}
+
+function sDateTime(dDate) {
+        var nSeconds=dDate.getSeconds();
+        var nMinutes=dDate.getMinutes();
+        var nHours=dDate.getHours();
+	var nDay=dDate.getDate();
+	var nMonth=dDate.getMonth()+1;
+	var nYear=dDate.getFullYear();
+	var sDate="";
+
+	sDate= nYear;
+	if (nMonth<10) {
+		sDate= sDate + '0' + nMonth; }
+	else {
+		sDate= sDate + nMonth;  }
+
+	if (nDay<10) {
+		sDate=sDate + '0' + nDay; }
+	else {
+		sDate=sDate + nDay; }
+
+        var timeValue = "" + ((nHours >12) ? nHours -12 :nHours)
+        if (timeValue == "0") timeValue = 12;
+        timeValue += ((nMinutes < 10) ? "0" : "") + nMinutes
+        timeValue += ((nSeconds < 10) ? "0" : "") + nSeconds
+
+	return sDate + timeValue;
 }
 
 function removeHTMLTags(s){
