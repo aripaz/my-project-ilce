@@ -64,14 +64,15 @@
 
                          $("#tabConfiguracion").appgrid({app: "1",
                                               entidad: "1",
+                                              pk:"0",
                                               wsParameters:"e.clave_empleado=" + $.fn.sessionmenu.options.empleado,
                                               titulo:"Par&aacute;metros de configuraci&oacute;n",
                                               inQueue:false,
                                               height:"75%",
                                               showFilterLink:false,
                                               editingApp:"1",
+                                              openKardex:false,
                                               leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
-
                     }
                     
                 });

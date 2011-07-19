@@ -304,7 +304,7 @@
 
                //Verifica si el grid está en una cola
                if ($.fn.appgrid.options.inQueue)
-                   setTimeout("$('.queued_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",2000);
+                   setTimeout("$('.queued_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",3000);
 
                if ($.fn.appgrid.options.removeGridTitle)
                      $('.ui-jqgrid-titlebar',oGrid).remove();
@@ -337,7 +337,8 @@
 
         oTamano=oColumnas.find('tamano');
         oAlias= oColumnas.find('alias_campo');
-        var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
+        //var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad;
+        var suffix = "-" + sDateTime(new Date());
         oAlias.each( function() {
              
              var sParent=$(this).parent()[0].tagName;
