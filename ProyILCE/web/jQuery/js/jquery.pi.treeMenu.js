@@ -108,14 +108,14 @@
 
                        $(o.nextSibling).appgrid({app: nApp,
                           entidad: nForma,
-                          editingApp: o.id.split("_")[3],
+                          editingApp: o.id.split("_")[4],
                           pk: $.fn.treeMenu.options.pk,
                           wsParameters: sW,
                           titulo:sTitulo,
                           showFilterLink:false,
                           inQueue:false,
                           leyendas:["Nuevo registro", "Edición de registro"],
-                          height:"75%"
+                          height:"70%"
                        });
                     }
 
