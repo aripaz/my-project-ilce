@@ -16,6 +16,7 @@
             suffix:"",
             colNames: [],
             colModel: [{}],
+            groupFields:[],
             sortname:"",
             tab:"",
             insertInDesktopEnabled:"1",
@@ -118,12 +119,25 @@
                     rowList:[25,50,100],
                     pager: jQuery('#pager' + suffix),
                     toppager:true,
-                    sortname:  $.fn.appgrid.options.sortname+suffix,
+                    sortname: $.fn.appgrid.options.sortname+suffix,
                     viewrecords: true,
                     sortorder: "desc",
                     caption:$.fn.appgrid.options.titulo,
+                    /*grouping: true,
+                    groupingView : {
+                            groupField : $.fn.appgrid.options.groupFields[0],
+                            groupColumnShow : [true],
+                            groupText : ['<b>{0}</b>'],
+                            groupCollapse : false,
+                            groupOrder: ['asc'],
+                            groupSummary : [false],
+                            groupDataSorted : true
+                    },
+                    footerrow: true,
+                    userDataOnFooter: true,*/
                     gridComplete: function() {
-
+                        //Quita agrupamiento
+                        oGrid.jqGrid('groupingRemove',true);
                         //Va estableciendo botones de acuerdo a permisos
                         sP=$("#pager"+suffix).attr("security");
 
@@ -362,8 +376,29 @@
                         //Quita el paginador del la barra de herramientas superior
                         $("#grid"+ suffix+"_toppager_center").remove();
 
-                        //Quita el paginador del la barra de herramientas superior
-                        $("#grid"+ suffix+"_toppager_right").remove();
+                        //Se reemplaza el contenido del toppager_right con
+                        // el combo para agrupar
+                        var sOptions="<option value='clear'>Quitar agrupamiento</option>";
+                        for (i = 0; i < $.fn.appgrid.options.groupFields.length; i++) {
+                            sOptions+="<option value='" + $.fn.appgrid.options.groupFields[i]+ "'>" +
+                                $.fn.appgrid.options.groupFields[i] +
+                                "</option>"
+                        }
+
+                        $("#grid"+ suffix+"_toppager_right").html("<select id='cbGroups"+suffix+"'>"+sOptions+"</select>");
+
+                        //Establece evento para select
+                        $("#cbGroups"+suffix).change(function() {
+                            var suffix=this.id.split("_")[1] + "_" +
+                                       this.id.split("_")[2] + "_" +
+                                       this.id.split("_")[3];
+                            var sVal=$(this).val();
+                            if(sVal=='clear')
+                                   oGrid.jqGrid('groupingRemove',true);
+                              else
+                                   oGrid.jqGrid('groupingGroupBy',sVal);
+                        });
+
 
                         //Remueve el botón de kardex si no está especificado en el constructor
                         if (oGrid.attr("openKardex")!="true")
@@ -422,8 +457,10 @@
                 index:sParent+suffix,
                 width:$(oTamano[iCol]).text()
             };
+
             $.fn.appgrid.options.colNames[iCol]=$(this).text();
             $.fn.appgrid.options.colModel[iCol]=oColumna;
+            $.fn.appgrid.options.groupFields[iCol]=$(this).text()+suffix;
             iCol++;
         });
 
