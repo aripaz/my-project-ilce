@@ -347,8 +347,8 @@
 
             },
             error:function(xhr,err){
-                $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
-                alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                if ($("#tdEstatus_" +formSuffix).length>0)
+                    $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
                 alert("responseText: "+xhr.responseText);
             }
         });
