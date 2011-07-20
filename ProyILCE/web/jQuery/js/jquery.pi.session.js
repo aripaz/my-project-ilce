@@ -68,7 +68,7 @@
                                               wsParameters:"e.clave_empleado=" + $.fn.sessionmenu.options.empleado,
                                               titulo:"Par&aacute;metros de configuraci&oacute;n",
                                               inQueue:false,
-                                              height:"75%",
+                                              height:"70%",
                                               showFilterLink:false,
                                               editingApp:"1",
                                               openKardex:false,
