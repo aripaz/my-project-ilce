@@ -16,7 +16,10 @@
             modo:"",
             top: 122,
             height:500,
-            width:510
+            width:510,
+            datestamp:"",
+            updateControl:"",
+            updateForeignForm:""
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -86,7 +89,7 @@
                 if ($.fn.form.options.aplicacion=="1" &&
                     ($.fn.form.options.forma=="2" || $.fn.form.options.forma=="3") &&
                     $.fn.form.options.modo!='lookup')
-                    sTabs="<div id='formTab_" + suffix +"' security='" + sPermiso + "'>"+
+                    sTabs="<div id='formTab_" + suffix +"' security='"+ sPermiso + "' datestamp='" + $.fn.form.options.datestamp + "'>"+
                           "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
                           "<li><a href='#divFormPerfiles_" + suffix +"'>Perfiles de seguridad</a></li></ul>"+
                           "<div id='divFormGeneral_" + suffix +"' >" +
@@ -272,7 +275,10 @@
                                 var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
                                 $("#dlgModal_"+ suffix).dialog("destroy");
                                 $("#dlgModal_"+ suffix).remove();
-                                $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid().trigger("reloadGrid");
+                                if ($.fn.form.options.updateControl=="")
+                                    $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp).jqGrid().trigger("reloadGrid");
+                                else
+                                    setXMLInSelect3($.fn.form.options.updateControl,$.fn.form.options.updateForeignForm,'foreign',null)
                             },
                         error:function(xhr,err){
                             $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
@@ -303,11 +309,12 @@
                             oGridHeader=$("span.ui-jqgrid-title, #grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma);
                             nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
                             nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma +"'>(Quitar filtro)</a>");
+                            sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
+                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
 
                             //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                             $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
-                                var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                                var sGridId="#grid_" + this.id.split("_")[2] + "_" + this.id.split("_")[3]+"_"+this.id.split("_")[4] ;
                                 $(sGridId).jqGrid('setGridParam',{
                                     url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body"
                                     }).trigger("reloadGrid")

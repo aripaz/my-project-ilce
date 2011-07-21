@@ -113,17 +113,19 @@
                     datatype: sDataType,
                     colNames:$.fn.appgrid.options.colNames,
                     colModel:$.fn.appgrid.options.colModel,
-                    rowNum:10,
+                    rowNum:50,
                     autowidth: true,
+                    shrinkToFit: false,
                     height:$.fn.appgrid.options.height,
-                    rowList:[25,50,100],
+                    rowList:[50,100,200],
                     pager: jQuery('#pager' + suffix),
                     toppager:true,
-                    sortname: $.fn.appgrid.options.sortname+suffix,
+                    sortname: $.fn.appgrid.options.colModel[0],//$.fn.appgrid.options.sortname,//+suffix,
                     viewrecords: true,
                     sortorder: "desc",
-                    caption:$.fn.appgrid.options.titulo,
-                    /*grouping: true,
+                    //loadonce: true,
+                    caption:$.fn.appgrid.options.titulo
+                /*grouping: true,
                     groupingView : {
                             groupField : $.fn.appgrid.options.groupFields[0],
                             groupColumnShow : [true],
@@ -135,285 +137,292 @@
                     },
                     footerrow: true,
                     userDataOnFooter: true,*/
-                    gridComplete: function() {
-                        //Quita agrupamiento
-                        oGrid.jqGrid('groupingRemove',true);
-                        //Va estableciendo botones de acuerdo a permisos
-                        sP=$("#pager"+suffix).attr("security");
+                })
 
-                        if (sP.indexOf("2")>-1) {
-                            oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                                edit:false,
-                                add:false,
-                                del:false,
-                                search:false
-                            })
-                            .navButtonAdd('#grid'+ suffix+'_toppager',{
-                                caption:"",
-                                buttonicon:"ui-icon-plus",
-                                onClickButton:function() {
-                                    nEditingApp=$(this).attr("editingApp");
-                                    $("body").form({
-                                        aplicacion: nApp,
-                                        forma:nEntidad,
-                                        modo:"insert",
-                                        titulo: $.fn.appgrid.options.leyendas[0],
-                                        columnas:1,
-                                        pk:0,
-                                        filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
-                                        height:400,
-                                        width:500
-                                    });
-                                },
-                                position: "last",
-                                title:"Nuevo registro",
-                                cursor: "pointer"
+
+                //Quita agrupamiento
+                //oGrid.jqGrid('groupingRemove',true);
+
+                //Verifica si ya existen los botones para
+                //evitar duplicarlos
+                if ($('#grid'+ suffix+'_toppager_left').html()!="")
+                    return true;
+
+                //Va estableciendo botones de acuerdo a permisos
+                sP=$("#pager"+suffix).attr("security");
+
+                if (sP.indexOf("2")>-1) {
+                    oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                        edit:false,
+                        add:false,
+                        del:false,
+                        search:false
+                    })
+                    .navButtonAdd('#grid'+ suffix+'_toppager',{
+                        caption:"",
+                        buttonicon:"ui-icon-plus",
+                        onClickButton:function() {
+                            nEditingApp=$(this).attr("editingApp");
+                            $("body").form({
+                                aplicacion: nApp,
+                                forma:nEntidad,
+                                datestamp:$(this).attr("datestamp"),
+                                modo:"insert",
+                                titulo: $.fn.appgrid.options.leyendas[0],
+                                columnas:1,
+                                pk:0,
+                                filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                height:400,
+                                width:500
                             });
-                        }
+                        },
+                        position: "last",
+                        title:"Nuevo registro",
+                        cursor: "pointer"
+                    });
+                }
 
-                        if (sP.indexOf("3")>-1) {
-                            oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                                edit:false,
-                                add:false,
-                                del:false,
-                                search:false
-                            })
-                            .navButtonAdd('#grid'+ suffix+'_toppager',{
-                                caption:"",
-                                buttonicon:"ui-icon-pencil",
-                                onClickButton:function() {
-                                    nRow=$(this).getGridParam('selrow');
-                                    if (nRow) {
-                                        nPK= $(this).getCell(nRow,0);
-                                        nEditingApp=$(this).attr("editingApp");
-                                        $("body").form({
-                                            aplicacion: nApp,
-                                            forma:nEntidad,
-                                            modo:"update",
-                                            titulo: $.fn.appgrid.options.leyendas[1],
-                                            columnas:1,
-                                            pk:nPK,
-                                            filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
-                                            height:"500",
-                                            width:"500"
-                                        });
-                                    }
-                                    else {
-                                        alert('Seleccione el registro a editar');
-                                    }
-                                },
-                                position: "last",
-                                title:"Editar registro",
-                                cursor: "pointer"
-                            });
-                        }
-
-                        if (sP.indexOf("4")>-1) {
-                            oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                                edit:false,
-                                add:false,
-                                del:false,
-                                search:false
-                            })
-                            .navButtonAdd('#grid'+ suffix+'_toppager',{
-                                caption:"",
-                                buttonicon:"ui-icon-trash",
-                                onClickButton:function() {
-                                    nRow=$(this).getGridParam('selrow');
-                                    if (nRow) {
-                                        nPK= $(this).getCell(nRow,0);
-                                        if (confirm("¿Está seguro que desea eliminar el registro? No es posible deshacer esta acción.")){
-                                            $.ajax(
-                                            {
-                                                url: "srvFormaDelete?$cf="+ nEntidad + "&$pk="+ nPK,
-                                                dataType: "text",
-                                                success:  function(data){
-                                                    oGrid.jqGrid('delRowData',nRow);
-                                                },
-                                                error:function(xhr,err){
-                                                    alert("Error al eliminar registro");
-                                                }
-                                            });
-                                        }
-                                    }
-                                    else {
-                                        alert('Seleccione el registro a eliminar');
-                                    }
-                                },
-                                position: "last",
-                                title:"Eliminar registro",
-                                cursor: "pointer"
-                            });
-                        }
-
-
-                        oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                            edit:false,
-                            add:false,
-                            del:false,
-                            search:false
-                        })
-                        .navButtonAdd('#grid'+ suffix+'_toppager',{
-                            caption:"",
-                            buttonicon:"ui-icon-search",
-                            onClickButton:  function() {
+                if (sP.indexOf("3")>-1) {
+                    oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                        edit:false,
+                        add:false,
+                        del:false,
+                        search:false
+                    })
+                    .navButtonAdd('#grid'+ suffix+'_toppager',{
+                        caption:"",
+                        buttonicon:"ui-icon-pencil",
+                        onClickButton:function() {
+                            nRow=$(this).getGridParam('selrow');
+                            if (nRow) {
+                                nPK= $(this).getCell(nRow,0);
+                                nEditingApp=$(this).attr("editingApp");
                                 $("body").form({
                                     aplicacion: nApp,
                                     forma:nEntidad,
-                                    modo:"lookup",
-                                    titulo: "Filtrado de registros",
+                                    datestamp:$(this).attr("datestamp"),
+                                    modo:"update",
+                                    titulo: $.fn.appgrid.options.leyendas[1],
                                     columnas:1,
-                                    pk:0
+                                    pk:nPK,
+                                    filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                    height:"500",
+                                    width:"500"
                                 });
-                            },
-                            position: "last",
-                            title:"Filtrar",
-                            cursor: "pointer"
-                        });
+                            }
+                            else {
+                                alert('Seleccione el registro a editar');
+                            }
+                        },
+                        position: "last",
+                        title:"Editar registro",
+                        cursor: "pointer"
+                    });
+                }
 
-                        oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                            edit:false,
-                            add:false,
-                            del:false,
-                            search:false
-                        })
-                        .navButtonAdd('#grid'+ suffix+'_toppager',{
-                            caption:"",
-                            buttonicon:"ui-icon-document",
-                            onClickButton:  function() {
-                                var nApp=this.id.split("_")[1];
-                                var nForm=this.id.split("_")[2];
-                                var sDateStamp=this.id.split("_")[3];
-                                nRow=$(this).getGridParam('selrow');
-                                if (nRow) {
-                                    nPK= $(this).getCell(nRow,0);
-                                    $.fn.appgrid.openKardex(nApp,nForm,sDateStamp,nPK);
+                if (sP.indexOf("4")>-1) {
+                    oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                        edit:false,
+                        add:false,
+                        del:false,
+                        search:false
+                    })
+                    .navButtonAdd('#grid'+ suffix+'_toppager',{
+                        caption:"",
+                        buttonicon:"ui-icon-trash",
+                        onClickButton:function() {
+                            nRow=$(this).getGridParam('selrow');
+                            if (nRow) {
+                                nPK= $(this).getCell(nRow,0);
+                                if (confirm("¿Está seguro que desea eliminar el registro? No es posible deshacer esta acción.")){
+                                    $.ajax(
+                                    {
+                                        url: "srvFormaDelete?$cf="+ nEntidad + "&$pk="+ nPK,
+                                        dataType: "text",
+                                        success:  function(data){
+                                            oGrid.jqGrid('delRowData',nRow);
+                                        },
+                                        error:function(xhr,err){
+                                            alert("Error al eliminar registro");
+                                        }
+                                    });
                                 }
-                                else
-                                    alert('Seleccione un registro');
-                            },
-                            position: "last",
-                            title:"Abrir kardex",
-                            cursor: "pointer"
+                            }
+                            else {
+                                alert('Seleccione el registro a eliminar');
+                            }
+                        },
+                        position: "last",
+                        title:"Eliminar registro",
+                        cursor: "pointer"
+                    });
+                }
+
+
+                oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                    edit:false,
+                    add:false,
+                    del:false,
+                    search:false
+                })
+                .navButtonAdd('#grid'+ suffix+'_toppager',{
+                    caption:"",
+                    buttonicon:"ui-icon-search",
+                    onClickButton:  function() {
+                        $("body").form({
+                            aplicacion: nApp,
+                            forma:nEntidad,
+                            datestamp:$(this).attr("datestamp"),
+                            modo:"lookup",
+                            titulo: "Filtrado de registros",
+                            columnas:1,
+                            pk:0
                         });
+                    },
+                    position: "last",
+                    title:"Filtrar",
+                    cursor: "pointer"
+                });
 
-                        //Remueve del dom el loader
-                        $("#loader"+ suffix).remove();
-                        if ($.fn.appgrid.options.insertInDesktopEnabled=="1")
-
-                            oGrid.navGrid('#grid'+ suffix+'_toppager',{
-                                edit:false,
-                                add:false,
-                                del:false,
-                                search:false,
-                                view:false
-                            })
-                            .navButtonAdd('#grid'+ suffix+'_toppager',{
-                                caption:"Insertar en escritorio",
-                                onClickButton:  function() {
-                                    nApp=this.id.split("_")[1];
-                                    nForma=this.id.split("_")[2];
-                                    postConfig = "$cf=1&$ta=insert&$pk=0"+
-                                    "&clave_aplicacion=" + nApp +
-                                    "&clave_empleado="+ $("#_ce_").val() +
-                                    "&parametro=escritorio.grid"+
-                                    "&valor=" +escape("app:"+nApp+
-                                        ",entidad:" + nForma +
-                                        ",wsParameters:" + oGrid.attr("wsParameters") +
-                                        ",titulo:" + oGrid.attr("titulo") +
-                                        ",leyendas:" + oGrid.attr("leyendas").replace(",", "/") +
-                                        ",openKardex:" + oGrid.attr("openKardex") +
-                                        ",editingApp:" + oGrid.attr("editingApp") +
-                                        ",inDesktop:true"
-                                        );
-                                    $.post("srvFormaInsert", postConfig);
-
-                                    //Inserta el html para agragar el grid en el escritorio
-
-                                    $('#isotope').append("<div class='queued_grids'" +
-                                        " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
-                                        " app='" + nApp + "' " +
-                                        " form='" + nForma + "' " +
-                                        " wsParameters='" + oGrid.attr("wsParameters") + "' " +
-                                        " titulo='" + oGrid.attr("titulo") + "' " +
-                                        " leyendas='" +oGrid.attr("leyendas")+ "' "  +
-                                        " openKardex='" + oGrid.attr("openKardex") + "' " +
-                                        " inDesktop='true'" +
-                                        " class='queued_grids'," +
-                                        " insertInDesktopEnabled='0'></div>"+
-                                        "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
-                                        );
-
-                                    setTimeout("$('.queued_grids:first').gridqueue()",2000);
-                                    alert("Se agregó el grid al escritorio");
-
-                                },
-                                position: "last",
-                                title:"",
-                                cursor: "pointer"
-                            });
-
-                        //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                        if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink) {
-                            $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
-                                nApp=this.id.split("_")[2];
-                                nForma=this.id.split("_")[3];
-                                var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
-                                $(sGridId).jqGrid('setGridParam',{
-                                    url:"srvGrid?$cf=" + nForma + "&$dp=body"
-                                    }).trigger("reloadGrid")
-                                $(this).remove();
-                            });
+                oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                    edit:false,
+                    add:false,
+                    del:false,
+                    search:false
+                })
+                .navButtonAdd('#grid'+ suffix+'_toppager',{
+                    caption:"",
+                    buttonicon:"ui-icon-document",
+                    onClickButton:  function() {
+                        var nApp=this.id.split("_")[1];
+                        var nForm=this.id.split("_")[2];
+                        var sDateStamp=this.id.split("_")[3];
+                        nRow=$(this).getGridParam('selrow');
+                        if (nRow) {
+                            nPK= $(this).getCell(nRow,0);
+                            $.fn.appgrid.openKardex(nApp,nForm,sDateStamp,nPK);
                         }
+                        else
+                            alert('Seleccione un registro');
+                    },
+                    position: "last",
+                    title:"Abrir kardex",
+                    cursor: "pointer"
+                });
+
+                //Remueve del dom el loader
+                $("#loader"+ suffix).remove();
+                if ($.fn.appgrid.options.insertInDesktopEnabled=="1")
+
+                    oGrid.navGrid('#grid'+ suffix+'_toppager',{
+                        edit:false,
+                        add:false,
+                        del:false,
+                        search:false,
+                        view:false
+                    })
+                    .navButtonAdd('#grid'+ suffix+'_toppager',{
+                        caption:"Insertar en escritorio",
+                        onClickButton:  function() {
+                            nApp=this.id.split("_")[1];
+                            nForma=this.id.split("_")[2];
+                            postConfig = "$cf=1&$ta=insert&$pk=0"+
+                            "&clave_aplicacion=" + nApp +
+                            "&clave_empleado="+ $("#_ce_").val() +
+                            "&parametro=escritorio.grid"+
+                            "&valor=" +escape("app:"+nApp+
+                                ",entidad:" + nForma +
+                                ",wsParameters:" + oGrid.attr("wsParameters") +
+                                ",titulo:" + oGrid.attr("titulo") +
+                                ",leyendas:" + oGrid.attr("leyendas").replace(",", "/") +
+                                ",openKardex:" + oGrid.attr("openKardex") +
+                                ",editingApp:" + oGrid.attr("editingApp") +
+                                ",inDesktop:true"
+                                );
+                            $.post("srvFormaInsert", postConfig);
+
+                            //Inserta el html para agragar el grid en el escritorio
+
+                            $('#isotope').append("<div class='queued_grids'" +
+                                " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
+                                " app='" + nApp + "' " +
+                                " form='" + nForma + "' " +
+                                " wsParameters='" + oGrid.attr("wsParameters") + "' " +
+                                " titulo='" + oGrid.attr("titulo") + "' " +
+                                " leyendas='" +oGrid.attr("leyendas")+ "' "  +
+                                " openKardex='" + oGrid.attr("openKardex") + "' " +
+                                " inDesktop='true'" +
+                                " class='queued_grids'," +
+                                " insertInDesktopEnabled='0'></div>"+
+                                "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
+                                );
+
+                            setTimeout("$('.queued_grids:first').gridqueue()",2000);
+                            alert("Se agregó el grid al escritorio");
+
+                        },
+                        position: "last",
+                        title:"",
+                        cursor: "pointer"
+                    });
+
+                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink) {
+                    $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
+                        nApp=this.id.split("_")[2];
+                        nForma=this.id.split("_")[3];
+                        var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                        $(sGridId).jqGrid('setGridParam',{
+                            url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                        }).trigger("reloadGrid")
+                        $(this).remove();
+                    });
+                }
 
 
-                        //remueve los botones refresh agregados por default
-                        $("table","#grid"+ suffix+"_toppager_left").each( function(){
-                            if($(this).index()>0)
-                                $(this).remove();
-                        });
+                //remueve los botones refresh agregados por default
+                $("table","#grid"+ suffix+"_toppager_left").each( function(){
+                    if($(this).index()>0)
+                        $(this).remove();
+                });
 
-                        //Quita el paginador del la barra de herramientas superior
-                        $("#grid"+ suffix+"_toppager_center").remove();
+                //Quita el paginador del la barra de herramientas superior
+                $("#grid"+ suffix+"_toppager_center").remove();
 
-                        //Se reemplaza el contenido del toppager_right con
-                        // el combo para agrupar
-                        var sOptions="<option value='clear'>Quitar agrupamiento</option>";
+                //Se reemplaza el contenido del toppager_right con
+                // el combo para agrupar
+                /*var sOptions="<option value='clear'>Quitar agrupamiento</option>";
                         for (i = 0; i < $.fn.appgrid.options.groupFields.length; i++) {
                             sOptions+="<option value='" + $.fn.appgrid.options.groupFields[i]+ "'>" +
                                 $.fn.appgrid.options.groupFields[i] +
                                 "</option>"
                         }
 
-                        $("#grid"+ suffix+"_toppager_right").html("<select id='cbGroups"+suffix+"'>"+sOptions+"</select>");
+                        $("#grid"+ suffix+"_toppager_right").html("<select id='cbGroups"+suffix+"'>"+sOptions+"</select>"); */
 
-                        //Establece evento para select
-                        $("#cbGroups"+suffix).change(function() {
-                            var suffix=this.id.split("_")[1] + "_" +
-                                       this.id.split("_")[2] + "_" +
-                                       this.id.split("_")[3];
-                            var sVal=$(this).val();
-                            if(sVal=='clear')
-                                   oGrid.jqGrid('groupingRemove',true);
-                              else
-                                   oGrid.jqGrid('groupingGroupBy',sVal);
-                        });
-
-
-                        //Remueve el botón de kardex si no está especificado en el constructor
-                        if (oGrid.attr("openKardex")!="true")
-                            $(".ui-icon-document", $("#pager"+suffix)).remove()
-
-                        //Verifica si el grid está en una cola
-                        if ($.fn.appgrid.options.inQueue)
-                            setTimeout("$('.queued_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",3000);
-
-                        if ($.fn.appgrid.options.removeGridTitle)
-                            $('.ui-jqgrid-titlebar',oGrid).remove();
-                    }
-                })
+                //Establece evento para select
+                $("#cbGroups"+suffix).change(function() {
+                    var suffix=this.id.split("_")[1] + "_" +
+                    this.id.split("_")[2] + "_" +
+                    this.id.split("_")[3];
+                    var sVal=$(this).val();
+                    if(sVal=='clear')
+                        oGrid.jqGrid('groupingRemove',true);
+                    else
+                        oGrid.jqGrid('groupingGroupBy',sVal);
+                });
 
 
+                //Remueve el botón de kardex si no está especificado en el constructor
+                if (oGrid.attr("openKardex")!="true")
+                    $(".ui-icon-document", $("#pager"+suffix)).remove()
+
+                //Verifica si el grid está en una cola
+                if ($.fn.appgrid.options.inQueue)
+                    setTimeout("$('.queued_grids:first').gridqueue({height: $('#_gq_').val()+'%'})",3000);
+
+                if ($.fn.appgrid.options.removeGridTitle)
+                    $('.ui-jqgrid-titlebar',oGrid).remove();
 
             /* Finaliza implementación de grid */
 
@@ -444,7 +453,7 @@
 
         oTamano=oColumnas.find('tamano');
         oAlias= oColumnas.find('alias_campo');
-        var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad + "_"+ $.fn.appgrid.options.datestamp;
+        var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad+ "_"+ $.fn.appgrid.options.datestamp;
         //var suffix = "-" + sDateTime(new Date());
         oAlias.each( function() {
              
@@ -455,15 +464,15 @@
             oColumna={
                 name:sParent+suffix,
                 index:sParent+suffix,
-                width:$(oTamano[iCol]).text()
+                width:$(oTamano[iCol]).text(),
+                sortable:true
             };
 
             $.fn.appgrid.options.colNames[iCol]=$(this).text();
             $.fn.appgrid.options.colModel[iCol]=oColumna;
-            $.fn.appgrid.options.groupFields[iCol]=$(this).text()+suffix;
+            $.fn.appgrid.options.groupFields[iCol]=$(this).text();
             iCol++;
         });
-
 
         $("#pager"+ suffix).attr("security", sPermiso) ;
     }
