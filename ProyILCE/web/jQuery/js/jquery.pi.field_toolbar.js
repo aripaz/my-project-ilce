@@ -46,7 +46,11 @@
                                 columnas:1,
                                 pk: 0,
                                 height:"500",
-                                width:"500"});
+                                width:"500",
+                                updateControl:suffix,
+                                updateForeignForm:$(this).attr("forma")
+
+                            });
              })
 
              $("#spnUpdt" + suffix).click(function(){
@@ -64,7 +68,10 @@
                                 columnas:1,
                                 pk: nPK,
                                 height:"500",
-                                width:"500"});
+                                width:"500",
+                                updateControl:suffix,
+                                updateForeignForm:$(this).attr("forma")
+                            });
 
              })
 
