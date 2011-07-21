@@ -229,14 +229,19 @@ if (window.ActiveXObject) // for IE
 	}
 }
 
-function setXMLInSelect3(sSelect,pk) {
+function setXMLInSelect3(sSelect,cf,ta,pk) {
 var httpRequest;
 if (window.ActiveXObject) // for IE 
     httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 else if (window.XMLHttpRequest) // for other browsers 
     httpRequest = new XMLHttpRequest();
 
-var s="srvFormaSearch?$cf=-2&$ta=update&$pk="+pk
+var s="";
+if (pk!=null)
+    s="srvFormaSearch?$cf="+cf+"&$ta="+ta+"&$pk="+pk
+else
+    s="srvFormaSearch?$cf="+cf+"&$ta="+ta
+
 httpRequest.open('GET',s, false);
 httpRequest.send(null);
 
