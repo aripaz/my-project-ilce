@@ -27,10 +27,8 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.form.options = $.extend($.fn.form.settings, opc);
-            $("body").addClass('wait');
             obj = $(this);
             $.fn.form.ajax();          
-            $("body").removeClass('wait');
         });
  
     };
@@ -171,6 +169,8 @@
                     app:$.fn.form.options.aplicacion
                     });
 
+                var gridSuffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
+
                 //Se captura el submit
                 oForm.submit(function() {
                     //Deshabilita el botón guardar
@@ -181,6 +181,8 @@
                     var sWS="";
                     var oCampos;
                     var sData="";
+
+
                     if ($.fn.form.options.modo!="lookup") {
                         var bCompleto=true;
                         oForm.find('.obligatorio').each(function() {
@@ -245,6 +247,9 @@
                                       $.post('srvFormaDelete','$cf=10&$w=clave_aplicacion='+sResultado+" AND clave_perfil="+nPerfil);
                                       sData='clave_perfil='+nPerfil+"&clave_aplicacion=" + sResultado + "&activo=1&$cf=10&$pk=0&$ta=insert";
                                       setTimeout("$.post('"+sWS+"','"+ sData+ "')",1000);
+                                      /*$("#apps_menu").appmenu().appmenu.getSearchs($.fn.form.options.aplicacion)
+                                      $.fn.treeMenu.getTreeDefinition*/
+
                                     });
                                 }
 
@@ -272,11 +277,10 @@
                                 }
 
                                 //Cierra el dialogo
-                                var suffix=$.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
                                 $("#dlgModal_"+ suffix).dialog("destroy");
                                 $("#dlgModal_"+ suffix).remove();
                                 if ($.fn.form.options.updateControl=="")
-                                    $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp).jqGrid().trigger("reloadGrid");
+                                    $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid");
                                 else
                                     setXMLInSelect3($.fn.form.options.updateControl,$.fn.form.options.updateForeignForm,'foreign',null)
                             },
@@ -306,15 +310,17 @@
                             alert("Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
                         }
                         else {
-                            oGridHeader=$("span.ui-jqgrid-title, #grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma);
+
+                            $("#grid_" + gridSuffix)
+                            oGridHeader=$("span.ui-jqgrid-title, #grid_"+gridSuffix );
                             nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
                             nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
                             sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
                             $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
 
                             //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                            $("#lnkRemoveFilter_grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).click(function() {
-                                var sGridId="#grid_" + this.id.split("_")[2] + "_" + this.id.split("_")[3]+"_"+this.id.split("_")[4] ;
+                            $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
+                                var sGridId="#grid_" +gridSuffix ;
                                 $(sGridId).jqGrid('setGridParam',{
                                     url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$dp=body"
                                     }).trigger("reloadGrid")
@@ -334,11 +340,10 @@
                                     
                                 // Aqui va método del accordion para actualizarlo
                                 $("#apps_menu").appmenu().appmenu.getSearchs($.fn.form.options.aplicacion)
-
                             }
 
                             sData = sData.substring(0,sData.length-1)
-                            $("#grid_" + $.fn.form.options.aplicacion + "_" + $.fn.form.options.forma).jqGrid('setGridParam',{
+                            $("#grid_" + gridSuffix).jqGrid('setGridParam',{
                                 url:"srvGrid?$cf=" + $.fn.form.options.forma + "&$w=" + escape(sData)+ "&$dp=body&page=1"
                                 }).trigger("reloadGrid")
                             $("#dlgModal_"+ formSuffix).dialog("destroy");
@@ -351,6 +356,7 @@
 
                 });
 
+                $("#pager_"+ gridSuffix+"_left").html("");
 
             },
             error:function(xhr,err){

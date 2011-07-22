@@ -162,6 +162,8 @@
                         caption:"",
                         buttonicon:"ui-icon-plus",
                         onClickButton:function() {
+                            $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
+
                             nEditingApp=$(this).attr("editingApp");
                             $("body").form({
                                 aplicacion: nApp,
@@ -195,6 +197,7 @@
                         onClickButton:function() {
                             nRow=$(this).getGridParam('selrow');
                             if (nRow) {
+                                $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                                 nPK= $(this).getCell(nRow,0);
                                 nEditingApp=$(this).attr("editingApp");
                                 $("body").form({
@@ -235,6 +238,7 @@
                             if (nRow) {
                                 nPK= $(this).getCell(nRow,0);
                                 if (confirm("¿Está seguro que desea eliminar el registro? No es posible deshacer esta acción.")){
+                                    $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Eliminando registro...");
                                     $.ajax(
                                     {
                                         url: "srvFormaDelete?$cf="+ nEntidad + "&$pk="+ nPK,
@@ -246,6 +250,7 @@
                                             alert("Error al eliminar registro");
                                         }
                                     });
+                                    $("#pager"+suffix+"_left").html("");
                                 }
                             }
                             else {
@@ -269,6 +274,7 @@
                     caption:"",
                     buttonicon:"ui-icon-search",
                     onClickButton:  function() {
+                        $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                         $("body").form({
                             aplicacion: nApp,
                             forma:nEntidad,
@@ -278,6 +284,7 @@
                             columnas:1,
                             pk:0
                         });
+                        
                     },
                     position: "last",
                     title:"Filtrar",
@@ -299,6 +306,7 @@
                         var sDateStamp=this.id.split("_")[3];
                         nRow=$(this).getGridParam('selrow');
                         if (nRow) {
+                            $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Abriendo kardex...");
                             nPK= $(this).getCell(nRow,0);
                             $.fn.appgrid.openKardex(nApp,nForm,sDateStamp,nPK);
                         }
@@ -401,7 +409,7 @@
                         $("#grid"+ suffix+"_toppager_right").html("<select id='cbGroups"+suffix+"'>"+sOptions+"</select>"); */
 
                 //Establece evento para select
-                $("#cbGroups"+suffix).change(function() {
+                /*$("#cbGroups"+suffix).change(function() {
                     var suffix=this.id.split("_")[1] + "_" +
                     this.id.split("_")[2] + "_" +
                     this.id.split("_")[3];
@@ -410,8 +418,7 @@
                         oGrid.jqGrid('groupingRemove',true);
                     else
                         oGrid.jqGrid('groupingGroupBy',sVal);
-                });
-
+                });*/
 
                 //Remueve el botón de kardex si no está especificado en el constructor
                 if (oGrid.attr("openKardex")!="true")
@@ -507,5 +514,6 @@
             });
 
         }
+        $("#pager"+suffix+"_left").html("");
     }
 })(jQuery);
