@@ -16,14 +16,20 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             $.fn.treeMenu.options = $.extend($.fn.treeMenu.settings, opc);
+            obj=$(this);
+            obj.attr("app", $.fn.treeMenu.options.app);
+            obj.attr("entidad", $.fn.treeMenu.options.entidad);
+            obj.attr("pk", $.fn.treeMenu.options.pk);
             $.fn.treeMenu.getTreeDefinition(this);
         });
     }
 
     $.fn.treeMenu.getTreeDefinition=function(o) {
+        var nEntidad=$(o).attr("entidad");
+        var nPk=$(o).attr("pk");
         $.ajax(
         {
-            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + $.fn.treeMenu.options.entidad + "&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf=" + nEntidad + "&$pk=" + nPk + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
             contentType: "application/x-www-form-urlencoded",
             success:  function(data){
@@ -44,6 +50,8 @@
                     "types":{}
                 };
 
+                //Destruye los nodos existentes para recargarlos
+                $("ul",obj).remove();
                 oRegistros = $(xmlGT).find("registro")
                 
                 var sTypes="";
@@ -89,7 +97,7 @@
                     }
                 );
 
-                if ($(o).attr("behaviour")=='profile' && $.fn.treeMenu.options.pk>0)
+                if ($(o).attr("behaviour")=='profile' && nPk>0)
                    $.fn.treeMenu.getAppProfiles(o);
                 else if ($(o).attr("behaviour")=='profile')
                     $(o).jstree('check_node', $('#perfil-1'));
@@ -109,13 +117,14 @@
                        $(o.nextSibling).appgrid({app: nApp,
                           entidad: nForma,
                           editingApp: o.id.split("_")[4],
-                          pk: $.fn.treeMenu.options.pk,
+                          pk: nPK,
                           wsParameters: sW,
                           titulo:sTitulo,
                           showFilterLink:false,
                           inQueue:false,
                           leyendas:["Nuevo registro", "Edición de registro"],
-                          height:"70%"
+                          height:"70%",
+                          originatingObject:o.id
                        });
                     }
 

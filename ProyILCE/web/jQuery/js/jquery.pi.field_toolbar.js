@@ -39,7 +39,7 @@
 
 
              $("#spnInsrt" + suffix).click(function(){
-                $("body").form({aplicacion:  $.fn.fieldtoolbar.options.app,
+                $("body").form({app:  $.fn.fieldtoolbar.options.app,
                                 forma: $(this).attr("forma"),
                                 modo:"insert",
                                 titulo: $(this).attr("titulo_agregar"),
@@ -61,7 +61,7 @@
                         return;
                     }
 
-                    $("body").form({aplicacion:  $.fn.fieldtoolbar.options.app,
+                    $("body").form({app:  $.fn.fieldtoolbar.options.app,
                                 forma:$(this).attr("forma") ,
                                 modo:"update",
                                 titulo: $(this).attr("titulo_editar"),

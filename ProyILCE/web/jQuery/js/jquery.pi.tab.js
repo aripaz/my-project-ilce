@@ -65,7 +65,7 @@
                 //Inicializa forma de edición en la primera página
                 firstTab=$entityTab.find(".ui-tabs-panel:first")[0].id;
                 $("#" + firstTab).form({
-                        aplicacion: $.fn.apptab.options.app,
+                        app: $.fn.apptab.options.app,
                         forma:$.fn.apptab.options.entidad,
                         pk:$.fn.apptab.options.pk,
                         modo:"update",

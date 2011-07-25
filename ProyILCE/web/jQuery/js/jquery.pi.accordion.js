@@ -106,15 +106,15 @@
                             else {
 
                                 if (this.id.split("_")[0]=="newEntity") {
-                                    $("body").form({aplicacion: nAplicacion,
-                                                                       forma:nEntidad,
-                                                                       modo:"insert",
-                                                                       pk:0,
-                                                                       titulo: sTitulo,
-                                                                       columnas:1,
-                                                                       height:400,
-                                                                       width:500
-                                                                   });
+                                    $("body").form({app: nAplicacion,
+                                                    forma:nEntidad,
+                                                    modo:"insert",
+                                                    pk:0,
+                                                    titulo: sTitulo,
+                                                    columnas:1,
+                                                    height:400,
+                                                    width:500
+                                               });
                                 }
                                 else {
                                     $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
@@ -131,7 +131,8 @@
                                                                titulo:sTitulo,
                                                                height:"70%",
                                                                leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
-                                                               openKardex:true
+                                                               openKardex:true,
+                                                               originatingObject:obj[0].id
                                                            });
                                 }
                             }
