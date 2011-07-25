@@ -29,7 +29,8 @@
             inQueue:false,
             inDesktop:false,
             editingApp:"",
-            datestamp: sDateTime(new Date())
+            datestamp: sDateTime(new Date()),
+            originatingObject:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -51,7 +52,9 @@
                 "' openkardex='" + $.fn.appgrid.options.openKardex +
                 "' editingApp='" + $.fn.appgrid.options.editingApp +
                 "' leyendas='" + $.fn.appgrid.options.leyendas[0] + "," + $.fn.appgrid.options.leyendas[1]+
-                "' datestamp='" + $.fn.appgrid.options.datestamp + "'>" +
+                "' datestamp='" + $.fn.appgrid.options.datestamp +
+                "' originatingObject='"+ $.fn.appgrid.options.originatingObject +
+                "'>" +
                 "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
             $.fn.appgrid.getGridDefinition();
@@ -166,7 +169,7 @@
 
                             nEditingApp=$(this).attr("editingApp");
                             $("body").form({
-                                aplicacion: nApp,
+                                app: nApp,
                                 forma:nEntidad,
                                 datestamp:$(this).attr("datestamp"),
                                 modo:"insert",
@@ -201,7 +204,7 @@
                                 nPK= $(this).getCell(nRow,0);
                                 nEditingApp=$(this).attr("editingApp");
                                 $("body").form({
-                                    aplicacion: nApp,
+                                    app: nApp,
                                     forma:nEntidad,
                                     datestamp:$(this).attr("datestamp"),
                                     modo:"update",
@@ -245,6 +248,11 @@
                                         dataType: "text",
                                         success:  function(data){
                                             oGrid.jqGrid('delRowData',nRow);
+                                            //Actualiza árbol
+                                            if (nEntidad=="3") {
+                                                 sTvId=oGrid.attr("originatingObject");
+                                                $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
+                                            }
                                         },
                                         error:function(xhr,err){
                                             alert("Error al eliminar registro");
@@ -276,7 +284,7 @@
                     onClickButton:  function() {
                         $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                         $("body").form({
-                            aplicacion: nApp,
+                            app: nApp,
                             forma:nEntidad,
                             datestamp:$(this).attr("datestamp"),
                             modo:"lookup",
@@ -422,7 +430,7 @@
 
                 //Remueve el botón de kardex si no está especificado en el constructor
                 if (oGrid.attr("openKardex")!="true")
-                    $(".ui-icon-document", $("#pager"+suffix)).remove()
+                    $(".ui-icon-document", $("#grid"+ suffix+"_toppager_left")).remove()
 
                 //Verifica si el grid está en una cola
                 if ($.fn.appgrid.options.inQueue)
