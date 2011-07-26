@@ -48,7 +48,8 @@
                                 height:"500",
                                 width:"500",
                                 updateControl:suffix,
-                                updateForeignForm:$(this).attr("forma")
+                                updateForeignForm:$(this).attr("forma"),
+                                originatingObject:$(this).id
 
                             });
              })
@@ -70,7 +71,8 @@
                                 height:"500",
                                 width:"500",
                                 updateControl:suffix,
-                                updateForeignForm:$(this).attr("forma")
+                                updateForeignForm:$(this).attr("forma"),
+                                originatingObject:$(this).id
                             });
 
              })

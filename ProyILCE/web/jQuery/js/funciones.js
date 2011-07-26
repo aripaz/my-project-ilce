@@ -263,7 +263,10 @@ oSelect.options.length=0
 var addOption = new Option('','');
 oSelect.options[oSelect.length] = addOption;
 for (i=0;i<x.length;i++) {
-         addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
+        if (pk!=null)
+            addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
+        else
+            addOption = new Option(x[i].childNodes[3].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
          oSelect.options[oSelect.length] = addOption;
         }
 }

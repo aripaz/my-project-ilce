@@ -10,7 +10,8 @@
             xmlUrl : "srvFormaSearch",
             app: "",
             entidad:"",
-            pk:""
+            pk:"",
+            datestamp: sDateTime(new Date())
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -20,6 +21,7 @@
             obj.attr("app", $.fn.treeMenu.options.app);
             obj.attr("entidad", $.fn.treeMenu.options.entidad);
             obj.attr("pk", $.fn.treeMenu.options.pk);
+            obj.attr("datestamp", $.fn.treeMenu.options.datestamp);
             $.fn.treeMenu.getTreeDefinition(this);
         });
     }
@@ -61,11 +63,12 @@
                 //Se reemplaza el parámetro de la aplicación
                 
                 oRegistros.each( function() {
+                   sDateStamp=$(o).attr("datestamp");
                    sTypes+= '"'+$.trim($(this).find('rel').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().replace('\n','')) + '"}},';
-                   nClaveNodo= $.trim($(this).find('clave_nodo').text().replace('\n',''));
+                   nClaveNodo= $.trim($(this).find('clave_nodo').text().replace('\n','')) + "-" + sDateStamp;
                    sRel=$.trim($(this).find('rel').text().replace('\n',''));
                    sTextoNodo=$.trim($(this).find('texto_nodo').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
-                   nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''));
+                   nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''))+"-"+sDateStamp;
                    if (sRel=='aplicacion')
                        sState='open'
                    else
@@ -100,7 +103,7 @@
                 if ($(o).attr("behaviour")=='profile' && nPk>0)
                    $.fn.treeMenu.getAppProfiles(o);
                 else if ($(o).attr("behaviour")=='profile')
-                    $(o).jstree('check_node', $('#perfil-1'));
+                    $(o).jstree('check_node', $('#perfil-1'+"-"+$(o).attr("datestamp")));
                     
                
                 $("#" + o.id+ " a").live("click", function(e) {
@@ -112,11 +115,11 @@
                       var sW=sNodeId.split("-").length>3?sNodeId.split("-")[3]:"";
 
                       //Llama grids
-                      if (nForma==undefined) return false;
+                      if (nForma==$(o).attr("datestamp")) return false;
 
                        $(o.nextSibling).appgrid({app: nApp,
                           entidad: nForma,
-                          editingApp: o.id.split("_")[4],
+                          editingApp: o.id.split("_")[3],
                           pk: nPK,
                           wsParameters: sW,
                           titulo:sTitulo,
@@ -153,7 +156,7 @@ $.fn.treeMenu.getAppProfiles=function(o) {
 
         $.ajax(
         {
-            url: $.fn.treeMenu.options.xmlUrl + "?$cf="+nCF+"&$pk=" + $.fn.treeMenu.options.pk + "&$ta=children",
+            url: $.fn.treeMenu.options.xmlUrl + "?$cf="+nCF+"&$pk=" + $(o).attr("pk") + "&$ta=children",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
