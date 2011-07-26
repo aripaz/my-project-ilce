@@ -10,7 +10,7 @@ form.forma {font-size: 1em !important; width: 100%; margin:5px; }
 table.forma { width: 100%; margin:0px;}
 form.forma { width: 100%; margin:5px;}
 h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
-td.etiqueta_forma {width: 24.5%; font-size: .80em; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right  }
+td.etiqueta_forma {width: 24.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
 div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
 input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
 textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; float: left;  }
@@ -123,7 +123,7 @@ input.formButton { font-size: 12px !important; font-style: normal; font-family:V
 
 td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 
-.foreign_grids {
+.queued_grids {
     float: right;
     width:98%;
 }
@@ -143,6 +143,12 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
     width: 75%;
     margin-left:5px
 
+}
+
+.desktopGridContainer {
+    overflow:auto;
+    float: left;
+    width: 95%;
 }
 
 .treeProfiles {
@@ -181,7 +187,7 @@ td.etiqueta_perfil {
 }
 
 #tabUser {
-    height: 85%; margin: 1px;
+    height: 85%; margin: 1px; overflow: auto;
 
 }
 
@@ -228,3 +234,6 @@ a.appMenuTitle {
 }
 
 
+.wait { cursor: wait;}
+
+#msjLogin { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight:bold  }
