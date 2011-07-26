@@ -76,31 +76,31 @@
 
                             if ($("#tab"+this.id).length) {
                                 //Selecciona el tab correspondiente
-                                $tabs.tabs( "select", "#tab"+this.id);
+                                $tabs.tabs("select", "#tab"+this.id);
+
+                                //Recupera el id del grid del tab
+                                sGridIdSuffix=$("#tab" + this.id).children()[0].id.replace("gbox_grid_","");
 
                                 //Recarga el grid por si tiene algún filtro
                                 if (data==undefined){
                                     data="";
-                                   $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).remove();
+                                   $("#lnkRemoveFilter_grid_" +sGridIdSuffix ).remove();
                                 }
                                 else {
                                     //Si no existe el link para quitar filtro, lo establece
-                                    if ($("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).length==0) {
-                                        oGridHeader=$("span.ui-jqgrid-title, #grid_" +nAplicacion + "_" + nEntidad);
-                                        nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
-                                        nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                                        $(oGridHeader[0]).append("<a style='margin-left:10px' href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad +"'>(Quitar filtro)</a>");
+                                    if ($("#lnkRemoveFilter_grid_" + sGridIdSuffix).length==0) {                                        
+                                        oGridHeader=$("#gview_grid_" +sGridIdSuffix).find("span.ui-jqgrid-title");
+                                        $(oGridHeader[0]).append("<a style='margin-left:10px' href='#' id='lnkRemoveFilter_grid_" + sGridIdSuffix +"'>(Quitar filtro)</a>");
 
                                         //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                                        $("#lnkRemoveFilter_grid_" + nAplicacion + "_" + nEntidad).click(function() {
-                                            var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
-                                            $(sGridId).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"}).trigger("reloadGrid")
+                                        $("#lnkRemoveFilter_grid_" + sGridIdSuffix).click(function() {
+                                            $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"}).trigger("reloadGrid")
                                             $(this).remove();
                                         });
                                     }
                                 }
 
-                               $("#grid_"+nAplicacion+"_"+nEntidad).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
+                               $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data}).trigger("reloadGrid");
 
                             }
                             else {
@@ -113,7 +113,8 @@
                                                     titulo: sTitulo,
                                                     columnas:1,
                                                     height:400,
-                                                    width:500
+                                                    width:500,
+                                                    originatingObject:obj.id
                                                });
                                 }
                                 else {

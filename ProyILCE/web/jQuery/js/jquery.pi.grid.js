@@ -95,7 +95,7 @@
 
                 /* Agrega la liga para quitar filtro desde el contructor    */
                 if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink)
-                    $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nApp + "_" + nEntidad+"'>(Quitar filtro)</a>";
+                    $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid" + suffix+"'>(Quitar filtro)</a>";
 
                 /*Crea cadena a partir de objeto xml*/
                 /*var sXML="";
@@ -176,9 +176,10 @@
                                 titulo: $.fn.appgrid.options.leyendas[0],
                                 columnas:1,
                                 pk:0,
-                                filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
-                                width:500
+                                width:500,
+                                originatingObject:oGrid.id
                             });
                         },
                         position: "last",
@@ -211,9 +212,10 @@
                                     titulo: $.fn.appgrid.options.leyendas[1],
                                     columnas:1,
                                     pk:nPK,
-                                    filtroForaneo:"2=clave_aplicacion=" + nEditingApp,
+                                    filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                     height:"500",
-                                    width:"500"
+                                    width:"500",
+                                    originatingObject: $(this).id
                                 });
                             }
                             else {
@@ -290,7 +292,8 @@
                             modo:"lookup",
                             titulo: "Filtrado de registros",
                             columnas:1,
-                            pk:0
+                            pk:0,
+                            originatingObject: oGrid.id
                         });
                         
                     },
@@ -384,10 +387,11 @@
 
                 //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                 if ($.fn.appgrid.options.wsParameters!="" && $.fn.appgrid.options.showFilterLink) {
-                    $("#lnkRemoveFilter_grid_" + nApp + "_" + nEntidad).click(function() {
+                    $("#lnkRemoveFilter_grid" + suffix).click(function() {
                         nApp=this.id.split("_")[2];
                         nForma=this.id.split("_")[3];
-                        var sGridId="#grid_" + this.id.split("_")[2] + "_" + + this.id.split("_")[3];
+                        sDS=this.id.split("_")[4];
+                        var sGridId="#grid_" + nApp + "_" + nForma+ "_"+ sDS;
                         $(sGridId).jqGrid('setGridParam',{
                             url:"srvGrid?$cf=" + nForma + "&$dp=body"
                         }).trigger("reloadGrid")
@@ -512,10 +516,10 @@
             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
             //Crea la interfaz de la aplicación abierta
             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
-                "<div id='tvApp" + suffix + "_" + id +"' class='treeContainer' behaviour='kardex'></div>" +
+                "<div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
                 "<div id='divForeignGrids" + suffix + "_" + id +"' class='gridContainer'></div>" +
                 "</div>");
-            $("#tvApp" + suffix + "_" + id).treeMenu({
+            $("#tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).treeMenu({
                 app:nApp,
                 entidad:nEntidad,
                 pk:id
