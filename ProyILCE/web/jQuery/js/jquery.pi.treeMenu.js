@@ -110,6 +110,7 @@
                    if ($(o).attr("behaviour")=='kardex') {
                       var sNodeId=this.parentNode.id;
                       var sTitulo=$.trim(this.text);
+                      var sTipoNodo=sNodeId.split("-")[0];
                       var nApp=sNodeId.split("-")[1];
                       var nForma=sNodeId.split("-")[2];
                       var sW="";
@@ -122,7 +123,7 @@
                       }
 
                       //Llama grids
-                      if (nForma==$(o).attr("datestamp")) return false;
+                      if (sTipoNodo=='foraneo'||sTipoNodo=='perfilxforma') return false;
 
                        $(o.nextSibling).appgrid({app: nApp,
                           entidad: nForma,
