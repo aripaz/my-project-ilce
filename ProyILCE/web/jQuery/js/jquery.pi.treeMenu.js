@@ -112,7 +112,14 @@
                       var sTitulo=$.trim(this.text);
                       var nApp=sNodeId.split("-")[1];
                       var nForma=sNodeId.split("-")[2];
-                      var sW=sNodeId.split("-").length>3?sNodeId.split("-")[3]:"";
+                      var sW="";
+
+                      for (i=3; i<sNodeId.split("-").length-1;i++) {
+                          if (i==3)
+                            sW+=sNodeId.split("-")[i];
+                          else
+                            sW+="&"+sNodeId.split("-")[i];
+                      }
 
                       //Llama grids
                       if (nForma==$(o).attr("datestamp")) return false;

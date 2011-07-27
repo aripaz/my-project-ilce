@@ -517,7 +517,7 @@
             //Crea la interfaz de la aplicación abierta
             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
                 "<div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
-                "<div id='divForeignGrids" + suffix + "_" + id +"' class='gridContainer'></div>" +
+                "<div id='divForeignGrids" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridContainer'></div>" +
                 "</div>");
             $("#tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).treeMenu({
                 app:nApp,
