@@ -1118,7 +1118,12 @@ public class AdminXML {
             strSld = "text";
         }else if ("mx.ilce.bean.BIT".equals(strData)){
             strSld = "bit";
+        }else if ("mx.ilce.bean.Money".equals(strData)){
+            strSld = "money";
+        }else if ("java.sql.Date".equals(strData)){
+            strSld = "datetime";
         }
+
         return strSld;
     }
 
