@@ -742,52 +742,57 @@ class ConQuery {
      */
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
+        if (query!=null){
+            strQuery = strQuery.toUpperCase();
+            strQuery = strQuery.replace("WHERE", "WHERE ");
+        }
         if ((strWhere!=null) && (!"".equals(strWhere))){
-            if (query.toUpperCase().contains("WHERE ")){
+            strWhere = strWhere.toUpperCase();
+            if (strQuery.contains("WHERE ")){
                 //evaluaremos el WHERE y el AND
                 if (strWhere.trim().length()>6){
                     //EMPIEZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
+                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
                     //EMPIEZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                            strQuery = query + " " + strWhere;
+                            strQuery = strQuery + " " + strWhere;
                     }else{
-                            strQuery = query + " AND " + strWhere;
+                            strQuery = strQuery + " AND " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //EMPIEZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = query + " " + strWhere;
+                        strQuery = strQuery + " " + strWhere;
                     }else{
-                        strQuery = query + " AND " + strWhere;
+                        strQuery = strQuery + " AND " + strWhere;
                     }
                 }else{
-                        strQuery = query + " AND " + strWhere;
+                        strQuery = strQuery + " AND " + strWhere;
                 }
             }else{
                 //evaluaremos el WHERE Y el AND
                 if (strWhere.trim().length()>6){
                     //COMIENZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery = query + " " + strWhere;
+                        strQuery = strQuery + " " + strWhere;
                     //COMIENZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        strQuery = query + " WHERE " + strWhere;
+                        strQuery = strQuery + " WHERE " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //COMIENZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = query + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        strQuery = query + " WHERE " + strWhere;
+                        strQuery = strQuery + " WHERE " + strWhere;
                     }
                 }else{
-                    strQuery = query + " " + strWhere;
+                    strQuery = strQuery + " " + strWhere;
                 }
             }
         }else{
