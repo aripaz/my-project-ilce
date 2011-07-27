@@ -472,7 +472,7 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
@@ -486,8 +486,8 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo(itCmp.getNombre(),
-                                              itCmp.getNombreDB(),
+                        Campo cmp = new Campo(itCmp.getNombre().toLowerCase(),
+                                              itCmp.getNombreDB().toLowerCase(),
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
@@ -566,7 +566,7 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
@@ -580,8 +580,8 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo(itCmp.getNombre(),
-                                              itCmp.getNombreDB(),
+                        Campo cmp = new Campo(itCmp.getNombre().toLowerCase(),
+                                              itCmp.getNombreDB().toLowerCase(),
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
@@ -667,7 +667,7 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
@@ -681,8 +681,8 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo(itCmp.getNombre(),
-                                              itCmp.getNombreDB(),
+                        Campo cmp = new Campo(itCmp.getNombre().toLowerCase(),
+                                              itCmp.getNombreDB().toLowerCase(),
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
@@ -823,7 +823,7 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
@@ -837,8 +837,8 @@ class ConQuery {
                     Iterator it = lstCampo.iterator();
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo(itCmp.getNombre(),
-                                              itCmp.getNombreDB(),
+                        Campo cmp = new Campo(itCmp.getNombre().toLowerCase(),
+                                              itCmp.getNombreDB().toLowerCase(),
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
@@ -996,7 +996,7 @@ class ConQuery {
                     ResultSetMetaData rstm = rs.getMetaData();
 
                     for (int i=1;i<=rstm.getColumnCount();i++){
-                        Campo cmp = new Campo(rstm.getColumnName(i),
+                        Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                               Integer.valueOf(i),
                                               rstm.getColumnTypeName(i));
                         cmp.setTypeDataAPL(castTypeDataDBtoAPL(rstm.getColumnTypeName(i)));
@@ -1010,8 +1010,8 @@ class ConQuery {
                         Iterator it = lstCampo.iterator();
                         while (it.hasNext()){
                             Campo itCmp = (Campo) it.next();
-                            Campo cmp = new Campo(itCmp.getNombre(),
-                                                  itCmp.getNombreDB(),
+                            Campo cmp = new Campo(itCmp.getNombre().toLowerCase(),
+                                                  itCmp.getNombreDB().toLowerCase(),
                                                   itCmp.getCodigo(),
                                                   itCmp.getTypeDataDB(),
                                                   castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
@@ -1094,7 +1094,7 @@ class ConQuery {
                 ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i),
+                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
                                           Integer.valueOf(i),
                                           rstm.getColumnTypeName(i));
                     cmp.setIsIncrement(rstm.isAutoIncrement(i));
@@ -1108,7 +1108,7 @@ class ConQuery {
                     while (it.hasNext()){
                         Campo itCmp = (Campo) it.next();
                         Campo cmp = new Campo();
-                        cmp.setNombre(itCmp.getNombre());
+                        cmp.setNombre(itCmp.getNombre().toLowerCase());
                         cmp.setCodigo(itCmp.getCodigo());
                         cmp.setTypeDataDB(itCmp.getTypeDataDB());
                         cmp.setTypeDataAPL(castTypeDataDBtoAPL(itCmp.getTypeDataDB()));
