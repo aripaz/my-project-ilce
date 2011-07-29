@@ -131,11 +131,11 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public List getListFormaByIdAndCampos(String[] strData) throws ExceptionHandler{
+    public List getListFormaByIdAndCampos(String[] strData, String[][] arrVariables) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData, arrVariables);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
@@ -156,11 +156,11 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public List getListFormaById(String[] strData) throws ExceptionHandler{
+    public List getListFormaById(String[] strData, String[][] arrVariables) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
@@ -182,11 +182,11 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByQuery(String strQuery, String[] strData) throws ExceptionHandler{
+    public HashCampo getDataByQuery(String strQuery, String[] strData, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery con = new ConQuery();
-            hsCmp = con.getDataByQuery(strQuery, strData);
+            hsCmp = con.getDataByQuery(strQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Datos por una QUERY");
         }
@@ -219,11 +219,11 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
+    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
-            hsCmp = connQ.getData(IdQuery, strData);
+            hsCmp = connQ.getData(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY");
         }finally{
@@ -241,11 +241,11 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData ) throws ExceptionHandler{
+    public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData, String[][] arrVariables ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
-            hsCmp = connQ.getDataWithWhere(IdQuery, strData);
+            hsCmp = connQ.getDataWithWhere(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY y WHERE");
         }finally{
@@ -264,12 +264,12 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData )
+    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData, String[][] arrVariables )
             throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
-            hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData);
+            hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY, WHERE y DATA");
         }finally{

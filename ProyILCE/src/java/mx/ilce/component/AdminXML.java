@@ -98,12 +98,12 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
-    public StringBuffer getSessionXML(User user) throws ExceptionHandler{
+    public StringBuffer getSessionXML(User user, String[][] arrVariables) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            HashCampo hsCmp = con.getUserXML(user);
+            HashCampo hsCmp = con.getUserXML(user, arrVariables);
             Document document = getDocumentXML("widget.session.xml");
             str.append(listNode(document,0,hsCmp));
         }catch(Exception ex){
@@ -119,12 +119,12 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
-    public StringBuffer getMenuXML(User user) throws ExceptionHandler{
+    public StringBuffer getMenuXML(User user, String[][] arrVariables) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            HashCampo hsCmp = con.getMenuXML(user);
+            HashCampo hsCmp = con.getMenuXML(user, arrVariables);
 
             Document document = getDocumentXML("widget.accordion.xml");
             str.append("<qry>");
@@ -144,12 +144,12 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
-    public StringBuffer getTabXML(Perfil perfil) throws ExceptionHandler{
+    public StringBuffer getTabXML(Perfil perfil, String[][] arrVariables) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
         try {
             ConSession con = new ConSession();
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            HashCampo hsCmp = con.getTabForma(perfil);
+            HashCampo hsCmp = con.getTabForma(perfil, arrVariables);
             Document document = getDocumentXML("widget.tabs.xml");
             str.append("<qry>");
             for (int i=0;i<hsCmp.getLengthData();i++){
@@ -358,7 +358,7 @@ public class AdminXML {
      * @throws ExceptionHandler
      */
     public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, 
-            Integer idForma, String tipoAccion) throws ExceptionHandler{
+            Integer idForma, String tipoAccion, String[][] arrVariables) throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try {
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -459,7 +459,8 @@ public class AdminXML {
                                             }
                                         }
 
-                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
+                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB()
+                                                                        , arrVariables);
                                         if (!"".equals(strForaneo.toString())){
                                             str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
                                             str.append((" source=\"\">\n"));
@@ -524,7 +525,7 @@ public class AdminXML {
      * @throws ExceptionHandler
      */
     public StringBuffer getFormaWithoutData(HashCampo hsData, List lstCampos, 
-            Integer idForma, String tipoAccion) throws ExceptionHandler{
+            Integer idForma, String tipoAccion, String[][] arrVariables) throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try {
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -622,7 +623,7 @@ public class AdminXML {
                                                 strData[1]=datoForaneo;
                                             }
                                         }
-                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB());
+                                        StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB(), arrVariables);
                                         if (!"".equals(strForaneo.toString())){
                                             str.append(("\t\t\t<qry_"+cmp.getNombreDB()));
                                             str.append((" source=\"\">\n"));
@@ -679,11 +680,11 @@ public class AdminXML {
      * @throws ExceptionHandler
      */
     private StringBuffer getXmlByQueryAndData(String query, String[] strData, 
-            String strRegistro) throws ExceptionHandler {
+            String strRegistro, String[][] arrVariables) throws ExceptionHandler {
         StringBuffer str = new StringBuffer("");
         try {
             ConEntidad con = new ConEntidad();
-            HashCampo hsData = con.getDataByQuery(query, strData);
+            HashCampo hsData = con.getDataByQuery(query, strData, arrVariables);
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
             if (!hsDat.isEmpty()){
@@ -717,7 +718,7 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
-    private StringBuffer getXmlByIdForma(String[] strData, String strRegistro)
+    private StringBuffer getXmlByIdForma(String[] strData, String strRegistro, String[][] arrVariables)
             throws ExceptionHandler{
         StringBuffer str = new StringBuffer();
         try{
@@ -727,7 +728,7 @@ public class AdminXML {
             String[] strDataQ = new String[2];
             strDataQ[0] =strData[0];
             strDataQ[1] ="foreign";
-            HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ);
+            HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ, arrVariables);
             Campo cmpQ = hsCmpQ.getCampoByName("claveconsulta");
             HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -737,11 +738,12 @@ public class AdminXML {
                     strDataFiltro[0] = strData[2];
                     //ejecutamos la query, con el filtro entregado
                     if ("".equals(strData[1])){
-                        hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro);
+                        hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro, arrVariables);
                     }else{
                         hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
                                                                     strData[1],
-                                                                    strDataFiltro);
+                                                                    strDataFiltro,
+                                                                    arrVariables);
                     }
                 }
             List lstCmp = hsData.getListCampos();

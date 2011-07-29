@@ -63,7 +63,7 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public User getUser(String user, String password) throws ExceptionHandler{
+    public User getUser(String user, String password, String[][] arrVariables) throws ExceptionHandler{
         User usr = new User();
         try{
             String[] strData = new String[2];
@@ -73,13 +73,13 @@ public class ConSession {
             ConQuery connQ = new ConQuery();
             //validamos user y password
             connQ.setEnableDataLog(false);
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=user;
                 //validamos que es problema de la password
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser );
+                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -111,7 +111,7 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public User getUser(User usuario) throws ExceptionHandler{
+    public User getUser(User usuario, String[][] arrVariables) throws ExceptionHandler{
         User usr = new User();
         try{
             String[] strData = new String[2];
@@ -121,13 +121,13 @@ public class ConSession {
             ConQuery connQ = new ConQuery();
             //validamos user y password
             connQ.setEnableDataLog(false);
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=usuario.getNombre();
                 //validamos que es problema de la password
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser );
+                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -159,14 +159,14 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public Perfil getPerfil(User user) throws ExceptionHandler{
+    public Perfil getPerfil(User user, String[][] arrVariables) throws ExceptionHandler{
         Perfil perfil = new Perfil();
         try{
             String[] strData = new String[1];
             strData[0] = String.valueOf(user.getClavePerfil());
 
             ConQuery connQ = new ConQuery();
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData);
+            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData, arrVariables);
 
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
@@ -191,7 +191,7 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getTabForma(Perfil perfil) throws ExceptionHandler{
+    public HashCampo getTabForma(Perfil perfil, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             List lstApl = perfil.getLstAplicacion();
@@ -208,7 +208,7 @@ public class ConSession {
                     strData[1]= String.valueOf(apl.getClaveFormaPrincipal());
                     strData[2]= String.valueOf(apl.getClaveAplicacion());
                     strData[3]= String.valueOf(apl.getClaveFormaPrincipal());
-                    hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData);
+                    hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData, arrVariables);
                     if ((hsCmp.getLengthCampo()==0)&&(hsCmpAux!=null)) {
                         hsCmp.setListCampos(hsCmpAux.getListCampos());
                     }
@@ -232,13 +232,13 @@ public class ConSession {
      * @return
       * @throws ExceptionHandler
       */
-    public HashCampo getUserXML(User usuario) throws ExceptionHandler{
+    public HashCampo getUserXML(User usuario, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
             strData[0] = usuario.getClaveEmpleado().toString();
-            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData);
+            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData, arrVariables);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
@@ -258,13 +258,13 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getMenuXML(User usuario) throws ExceptionHandler{
+    public HashCampo getMenuXML(User usuario, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
             strData[0] = usuario.getClavePerfil().toString();
-            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData);
+            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData, arrVariables);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
@@ -284,11 +284,11 @@ public class ConSession {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData ) throws ExceptionHandler{
+    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
-            hsCmp = connQ.getData(IdQuery, strData);
+            hsCmp = connQ.getData(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");
         }finally{

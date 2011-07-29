@@ -34,6 +34,7 @@ public class Aplicacion extends Entidad {
     private Integer numRows;
     private String[] arrayData;
     private boolean cleanIncrement;
+    private String[][] arrVariables;
 
     /**
      * Constructor Basico de la clase, inicializa las variables de la clase
@@ -56,6 +57,14 @@ public class Aplicacion extends Entidad {
     }
 
 /********* GETTER Y SETTER *********/
+
+    public String[][] getArrVariables() {
+        return arrVariables;
+    }
+
+    public void setArrVariables(String[][] arrVariables) {
+        this.arrVariables = arrVariables;
+    }
 
     public Integer getClaveEmpleado() {
         return claveEmpleado;
@@ -439,7 +448,8 @@ public class Aplicacion extends Entidad {
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
+                        strData, this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -449,16 +459,20 @@ public class Aplicacion extends Entidad {
                     if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()==null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
-                        hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
+                        hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
+                                strData[0], this.getArrVariables());
                     }else if ((this.getStrWhereQuery()==null)&&(this.getArrayData()!=null)){
-                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), this.getArrayData());
+                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), 
+                                this.getArrayData(), this.getArrVariables());
                     }else if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()!=null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
-                         hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strData[0],this.getArrayData());
+                         hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
+                                 strData[0],this.getArrayData(), this.getArrVariables());
                     }else{
                         strData = new String[0];
-                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),strData);
+                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),
+                                    strData, this.getArrVariables());
                     }
                 }
                 if (this.getClaveEmpleado()!=null){
@@ -466,7 +480,8 @@ public class Aplicacion extends Entidad {
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
-                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
+                                    strData, this.getArrVariables());
                     adm.setHashPermisoForma(hsCmpPerm);
                 }
             }
@@ -494,7 +509,8 @@ public class Aplicacion extends Entidad {
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strData);
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
+                        strData, this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -502,14 +518,16 @@ public class Aplicacion extends Entidad {
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
                     strData = new String[1];
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
-                    hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0]);
+                    hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
+                            strData[0], this.getArrVariables());
                 }
                 if (this.getClaveEmpleado()!=null){
                     HashCampo hsCmpPerm = new HashCampo();
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
-                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData);
+                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS), 
+                            strData, this.getArrVariables());
                     adm.setHashPermisoForma(hsCmpPerm);
                 }
             }
@@ -538,7 +556,8 @@ public class Aplicacion extends Entidad {
         ArrayList lst = new ArrayList();
         try{
             ConEntidad con = new ConEntidad();
-            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData);
+            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
+                    arrayData, this.getArrVariables());
             Campo cmp = hsCmp.getCampoByName("consulta");
             HashMap dq = hsCmp.getListData();
             if (!dq.isEmpty()){
@@ -548,7 +567,8 @@ public class Aplicacion extends Entidad {
                 String[] strSPlit2 = strSplit[1].split(" ");
                 String tabla = strSPlit2[0];
 
-                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), arrayData);
+                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), 
+                        arrayData, this.getArrVariables());
                 List lstCmp = (List) hsCmpList.getListCampos();
                 for (int i=0;i<lstCmp.size();i++){
                     Campo cmpArr = (Campo) lstCmp.get(i);
