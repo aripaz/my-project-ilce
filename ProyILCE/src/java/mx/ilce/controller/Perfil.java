@@ -16,8 +16,17 @@ public class Perfil extends Entidad{
     private Integer clavePerfil;
     private String perfil;
     private List lstAplicacion;
+    private String[][] arrVariables;
 
 //******** GETTER Y SETTER ********
+    public String[][] getArrVariables() {
+        return arrVariables;
+    }
+
+    public void setArrVariables(String[][] arrVariables) {
+        this.arrVariables = arrVariables;
+    }
+
     /**
      * Obtiene la clave del perfil
      * @return
@@ -143,12 +152,12 @@ public class Perfil extends Entidad{
         LoginHandler lg = new LoginHandler();
         try{
             ConSession con = new ConSession();
-            User usr = con.getUser(user, password);
+            User usr = con.getUser(user, password, this.getArrVariables());
 
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                Perfil perf = con.getPerfil(usr);
+                Perfil perf = con.getPerfil(usr, this.getArrVariables());
                 this.clavePerfil = perf.getClavePerfil();
                 this.lstAplicacion = perf.getLstAplicacion();
                 this.perfil = perf.getPerfil();
@@ -181,12 +190,12 @@ public class Perfil extends Entidad{
             String user = usuario.getLogin();
             String password = usuario.getPassword();
             ConSession con = new ConSession();
-            User usr = con.getUser(user, password);
+            User usr = con.getUser(user, password, this.getArrVariables());
 
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                Perfil perf = con.getPerfil(usr);
+                Perfil perf = con.getPerfil(usr, this.getArrVariables());
                 this.clavePerfil = perf.getClavePerfil();
                 this.lstAplicacion = perf.getLstAplicacion();
                 this.perfil = perf.getPerfil();

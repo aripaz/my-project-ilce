@@ -31,6 +31,8 @@ import mx.ilce.util.Validation;
  */
 public class srvForma extends HttpServlet {
 
+    private String[][] arrVariables = null;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -156,7 +158,8 @@ public class srvForma extends HttpServlet {
                     strQuery.delete(strQuery.length()-1, strQuery.length());
                     strQuery.append(" from ").append(nameTable).append(" where 1=2");
                     ConEntidad con = new ConEntidad();
-                    HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), new String[0]);
+                    HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), 
+                            new String[0], arrVariables);
                     if (hsCmp.getLengthCampo()>0){
                         for (int j=0;j<i;j++){
                             Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);

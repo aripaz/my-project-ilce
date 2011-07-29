@@ -25,7 +25,7 @@ import mx.ilce.util.Validation;
  * @author ccatrilef
  */
 public class srvGrid extends HttpServlet {
-   
+    private String[][] arrVariables = null;
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request

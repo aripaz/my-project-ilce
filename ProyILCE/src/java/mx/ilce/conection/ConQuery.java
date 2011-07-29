@@ -445,11 +445,13 @@ class ConQuery {
      * Query.
      * @param idQuery   Codigo de la query a utilizar
      * @param arrData   Arreglo con los parametros de entrada
+     * @param arrVariables   Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en
      * @return HashCampo.  Contiene el listado de registros obtenidos y los campos
      * que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getData(Integer idQuery, String[] arrData) throws ExceptionHandler{
+    public HashCampo getData(Integer idQuery, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
         ResultSet rs = null;
@@ -461,6 +463,16 @@ class ConQuery {
             queryLog = query;
             if ((!"".equals(query)) && (arrData != null)){
                 ps =this.conn.createStatement();
+
+                if (arrVariables!=null){
+                    for (int i=0; i<arrVariables.length;i++){
+                        String strVar = arrVariables[i][0];
+                        String strValue = arrVariables[i][1];
+                        if (strVar!=null){
+                            query = query.replaceAll(strVar, strValue);
+                        }
+                    }
+                }
                 for(int i=1;i<=arrData.length;i++){
                     String strData = arrData[i-1];
                     if (strData != null){
@@ -551,7 +563,7 @@ class ConQuery {
      * que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getDataWithWhere(Integer idQuery, String whereData) throws ExceptionHandler{
+    public HashCampo getDataWithWhere(Integer idQuery, String whereData, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
         ResultSet rs = null;
@@ -564,6 +576,16 @@ class ConQuery {
                 query = addWhereToQuery(query,whereData);
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
+
+                if (arrVariables!=null){
+                    for (int i=0; i<arrVariables.length;i++){
+                        String strVar = arrVariables[i][0];
+                        String strValue = arrVariables[i][1];
+                        if (strVar!=null){
+                            query = query.replaceAll(strVar, strValue);
+                        }
+                    }
+                }
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
                     Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
@@ -642,7 +664,7 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData) 
+    public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData, String[][] arrVariables)
             throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
@@ -653,6 +675,17 @@ class ConQuery {
             query = getQueryById(idQuery);
             if ((!"".equals(query)) && (whereData != null)){
                 ps =this.conn.createStatement();
+
+                if (arrVariables!=null){
+                    for (int i=0; i<arrVariables.length;i++){
+                        String strVar = arrVariables[i][0];
+                        String strValue = arrVariables[i][1];
+                        if (strVar!=null){
+                            query = query.replaceAll(strVar, strValue);
+                        }
+                    }
+                }
+
                 if (arrData!=null){
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
@@ -663,6 +696,9 @@ class ConQuery {
                     }
                 }
                 query = addWhereToQuery(query,whereData);
+                if (idQuery==36){
+                   query = query.replace("AND CLAVE_PERFIL=1", "");
+                }
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -809,7 +845,7 @@ class ConQuery {
      * campos que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getData(Integer idQuery) throws ExceptionHandler{
+    public HashCampo getData(Integer idQuery, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -818,6 +854,15 @@ class ConQuery {
             getConexion();
             query = getQueryById(idQuery);
             if (!"".equals(query)){
+                if (arrVariables!=null){
+                    for (int i=0; i<arrVariables.length;i++){
+                        String strVar = arrVariables[i][0];
+                        String strValue = arrVariables[i][1];
+                        if (strVar!=null){
+                            query = query.replaceAll(strVar, strValue);
+                        }
+                    }
+                }
                 st = this.conn.createStatement();
                 rs = st.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
@@ -976,7 +1021,7 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByQuery(String query, String[] arrData) throws ExceptionHandler{
+    public HashCampo getDataByQuery(String query, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -985,6 +1030,15 @@ class ConQuery {
             if (allowedQuery(query)){
                 if ((!"".equals(query)) && (arrData != null)){
                     st = this.conn.createStatement();
+                    if (arrVariables!=null){
+                        for (int i=0; i<arrVariables.length;i++){
+                            String strVar = arrVariables[i][0];
+                            String strValue = arrVariables[i][1];
+                            if (strVar!=null){
+                                query = query.replaceAll(strVar, strValue);
+                            }
+                        }
+                    }
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){

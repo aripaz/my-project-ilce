@@ -55,8 +55,9 @@ public class srvLogin extends HttpServlet {
                     request.getSession().setAttribute("forma", forma);
 
                     AdminXML adm = new AdminXML();
-                    StringBuffer xmlSession = adm.getSessionXML(user);
-                    StringBuffer xmlMenu = adm.getMenuXML(user);
+                    String[][] arrVariables = null;
+                    StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
+                    StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
 
                     request.getSession().setAttribute("xmlSession", xmlSession );
                     request.getSession().setAttribute("xmlMenu",xmlMenu);

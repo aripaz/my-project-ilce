@@ -5,7 +5,13 @@ import com.oreilly.servlet.multipart.MultipartParser;
 import com.oreilly.servlet.multipart.ParamPart;
 import com.oreilly.servlet.multipart.Part;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,6 +28,8 @@ import mx.ilce.util.UtilDate;
  * @author ccatrilef
  */
 public class AdminForm {
+
+    private static File WORKING_DIRECTORY;
 
     /**
      * Entrega un HashMap que contiene los datos de un formulario, separados en
@@ -84,6 +92,7 @@ public class AdminForm {
                     String strEnum = (String) enumData.nextElement();
                     String[] strData = request.getParameterValues(strEnum);
                     String value = strData[0];
+                    value = castCodeEncoded(value);
                     value = castCodeNoUtf8(value);
                     hsForm.put(strEnum, value);
                     arrayFORM.add(strEnum);
@@ -138,6 +147,7 @@ public class AdminForm {
                     if (hsForm==null){
                         hsForm = new HashMap();
                     }
+                    value = castCodeEncoded(value);
                     value = castCodeNoUtf8(value);
                     hsForm.put(name, value);
                     arrayFORM.add(name);
@@ -211,7 +221,7 @@ public class AdminForm {
                 postedBody = new String (postedBytes);
                 StringTokenizer st = new StringTokenizer(postedBody, "&");
                 String key=null;
-                String val=null;
+                String value=null;
 
                 HashMap hsForm = new HashMap();
                 while (st.hasMoreTokens()) {
@@ -221,24 +231,25 @@ public class AdminForm {
                         throw new IllegalArgumentException();
                     }
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
-                    val = pair.substring(pos+1,pair.length());
+                    value = pair.substring(pos+1,pair.length());
                     try{
-                        val = java.net.URLDecoder.decode(val,"UTF-8");
+                        value = java.net.URLDecoder.decode(value,"UTF-8");
                     }catch(IllegalArgumentException e){
-                        if (val.contains("%")){
-                            String[] strVal = val.split("%");
+                        if (value.contains("%")){
+                            String[] strVal = value.split("%");
                             String[] paso = new String[strVal.length];
                             for (int i=0;i<strVal.length;i++){
                                 paso[i] = java.net.URLDecoder.decode(strVal[i],"UTF-8");
                             }
-                            val = paso[0];
+                            value = paso[0];
                             for (int i=1;i<strVal.length;i++){
-                                val = val + "%" + paso[i];
+                                value = value + "%" + paso[i];
                             }
                         }
                     }
-                    val = castCodeNoUtf8(val);
-                    hsForm.put(key, val);
+                    value = castCodeNoUtf8(value);
+                    value = castCodeEncoded(value);
+                    hsForm.put(key, value);
                     arrayFORM.add(key);
                     existData=true;
                 }
@@ -283,6 +294,33 @@ public class AdminForm {
         return data;
     }
 
+    /**
+     * Metodo para convertir caracteres obtenidos de un encodeURI de Jquery, principalmente
+     * formulado para no perder los simbolos + u otros caracteres enviados por la capa vista
+     * @param val
+     * @return
+     */
+    private String castCodeEncoded(String val){
+        String str = val;
+        str = str.replaceAll("\\%20", " ")
+                 .replaceAll("\\%21", "!")
+                 .replaceAll("\\%27", "'")
+                 .replaceAll("\\%28", "(")
+                 .replaceAll("\\%29", ")")
+                 .replaceAll("\\%7E", "~")
+                 .replaceAll("\\%2F", "/")
+                 .replaceAll("\\%0A", "\n")
+                 .replaceAll("\\%2C", ",")
+                 .replaceAll("\\%2B", "+");
+        return str;
+    }
+
+    /**
+     * Metodo para convertir caracteres NO UTF8 a uno manejable para que se guarde
+     * en la base de datos
+     * @param data
+     * @return
+     */
     private String castCodeNoUtf8(String data){
         String str = "";
         if (data!=null){
@@ -330,5 +368,156 @@ public class AdminForm {
             str = data;
         }
         return str;
+    }
+
+
+
+    /**
+     * Lee el archivo variables.properties, para obtener las variables que serviran
+     * para la evaluacion de queries
+     * @return
+     * @throws ExceptionHandler
+     */
+    private static Properties leerConfigVariables() throws ExceptionHandler{
+        Properties prop = new Properties();
+	InputStream is = null;
+	File f = null;
+        File fichero = null;
+	try {
+            String separador = String.valueOf(File.separator);
+            URL url = AdminFile.class.getResource("AdminForm.class");
+
+            if(url.getProtocol().equals("file")) {
+		f = new File(url.toURI());
+		f = f.getParentFile().getParentFile();
+		f = f.getParentFile().getParentFile();
+		WORKING_DIRECTORY = f.getParentFile();
+            }
+            fichero = new File(WORKING_DIRECTORY + separador + "variables.properties");
+            if (fichero.exists()){
+                is=new FileInputStream(fichero.getAbsolutePath());
+                prop.load(is);
+            }
+        } catch(URISyntaxException u){
+            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de configuracion");
+	} catch(IOException e) {
+            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de configuracion");
+        }finally{
+            try{
+                if (is != null){
+                    is.close();
+                }
+            }catch (Exception e){
+                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de configuracion");
+            }
+        }
+	return prop;
+    }
+
+    /**
+     * Obtiene un arreglo, construido a partir del archivo variables.properties, el cual
+     * contiene los valores que serviran de referencia para buscar en el formulario
+     * @param hsForm
+     * @return
+     * @throws ExceptionHandler
+     */
+    public String[][] getVariablesFromProperties(HashMap hsForm) throws ExceptionHandler{
+        String[][] strSld = null;
+
+        Properties prop = leerConfigVariables();
+        if (prop.size()>0) {
+            strSld = new String[prop.size()][2];
+            Enumeration e = prop.keys();
+            int i=0;
+            while (e.hasMoreElements()){
+                String strKey = (String) e.nextElement();
+                String strData = prop.getProperty(strKey);
+                strSld[i][0] = strData;
+                if (hsForm!=null){
+                    String strForm = (String)hsForm.get(strData);
+                    if ((strForm!=null)&&(!"".equals(strForm))){
+                        strSld[i][1] = strForm;
+                    }else{
+                        strSld[i][1] = strKey;
+                    }
+                }else{
+                    strSld[i][1] = strKey;
+                }
+                i++;
+            }
+        }
+        return strSld;
+    }
+
+    /**
+     * Toma un Objeto de referencia y busca en los valores que entregan los metodos
+     * que correspondan (por su nombre) a las variables, reemplazando los valores
+     * @param obj   Objeto de referencia, de donde se sacaran los valores
+     * @param arrVariable   Arreglo que contiene las variables que se estan buscando
+     * @return
+     * @throws ExceptionHandler
+     */
+    public String[][] getVariableByObject(Object obj, String[][] arrVariable) throws ExceptionHandler{
+        String[][] strSld = null;
+        try{
+            Class clase = Class.forName(obj.getClass().getName());
+            Method[] met = clase.getDeclaredMethods();
+            if (met.length>0){
+                Object[] paramDato = null;
+                for (int j=0;j<arrVariable.length;j++){
+                    for(int i=0;i<met.length;i++){
+                        String strIni = met[i].getName().substring(0,3);
+                        if ("get".equals(strIni)){
+                            String nameCampo = "GET"+((arrVariable[j][1]==null)?"":arrVariable[j][1]).toUpperCase();
+                            String nameMetodo = met[i].getName().toUpperCase();
+                            if (nameMetodo.equals(nameCampo)){
+                                Object objRet =  met[i].getReturnType();
+                                objRet = met[i].invoke(obj, paramDato);
+                                arrVariable[j][1]= String.valueOf(objRet);
+                            }
+                        }
+                    }
+                }
+                strSld = arrVariable;
+            }
+        }catch(NullPointerException e0){
+            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Bean individual");
+        }catch(ClassNotFoundException e1){
+            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Bean individual");
+        }catch(IllegalAccessException e4){
+            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Bean individual");
+        }catch(IllegalArgumentException e5){
+            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Bean individual");
+        }catch(InvocationTargetException e6){
+            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Bean individual");
+        }
+        return strSld;
+    }
+
+    /**
+     * Limpia las variables que no hayan sido encontradas en el formulario y/o en la clases de
+     * referencia, dejandolas con un valor null, para que no sean consideradas en el analisis
+     * de las queries.
+     * @param arrVariable   Arreglo que contiene las variables que deben ser consideradas en las
+     * evaluaciones de las queries
+     * @return
+     * @throws ExceptionHandler
+     */
+    public String[][] cleanVariables(String[][] arrVariable) throws ExceptionHandler{
+        String[][] strSld = arrVariable;
+
+        Properties prop = leerConfigVariables();
+        if (!prop.isEmpty()){
+            for (int i=0;i<strSld.length;i++){
+                String strData = strSld[i][1];
+                String strKey = prop.getProperty(strData);
+                if ((strKey!=null)&&(!"".equals(strKey))){
+                    if (strKey.equals(strSld[i][0])){
+                        strSld[i][1]=null;
+                    }
+                }
+            }
+        }
+        return strSld;
     }
 }
