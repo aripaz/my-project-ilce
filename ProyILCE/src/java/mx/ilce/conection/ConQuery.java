@@ -696,9 +696,9 @@ class ConQuery {
                     }
                 }
                 query = addWhereToQuery(query,whereData);
-                if (idQuery==36){
+                /*if (idQuery==36){
                    query = query.replace("AND CLAVE_PERFIL=1", "");
-                }
+                }*/
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
