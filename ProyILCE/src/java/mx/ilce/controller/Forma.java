@@ -558,7 +558,7 @@ public class Forma extends Entidad{
             
             conE.setQuery(strQuery.toString());
             conE.setCampoForma(cmpF);
-            //conE.ingresaEntidad();
+            conE.ingresaEntidad();
 
             HashCampo hs = conE.getHashCampo();
             Integer intHs = (Integer) hs.getObjData();
@@ -681,7 +681,7 @@ public class Forma extends Entidad{
 
             conE.setQuery(strQuery.toString());
             conE.setCampoForma(cmpF);
-            //conE.editarEntidad();
+            conE.editarEntidad();
 
             HashCampo hs = conE.getHashCampo();
             Integer intHs = (Integer) hs.getObjData();

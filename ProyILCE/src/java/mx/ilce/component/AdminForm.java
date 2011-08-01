@@ -52,9 +52,6 @@ public class AdminForm {
         HashMap hs = null;
         try{
             String contentType = request.getContentType();
-            /*if (request.getCharacterEncoding()==null){
-                request.setCharacterEncoding("UTF-8");
-            }*/
             if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0))
             {
                 hs = getFormularioMultiPart(request);
@@ -247,8 +244,8 @@ public class AdminForm {
                             }
                         }
                     }
-                    value = castCodeNoUtf8(value);
                     value = castCodeEncoded(value);
+                    value = castCodeNoUtf8(value);
                     hsForm.put(key, value);
                     arrayFORM.add(key);
                     existData=true;
@@ -302,7 +299,20 @@ public class AdminForm {
      */
     private String castCodeEncoded(String val){
         String str = val;
-        str = str.replaceAll("\\%20", " ")
+        str = str.replaceAll("\\%C3\\%A1","á")
+                 .replaceAll("\\%C3\\%A9","é")
+                 .replaceAll("\\%C3\\%AD","í")
+                 .replaceAll("\\%C3\\%B1","ñ")
+                 .replaceAll("\\%C3\\%B3","ó")
+                 .replaceAll("\\%C3\\%BA","ú")
+                 .replaceAll("\\%C3\\%BC","ü")
+                 .replaceAll("\\%C3\\%81","Á")
+                 .replaceAll("\\%C3\\%89","É")
+                 .replaceAll("\\%C3\\%8D","Í")
+                 .replaceAll("\\%C3\\%93","Ó")
+                 .replaceAll("\\%C3\\%9A","Ú")
+                 .replaceAll("\\%C3\\%9C","Ü")
+                 .replaceAll("\\%20", " ")
                  .replaceAll("\\%21", "!")
                  .replaceAll("\\%27", "'")
                  .replaceAll("\\%28", "(")
@@ -311,6 +321,7 @@ public class AdminForm {
                  .replaceAll("\\%2F", "/")
                  .replaceAll("\\%0A", "\n")
                  .replaceAll("\\%2C", ",")
+                 .replaceAll("\\%3A", ":")
                  .replaceAll("\\%2B", "+");
         return str;
     }
