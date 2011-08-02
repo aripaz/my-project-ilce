@@ -62,6 +62,11 @@ public class srvForma extends HttpServlet {
                 String tipoAccion = (String) hsForm.get("$ta");
                 String strWhere = (String) hsForm.get("$w");
 
+                User usr = (User) request.getSession().getAttribute("user");
+                arrVariables = admForm.getVariablesFromProperties(hsForm);
+                arrVariables = admForm.getVariableByObject(usr, arrVariables);
+                arrVariables = admForm.cleanVariables(arrVariables);
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$pk");
@@ -78,6 +83,7 @@ public class srvForma extends HttpServlet {
                         forma.setPk(pk);
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
+                        forma.setArrVariables(arrVariables);
                         if ((strWhere!=null)&&(!"".equals(strWhere))){
                             String[] strData = getArrayData(hsForm);
                             forma.setArrayData(strData);

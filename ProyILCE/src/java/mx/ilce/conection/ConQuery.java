@@ -469,6 +469,9 @@ class ConQuery {
                         String strVar = arrVariables[i][0];
                         String strValue = arrVariables[i][1];
                         if (strVar!=null){
+                            if (strVar.equals("$pk")){
+                                strVar = "\\$pk";
+                            }
                             query = query.replaceAll(strVar, strValue);
                         }
                     }
@@ -582,6 +585,9 @@ class ConQuery {
                         String strVar = arrVariables[i][0];
                         String strValue = arrVariables[i][1];
                         if (strVar!=null){
+                            if (strVar.equals("$pk")){
+                                strVar = "\\$pk";
+                            }
                             query = query.replaceAll(strVar, strValue);
                         }
                     }
@@ -681,6 +687,9 @@ class ConQuery {
                         String strVar = arrVariables[i][0];
                         String strValue = arrVariables[i][1];
                         if (strVar!=null){
+                            if (strVar.equals("$pk")){
+                                strVar = "\\$pk";
+                            }
                             query = query.replaceAll(strVar, strValue);
                         }
                     }
@@ -859,6 +868,9 @@ class ConQuery {
                         String strVar = arrVariables[i][0];
                         String strValue = arrVariables[i][1];
                         if (strVar!=null){
+                            if (strVar.equals("$pk")){
+                                strVar = "\\$pk";
+                            }
                             query = query.replaceAll(strVar, strValue);
                         }
                     }
@@ -1035,6 +1047,9 @@ class ConQuery {
                             String strVar = arrVariables[i][0];
                             String strValue = arrVariables[i][1];
                             if (strVar!=null){
+                                if (strVar.equals("$pk")){
+                                    strVar = "\\$pk";
+                                }
                                 query = query.replaceAll(strVar, strValue);
                             }
                         }

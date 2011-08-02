@@ -299,55 +299,54 @@ public class AdminForm {
      */
     private String castCodeEncoded(String val){
         String str = val;
-        str = str.replaceAll("\\%C3\\%A1","á")
-                 .replaceAll("\\%C3\\%A9","é")
-                 .replaceAll("\\%C3\\%AD","í")
-                 .replaceAll("\\%C3\\%B1","ñ")
-                 .replaceAll("\\%C3\\%B3","ó")
-                 .replaceAll("\\%C3\\%BA","ú")
-                 .replaceAll("\\%C3\\%BC","ü")
-                 .replaceAll("\\%C3\\%81","Á")
-                 .replaceAll("\\%C3\\%89","É")
-                 .replaceAll("\\%C3\\%8D","Í")
-                 .replaceAll("\\%C3\\%93","Ó")
-                 .replaceAll("\\%C3\\%9A","Ú")
-                 .replaceAll("\\%C3\\%9C","Ü")
-                 .replaceAll("\\%C2\\%A1","¡")
-                 .replaceAll("\\%C2\\%A6","¦")
-                 .replaceAll("\\%20", " ")
-                 .replaceAll("\\%21", "!")
-                 .replaceAll("\\%22", "\"")
-                 .replaceAll("\\%23", "#")
-                 .replaceAll("\\%24", "$")
-                 .replaceAll("\\%25", "%")
-                 .replaceAll("\\%26", "$")
-                 .replaceAll("\\%27", "'")
-                 .replaceAll("\\%28", "(")
-                 .replaceAll("\\%29", ")")
-                 .replaceAll("\\%2A", "*")
-                 .replaceAll("\\%2B", "+")
-                 .replaceAll("\\%2C", ",")
-                 .replaceAll("\\%2D", "-")
-                 .replaceAll("\\%2E", ".")
-                 .replaceAll("\\%2F", "/")
-                 .replaceAll("\\%3A", ":")
-                 .replaceAll("\\%3B", ";")
-                 .replaceAll("\\%3C", "<")
-                 .replaceAll("\\%3D", "=")
-                 .replaceAll("\\%3E", ">")
-                 .replaceAll("\\%3F", "?")
-                 .replaceAll("\\%5B", "[")
-                 .replaceAll("\\%5C", "\\")
-                 .replaceAll("\\%5D", "]")
-                 .replaceAll("\\%5E", "^")
-                 .replaceAll("\\%5F", "_")
-                 .replaceAll("\\%7B", "{")
-                 .replaceAll("\\%7C", "|")
-                 .replaceAll("\\%7D", "}")
-                 .replaceAll("\\%7E", "~")
-                 .replaceAll("\\%25", "%")
-                 .replaceAll("\\%40", "@")
-                 .replaceAll("\\%0A", "\n");
+        str = str.replaceAll("\\%C3\\%A1","á");
+        str = str.replaceAll("\\%C3\\%A9","é");
+        str = str.replaceAll("\\%C3\\%AD","í");
+        str = str.replaceAll("\\%C3\\%B1","ñ");
+        str = str.replaceAll("\\%C3\\%B3","ó");
+        str = str.replaceAll("\\%C3\\%BA","ú");
+        str = str.replaceAll("\\%C3\\%BC","ü");
+        str = str.replaceAll("\\%C3\\%81","Á");
+        str = str.replaceAll("\\%C3\\%89","É");
+        str = str.replaceAll("\\%C3\\%8D","Í");
+        str = str.replaceAll("\\%C3\\%93","Ó");
+        str = str.replaceAll("\\%C3\\%9A","Ú");
+        str = str.replaceAll("\\%C3\\%9C","Ü");
+        str = str.replaceAll("\\%C2\\%A1","¡");
+        str = str.replaceAll("\\%C2\\%A6","¦");
+        str = str.replaceAll("\\%20", " ");
+        str = str.replaceAll("\\%21", "!");
+        str = str.replaceAll("\\%22", "\"");
+        str = str.replaceAll("\\%23", "#");
+        str = str.replaceAll("\\%24", "\\$");
+        str = str.replaceAll("\\%25", "\\%");
+        str = str.replaceAll("\\%26", "\\&");
+        str = str.replaceAll("\\%27", "'");
+        str = str.replaceAll("\\%28", "(");
+        str = str.replaceAll("\\%29", ")");
+        str = str.replaceAll("\\%2A", "*");
+        str = str.replaceAll("\\%2B", "+");
+        str = str.replaceAll("\\%2C", ",");
+        str = str.replaceAll("\\%2D", "-");
+        str = str.replaceAll("\\%2E", ".");
+        str = str.replaceAll("\\%2F", "/");
+        str = str.replaceAll("\\%3A", ":");
+        str = str.replaceAll("\\%3B", ";");
+        str = str.replaceAll("\\%3C", "<");
+        str = str.replaceAll("\\%3D", "=");
+        str = str.replaceAll("\\%3E", ">");
+        str = str.replaceAll("\\%3F", "?");
+        str = str.replaceAll("\\%5B", "[");
+        str = str.replaceAll("\\%5C", "\\");
+        str = str.replaceAll("\\%5D", "]");
+        str = str.replaceAll("\\%5E", "^");
+        str = str.replaceAll("\\%5F", "_");
+        str = str.replaceAll("\\%7B", "{");
+        str = str.replaceAll("\\%7C", "|");
+        str = str.replaceAll("\\%7D", "}");
+        str = str.replaceAll("\\%7E", "~");
+        str = str.replaceAll("\\%40", "@");
+        str = str.replaceAll("\\%0A", "\n");
         return str;
     }
 
