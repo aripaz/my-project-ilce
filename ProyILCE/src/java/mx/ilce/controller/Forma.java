@@ -8,6 +8,7 @@ import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
+import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
@@ -516,6 +517,8 @@ public class Forma extends Entidad{
                 String valor = (String) hsForm.get(cmpFL.getCampo());
                 // si es autoIncremental, no se necesita enviar
                 if (!cmpHS.getIsIncrement()){
+                    AdminForm admForm = new AdminForm();
+                    valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                     if (valor!=null){
                         if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
                             hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
@@ -630,6 +633,8 @@ public class Forma extends Entidad{
                 if (cmpHS!=null){
                     // si es autoIncremental, no se necesita enviar
                     if (!cmpHS.getIsIncrement()){
+                        AdminForm admForm = new AdminForm();
+                        valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                         if (valor!=null){
                             if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
                                 hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
