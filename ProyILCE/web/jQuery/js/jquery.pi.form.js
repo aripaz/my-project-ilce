@@ -237,7 +237,7 @@
                         oCampos = $(this).serializeArray();
                         jQuery.each(oCampos, function(i, oCampo){
                             sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                            sData+=sNombreCampo+"="+oCampo.value + "&";
+                            sData+=sNombreCampo+"="+escape(encodeURIComponent(oCampo.value))+ "&";
                         });
                         sData+="$cf=" +$("#formTab_" + suffix).attr("forma") +
                         "&$pk=" + $("#formTab_" + suffix).attr("pk")+
@@ -510,10 +510,10 @@
 
                     // Establece la marca de obligatorio con la seudoclase obligatorio
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
-                        sRenglon+='class="singleInput" ';
+                        sRenglon+='class="singleInput obligatorio" ';
                     }
                     else {
-                        sRenglon+='class="singleInput obligatorio" ';
+                        sRenglon+='class="singleInput" ';
                     }
 
                     sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':''
@@ -528,8 +528,11 @@
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
 
-                    if (sTipoCampo=="date")
+                    if (sTipoCampo=="datetime")
                         sRenglon +=' fecha';
+
+                    if (sTipoCampo=="money")
+                        sRenglon +=' money';
 
                     sRenglon +='" type="text" value="' + oCampo[0].childNodes[0].data + '" ' + oCampo.find('evento').text();
 
