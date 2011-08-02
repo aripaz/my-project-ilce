@@ -266,7 +266,13 @@ for (i=0;i<x.length;i++) {
         if (pk!=null)
             addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
         else
-            addOption = new Option(x[i].childNodes[3].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
+            display=x[i].childNodes[3].childNodes[0].nodeValue.replace("&aacute;","á");
+            display=display.replace("&eacute;","é");
+            display=display.replace("&iacute;","í");
+            display=display.replace("&oacute;","ó");
+            display=display.replace("&uacute;","ú");
+
+            addOption = new Option(display,x[i].childNodes[1].childNodes[0].nodeValue);
          oSelect.options[oSelect.length] = addOption;
         }
 }
