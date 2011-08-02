@@ -33,6 +33,8 @@ import mx.ilce.util.Validation;
  */
 public class srvFormaInsert extends HttpServlet {
 
+    private String[][] arrVariables = null;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -61,6 +63,11 @@ public class srvFormaInsert extends HttpServlet {
                 String pk = (String) hsForm.get("$pk");
                 String tipoAccion = (String) hsForm.get("$ta");
 
+                User usr = (User) request.getSession().getAttribute("user");
+                arrVariables = admF.getVariablesFromProperties(hsForm);
+                arrVariables = admF.getVariableByObject(usr, arrVariables);
+                arrVariables = admF.cleanVariables(arrVariables);
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$pk");
@@ -75,6 +82,7 @@ public class srvFormaInsert extends HttpServlet {
                     forma.setPk(pk);
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
+                    forma.setArrVariables(arrVariables);
                     List lstForma = forma.getForma(Integer.valueOf(claveForma));
                     List lstNew = null;
                     if (("0".equals(pk))&&("INSERT".equals(tipoAccion.toUpperCase()))){

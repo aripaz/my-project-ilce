@@ -57,6 +57,11 @@ public class srvFormaSearch extends HttpServlet {
                 String tipoAccion = (String) hsForm.get("$ta");
                 String strWhere = (String) hsForm.get("$w");
 
+                User usr = (User) request.getSession().getAttribute("user");
+                arrVariables = admForm.getVariablesFromProperties(hsForm);
+                arrVariables = admForm.getVariableByObject(usr, arrVariables);
+                arrVariables = admForm.cleanVariables(arrVariables);
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$ta");
@@ -74,6 +79,7 @@ public class srvFormaSearch extends HttpServlet {
                         forma.setPk(pk);
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
+                        forma.setArrVariables(arrVariables);
                         String[] strData = getArrayData(hsForm);
                         if (pk!=null){
                             String[] strDataAdic = new String[strData.length+1];
