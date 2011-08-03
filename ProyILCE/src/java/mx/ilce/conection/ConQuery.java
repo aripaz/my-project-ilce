@@ -165,7 +165,11 @@ class ConQuery {
                         do {
                             for (int i=1; i<=columnCount; i++) {
                                 String key = rs.getString(i);
-                                increment = Integer.valueOf(key);
+                                try{
+                                    increment = Integer.valueOf(key);
+                                }catch(NumberFormatException e){
+                                    increment = res;
+                                }
                             }
                         } while(rs.next());
                     }
