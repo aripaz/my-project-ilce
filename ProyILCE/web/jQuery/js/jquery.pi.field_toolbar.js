@@ -19,13 +19,32 @@
              $.fn.fieldtoolbar.options.titulo_editar=$(this).attr("titulo_editar");*/
 
              var suffix=obj[0].previousSibling.id;
+             sTipoBoton=obj.attr("tipo")
 
-             sHtml="<table class='ui-pg-table navtable' cellspacing='0' cellpadding='0' border=0' style='float: left; table-layout: auto;'><tr>" +
-                   "<td class='ui-pg-button ui-corner-all' title='Insertar registro'><div class='ui-pg-div'>" +
-                   "<span id='spnInsrt" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' class='ui-icon ui-icon-plus'></span></div></td>"  + //Botón de insertar
-                   "<td class='ui-pg-button ui-corner-all' title='Editar registro'><div class='ui-pg-div'>" +
-                   "<span id='spnUpdt" + suffix + "' control='" + obj.attr("control")+ "' forma='" + obj.attr("forma") + "' titulo_editar='" + obj.attr("titulo_editar") + "' class='ui-icon ui-icon-pencil'></span></div></td>" + // Botón de editar
-                   "</tr></table>"
+             if (sTipoBoton=="foreign_toolbar") {
+                 sHtml="<table class='ui-pg-table navtable' cellspacing='0' cellpadding='0' border=0' style='float: left; table-layout: auto;'><tr>" +
+                       "<td class='ui-pg-button ui-corner-all' title='Insertar registro'><div class='ui-pg-div'>" +
+                       "<span id='spnInsrt" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' class='ui-icon ui-icon-plus'></span></div></td>"  + //Botón de insertar
+                       "<td class='ui-pg-button ui-corner-all' title='Editar registro'><div class='ui-pg-div'>" +
+                       "<span id='spnUpdt" + suffix + "' control='" + obj.attr("control")+ "' forma='" + obj.attr("forma") + "' titulo_editar='" + obj.attr("titulo_editar") + "' class='ui-icon ui-icon-pencil'></span></div></td>" + // Botón de editar
+                       "</tr></table>"
+             }
+
+            if (sTipoBoton=="calendar_button") {
+                 sHtml="<table class='ui-pg-table navtable' cellspacing='0' cellpadding='0' border=0' style='float: left; table-layout: auto;'><tr>" +
+                       "<td class='ui-pg-button ui-corner-all' title='Muestra calendario'><div class='ui-pg-div'>" +
+                       "<span id='spnCalendar" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' control='" + obj.attr("control")+ "' class='ui-icon ui-icon-calendar'></span></div></td>"  + //Botón de calendario
+                       "</tr></table>"
+             }
+
+            if (sTipoBoton=="calculator_button") {
+                 sHtml="<div id='div_spnCalculator" + suffix + "' >"+
+                       "<table class='ui-pg-table navtable' cellspacing='0' cellpadding='0' border=0' style='float: left; table-layout: auto;'><tr>" +
+                       "<td class='ui-pg-button ui-corner-all' title='Muestra calculadora'><div class='ui-pg-div'>" +
+                       "<span id='spnCalculator" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' control='" + obj.attr("control")+ "' class='ui-icon ui-icon-calculator'></span></div></td>"  + //Botón de insertar
+                       "</tr></table>"
+             }
+
              obj.html(sHtml);
 
              $(".ui-pg-button").hover(
@@ -37,6 +56,7 @@
                 }
              );
 
+            if (sTipoBoton=="foreign_toolbar") {
 
              $("#spnInsrt" + suffix).click(function(){
                 $("body").form({app:  $.fn.fieldtoolbar.options.app,
@@ -76,8 +96,21 @@
                             });
 
              })
+            }
 
-             //$.fn.fieldtoolbar.ajax(obj);
+            if (sTipoBoton=="calendar_button") {
+            //Se activa el datepicker para los campos con seudoclase fecha
+                $("#spnCalendar" + suffix).click(function(){
+                    $("#"+$(this).attr("control")).datepicker('show');
+                });
+            }
+
+            if (sTipoBoton=="calculator_button") {
+            //Se activa el datepicker para los campos con seudoclase fecha
+                $("#spnCalculator" + suffix).click(function(){
+                    $("#"+$(this).attr("control")).calculator('show');
+                });
+            }
         });
 
     };

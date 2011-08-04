@@ -169,7 +169,7 @@
                 /**/
 
                 if ($("#formTab_" + suffix).attr("modo")!='lookup' && ($.fn.form.options.forma=="2" ||$.fn.form.options.forma=="3"))
-                    $.fn.form.getProfileTree($("#divFormProfiles_" + formSuffix));nForma
+                    $.fn.form.getProfileTree($("#divFormProfiles_" + formSuffix));
                 
                 oForm=$("#form_" + formSuffix);
 
@@ -178,15 +178,17 @@
                     $("#msgvalida_" + this.name).hide();
                 });
 
-                //Se activa el datepicker para los campos con seudoclase fecha
-                oForm.find('.fecha').datepicker( {
-                    dateFormat: 'dd/mm/yy',
-                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                    monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-                    });
+                $(".fecha").datepicker({
+                        dateFormat: 'dd/mm/yyyy',
+                        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+                });
+
+                $(".money").calculator({useThemeRoller: true,
+                                        prompt: 'Calculadora'});
 
                 //Se activa el foreign toolbar para editar registros foraneos
-                oForm.find('.foreign_toolbar').fieldtoolbar({
+                oForm.find('.widgetbutton').fieldtoolbar({
                     app:$.fn.form.options.app
                     });
 
@@ -314,7 +316,7 @@
                                 if ($("#formTab_" + suffix).attr("updateControl")=="")
                                     $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid");
                                 else
-                                    setXMLInSelect3($("#formTab_" + suffix).attr("updateControl"),$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
+                                    setXMLInSelect3($   ("#formTab_" + suffix).attr("updateControl"),$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
 
                                 //Cierra el dialogo
                                 $("#dlgModal_"+ suffix).dialog("destroy");
@@ -481,7 +483,7 @@
                                 
                 sRenglon +='</select>';
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
-                    sRenglon +="<div class='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' class='fieldToolbar'></div>";
+                    sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
                 }
                 
                 sRenglon+='</td>|';
@@ -490,16 +492,27 @@
                 if (oCampo.find('tipo_control').text()=="textarea" || sTipoCampo=="text") {
                     sRenglon+='<td class="etiqueta_forma">' +
                     '<textarea tabindex="' + tabIndex + '" ';
-                    
-                    //Establece la marca de obligatorio con la seudoclase obligatorio
-                    if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
-                        sRenglon+='class="singleInput obligatorio"'
-                        }
-                    else {
-                        sRenglon+='class="singleInput"'
-                        }
 
-                    sRenglon += 'id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
+                    sWidgetButton="";
+
+                    if (sTipoCampo=='money') {
+                        sRenglon+='class="inputWidgeted';
+                        sWidgetButton='<div class="widgetbutton" tipo="calculator_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                        sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
+                    } else if (sTipoCampo=='datetime') {
+                        sRenglon+='class="inputWidgeted';
+                        sWidgetButton='<div class="widgetbutton" tipo="calendar_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                    }
+                    else
+                        sRenglon+='class="singleInput';
+
+                    //Establece la marca de obligatorio con la seudoclase obligatorio
+                    if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  
+                        sRenglon+=' obligatorio"';
+                    else 
+                        sRenglon+='"';
+
+                    sRenglon += ' id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
                     oCampo.find('evento').text() +
                     '>' + oCampo[0].childNodes[0].data + '</textarea></td>|';
                 }
@@ -522,9 +535,20 @@
                 else {
                     sRenglon += '<td class="etiqueta_forma">' + 
                     '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '"' +
-                    'tabindex="' + tabIndex + '" ' +
-                    ' class="singleInput';
-                    
+                    'tabindex="' + tabIndex + '" ';
+
+                    sWidgetButton="";
+
+                    if (sTipoCampo=='money') {
+                        sRenglon+='class="inputWidgeted';
+                        sWidgetButton='<div class="widgetbutton" tipo="calculator_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                    } else if (sTipoCampo=='datetime') {
+                        sRenglon+='class="inputWidgeted';
+                        sWidgetButton='<div class="widgetbutton" tipo="calendar_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                    }
+                    else
+                        sRenglon+='class="singleInput';
+
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
 
@@ -537,14 +561,14 @@
                     sRenglon +='" type="text" value="' + oCampo[0].childNodes[0].data + '" ' + oCampo.find('evento').text();
 
                     //Validación para inputs estandar de acuerdo al tipo de datos del campo
-                    if (sTipoCampo=="integer") {
+                    if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {
                         sRenglon+=" onBlur='javascript:check_number(this)'";
                     }
                     else if (sTipoCampo=="date") {
                         sRenglon+=" onBlur='javascript:check_date(this)' "
                     }
 
-                    sRenglon+= ' /></td>|';
+                    sRenglon+= ' />' + sWidgetButton + ' </td>|';
                 }
             }
             tabIndex++;
