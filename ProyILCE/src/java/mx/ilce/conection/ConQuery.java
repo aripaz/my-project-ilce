@@ -2,6 +2,7 @@ package mx.ilce.conection;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.component.AdminFile;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LogHandler;
+import mx.ilce.util.UtilDate;
 
 /**
  *  Clase para la implementacion de los metodos que se conectan a la Base de
@@ -1308,7 +1310,10 @@ class ConQuery {
                 }else if(strType.toUpperCase().equals("INT") ){
                     sld = String.valueOf(rs.getBigDecimal(codigo.intValue()));
                 }else if(strType.toUpperCase().equals("DATETIME") ){
-                    sld = String.valueOf(rs.getDate(codigo.intValue()));
+                    Date date = rs.getDate(codigo.intValue());
+                    UtilDate utDate = new UtilDate(date.getDate(), date.getMonth(), date.getYear());
+                    sld = utDate.getFecha("/");
+                    //sld = String.valueOf(rs.getDate(codigo.intValue()));
                 }else if(strType.toUpperCase().equals("BIT") ){
                     sld = String.valueOf(rs.getString(codigo.intValue()));
                 }else if (strType.toUpperCase().equals("TEXT")){
