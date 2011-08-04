@@ -387,8 +387,10 @@ public class Forma extends Entidad{
                 if (!cmpHS.getIsIncrement()){
                     if (valor!=null){
                         boolean isString = false;
-                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                        if (("java.lang.String".equals(cmpHS.getTypeDataAPL())) ||
+                            ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL())) ||
+                            ("java.sql.Date".equals(cmpHS.getTypeDataAPL()))
+                           ){
                             isString = true;
                         }
                         strCampos.append(cmpFL.getCampo()).append(",");
@@ -523,8 +525,10 @@ public class Forma extends Entidad{
                         if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
                             hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
                             boolean isString = false;
-                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                    ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                            if (("java.lang.String".equals(cmpHS.getTypeDataAPL())) ||
+                                ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL())) ||
+                                ("java.sql.Date".equals(cmpHS.getTypeDataAPL()))
+                               ){
                                 isString = true;
                             }
                             strCampos.append(cmpFL.getCampo()).append(",");
@@ -639,8 +643,10 @@ public class Forma extends Entidad{
                             if (!hsCmpProcesados.containsKey(cmpFL.getCampo())){
                                 hsCmpProcesados.put(cmpFL.getCampo(),cmpFL.getCampo());
                                 boolean isString = false;
-                                if (("java.lang.String".equals(cmpHS.getTypeDataAPL()))||
-                                        ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL()))){
+                                if (("java.lang.String".equals(cmpHS.getTypeDataAPL())) ||
+                                    ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL())) ||
+                                    ("java.sql.Date".equals(cmpHS.getTypeDataAPL()))
+                                   ){
                                     isString = true;
                                 }
                                 strQuery.append(cmpFL.getCampo()).append("=");
