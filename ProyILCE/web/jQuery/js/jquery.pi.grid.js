@@ -55,7 +55,7 @@
                 "' datestamp='" + $.fn.appgrid.options.datestamp +
                 "' originatingObject='"+ $.fn.appgrid.options.originatingObject +
                 "'>" +
-                "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
+                "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
             $.fn.appgrid.getGridDefinition();
         });
@@ -447,8 +447,20 @@
 
             },
             error:function(xhr,err){
-                alert("Error al recuperar definición de grid\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);
-                alert("responseText: "+xhr.responseText);
+                sTipoError='Problemas al recuperar definición de grid.\n';
+                if (xhr.responseText.indexOf('NullPointerException')>-1)
+                    sTipoError+='Problemas de conexión a la base de datos. Verifique su conexión a la red.'
+                else
+                    sTipoError+=xhr.responseText;
+
+                alert(sTipoError);
+                suffix=obj.children()[1].id.replace("pager","");
+                $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+                                        "<div class='ui-widget'>"+
+                                        "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
+					"<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
+					sTipoError+"</p>"+
+                                        "</div></div>");
             }
         });
     };
