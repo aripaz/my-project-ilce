@@ -1311,9 +1311,12 @@ class ConQuery {
                     sld = String.valueOf(rs.getBigDecimal(codigo.intValue()));
                 }else if(strType.toUpperCase().equals("DATETIME") ){
                     Date date = rs.getDate(codigo.intValue());
-                    UtilDate utDate = new UtilDate(date.getDate(), date.getMonth(), date.getYear());
-                    sld = utDate.getFecha("/");
-                    //sld = String.valueOf(rs.getDate(codigo.intValue()));
+                    if (date!=null){
+                        UtilDate utDate = new UtilDate(date.getDate(), date.getMonth()+1, date.getYear()+1900);
+                        sld = utDate.getFecha("/");
+                    }else{
+                        sld = "";
+                    }
                 }else if(strType.toUpperCase().equals("BIT") ){
                     sld = String.valueOf(rs.getString(codigo.intValue()));
                 }else if (strType.toUpperCase().equals("TEXT")){
