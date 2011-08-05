@@ -122,9 +122,11 @@
                             sW+="&"+sNodeId.split("-")[i];
                       }
 
-                      //Llama grids
-                      if (sTipoNodo=='foraneo'||sTipoNodo=='perfilxforma') return false;
+                      if (sTipoNodo=='foraneo'||
+                          sTipoNodo=='perfilxforma'||
+                          sTipoNodo=='aplicacion') return false;
 
+                      //Llama grids
                        $(o.nextSibling).appgrid({app: nApp,
                           entidad: nForma,
                           editingApp: o.id.split("_")[3],

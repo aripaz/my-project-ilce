@@ -42,8 +42,6 @@
             var suffix =  "_" + nApp + "_" + nEntidad + "_" + $.fn.appgrid.options.datestamp;
 
             obj = $(this);
-            var nForma = obj.attr(name);
-
             //Verifica si el objeto padre es un tabEntity
             //Si así es toma de su id el sufijo app + entidad principal + entidad foranea            
             $(this).html("<table width='100%' id='grid"+ suffix +
@@ -449,11 +447,10 @@
             error:function(xhr,err){
                 sTipoError='Problemas al recuperar definición de grid.\n';
                 if (xhr.responseText.indexOf('NullPointerException')>-1)
-                    sTipoError+='Problemas de conexión a la base de datos. Verifique su conexión a la red.'
+                    sTipoError+='Problemas de conexión a la base de datos, verifique la conexión a la red.'
                 else
                     sTipoError+=xhr.responseText;
 
-                alert(sTipoError);
                 suffix=obj.children()[1].id.replace("pager","");
                 $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
                                         "<div class='ui-widget'>"+

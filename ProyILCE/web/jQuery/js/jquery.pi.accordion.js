@@ -279,7 +279,7 @@
             //if (nMostrar=="1")
                    sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='showEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasMostrarEntidad+"</a></div>";
 
-            sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros<span>>><br /></div></div>";
+            sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros>></span><br /></div></div>";
 
         })
 

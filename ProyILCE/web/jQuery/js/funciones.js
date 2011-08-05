@@ -465,3 +465,53 @@ if (window.ActiveXObject) // for IE
 	  	}
 	}
 }
+
+function validaAnteproyectoXAutorizar (sControl,mustBe,sObligatorios) {
+   /*
+    *"proyecto,clave_area,clave_cliente,clave_categoria_proyecto,clave_factibilidad,"+
+     "fecha_inicio_planeada,fecha_final_planeada,duracion_planeada,fecha_alta,"+
+     "clave_estatus_proyecto,egreso_planeado,ingreso_planeados,clave_moneda,tipo_cambio"
+    */
+
+   oControl=$("#"+sControl);
+   if (oControl.length==0) return false;
+   aControl=sControl.split("_")
+   Suffix=aControl[aControl.length-3]+"_"+aControl[aControl.length-2]+"_"+aControl[aControl.length-1];
+
+   if (oControl.val()!=mustBe ) return true;
+
+   bCompleto=true;
+   aObligatorios=sObligatorios.split(",");
+   oForm=$($("#"+sControl)[0].form);
+   aToValidate=oForm.serialize().split("&");
+   for (k=0; k<aObligatorios.length;k++) {
+        for (i=0; i<aToValidate.length; i++) {
+             if (aToValidate[i].indexOf(aObligatorios[k])==0) {
+               sField=aToValidate[i].split("=")[0]
+               sVal=aToValidate[i].split("=")[1]
+               oField=$("#"+sField);
+               if (sVal=="") {
+                  $("#td_" + sField).addClass("errorencampo")
+                  $("#"+sField).addClass("errorencampo");
+                  bCompleto=false;
+                  break;
+               }
+           }
+       }  
+   }
+
+   if (!bCompleto) {
+       $("#tdEstatus_" +Suffix).html("Falta(n) dato(s) para poder cambiar " + $("#td_"+sControl).html() + ", verifique");
+       
+       oControl.val("0");
+       return false;
+   }
+   else {
+        if (confirm("Después de guardar el anteproyecto con estatus por autorizar no será posible modificarlo, desea continuar?"))
+            return true;
+        else {
+            oControl.val("0");
+            return false;
+        }
+    }
+}
