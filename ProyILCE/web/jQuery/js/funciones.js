@@ -263,10 +263,10 @@ oSelect.options.length=0
 var addOption = new Option('','');
 oSelect.options[oSelect.length] = addOption;
 for (i=0;i<x.length;i++) {
-        if (pk!=null)
+        /*if (pk!=null)
             addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
-        else
-            display=x[i].childNodes[3].childNodes[0].nodeValue.replace("&aacute;","á");
+        else*/
+            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace("&aacute;","á");
             display=display.replace("&eacute;","é");
             display=display.replace("&iacute;","í");
             display=display.replace("&oacute;","ó");
@@ -338,11 +338,9 @@ return false
 var atomPat=new RegExp(atom,"g")
 var domArr=domain.match(atomPat)
 var len=domArr.length
-if (domArr[domArr.length-1].length<2 || 
-domArr[domArr.length-1].length>3) { 
-
-alert("La dirección debe tener 3 letras si es .'com' o 2 si en de algún país.")
-return false
+if (domArr[domArr.length-1].length<2 || domArr[domArr.length-1].length>3) { 
+    alert("La dirección debe tener 3 letras si es .'com' o 2 si en de algún país.")
+    return false
 }
 
 if (len<2) {

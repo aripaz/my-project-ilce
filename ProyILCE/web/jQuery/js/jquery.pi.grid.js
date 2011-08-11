@@ -20,7 +20,7 @@
             sortname:"",
             tab:"",
             insertInDesktopEnabled:"1",
-            width:"650",
+            width:"",
             height:"",
             openKardex:false,
             loadMode:"",
@@ -137,7 +137,11 @@
                             groupDataSorted : true
                     },
                     footerrow: true,
-                    userDataOnFooter: true,*/
+                    userDataOnFooter: true,,
+                    gridComplete:function(){
+                         nWidth=$("#grid_"+suffix).parent().width();
+                         $("#grid_"+suffix).jqGrid().setGridWidth(nWidth);
+                    }*/
                 })
 
 
