@@ -88,7 +88,7 @@
                 var suffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk
                 if ($.fn.form.options.app=="1" &&
                     ($.fn.form.options.forma=="2" || $.fn.form.options.forma=="3") &&
-                    $.fn.form.options.modo!='lookup')
+                    $.fn.form.options.modo=='update')
                     sTabs="<div id='formTab_" + suffix +"' security='"+ sPermiso +
                            "' datestamp='" + $.fn.form.options.datestamp +
                            "' app='" + $.fn.form.options.app +
@@ -100,12 +100,14 @@
                            "' updateForeignForm='" + $.fn.form.options.updateForeignForm +
                            "'>"+
                           "<ul><li><a href='#divFormGeneral_" + suffix +"'>General</a></li>"+
-                          "<li><a href='#divFormPerfiles_" + suffix +"'>Perfiles de seguridad</a></li></ul>"+
+                          "<li><a href='#divFormPerfiles_" + suffix +"'>Seguridad</a></li></ul>"+
                           "<div id='divFormGeneral_" + suffix +"' >" +
                           "<div align='center'><br><br />Cargando informaci&oacute;n... <br /> <br />"+
                           "<img src='img/loading.gif' /></div>"+
                           "</div>"+
-                          "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>Seleccione los perfiles con autorizaci&oacute;n para accesar al objeto<div id='divFormProfiles_" + suffix +"' class='treeProfiles' behaviour='profile' originalForm='" + $.fn.form.options.forma + "'></div></div>"+
+                          "<div id='divFormPerfiles_" + suffix +"' class='etiqueta_perfil'>"+
+                          "<div id='divFormProfiles_" + suffix +"' xclass='treeProfiles' behaviour='profile' originalForm='" + $.fn.form.options.forma + "'></div>"+
+                          "</div>"+
                           "</div>";
                 else {
 
@@ -168,9 +170,24 @@
                 $("#formTab_" + suffix).tabs();
                 /**/
 
-                if ($("#formTab_" + suffix).attr("modo")!='lookup' && ($.fn.form.options.forma=="2" ||$.fn.form.options.forma=="3"))
-                    $.fn.form.getProfileTree($("#divFormProfiles_" + formSuffix));
-                
+                if ($("#formTab_" + suffix).attr("modo")=='update' && ($.fn.form.options.forma=="2" ||$.fn.form.options.forma=="3")) {
+                    $("#divFormProfiles_"+suffix).appgrid({app: $.fn.form.options.app,
+                                               entidad: $.fn.form.options.forma=="2"?"10":"14",
+                                               pk:"0",
+                                               editingApp:"1",
+                                               wsParameters: ($.fn.form.options.forma=="2")?"a.clave_aplicacion="+suffix.split("_")[2]:"pf.clave_forma="+$.fn.form.options.pk,
+                                               titulo:($.fn.form.options.forma=="2")?"Perfiles con autorizaci&oacute;n para accesar a la aplicación:":"Permisos de la forma:",
+                                               height:"250",
+                                               width:"100",
+                                               leyendas:["Nuevo perfil", "Editar perfil"],
+                                               openKardex:false,
+                                               originatingObject:obj[0].id,
+                                               showFilterLink:false,
+                                               insertInDesktopEnabled:"0"
+                                               });
+                    //nWidth=$("#divFormProfiles_" + suffix).width();
+
+                }
                 oForm=$("#form_" + formSuffix);
 
                 // Se ocultan los mensajes de validación
@@ -269,49 +286,6 @@
                                 var nPK=$("#formTab_" + suffix).attr("pk")
 
                                 sResultado=$(xmlResult).find("resultado").text();
-                                
-                                $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando perfiles de seguridad...");
-                                //Envía perfiles asociados a la forma aplicación
-                                if (nForma=="2") {
-                                    $("#divFormProfiles_" + formSuffix).find('li.jstree-checked').each(function(){
-                                      //Se deben borrar los perfiles anteriores!!
-                                      nPerfil=this.id.split("-")[1]
-                                      $.post('srvFormaDelete','$cf=10&$w=clave_aplicacion='+sResultado+" AND clave_perfil="+nPerfil);
-                                      sData='clave_perfil='+nPerfil+"&clave_aplicacion=" + sResultado + "&activo=1&$cf=10&$pk=0&$ta=insert";
-                                      setTimeout("$.post('"+sWS+"','"+ sData+ "')",1000);
-                                    });
-                                }
-
-                                //Envía perfiles asociados a la forma forma
-                                if (nForma=="3") {
-                                    //Se necesita recuperar los perfiles padres
-                                    oPermisos=$("#divFormProfiles_" + formSuffix).find('li');
-                                    oPermisos.each(function(){
-                                     
-                                       sNodoId=this.id;
-                                       sTipoNodo=sNodoId.split("-")[0];
-                                       nPerfil=sNodoId.split("-")[1];
-                                       nPermiso=sNodoId.split("-")[2];
-                                       sDS = sNodoId.split("-")[3];
-
-                                       if (sTipoNodo=="perfil") ///Se deben borrar los permisos anteriores
-                                             $.post("srvFormaDelete","$cf=14&$w=clave_forma="+ nPK + "&clave_perfil="+nPerfil);
-
-                                       if (sTipoNodo=="permiso") {
-                                           if ($.jstree._reference("#divFormProfiles_" + formSuffix).is_checked("#" + sNodoId))
-                                                sData ="clave_forma="+sResultado+ "&clave_perfil="+nPerfil+"&clave_permiso="+nPermiso+"&$cf=14&$pk=0&$ta=insert";
-                                                setTimeout("$.post('" + sWS+"','"+ sData +"')",1000);
-                                       }
-                                      
-                                    });
-
-                                    /*$("#apps_menu").appmenu().appmenu.getSearchs($.fn.form.options.app) */
-                                    if ($("#grid_" + gridSuffix).length>0) {
-                                        sTvId=$("#grid_" + gridSuffix).attr("originatingObject")
-                                        setTimeout("$('#"+sTvId+"').treeMenu.getTreeDefinition($('#"+sTvId+"'))",2000);
-                                    }
-
-                                }
 
                                 if ($("#formTab_" + suffix).attr("updateControl")=="")
                                     $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid");
@@ -367,22 +341,23 @@
 
                             // Si el usuario le dió un nombre a la consulta
                             // Significa que la desea guardar
+                            sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
+
                             if (document.getElementById("$b").value!="") {
                                 sBusqueda=document.getElementById("$b").value;
                                 postConfig = "$cf=1&$ta=insert&$pk=0"+
                                 "&clave_aplicacion=" + $.fn.form.options.app +
                                 "&clave_empleado="+ $("#_ce_").val() +
                                 "&parametro=menu.busqueda."+nForma+"."+sBusqueda +
-                                "&valor=" +escape(sData.substring(0,sData.length-1));
+                                "&valor=" +sData;
                                 $.post("srvFormaInsert", postConfig);
                                     
                                 // Aqui va método del accordion para actualizarlo
                                 $("#apps_menu").appmenu().appmenu.getSearchs(nApp)
                             }
 
-                            sData = sData.substring(0,sData.length-1)
                             $("#grid_" + gridSuffix).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" + nForma + "&$w=" + escape(sData)+ "&$dp=body&page=1"
+                                url:"srvGrid?$cf=" + nForma + "&$w=" + sData+ "&$dp=body&page=1"
                                 }).trigger("reloadGrid")
                             $("#dlgModal_"+ formSuffix).dialog("destroy");
                             $("#dlgModal_"+ formSuffix).remove();
