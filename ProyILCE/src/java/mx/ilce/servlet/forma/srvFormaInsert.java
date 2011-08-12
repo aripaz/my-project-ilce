@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
@@ -68,6 +69,8 @@ public class srvFormaInsert extends HttpServlet {
                 arrVariables = admF.getVariableByObject(usr, arrVariables);
                 arrVariables = admF.cleanVariables(arrVariables);
 
+                Bitacora bitacora = usr.getBitacora();
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$pk");
@@ -79,6 +82,7 @@ public class srvFormaInsert extends HttpServlet {
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
+
                     forma.setPk(pk);
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
@@ -89,6 +93,9 @@ public class srvFormaInsert extends HttpServlet {
                         String[] arrayData = new String[2];
                         arrayData[0] = claveForma;
                         arrayData[1] = "insert";
+                        
+                        bitacora.setBitacora("Busqueda de forma que no esta en el perfil.");
+                        forma.setBitacora(bitacora);
                         lstNew = forma.getNewFormaById(arrayData);
                         if (!lstNew.isEmpty()){
                             lstForma = lstNew;
@@ -120,8 +127,12 @@ public class srvFormaInsert extends HttpServlet {
                         lstData.add(hsFormQuery);
                         lstData.add(forma);
                         if ("0".equals(forma.getPk())){     // Es un nuevo elemento
+                            bitacora.setBitacora("Agregar dato.");
+                            forma.setBitacora(bitacora);
                             ex = forma.ingresarEntidad(lstData);
                         }else{
+                            bitacora.setBitacora("Editar dato.");
+                            forma.setBitacora(bitacora);
                             ex = forma.editarEntidad(lstData);
                         }
                         ex.setExecutionOK(true);

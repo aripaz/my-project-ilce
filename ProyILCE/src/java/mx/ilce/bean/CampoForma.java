@@ -28,18 +28,34 @@ public class CampoForma implements Serializable  {
     private String foraneo;
     private String typeData;
 
+    /**
+     * Obtiene la clavePerfil del objeto
+     * @return
+     */
     public Integer getClavePerfil() {
         return clavePerfil;
     }
 
+    /**
+     * Asigna la clavePerfil del objeto
+     * @param clavePerfil
+     */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
     }
 
+    /**
+     * Obtiene un entero que indica si se edita (1) o no (0) la forma Foranea
+     * @return
+     */
     public Integer getEditaFormaForanea() {
         return editaFormaForanea;
     }
 
+    /**
+     * Asigna un entero que indica si se edita (1) o no (0) la forma Foranea
+     * @param editaFormaForanea
+     */
     public void setEditaFormaForanea(Integer editaFormaForanea) {
         this.editaFormaForanea = editaFormaForanea;
     }
@@ -310,6 +326,21 @@ public class CampoForma implements Serializable  {
      */
     @Override
     public String toString() {
-        return "CampoForma{" + "claveCampo=" + claveCampo + " || claveForma=" + claveForma + " || tabla=" + tabla + " || campo=" + campo + " || aliasCampo=" + aliasCampo + " || obligatorio=" + obligatorio + " || tipoControl=" + tipoControl + " || evento=" + evento + " || foraneo=" + foraneo + " || filtroForaneo=" + filtroForaneo + " || ayuda=" + ayuda + " || datoSensible=" + datoSensible + " || activo=" + activo + " || tamano=" + tamano + " || claveFormaForanea=" + claveFormaForanea + " || typeData=" + typeData + '}';
+        return "CampoForma{" + "claveCampo=" + claveCampo
+                + " || claveForma=" + claveForma
+                + " || tabla=" + tabla
+                + " || campo=" + campo
+                + " || aliasCampo=" + aliasCampo
+                + " || obligatorio=" + obligatorio
+                + " || tipoControl=" + tipoControl
+                + " || evento=" + evento
+                + " || foraneo=" + foraneo
+                + " || filtroForaneo=" + filtroForaneo
+                + " || ayuda=" + ayuda
+                + " || datoSensible=" + datoSensible
+                + " || activo=" + activo
+                + " || tamano=" + tamano
+                + " || claveFormaForanea=" + claveFormaForanea
+                + " || typeData=" + typeData + '}';
     }
 }

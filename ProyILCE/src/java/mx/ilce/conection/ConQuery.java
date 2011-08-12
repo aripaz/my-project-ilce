@@ -16,6 +16,8 @@ import java.util.Properties;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.bitacora.AdmBitacora;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LogHandler;
@@ -29,45 +31,81 @@ import mx.ilce.util.UtilDate;
  */
 class ConQuery {
     private Connection conn;
-    private String idPerson;
-    private String fecha;
-    private String ip;
-    private String browser;
-    private String logDB;
+    //private String idPerson;
+    //private String fecha;
+    //private String ip;
+    //private String browser;
+    //private String logDB;
     private boolean enableDataLog=true;
+    private Bitacora bitacora;
 
+    /**
+     * Obtiene el objeto bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    /**
+     * Obtiene si el log debe incluir la query con datos o no
+     * @return
+     */
     public boolean isEnableDataLog() {
         return enableDataLog;
     }
 
+    /**
+     * Asigna si el log debe inlcuir la query con datos o no
+     * @param enableDataLog
+     */
     public void setEnableDataLog(boolean enableDataLog) {
         this.enableDataLog = enableDataLog;
     }
 
+    /*
     private String getLogDB() {
         return logDB;
     }
 
     private void setLogDB(String logDB) {
         this.logDB = logDB;
-    }
+    }*/
 
+    /*
     public String getBrowser() {
         return browser;
     }
 
     public void setBrowser(String browser) {
         this.browser = browser;
-    }
+    }*/
 
+    /**
+     * Obtiene el objeto de conexion
+     * @return
+     */
     public Connection getConn() {
         return conn;
     }
 
+    /**
+     * Asigna el objeto de conexion
+     * @param conn
+     */
     public void setConn(Connection conn) {
         this.conn = conn;
     }
 
+/*
     public String getFecha() {
         return fecha;
     }
@@ -90,7 +128,7 @@ class ConQuery {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
+    }*/
 
     /**
      * COnstructor Basico
@@ -107,8 +145,6 @@ class ConQuery {
         StringBuffer strConexion = new StringBuffer();
         try {
             Properties prop = AdminFile.leerConfig();
-
-            setLogDB(AdminFile.getKey(prop,AdminFile.LOGDB));
 
             String server = AdminFile.getKey(prop,"SERVER");
             String base = AdminFile.getKey(prop,"BASE");
@@ -175,6 +211,18 @@ class ConQuery {
                             }
                         } while(rs.next());
                     }
+                }
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
+                    bitacora.setConsulta(strQuery);
+                    bitacora.setClaveProyecto(increment);
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.AGREGAR);
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
                 }
             }
             hsCmp.setObjData(increment);
@@ -250,6 +298,18 @@ class ConQuery {
                 getConexion();
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(strQuery);
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ACTUALIZAR));
+                    bitacora.setConsulta(strQuery);
+                    bitacora.setClaveProyecto(increment);
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.ACTUALIZAR);
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
+                }
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
@@ -321,6 +381,18 @@ class ConQuery {
                 getConexion();
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(strQuery);
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
+                    bitacora.setConsulta(strQuery);
+                    bitacora.setClaveProyecto(increment);
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.ELIMINAR);
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
+                }
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
@@ -390,6 +462,29 @@ class ConQuery {
                     }
                 }
                 hsCmp.setObjData(increment);
+            }
+            Bitacora bitacora = this.getBitacora();
+            if ((bitacora!=null)&&(bitacora.isEnable()))
+            {
+                AdmBitacora admBit = new AdmBitacora();
+                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
+                bitacora.setConsulta(qryDelete);
+                bitacora.setClaveProyecto(increment);
+                bitacora.setClaveTipoEvento(evento);
+                bitacora.setEvento(admBit.ELIMINAR);
+                admBit.setBitacora(bitacora);
+                admBit.addBitacora();
+            }
+            if ((bitacora!=null)&&(bitacora.isEnable()))
+            {
+                AdmBitacora admBit = new AdmBitacora();
+                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
+                bitacora.setConsulta(qryInsert);
+                bitacora.setClaveProyecto(increment);
+                bitacora.setClaveTipoEvento(evento);
+                bitacora.setEvento(admBit.AGREGAR);
+                admBit.setBitacora(bitacora);
+                admBit.addBitacora();
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
@@ -463,13 +558,13 @@ class ConQuery {
         ResultSet rs = null;
         String query = "";
         String queryLog = "";
+        String pk="";
         try{
             getConexion();
             query = getQueryById(idQuery);
             queryLog = query;
             if ((!"".equals(query)) && (arrData != null)){
                 ps =this.conn.createStatement();
-
                 if (arrVariables!=null){
                     for (int i=0; i<arrVariables.length;i++){
                         String strVar = arrVariables[i][0];
@@ -477,6 +572,7 @@ class ConQuery {
                         if (strVar!=null){
                             if (strVar.equals("$pk")){
                                 strVar = "\\$pk";
+                                pk = strValue;
                             }
                             query = query.replaceAll(strVar, strValue);
                         }
@@ -485,7 +581,6 @@ class ConQuery {
                 for(int i=1;i<=arrData.length;i++){
                     String strData = arrData[i-1];
                     if (strData != null){
-                        //query = query.replaceFirst("%"+i, strData);
                         query = query.replaceAll("%"+i, strData);
                     }
                 }
@@ -518,6 +613,30 @@ class ConQuery {
                     }
                     hsCmp.addListData(lstData,i++);
                 }
+            }
+
+            Bitacora bitacora = this.getBitacora();
+            if ((bitacora!=null)&&(bitacora.isEnable()))
+            {
+                AdmBitacora admBit = new AdmBitacora();
+                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                if (this.isEnableDataLog()){
+                    bitacora.setConsulta(query);
+                }else{
+                    bitacora.setConsulta(queryLog);
+                }
+                if ((pk!=null)&&(!"".equals(pk))){
+                    try{
+                        Integer intPk = Integer.valueOf(pk);
+                        bitacora.setClaveProyecto(intPk);
+                    }catch(Exception e){
+                    }
+                }
+                bitacora.setClaveTipoEvento(evento);
+                bitacora.setEvento(admBit.CONSULTAR);
+
+                admBit.setBitacora(bitacora);
+                admBit.addBitacora();
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
@@ -577,6 +696,7 @@ class ConQuery {
         Statement ps = null;
         ResultSet rs = null;
         String query = "";
+        String pk="";
         try{
             getConexion();
             query = getQueryById(idQuery);
@@ -593,6 +713,7 @@ class ConQuery {
                         if (strVar!=null){
                             if (strVar.equals("$pk")){
                                 strVar = "\\$pk";
+                                pk = strValue;
                             }
                             query = query.replaceAll(strVar, strValue);
                         }
@@ -624,6 +745,25 @@ class ConQuery {
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
+                }
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                    bitacora.setConsulta(query);
+                    if ((pk!=null)&&(!"".equals(pk))){
+                        try{
+                            Integer intPk = Integer.valueOf(pk);
+                            bitacora.setClaveProyecto(intPk);
+                        }catch(Exception e){
+                        }
+                    }
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.CONSULTAR);
+
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
                 }
             }
         }catch(SQLException e){
@@ -682,6 +822,7 @@ class ConQuery {
         Statement ps = null;
         ResultSet rs = null;
         String query = "";
+        String pk = "";
         try{
             getConexion();
             query = getQueryById(idQuery);
@@ -695,6 +836,7 @@ class ConQuery {
                         if (strVar!=null){
                             if (strVar.equals("$pk")){
                                 strVar = "\\$pk";
+                                pk = strValue;
                             }
                             query = query.replaceAll(strVar, strValue);
                         }
@@ -705,15 +847,11 @@ class ConQuery {
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){
-                            //query = query.replaceFirst("%"+i, strData);
                             query = query.replaceAll("%"+i, strData);
                         }
                     }
                 }
                 query = addWhereToQuery(query,whereData);
-                /*if (idQuery==36){
-                   query = query.replace("AND CLAVE_PERFIL=1", "");
-                }*/
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -742,6 +880,25 @@ class ConQuery {
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
+                }
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                    bitacora.setConsulta(query);
+                    if ((pk!=null)&&(!"".equals(pk))){
+                        try{
+                            Integer intPk = Integer.valueOf(pk);
+                            bitacora.setClaveProyecto(intPk);
+                        }catch(Exception e){
+                        }
+                    }
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.CONSULTAR);
+
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
                 }
             }
         }catch(SQLException e){
@@ -865,6 +1022,7 @@ class ConQuery {
         Statement st = null;
         ResultSet rs = null;
         String query = "";
+        String pk = "";
         try{
             getConexion();
             query = getQueryById(idQuery);
@@ -876,6 +1034,7 @@ class ConQuery {
                         if (strVar!=null){
                             if (strVar.equals("$pk")){
                                 strVar = "\\$pk";
+                                pk = strValue;
                             }
                             query = query.replaceAll(strVar, strValue);
                         }
@@ -910,6 +1069,25 @@ class ConQuery {
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
+                }
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                    bitacora.setConsulta(query);
+                    if ((pk!=null)&&(!"".equals(pk))){
+                        try{
+                            Integer intPk = Integer.valueOf(pk);
+                            bitacora.setClaveProyecto(intPk);
+                        }catch(Exception e){
+                        }
+                    }
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.CONSULTAR);
+
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
                 }
             }
         }catch(SQLException e){
@@ -1043,6 +1221,7 @@ class ConQuery {
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
+        String pk = "";
         try{
             getConexion();
             if (allowedQuery(query)){
@@ -1055,6 +1234,7 @@ class ConQuery {
                             if (strVar!=null){
                                 if (strVar.equals("$pk")){
                                     strVar = "\\$pk";
+                                    pk = strValue;
                                 }
                                 query = query.replaceAll(strVar, strValue);
                             }
@@ -1063,7 +1243,6 @@ class ConQuery {
                     for(int i=1;i<=arrData.length;i++){
                         String strData = arrData[i-1];
                         if (strData != null){
-                            //query = query.replaceFirst("%"+i, strData);
                             query = query.replaceAll("%"+i, strData);
                         }
                     }
@@ -1096,6 +1275,25 @@ class ConQuery {
                         }
                         hsCmp.addListData(lstData,i++);
                     }
+                }
+                Bitacora bitacora = this.getBitacora();
+                if ((bitacora!=null)&&(bitacora.isEnable()))
+                {
+                    AdmBitacora admBit = new AdmBitacora();
+                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                    bitacora.setConsulta(query);
+                    if ((pk!=null)&&(!"".equals(pk))){
+                        try{
+                            Integer intPk = Integer.valueOf(pk);
+                            bitacora.setClaveProyecto(intPk);
+                        }catch(Exception e){
+                        }
+                    }
+                    bitacora.setClaveTipoEvento(evento);
+                    bitacora.setEvento(admBit.CONSULTAR);
+
+                    admBit.setBitacora(bitacora);
+                    admBit.addBitacora();
                 }
             }
         }catch(SQLException e){
@@ -1260,17 +1458,6 @@ class ConQuery {
             eh.setSeeStringData(true);
             throw eh;
         }finally{
-            /*
-            try{
-                LogHandler log = new LogHandler();
-                StringBuffer textData=new StringBuffer();
-                textData.append(("ID: "+idQuery)).append("\n");
-                log.setStrQuery(query.toString());
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
-                            new StringBuffer("getQueryById"),textData);
-            }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
-            }*/
             try{
                 if (rs!=null){
                     rs.close();
@@ -1395,6 +1582,4 @@ class ConQuery {
         }
         return sld.toString();
     }
-
-   // private void setLogDB
 }

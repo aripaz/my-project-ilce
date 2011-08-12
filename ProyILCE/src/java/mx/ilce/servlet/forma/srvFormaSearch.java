@@ -16,6 +16,7 @@ import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
@@ -62,6 +63,8 @@ public class srvFormaSearch extends HttpServlet {
                 arrVariables = admForm.getVariableByObject(usr, arrVariables);
                 arrVariables = admForm.cleanVariables(arrVariables);
 
+                Bitacora bitacora = usr.getBitacora();
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$ta");
@@ -73,6 +76,7 @@ public class srvFormaSearch extends HttpServlet {
                 }else{
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
                     if (forma !=null){
+
                         forma.setFormData(hsForm);
                         ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
                         forma.setFormName(arrayForm);
@@ -104,6 +108,9 @@ public class srvFormaSearch extends HttpServlet {
                             }
                         }
                         forma.setIncludeForaneo(false);
+                        //bitacora.setBitacora("Busqueda avanzada.");
+                        //forma.setBitacora(bitacora);
+                        
                         forma.ingresarBusquedaAvanzada();
                         StringBuffer xmlForma = forma.getXmlEntidad();
                         request.getSession().removeAttribute("xmlForma");

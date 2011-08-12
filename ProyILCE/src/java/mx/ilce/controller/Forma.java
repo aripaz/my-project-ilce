@@ -7,6 +7,7 @@ import java.util.List;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
@@ -42,22 +43,37 @@ public class Forma extends Entidad{
     private boolean includeForaneo=true;
     private Integer claveEmpleado;
     private String[][] arrVariables;
+    private Bitacora bitacora;
 
 
-
-    /************** GETTER Y SETTER ***************/
+    /**
+     * Obtiene el arreglo de variables
+     * @return
+     */
     public String[][] getArrVariables() {
         return arrVariables;
     }
 
+    /**
+     * Asigna el arreglo de variables
+     * @param arrVariables
+     */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
     }
 
+    /**
+     * Obtiene la clave del empleado
+     * @return
+     */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
     }
 
+    /**
+     * Asigna la clave del empleado
+     * @param claveEmpleado
+     */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
     }
@@ -341,6 +357,22 @@ public class Forma extends Entidad{
     }
 
     /**
+     * Obtiene el objeto Bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto Bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    /**
      * Constructor basico de la forma, inicializa las variables
      */
     public Forma() {
@@ -350,10 +382,9 @@ public class Forma extends Entidad{
         this.hsForma = new HashMap();
     }
 
-/************** METODOS ENTIDAD ****************/
-
     /**
-     *
+     * Metodo alternativo implementado para borrar los permisos anteriores
+     * e ingresar los nuevos permisos al mismo tiempo
      * @param data
      * @return
      * @throws ExceptionHandler
@@ -373,6 +404,8 @@ public class Forma extends Entidad{
             String pkInsert = forma.getPk();
 
             ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
+
             String query = "select * from " + tabla;
             String[] strData = new String[0];
             HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
@@ -504,6 +537,8 @@ public class Forma extends Entidad{
             String tabla = cmpF.getTabla();
 
             ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
+            
             String query = "select * from " + tabla;
             String[] strData = new String[0];
             HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
@@ -621,6 +656,8 @@ public class Forma extends Entidad{
             String tabla = cmpF.getTabla();
 
             ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
+
             String query = "select * from " + tabla;
             String[] strData = new String[0];
             HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
@@ -754,6 +791,8 @@ public class Forma extends Entidad{
                 String tabla = cmpF.getTabla();
 
                 ConEntidad conE = new ConEntidad();
+                conE.setBitacora(this.getBitacora());
+                
                 String query = "select * from " + tabla;
                 String[] strData = new String[0];
                 HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
@@ -832,6 +871,8 @@ public class Forma extends Entidad{
     public Forma mostrarForma() throws ExceptionHandler {
         try{
             ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
+
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
@@ -855,6 +896,8 @@ public class Forma extends Entidad{
                     hsCmp.setPkData(this.getPk());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        admXML.setBitacora(this.getBitacora());
+
                         if (this.getClaveEmpleado()!=null){
                             HashCampo hsCmpPerm = new HashCampo();
                             strData = new String[2];
@@ -920,6 +963,8 @@ public class Forma extends Entidad{
     public Forma ingresarBusquedaSencilla() throws ExceptionHandler {
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
@@ -939,6 +984,8 @@ public class Forma extends Entidad{
                             strWhere, this.getArrVariables());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        admXML.setBitacora(this.getBitacora());
+
                         List lstF = (List)this.getForma(Integer.valueOf(claveForma));
                         if (this.isCleanIncrement()){
                             admXML.setDeleteIncrement(cleanIncrement);
@@ -984,6 +1031,8 @@ public class Forma extends Entidad{
     public Forma ingresarBusquedaAvanzada() throws ExceptionHandler{
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+
             String[] strData = new String[2];
             StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
@@ -992,7 +1041,7 @@ public class Forma extends Entidad{
                 strData[1] = String.valueOf(this.getTipoAccion());
                 Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
                 HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,
-                        this.getArrVariables());
+                                        this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -1004,6 +1053,8 @@ public class Forma extends Entidad{
                             strWhere, strData, this.getArrVariables());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
+                        admXML.setBitacora(this.getBitacora());
+
                         if (this.getClaveEmpleado()!=null){
                             HashCampo hsCmpPerm = new HashCampo();
                             strData = new String[2];
@@ -1089,8 +1140,6 @@ public class Forma extends Entidad{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-/***********************    METODOS ADICIONALES   ***************************/
-
     /**
      * Completa el listado de formas segun el listado de aplicaciones que se le
      * entrega. Cada aplicacion posee una forma y por cada una de ellas, se trae
@@ -1103,6 +1152,8 @@ public class Forma extends Entidad{
     public void getFormasByAplications(List lstAplications ) throws ExceptionHandler{
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+            
             if ((lstAplications!=null)&&(!lstAplications.isEmpty())){
                 Iterator it = lstAplications.iterator();
                 while (it.hasNext()){
@@ -1158,6 +1209,8 @@ public class Forma extends Entidad{
         List lst = null;
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+
             lst = con.getListFormaById(arrayData,this.getArrVariables());
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el List con la configuracion de la Forma");
@@ -1179,6 +1232,8 @@ public class Forma extends Entidad{
         ArrayList lst = new ArrayList();
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+            
             HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
                     arrayData,this.getArrVariables());
             Campo cmp = hsCmp.getCampoByName("consulta");

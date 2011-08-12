@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.ListHash;
 import mx.ilce.handler.ExceptionHandler;
@@ -20,6 +21,7 @@ public class ConEntidad {
     private String queryDel = "";
     private HashCampo hashCampo = new HashCampo();
     private CampoForma campoForma = new CampoForma();
+    private Bitacora bitacora;
 
     /**
      * Constructor basico de la clase, al crearse se cargan los datos del
@@ -61,6 +63,8 @@ public class ConEntidad {
     public void ingresaEntidad() throws ExceptionHandler{
         try{
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             HashCampo hs = con.executeInsert(this.campoForma,this.query);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -76,6 +80,8 @@ public class ConEntidad {
     public void eliminaEntidad() throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             HashCampo hs = con.executeDelete(this.campoForma,this.query);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -91,6 +97,8 @@ public class ConEntidad {
     public void editarEntidad() throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             HashCampo hs = con.executeUpdate(this.campoForma,this.query);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -101,6 +109,8 @@ public class ConEntidad {
     public void ingresarDataPermisos() throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             HashCampo hs = con.executeDeleteInsert(this.campoForma,this.queryDel,this.query);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -135,6 +145,8 @@ public class ConEntidad {
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData, arrVariables);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
@@ -160,6 +172,8 @@ public class ConEntidad {
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
@@ -186,6 +200,8 @@ public class ConEntidad {
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             hsCmp = con.getDataByQuery(strQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Datos por una QUERY");
@@ -203,6 +219,8 @@ public class ConEntidad {
         String campo = "";
         try{
             ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+
             campo = con.getCampoPK(tabla);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el Campo PK de una tabla");
@@ -223,6 +241,8 @@ public class ConEntidad {
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             hsCmp = connQ.getData(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY");
@@ -245,6 +265,8 @@ public class ConEntidad {
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             hsCmp = connQ.getDataWithWhere(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY y WHERE");
@@ -269,6 +291,8 @@ public class ConEntidad {
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+            
             hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY, WHERE y DATA");
@@ -278,12 +302,19 @@ public class ConEntidad {
         return hsCmp;
     }
 
-//********************* GETTER AND SETTER ******************
 
+    /**
+     * Obtiene al query de borrado
+     * @return
+     */
     public String getQueryDel() {
         return queryDel;
     }
 
+    /**
+     * Asigna la query de borrado
+     * @param queryDel
+     */
     public void setQueryDel(String queryDel) {
         this.queryDel = queryDel;
     }
@@ -335,4 +366,21 @@ public class ConEntidad {
     public void setCampoForma(CampoForma campoForma) {
         this.campoForma = campoForma;
     }
+
+    /**
+     * Obtiene el objeto bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
 }

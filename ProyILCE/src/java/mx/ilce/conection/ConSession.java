@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Properties;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.AdmBitacora;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.ListHash;
 import mx.ilce.controller.Aplicacion;
@@ -20,6 +22,23 @@ public class ConSession {
 
     private Properties prop = null;
     private AdminFile adm = new AdminFile();
+    private Bitacora bitacora;
+
+    /**
+     * Obtiene el objeto bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
 
     /**
      * Constructor basico de la clase, al crearse se cargan los datos del
@@ -71,6 +90,8 @@ public class ConSession {
             strData[1] = password;
 
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             //validamos user y password
             connQ.setEnableDataLog(false);
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
@@ -92,6 +113,11 @@ public class ConSession {
                 usr.setIsLogged(true);
                 usr.setLogin(user);
                 usr.setPassword(password);
+                this.getBitacora().setClaveEmpleado(usr.getClaveEmpleado());
+                usr.setBitacora(this.getBitacora());
+                AdmBitacora admBit = new AdmBitacora();
+                admBit.setBitacora(this.getBitacora());
+                admBit.login();
             }
         }catch(Exception ex){
             usr.setIsLogged(false);
@@ -119,6 +145,8 @@ public class ConSession {
             strData[1] = usuario.getPassword();
 
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             //validamos user y password
             connQ.setEnableDataLog(false);
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
@@ -166,6 +194,8 @@ public class ConSession {
             strData[0] = String.valueOf(user.getClavePerfil());
 
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData, arrVariables);
 
             if (!hsCmp.getListData().isEmpty()){
@@ -200,6 +230,8 @@ public class ConSession {
                 Iterator it = lstApl.iterator();
                 String[] strData = new String[4];
                 ConQuery connQ = new ConQuery();
+                connQ.setBitacora(this.getBitacora());
+
                 HashCampo hsCmpAux = null;
                 Integer lenList = hsCmp.getLengthData();
                 while (it.hasNext()){
@@ -237,6 +269,8 @@ public class ConSession {
         try{
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             strData[0] = usuario.getClaveEmpleado().toString();
             hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData, arrVariables);
             hsCmp.setObjData(usuario);
@@ -263,6 +297,8 @@ public class ConSession {
         try{
             String[] strData = new String[1];
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             strData[0] = usuario.getClavePerfil().toString();
             hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData, arrVariables);
             hsCmp.setObjData(usuario);
@@ -288,6 +324,8 @@ public class ConSession {
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
             hsCmp = connQ.getData(IdQuery, strData, arrVariables);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");

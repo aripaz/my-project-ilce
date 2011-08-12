@@ -6,6 +6,7 @@ import java.util.List;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
 import mx.ilce.conection.ConEntidad;
@@ -35,6 +36,7 @@ public class Aplicacion extends Entidad {
     private String[] arrayData;
     private boolean cleanIncrement;
     private String[][] arrVariables;
+    private Bitacora bitacora;
 
     /**
      * Constructor Basico de la clase, inicializa las variables de la clase
@@ -56,20 +58,50 @@ public class Aplicacion extends Entidad {
         this.cleanIncrement=false;
     }
 
-/********* GETTER Y SETTER *********/
+    /**
+     * Obtiene el objeto Bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
 
+    /**
+     * Asigna el objeto Bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    /**
+     * Obtiene el arreglo de variables
+     * @return
+     */
     public String[][] getArrVariables() {
         return arrVariables;
     }
 
+    /**
+     * Asigna el arreglo de variables
+     * @param arrVariables
+     */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
     }
 
+    /**
+     * Obtiene la clave del empleado
+     * @return
+     */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
     }
 
+    /**
+     * Asigna la clave del empleado
+     * @param claveEmpleado
+     */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
     }
@@ -304,8 +336,6 @@ public class Aplicacion extends Entidad {
         this.descripcion = descripcion;
     }
 
-//************** OPERACIONES DE ENTIDAD **********
-
     /**
      * NO IMPLEMENTADO
      */
@@ -443,6 +473,7 @@ public class Aplicacion extends Entidad {
         try{
             AdminXML adm = new AdminXML();
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
             String[] strData = new String[2];
             HashCampo hsCmp = new HashCampo();
             if (this.claveForma !=null){
@@ -503,12 +534,14 @@ public class Aplicacion extends Entidad {
         StringBuffer strSld = null;
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
             AdminXML adm = new AdminXML();
             String[] strData = new String[2];
             HashCampo hsCmp = new HashCampo();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+                con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
                         strData, this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -518,6 +551,7 @@ public class Aplicacion extends Entidad {
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
                     strData = new String[1];
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
+                    con.getBitacora().setEnable(true);
                     hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
                             strData[0], this.getArrVariables());
                 }
@@ -526,6 +560,7 @@ public class Aplicacion extends Entidad {
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
+                    con.getBitacora().setEnable(false);
                     hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS), 
                             strData, this.getArrVariables());
                     adm.setHashPermisoForma(hsCmpPerm);
@@ -556,6 +591,7 @@ public class Aplicacion extends Entidad {
         ArrayList lst = new ArrayList();
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
             HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
                     arrayData, this.getArrVariables());
             Campo cmp = hsCmp.getCampoByName("consulta");
