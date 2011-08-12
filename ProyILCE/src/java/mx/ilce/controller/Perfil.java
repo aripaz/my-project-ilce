@@ -2,6 +2,7 @@ package mx.ilce.controller;
 
 import java.util.List;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
@@ -17,12 +18,36 @@ public class Perfil extends Entidad{
     private String perfil;
     private List lstAplicacion;
     private String[][] arrVariables;
+    private Bitacora bitacora;
 
-//******** GETTER Y SETTER ********
+    /**
+     * Obtiene el objeto bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    /**
+     * Obtiene el arreglo de variables
+     * @return
+     */
     public String[][] getArrVariables() {
         return arrVariables;
     }
 
+    /**
+     * Asigna el arreglo de variables
+     * @param arrVariables
+     */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
     }
@@ -74,8 +99,6 @@ public class Perfil extends Entidad{
     public void setPerfil(String perfil) {
         this.perfil = perfil;
     }
-
-/******* OPERACIONES DE ENTIDAD ******/
 
     /**
      * Constructor Basico
@@ -152,12 +175,17 @@ public class Perfil extends Entidad{
         LoginHandler lg = new LoginHandler();
         try{
             ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
+
             User usr = con.getUser(user, password, this.getArrVariables());
+            usr.setBitacora(this.getBitacora());
 
             if (usr.isLogged()){
                 lg.setIsLogin(true);
                 //completar los datos del perfil
                 Perfil perf = con.getPerfil(usr, this.getArrVariables());
+                perf.setBitacora(this.getBitacora());
+
                 this.clavePerfil = perf.getClavePerfil();
                 this.lstAplicacion = perf.getLstAplicacion();
                 this.perfil = perf.getPerfil();
@@ -190,12 +218,19 @@ public class Perfil extends Entidad{
             String user = usuario.getLogin();
             String password = usuario.getPassword();
             ConSession con = new ConSession();
+            Bitacora bitacora = this.getBitacora();
+            con.setBitacora(bitacora);
+
             User usr = con.getUser(user, password, this.getArrVariables());
 
             if (usr.isLogged()){
+                bitacora.setEnable(false);
+                usr.setBitacora(bitacora);
                 lg.setIsLogin(true);
                 //completar los datos del perfil
+                con.setBitacora(null);
                 Perfil perf = con.getPerfil(usr, this.getArrVariables());
+
                 this.clavePerfil = perf.getClavePerfil();
                 this.lstAplicacion = perf.getLstAplicacion();
                 this.perfil = perf.getPerfil();

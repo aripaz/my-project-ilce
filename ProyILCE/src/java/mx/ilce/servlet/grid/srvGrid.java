@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Aplicacion;
 import mx.ilce.controller.Forma;
@@ -63,15 +64,18 @@ public class srvGrid extends HttpServlet {
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
                     String[] strData = getArrayData(hsForm);
-                    Forma forma = (Forma) request.getSession().getAttribute("forma");
-                   
-                    Aplicacion apl = new Aplicacion();
-
                     User user = (User) request.getSession().getAttribute("user");
                     user.getClaveEmpleado();
+
+                    Bitacora bitacora = user.getBitacora();
+                    bitacora.setBitacora("");
+
+                    Aplicacion apl = new Aplicacion();
                     apl.setClaveEmpleado(Integer.valueOf(user.getClaveEmpleado()));
 
+                    Forma forma = (Forma) request.getSession().getAttribute("forma");
                     if ((forma !=null)&&(apl!=null)){
+
                         List lstF = forma.getForma(Integer.valueOf(claveForma));
                         StringBuffer xmlForma = new StringBuffer();
                         HashMap hsF = forma.getHsForma();
@@ -87,6 +91,10 @@ public class srvGrid extends HttpServlet {
                                 String numRows = (String) hsForm.get("rows");
                                 apl.setNumPage(numPage);
                                 apl.setNumRows(numRows);
+
+                                bitacora.setBitacora("Busqueda de datos para Grid.");
+                                bitacora.setEnable(true);
+                                apl.setBitacora(bitacora);
                                 apl.mostrarForma();
                                 xmlForma = apl.getXmlEntidad();
                             }else{
@@ -154,6 +162,10 @@ public class srvGrid extends HttpServlet {
         return strSal;
     }
 
+    /**
+     * Se utiliza para actualizar la data en memoria del usuario
+     * @param request
+     */
     private void actualizarData(HttpServletRequest request){
         try {
             User user = (User) request.getSession().getAttribute("user");

@@ -70,6 +70,33 @@ public class LogHandler {
         return sld;
     }
 
+    /**
+     * Constructor de la clase, el cual asigna los mensajes que se deben escribir
+     * en el log
+     * @param rutaFile      Ruta donde se dejara el archivo
+     * @param textMessage   Texto del mensaje
+     * @param textData      Data adicional para el mensaje
+     * @return
+     */
+    public boolean logData(String rutaFile,StringBuffer textMessage,
+            StringBuffer textData, String HeaderFile){
+        boolean sld =false;
+        setRutaFile(rutaFile);
+        setTextData(textData);
+        setTextMessage(textMessage);
+        if (this.rutaFile!=null){
+            sld = writeToFile(HeaderFile);
+        }
+        return sld;
+    }
+
+    /**
+     * Metodo para guardar los warning
+     * @param rutaFile
+     * @param textMessage
+     * @param textData
+     * @return
+     */
     public boolean logWarning(String rutaFile,StringBuffer textMessage, StringBuffer textData){
         boolean sld =false;
         setRutaFile(rutaFile);
@@ -193,6 +220,11 @@ public class LogHandler {
         return sld;
     }
 
+    /**
+     * Metodo que escribe en un archivo el contenido del LOG
+     * @param oper
+     * @return
+     */
     private boolean writeToFile(String oper){
         boolean sld = true;
         String strNameFile = "";

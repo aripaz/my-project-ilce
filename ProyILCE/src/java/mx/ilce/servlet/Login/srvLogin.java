@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
@@ -34,29 +35,46 @@ public class srvLogin extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
+            Bitacora bitacora = new Bitacora(request);
+            bitacora.setEnable(true);
+            bitacora.setBitacora("Ingreso del usuario");
+
             String lgn = (String) request.getParameter("lgn");
             String psw = (String) request.getParameter("psw");
             User user = new User();
+            user.setBitacora(bitacora);
             user.setLogin(lgn);
             user.setPassword(psw);
 
             Perfil perfil = new Perfil();
+            perfil.setBitacora(bitacora);
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()){
                 user = (User) lg.getObjectData();
                 if (user != null){
+                    bitacora = user.getBitacora();
                     List lst = perfil.getLstAplicacion();
 
                     Forma forma = new Forma();
+                    
+                    //bitacora.setBitacora("Obtencion de Formas");
+                    //forma.setBitacora(bitacora);
                     forma.getFormasByAplications(lst);
 
+                    user.getBitacora().setBitacora("");
                     request.getSession().setAttribute("user", user);
                     request.getSession().setAttribute("perfil", perfil);
                     request.getSession().setAttribute("forma", forma);
 
                     AdminXML adm = new AdminXML();
                     String[][] arrVariables = null;
+
+                    //bitacora.setBitacora("Obtener datos Session");
+                    //adm.setBitacora(bitacora);
                     StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
+
+                    //bitacora.setBitacora("Obtener datos Menu");
+                    //adm.setBitacora(bitacora);
                     StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
 
                     request.getSession().setAttribute("xmlSession", xmlSession );

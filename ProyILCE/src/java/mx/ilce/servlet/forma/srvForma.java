@@ -16,6 +16,7 @@ import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
@@ -62,10 +63,12 @@ public class srvForma extends HttpServlet {
                 String tipoAccion = (String) hsForm.get("$ta");
                 String strWhere = (String) hsForm.get("$w");
 
-                User usr = (User) request.getSession().getAttribute("user");
+                User user = (User) request.getSession().getAttribute("user");
                 arrVariables = admForm.getVariablesFromProperties(hsForm);
-                arrVariables = admForm.getVariableByObject(usr, arrVariables);
+                arrVariables = admForm.getVariableByObject(user, arrVariables);
                 arrVariables = admForm.cleanVariables(arrVariables);
+
+                Bitacora bitacora = user.getBitacora();
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
@@ -78,12 +81,12 @@ public class srvForma extends HttpServlet {
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
                     if (forma !=null){
-                        User user = (User) request.getSession().getAttribute("user");
                         forma.setClaveEmpleado(user.getClaveEmpleado());
                         forma.setPk(pk);
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
                         forma.setArrVariables(arrVariables);
+                        
                         if ((strWhere!=null)&&(!"".equals(strWhere))){
                             String[] strData = getArrayData(hsForm);
                             forma.setArrayData(strData);
@@ -101,8 +104,12 @@ public class srvForma extends HttpServlet {
                                     forma.setStrWhereQuery(whereForm);
                                 }
                             }
+                            bitacora.setBitacora("Busqueda por forma");
+                            forma.setBitacora(bitacora);
                             forma.ingresarBusquedaAvanzada();
                         }else{
+                            bitacora.setBitacora("Busqueda por forma");
+                            forma.setBitacora(bitacora);
                             forma.setCleanIncrement(false);
                             forma.mostrarForma();
                         }
@@ -225,6 +232,7 @@ public class srvForma extends HttpServlet {
         try {
             User user = (User) request.getSession().getAttribute("user");
             Perfil perfil = new Perfil();
+            perfil.setBitacora(user.getBitacora());
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()) {
                 user = (User) lg.getObjectData();

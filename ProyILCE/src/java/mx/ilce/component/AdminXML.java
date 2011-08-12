@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.controller.Perfil;
@@ -36,6 +37,15 @@ public class AdminXML {
     private boolean includeForaneo=true;
     private HashCampo hashPermisoForma;
     private HashMap hsForm;
+    private Bitacora bitacora;
+
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
 
     public HashMap getHsForm() {
         return hsForm;
@@ -102,6 +112,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             HashCampo hsCmp = con.getUserXML(user, arrVariables);
             Document document = getDocumentXML("widget.session.xml");
@@ -123,6 +134,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try{
             ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             HashCampo hsCmp = con.getMenuXML(user, arrVariables);
 
@@ -216,7 +228,6 @@ public class AdminXML {
                         if (cmpAux!=null){
                             if (cmpAux.getAliasCampo()!=null){
                                 str.append(("\t<alias_campo><![CDATA["
-                                        //+ replaceAccent(castNULL(cmpAux.getAliasCampo().trim()))
                                         + castNULL(cmpAux.getAliasCampo().trim())
                                         + "]]></alias_campo>\n"));
                             }
@@ -305,7 +316,6 @@ public class AdminXML {
                     if (cmpAux!=null){
                         if (cmpAux.getAliasCampo()!=null){
                             str.append(("\t<alias_campo><![CDATA["
-                                    //+replaceAccent(castNULL(cmpAux.getAliasCampo().trim()))
                                     +castNULL(cmpAux.getAliasCampo().trim())
                                     +"]]></alias_campo>\n"));
                         }
@@ -445,7 +455,7 @@ public class AdminXML {
                                     if (this.isIncludeForaneo()){
                                         String[] strData = new String[3];
                                         strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                        strData[1] = "";//String.valueOf(cmpAux.getFiltroForaneo());
+                                        strData[1] = "";
                                         if (hsData.getPkData()!=null){
                                             strData[2] = hsData.getPkData();
                                         }else{
@@ -531,7 +541,6 @@ public class AdminXML {
             str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
-            //HashMap hsDat = hsData.getListData();
 
             str.append("<qry>\n");
             if (this.getHashPermisoForma()!=null){
@@ -556,7 +565,6 @@ public class AdminXML {
                 str.append("</permisos>\n");
             }
             for(int i=0;i<1;i++){
-                //ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                 str.append(("<registro id='"+String.valueOf(i)+"'>\n"));
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) lstCmp.get(j) ;
@@ -609,7 +617,7 @@ public class AdminXML {
                                     str.append((" clave_forma=\""+String.valueOf(cmpAux.getClaveFormaForanea()).trim()+"\">\n"));
                                     String[] strData = new String[3];
                                     strData[0] = String.valueOf(cmpAux.getClaveFormaForanea());
-                                    strData[1] = "";//String.valueOf(cmpAux.getFiltroForaneo());
+                                    strData[1] = "";
                                     if (hsData.getPkData()!=null){
                                         strData[2]=hsData.getPkData();
                                     }else{
@@ -723,6 +731,7 @@ public class AdminXML {
         StringBuffer str = new StringBuffer();
         try{
             ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
             HashCampo hsData = new HashCampo();
             //obtenemos la query de la forma entregada
             String[] strDataQ = new String[2];

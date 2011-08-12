@@ -299,6 +299,17 @@ public class Campo implements Serializable {
      */
     @Override
     public String toString() {
-        return "Campo{" + "nombre=" + nombre + "nombreDB=" + nombreDB + "valor=" + valor + "codigo=" + codigo + "alias=" + alias + "typeDataDB=" + typeDataDB + "typeDataAPL=" + typeDataAPL + "typeControl=" + typeControl + "event=" + event + "help=" + help + "tamano=" + tamano + "isIncrement=" + isIncrement + '}';
+        return "Campo{" + "nombre=" + nombre 
+                + " || nombreDB=" + nombreDB
+                + " || valor=" + valor
+                + " || codigo=" + codigo
+                + " || alias=" + alias
+                + " || typeDataDB=" + typeDataDB
+                + " || typeDataAPL=" + typeDataAPL
+                + " || typeControl=" + typeControl
+                + " || event=" + event
+                + " || help=" + help
+                + " || tamano=" + tamano
+                + " || isIncrement=" + isIncrement + '}';
     }
 }

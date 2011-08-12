@@ -2,6 +2,7 @@ package mx.ilce.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import mx.ilce.bitacora.Bitacora;
 
 /**
  *  Clase implementada para contener los datos del User
@@ -23,8 +24,8 @@ public class User implements Serializable {
     private Integer clavePerfil;
     private Integer claveArea;
     private String email;
+    private Bitacora bitacora;
 
-//------------ CONSTRUCTOR -----------------
     /**
      * Constructor basico del User, inicializa las variables basicas
      */
@@ -35,7 +36,6 @@ public class User implements Serializable {
         this.isLogged = false;
     }
 
-//------------ GETTER Y SETTER --------------
     /**
      * Obtiene la clave de area del User
      * @return
@@ -260,12 +260,43 @@ public class User implements Serializable {
     }
 
     /**
+     * Obtiene el objeto bitacora
+     * @return
+     */
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    /**
+     * Asigna el objeto bitacora
+     * @param bitacora
+     */
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    /**
      * Entrega en formato String el contenido del objeto
      * @return
      */
     @Override
     public String toString() {
-        return "Usuario{" + "nombre=" + nombre + "IDUser=" + IDUser + "urlAvatar=" + urlAvatar + '}';
+        return "User{" + "login=" + login
+                + " || nombre=" + nombre
+                + " || password=" + password
+                + " || apellidoPaterno=" + apellidoPaterno
+                + " || apellidoMaterno=" + apellidoMaterno
+                + " || isLogged=" + isLogged
+                + " || IDUser=" + IDUser
+                + " || urlAvatar=" + urlAvatar
+                + " || message=" + message
+                + " || claveEmpleado=" + claveEmpleado
+                + " || clavePerfil=" + clavePerfil
+                + " || claveArea=" + claveArea
+                + " || email=" + email
+                + " || bitacora=" + bitacora.toString()
+                + " || xmlPermiso=" + xmlPermiso
+                + '}';
     }
 
 }

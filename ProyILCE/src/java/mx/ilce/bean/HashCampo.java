@@ -23,10 +23,18 @@ public class HashCampo implements Serializable  {
     private Object objData;
     private String pkData;
 
+    /**
+     * Obtiene el dato PK desde el objeto
+     * @return
+     */
     public String getPkData() {
         return pkData;
     }
 
+    /**
+     * Asigna el dato PK del objeto
+     * @param pkData
+     */
     public void setPkData(String pkData) {
         this.pkData = pkData;
     }
@@ -149,9 +157,6 @@ public class HashCampo implements Serializable  {
         setLengthCampo(this.listCampos.size());
     }
 
-//----------------------------------------------
-//  GETTER Y SETTER
-
     /**
      * Obtiene el numero de campos que posee cada registro
      * @return
@@ -252,9 +257,6 @@ public class HashCampo implements Serializable  {
         this.objData = objData;
     }
 
-
-//******* CONSTRUCTORES
-
     /**
      * Constructor de la clase, donde se le entregan los distintos elementos
      * que contiene la clase, su contenido depende de la query que se ejecuto
@@ -306,6 +308,24 @@ public class HashCampo implements Serializable  {
 
         return lst1.equals(lst2);
     }
+
+    /**
+     * Metodo que lleva a un string el contenido del objeto
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "HashCampo{" + "lengthCampo=" + lengthCampo
+                + " || lengthData=" + lengthData
+                + " || listData=" + listData.toString()
+                + " || listCampos=" + listCampos.toString()
+                + " || listCampoByCod=" + listCampoByCod.toString()
+                + " || listCampoByName=" + listCampoByName.toString()
+                + " || listAlias=" + listAlias.toString()
+                + " || objData=" + objData 
+                + " || pkData=" + pkData + '}';
+    }
+
 
 
 }

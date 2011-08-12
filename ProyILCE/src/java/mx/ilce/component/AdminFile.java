@@ -73,11 +73,6 @@ public class AdminFile {
      */
     public static String LOGFILESERVER = "LOGFILESERVER";
 
-    /**
-     * tabla para el log de operaciones
-     */
-    public static String LOGDB = "LOGDB";
-
     public static String PERMISOS = "PERMISOS";
 
     /**
@@ -163,6 +158,7 @@ public class AdminFile {
         }
 	return prop;
     }
+
 
     /**
      * Obtiene el valor de una palabra clave (key), desde un arreglo de
