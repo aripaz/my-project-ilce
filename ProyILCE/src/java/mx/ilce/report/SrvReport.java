@@ -11,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mx.ilce.component.AdmReport;
+//import mx.ilce.component.AdmReport;
 
 /**
  *
@@ -31,8 +31,8 @@ public class SrvReport extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            AdmReport adm = new AdmReport();
-            adm.getDocument();
+            //AdmReport adm = new AdmReport();
+            //adm.getDocument();
         } finally { 
             out.close();
         }
