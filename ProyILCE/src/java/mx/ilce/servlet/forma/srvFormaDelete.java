@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
@@ -67,6 +68,9 @@ public class srvFormaDelete extends HttpServlet {
                 if ("false".equals(blOK)){
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
+                    User usr = (User) request.getSession().getAttribute("user");
+                    Bitacora bitacora = usr.getBitacora();
+
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
                     forma.setPk(pk);
                     forma.setClaveForma(Integer.valueOf(claveForma));
@@ -78,6 +82,8 @@ public class srvFormaDelete extends HttpServlet {
 
                     lstData.add(hsFormQuery);
                     lstData.add(forma);
+                    bitacora.setBitacora("Eliminar dato.");
+                    forma.setBitacora(bitacora);
                     ex = forma.eliminarEntidad(lstData);
                     if ("0".equals(forma.getPk())){
                         forma.setPk("1");
@@ -113,6 +119,9 @@ public class srvFormaDelete extends HttpServlet {
         try {
             User user = (User) request.getSession().getAttribute("user");
             Perfil perfil = new Perfil();
+            perfil.setBitacora(user.getBitacora());
+            perfil.getBitacora().setEnable(false);
+            perfil.getBitacora().setEnableLogin(false);
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()) {
                 user = (User) lg.getObjectData();

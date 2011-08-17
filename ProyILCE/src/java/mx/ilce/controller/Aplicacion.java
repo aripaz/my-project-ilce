@@ -479,6 +479,7 @@ public class Aplicacion extends Entidad {
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+                con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
                         strData, this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -490,18 +491,22 @@ public class Aplicacion extends Entidad {
                     if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()==null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
+                        con.getBitacora().setEnable(false);
                         hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
                                 strData[0], this.getArrVariables());
                     }else if ((this.getStrWhereQuery()==null)&&(this.getArrayData()!=null)){
+                        con.getBitacora().setEnable(false);
                         hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), 
                                 this.getArrayData(), this.getArrVariables());
                     }else if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()!=null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
-                         hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
+                        con.getBitacora().setEnable(false);
+                        hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
                                  strData[0],this.getArrayData(), this.getArrVariables());
                     }else{
                         strData = new String[0];
+                        con.getBitacora().setEnable(false);
                         hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),
                                     strData, this.getArrVariables());
                     }
@@ -511,6 +516,7 @@ public class Aplicacion extends Entidad {
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
+                    con.getBitacora().setEnable(false);
                     hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
                                     strData, this.getArrVariables());
                     adm.setHashPermisoForma(hsCmpPerm);

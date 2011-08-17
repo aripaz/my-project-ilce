@@ -48,15 +48,17 @@ public class srvLogin extends HttpServlet {
 
             Perfil perfil = new Perfil();
             perfil.setBitacora(bitacora);
+            perfil.getBitacora().setEnableLogin(true);
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()){
                 user = (User) lg.getObjectData();
                 if (user != null){
+                    if(user.getBitacora()!=null){
+                        user.getBitacora().setEnableLogin(false);
+                    }
                     bitacora = user.getBitacora();
                     List lst = perfil.getLstAplicacion();
-
                     Forma forma = new Forma();
-                    
                     //bitacora.setBitacora("Obtencion de Formas");
                     //forma.setBitacora(bitacora);
                     forma.getFormasByAplications(lst);

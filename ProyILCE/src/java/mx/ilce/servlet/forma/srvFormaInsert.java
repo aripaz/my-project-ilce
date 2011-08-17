@@ -142,7 +142,7 @@ public class srvFormaInsert extends HttpServlet {
                         AdminFile.deleFileFromServer(hsFile);
                     }
                     
-                    //actualizarData(request);
+                    actualizarData(request);
 
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     AdminXML admXML = new AdminXML();
@@ -169,6 +169,9 @@ public class srvFormaInsert extends HttpServlet {
         try {
             User user = (User) request.getSession().getAttribute("user");
             Perfil perfil = new Perfil();
+            perfil.setBitacora(user.getBitacora());
+            perfil.getBitacora().setEnable(false);
+            perfil.getBitacora().setEnableLogin(false);
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()) {
                 user = (User) lg.getObjectData();

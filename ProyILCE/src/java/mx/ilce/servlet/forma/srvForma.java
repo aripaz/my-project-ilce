@@ -69,6 +69,7 @@ public class srvForma extends HttpServlet {
                 arrVariables = admForm.cleanVariables(arrVariables);
 
                 Bitacora bitacora = user.getBitacora();
+                bitacora.setEnableLogin(false);
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
@@ -233,6 +234,8 @@ public class srvForma extends HttpServlet {
             User user = (User) request.getSession().getAttribute("user");
             Perfil perfil = new Perfil();
             perfil.setBitacora(user.getBitacora());
+            perfil.getBitacora().setEnable(false);
+            perfil.getBitacora().setEnableLogin(false);
             LoginHandler lg = perfil.login(user);
             if (lg.isLogin()) {
                 user = (User) lg.getObjectData();

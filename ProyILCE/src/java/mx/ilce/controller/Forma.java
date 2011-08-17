@@ -541,6 +541,7 @@ public class Forma extends Entidad{
             
             String query = "select * from " + tabla;
             String[] strData = new String[0];
+            conE.getBitacora().setEnable(false);
             HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
             StringBuffer strQuery = new StringBuffer();
             StringBuffer strCampos = new StringBuffer("(");
@@ -548,12 +549,14 @@ public class Forma extends Entidad{
             HashMap hsCmpProcesados = new HashMap();
             HashMap hsCmpRepetidos = new HashMap();
             Integer intRep = 0;
+            List listVariables = new ArrayList();
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
                 String valor = (String) hsForm.get(cmpFL.getCampo());
                 // si es autoIncremental, no se necesita enviar
                 if (!cmpHS.getIsIncrement()){
+                    String[] arrVariables = new String[4];
                     AdminForm admForm = new AdminForm();
                     valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                     if (valor!=null){
@@ -582,6 +585,11 @@ public class Forma extends Entidad{
                                 }
                                 strValues.append(valor).append(",");
                             }
+                            arrVariables[0]=cmpFL.getCampo();
+                            arrVariables[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
+                            arrVariables[2]=valor;
+                            arrVariables[3]=cmpHS.getTypeDataAPL();
+                            listVariables.add(arrVariables);
                         }else{
                             hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                         }
@@ -600,7 +608,11 @@ public class Forma extends Entidad{
             
             conE.setQuery(strQuery.toString());
             conE.setCampoForma(cmpF);
+            conE.getBitacora().setEnable(true);
+            conE.getBitacora().setLstVariables(listVariables);
             conE.ingresaEntidad();
+            conE.getBitacora().setEnable(false);
+            conE.getBitacora().setLstVariables(null);
 
             HashCampo hs = conE.getHashCampo();
             Integer intHs = (Integer) hs.getObjData();
@@ -660,6 +672,7 @@ public class Forma extends Entidad{
 
             String query = "select * from " + tabla;
             String[] strData = new String[0];
+            conE.getBitacora().setEnable(false);
             HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
             StringBuffer strQuery = new StringBuffer();
             strQuery.append("update ").append(tabla).append(" set ");
@@ -667,6 +680,8 @@ public class Forma extends Entidad{
             HashMap hsCmpProcesados = new HashMap();
             HashMap hsCmpRepetidos = new HashMap();
             Integer intRep = 0;
+            List listVariables = new ArrayList();
+
             for (int i=0;i<lstForma.size();i++){
                 CampoForma cmpFL = (CampoForma) lstForma.get(i);
                 Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
@@ -674,6 +689,7 @@ public class Forma extends Entidad{
                 if (cmpHS!=null){
                     // si es autoIncremental, no se necesita enviar
                     if (!cmpHS.getIsIncrement()){
+                        String[] arrVariables = new String[4];
                         AdminForm admForm = new AdminForm();
                         valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                         if (valor!=null){
@@ -705,6 +721,11 @@ public class Forma extends Entidad{
                             }else{
                                 hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                             }
+                            arrVariables[0]=cmpFL.getCampo();
+                            arrVariables[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
+                            arrVariables[2]=valor;
+                            arrVariables[3]=cmpHS.getTypeDataAPL();
+                            listVariables.add(arrVariables);
                         }
                     }else{
                         strCampoPK = cmpFL.getCampo();
@@ -729,7 +750,11 @@ public class Forma extends Entidad{
 
             conE.setQuery(strQuery.toString());
             conE.setCampoForma(cmpF);
+            conE.getBitacora().setEnable(true);
+            conE.getBitacora().setLstVariables(listVariables);
             conE.editarEntidad();
+            conE.getBitacora().setEnable(false);
+            conE.getBitacora().setLstVariables(null);
 
             HashCampo hs = conE.getHashCampo();
             Integer intHs = (Integer) hs.getObjData();
@@ -778,6 +803,7 @@ public class Forma extends Entidad{
             Integer claveFormaInsert = forma.getClaveForma();
 
             List lstForma = forma.getForma(claveFormaInsert);
+            List listVariables = new ArrayList();
 
             if (lstForma==null){
                 String[] arrayData = new String[2];
@@ -810,10 +836,16 @@ public class Forma extends Entidad{
                     }
                 }
                 if (pkInsert!=null){
+                    String[] arrVariables = new String[4];
                     if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
                         if (strCampoPK !=null){
                             strQuery.append(strCampoPK);
                             strQuery.append(" = ").append(pkInsert);
+                            arrVariables[0]=strCampoPK;
+                            arrVariables[1]=strCampoPK;
+                            arrVariables[2]=pkInsert;
+                            arrVariables[3]=Integer.class.getName();
+                            listVariables.add(arrVariables);
                         }
                     }
                 }
@@ -839,7 +871,11 @@ public class Forma extends Entidad{
 
                 conE.setQuery(strQuery.toString());
                 conE.setCampoForma(cmpF);
+                conE.getBitacora().setEnable(true);
+                conE.getBitacora().setLstVariables(listVariables);
                 conE.eliminaEntidad();
+                conE.getBitacora().setEnable(false);
+                conE.getBitacora().setLstVariables(null);
 
                 HashCampo hs = conE.getHashCampo();
                 Integer intHs = (Integer) hs.getObjData();
@@ -880,7 +916,9 @@ public class Forma extends Entidad{
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
                 //Obtenemos el IDQUERY de la forma entregada
+                con.getBitacora().setEnable(false);
                 Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
+                con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
                             strData, this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -891,6 +929,7 @@ public class Forma extends Entidad{
                     strData = new String[1];
                     strData[0]= this.getPk();
                     //ejecutamos la QUERY que se obtuvo al buscar la forma
+                    con.getBitacora().setEnable(true);
                     HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), 
                             strData, this.getArrVariables());
                     hsCmp.setPkData(this.getPk());
@@ -903,6 +942,7 @@ public class Forma extends Entidad{
                             strData = new String[2];
                             strData[0] = String.valueOf(this.getClaveEmpleado());
                             strData[1] = String.valueOf(this.getClaveForma());
+                            con.getBitacora().setEnable(false);
                             hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
                                     strData, this.getArrVariables());
                             admXML.setHashPermisoForma(hsCmpPerm);
@@ -1039,7 +1079,9 @@ public class Forma extends Entidad{
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+                con.getBitacora().setEnable(false);
                 Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
+                con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,
                                         this.getArrVariables());
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -1049,17 +1091,19 @@ public class Forma extends Entidad{
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
                     String strWhere = this.getStrWhereQuery();
                     strData = this.getArrayData();
+                    con.getBitacora().setEnable(true);
                     HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()), 
                             strWhere, strData, this.getArrVariables());
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         admXML.setBitacora(this.getBitacora());
-
+                        admXML.getBitacora().setEnable(false);
                         if (this.getClaveEmpleado()!=null){
                             HashCampo hsCmpPerm = new HashCampo();
                             strData = new String[2];
                             strData[0] = String.valueOf(this.getClaveEmpleado());
                             strData[1] = String.valueOf(this.getClaveForma());
+                            con.getBitacora().setEnable(false);
                             hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
                                     strData,this.getArrVariables());
                             admXML.setHashPermisoForma(hsCmpPerm);

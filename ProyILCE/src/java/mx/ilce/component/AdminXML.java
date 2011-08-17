@@ -737,6 +737,7 @@ public class AdminXML {
             String[] strDataQ = new String[2];
             strDataQ[0] =strData[0];
             strDataQ[1] ="foreign";
+            con.getBitacora().setEnable(false);
             HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ, arrVariables);
             Campo cmpQ = hsCmpQ.getCampoByName("claveconsulta");
             HashMap dq = hsCmpQ.getListData();
@@ -747,8 +748,10 @@ public class AdminXML {
                     strDataFiltro[0] = strData[2];
                     //ejecutamos la query, con el filtro entregado
                     if ("".equals(strData[1])){
+                        con.getBitacora().setEnable(false);
                         hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro, arrVariables);
                     }else{
+                        con.getBitacora().setEnable(false);
                         hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
                                                                     strData[1],
                                                                     strDataFiltro,
