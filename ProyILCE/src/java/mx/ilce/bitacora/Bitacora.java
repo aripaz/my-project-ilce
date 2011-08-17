@@ -2,6 +2,8 @@ package mx.ilce.bitacora;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,8 +26,25 @@ public final class Bitacora implements Serializable {
     private String bitacora;
     private String consulta;
     private boolean enable;
+    private List lstVariables;
 
     private static Integer cero = Integer.valueOf(0);
+
+    /**
+     * Obtiene el listado de variables de la bitacora
+     * @return
+     */
+    public List getLstVariables() {
+        return lstVariables;
+    }
+
+    /**
+     * Agrega el listado de variables de la bitacora
+     * @param lstVariables
+     */
+    public void setLstVariables(List lstVariables) {
+        this.lstVariables = lstVariables;
+    }
 
     public boolean isEnable() {
         return enable;
@@ -165,6 +184,18 @@ public final class Bitacora implements Serializable {
     }
 
 
-
+    public void addToListVariables(String campo, String alias,
+                                String valor, String tipo){
+        if (this.getLstVariables()==null){
+            List listVariables = new ArrayList();
+            this.setLstVariables(listVariables);
+        }
+        String[] arrVariables = new String[4];
+        arrVariables[0]=campo;
+        arrVariables[1]=alias;
+        arrVariables[2]=valor;
+        arrVariables[3]=tipo;
+        this.getLstVariables().add(arrVariables);
+    }
 
 }

@@ -69,6 +69,7 @@ public class srvGrid extends HttpServlet {
 
                     Bitacora bitacora = user.getBitacora();
                     bitacora.setBitacora("");
+                    bitacora.addToListVariables("forma", "forma", claveForma, Integer.class.getName());
 
                     Aplicacion apl = new Aplicacion();
                     apl.setClaveEmpleado(Integer.valueOf(user.getClaveEmpleado()));
