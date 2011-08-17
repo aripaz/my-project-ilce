@@ -63,7 +63,7 @@
     $.fn.appgrid.getGridDefinition = function(){
         $.ajax(
         {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
+            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
