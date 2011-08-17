@@ -23,11 +23,16 @@ if (user == null){
         <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
         <script src="jQuery/js/grid.subgrid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jstree.js"  type="text/javascript"></script>
+        <!-- Calculator -->
+        <script src="jQuery/js/jquery.calculator.min.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.calculator-es.js" type="text/javascript"></script>
+
 
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
