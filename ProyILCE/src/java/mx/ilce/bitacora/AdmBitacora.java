@@ -13,6 +13,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import mx.ilce.component.AdminFile;
 import mx.ilce.handler.ExceptionHandler;
@@ -30,6 +32,8 @@ public class AdmBitacora {
     private String strQuery;
     private Bitacora bitacora;
     private Properties prop;
+    private List lstVariables;
+    private Integer intSld;
 
     private static File WORKING_DIRECTORY;
     private static String LOGBITACORA="LOGBITACORA";
@@ -48,6 +52,30 @@ public class AdmBitacora {
      */
     public AdmBitacora() throws ExceptionHandler {
         inicializar();
+    }
+
+    public Integer getIntSld() {
+        return intSld;
+    }
+
+    public void setIntSld(Integer intSld) {
+        this.intSld = intSld;
+    }
+
+    /**
+     * Obtiene el listado de variables de la bitacora
+     * @return
+     */
+    public List getLstVariables() {
+        return lstVariables;
+    }
+
+    /**
+     * Agrega el listado de variables de la bitacora
+     * @param lstVariables
+     */
+    public void setLstVariables(List lstVariables) {
+        this.lstVariables = lstVariables;
     }
 
     /**
@@ -688,6 +716,7 @@ public class AdmBitacora {
 
                 if (intSld>0){
                     sld = true;
+                    this.setIntSld(intSld);
                 }
             } finally {
                 try{
@@ -826,5 +855,45 @@ public class AdmBitacora {
         strSld = strData;
         strSld = strSld.replaceAll("'", "''");
         return strSld;
+    }
+
+    public void addVariablesBitacora(Integer strClaveBitacoraProy)throws ExceptionHandler{
+        boolean sld = false;
+        if ( this.getBitacora()!=null){
+            try {
+                if (this.getLstVariables()!=null){
+                    Iterator it = this.getLstVariables().iterator();
+                    while (it.hasNext()){
+                        String[] strVar = (String[]) it.next();
+                        StringBuffer strQuery = new StringBuffer();
+                        strQuery.append("insert into Bitacora_variable (");
+                        strQuery.append("clave_bitacora_proyecto,");
+                        strQuery.append("nombre_variable,");
+                        strQuery.append("alias_variable,");
+                        strQuery.append("valor_variable,");
+                        strQuery.append("tipo_variable) values (");
+                        strQuery.append(strClaveBitacoraProy).append(",'");
+                        strQuery.append(strVar[0]).append("','");
+                        strQuery.append(strVar[1]).append("','");
+                        strQuery.append(strVar[2]).append("','");
+                        strQuery.append(strVar[3]).append("')");
+                        this.setStrQuery(strQuery.toString());
+                        executeInsert();
+                    }
+                }
+            } finally {
+                try{
+                    LogHandler log = new LogHandler();
+                    log.setBoolSel(false);
+                    StringBuffer textData=new StringBuffer();
+                    log.setStrQuery(this.getStrQuery());
+                    log.logData(getKey(this.getProp(), this.LOGBITACORA),
+                                new StringBuffer("addVariablesBitacora"),textData,"BITACOR");
+                }catch(Exception ex){
+                    throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir las variables de la Bitacora");
+                }
+            }
+        }
+        //return sld;
     }
 }

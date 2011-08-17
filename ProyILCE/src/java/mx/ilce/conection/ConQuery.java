@@ -222,7 +222,11 @@ class ConQuery {
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.AGREGAR);
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
             hsCmp.setObjData(increment);
@@ -308,7 +312,11 @@ class ConQuery {
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.ACTUALIZAR);
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
             hsCmp.setObjData(increment);
@@ -391,7 +399,11 @@ class ConQuery {
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.ELIMINAR);
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
             hsCmp.setObjData(increment);
@@ -473,7 +485,11 @@ class ConQuery {
                 bitacora.setClaveTipoEvento(evento);
                 bitacora.setEvento(admBit.ELIMINAR);
                 admBit.setBitacora(bitacora);
-                admBit.addBitacora();
+                if (admBit.addBitacora()){
+                    admBit.setLstVariables(bitacora.getLstVariables());
+                    admBit.addVariablesBitacora(admBit.getIntSld());
+                    admBit.setLstVariables(null);
+                }
             }
             if ((bitacora!=null)&&(bitacora.isEnable()))
             {
@@ -484,7 +500,11 @@ class ConQuery {
                 bitacora.setClaveTipoEvento(evento);
                 bitacora.setEvento(admBit.AGREGAR);
                 admBit.setBitacora(bitacora);
-                admBit.addBitacora();
+                if (admBit.addBitacora()){
+                    admBit.setLstVariables(bitacora.getLstVariables());
+                    admBit.addVariablesBitacora(admBit.getIntSld());
+                    admBit.setLstVariables(null);
+                }
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
@@ -636,7 +656,11 @@ class ConQuery {
                 bitacora.setEvento(admBit.CONSULTAR);
 
                 admBit.setBitacora(bitacora);
-                admBit.addBitacora();
+                if (admBit.addBitacora()){
+                    admBit.setLstVariables(bitacora.getLstVariables());
+                    admBit.addVariablesBitacora(admBit.getIntSld());
+                    admBit.setLstVariables(null);
+                }
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
@@ -763,7 +787,11 @@ class ConQuery {
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
         }catch(SQLException e){
@@ -898,7 +926,11 @@ class ConQuery {
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
         }catch(SQLException e){
@@ -1087,7 +1119,11 @@ class ConQuery {
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
         }catch(SQLException e){
@@ -1293,7 +1329,11 @@ class ConQuery {
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    admBit.addBitacora();
+                    if (admBit.addBitacora()){
+                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.addVariablesBitacora(admBit.getIntSld());
+                        admBit.setLstVariables(null);
+                    }
                 }
             }
         }catch(SQLException e){

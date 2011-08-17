@@ -142,7 +142,7 @@ public class srvFormaInsert extends HttpServlet {
                         AdminFile.deleFileFromServer(hsFile);
                     }
                     
-                    actualizarData(request);
+                    //actualizarData(request);
 
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     AdminXML admXML = new AdminXML();
