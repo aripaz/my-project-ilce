@@ -26,6 +26,7 @@ public final class Bitacora implements Serializable {
     private String bitacora;
     private String consulta;
     private boolean enable;
+    private boolean enableLogin;
     private List lstVariables;
 
     private static Integer cero = Integer.valueOf(0);
@@ -46,6 +47,14 @@ public final class Bitacora implements Serializable {
         this.lstVariables = lstVariables;
     }
 
+    public boolean isEnableLogin() {
+        return enableLogin;
+    }
+
+    public void setEnableLogin(boolean enableLogin) {
+        this.enableLogin = enableLogin;
+    }
+
     public boolean isEnable() {
         return enable;
     }
@@ -58,6 +67,7 @@ public final class Bitacora implements Serializable {
         this.setIp(request.getRemoteAddr());
         this.setNavegador(request.getHeader("USER-AGENT"));
         this.setEnable(false);
+        this.setEnableLogin(false);
     }
 
     public String getBitacora() {

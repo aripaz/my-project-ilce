@@ -220,15 +220,18 @@ public class Perfil extends Entidad{
             ConSession con = new ConSession();
             Bitacora bitacora = this.getBitacora();
             con.setBitacora(bitacora);
-
+            if (bitacora.isEnableLogin()){
+                con.getBitacora().setEnable(true);
+            }else{
+                con.getBitacora().setEnable(false);
+            }
             User usr = con.getUser(user, password, this.getArrVariables());
-
             if (usr.isLogged()){
                 bitacora.setEnable(false);
                 usr.setBitacora(bitacora);
                 lg.setIsLogin(true);
                 //completar los datos del perfil
-                con.setBitacora(null);
+                con.getBitacora().setEnable(false);
                 Perfil perf = con.getPerfil(usr, this.getArrVariables());
 
                 this.clavePerfil = perf.getClavePerfil();

@@ -108,11 +108,12 @@ public class srvFormaSearch extends HttpServlet {
                             }
                         }
                         forma.setIncludeForaneo(false);
-                        //bitacora.setBitacora("Busqueda avanzada.");
-                        //forma.setBitacora(bitacora);
-                        
+                        forma.setBitacora(bitacora);
+                        forma.getBitacora().setEnable(false);
                         forma.ingresarBusquedaAvanzada();
+                        
                         StringBuffer xmlForma = forma.getXmlEntidad();
+
                         request.getSession().removeAttribute("xmlForma");
                         request.getSession().setAttribute("xmlForma", xmlForma);
                     }
@@ -225,30 +226,6 @@ public class srvFormaSearch extends HttpServlet {
             System.arraycopy(arr, 0, strSld, 0, j);
         }
         return strSld;
-    }
-
-    private void actualizarData(HttpServletRequest request){
-        try {
-            User user = (User) request.getSession().getAttribute("user");
-            Perfil perfil = new Perfil();
-            LoginHandler lg = perfil.login(user);
-            if (lg.isLogin()) {
-                user = (User) lg.getObjectData();
-                if (user != null) {
-                    List lst = perfil.getLstAplicacion();
-                    Forma forma = new Forma();
-                    forma.getFormasByAplications(lst);
-                    request.getSession().setAttribute("perfil", perfil);
-                    request.getSession().setAttribute("forma", forma);
-                }
-            }
-        } catch (ExceptionHandler ex) {
-            try {
-                throw new ExceptionHandler(ex, this.getClass(), "Problemas al actualizar datos del usuario");
-            } catch (ExceptionHandler ex1) {
-                Logger.getLogger(srvFormaSearch.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

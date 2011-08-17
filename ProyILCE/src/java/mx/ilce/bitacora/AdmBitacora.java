@@ -682,7 +682,7 @@ public class AdmBitacora {
                     strValues.append("',");
                 }
                 if (this.getBitacora().getClaveProyecto()!=null){
-                    strCampos.append("clave_proyecto,");
+                    strCampos.append("clave_aplicacion,");
                     strValues.append(this.getBitacora().getClaveProyecto());
                     strValues.append(",");
                 }
@@ -761,7 +761,7 @@ public class AdmBitacora {
                 strCampos.append("',");
             }
             if (this.getBitacora().getClaveProyecto()!=null){
-                strCampos.append(" clave_proyecto = ");
+                strCampos.append(" clave_aplicacion = ");
                 strCampos.append(this.getBitacora().getClaveProyecto());
                 strCampos.append(",");
             }
