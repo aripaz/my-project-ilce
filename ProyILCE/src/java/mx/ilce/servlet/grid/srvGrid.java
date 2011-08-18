@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +48,8 @@ public class srvGrid extends HttpServlet {
                 hsForm = (HashMap) hs.get("FORM");  //Datos
 
                 String claveForma = (String) hsForm.get("$cf");
+                String claveAplic = (String) hsForm.get("$ca");
+
                 String dp = (String) hsForm.get("$dp");
                 String tipoAccion = "select";
                 String strWhere = (String) hsForm.get("$w");
@@ -69,7 +69,10 @@ public class srvGrid extends HttpServlet {
 
                     Bitacora bitacora = user.getBitacora();
                     bitacora.setBitacora("");
-                    bitacora.addToListVariables("forma", "forma", claveForma, Integer.class.getName());
+                    bitacora.setClaveForma(Integer.valueOf(claveForma));
+                    if (claveAplic!=null){
+                        bitacora.setClaveAplicacion(Integer.valueOf(claveAplic));
+                    }
 
                     Aplicacion apl = new Aplicacion();
                     apl.setClaveEmpleado(Integer.valueOf(user.getClaveEmpleado()));
@@ -167,29 +170,22 @@ public class srvGrid extends HttpServlet {
      * Se utiliza para actualizar la data en memoria del usuario
      * @param request
      */
-    private void actualizarData(HttpServletRequest request){
-        try {
-            User user = (User) request.getSession().getAttribute("user");
-            Perfil perfil = new Perfil();
-            perfil.setBitacora(user.getBitacora());
-            perfil.getBitacora().setEnable(false);
-            perfil.getBitacora().setEnableLogin(false);
-            LoginHandler lg = perfil.login(user);
-            if (lg.isLogin()) {
-                user = (User) lg.getObjectData();
-                if (user != null) {
-                    List lst = perfil.getLstAplicacion();
-                    Forma forma = new Forma();
-                    forma.getFormasByAplications(lst);
-                    request.getSession().setAttribute("perfil", perfil);
-                    request.getSession().setAttribute("forma", forma);
-                }
-            }
-        } catch (ExceptionHandler ex) {
-            try {
-                throw new ExceptionHandler(ex, this.getClass(), "Problemas al actualizar datos del usuario");
-            } catch (ExceptionHandler ex1) {
-                Logger.getLogger(srvGrid.class.getName()).log(Level.SEVERE, null, ex1);
+    private void actualizarData(HttpServletRequest request) throws ExceptionHandler{
+
+        User user = (User) request.getSession().getAttribute("user");
+        Perfil perfil = new Perfil();
+        perfil.setBitacora(user.getBitacora());
+        perfil.getBitacora().setEnable(false);
+
+        LoginHandler lg = perfil.login(user);
+        if (lg.isLogin()) {
+            user = (User) lg.getObjectData();
+            if (user != null) {
+                List lst = perfil.getLstAplicacion();
+                Forma forma = new Forma();
+                forma.getFormasByAplications(lst);
+                request.getSession().setAttribute("perfil", perfil);
+                request.getSession().setAttribute("forma", forma);
             }
         }
     }

@@ -219,12 +219,10 @@ public class Perfil extends Entidad{
             String password = usuario.getPassword();
             ConSession con = new ConSession();
             Bitacora bitacora = this.getBitacora();
+            boolean enableBit = this.getBitacora().isEnable();
             con.setBitacora(bitacora);
-            if (bitacora.isEnableLogin()){
-                con.getBitacora().setEnable(true);
-            }else{
-                con.getBitacora().setEnable(false);
-            }
+
+            con.getBitacora().setEnable(enableBit);
             User usr = con.getUser(user, password, this.getArrVariables());
             if (usr.isLogged()){
                 bitacora.setEnable(false);
