@@ -31,11 +31,6 @@ import mx.ilce.util.UtilDate;
  */
 class ConQuery {
     private Connection conn;
-    //private String idPerson;
-    //private String fecha;
-    //private String ip;
-    //private String browser;
-    //private String logDB;
     private boolean enableDataLog=true;
     private Bitacora bitacora;
 
@@ -71,24 +66,6 @@ class ConQuery {
         this.enableDataLog = enableDataLog;
     }
 
-    /*
-    private String getLogDB() {
-        return logDB;
-    }
-
-    private void setLogDB(String logDB) {
-        this.logDB = logDB;
-    }*/
-
-    /*
-    public String getBrowser() {
-        return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }*/
-
     /**
      * Obtiene el objeto de conexion
      * @return
@@ -104,31 +81,6 @@ class ConQuery {
     public void setConn(Connection conn) {
         this.conn = conn;
     }
-
-/*
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getIdPerson() {
-        return idPerson;
-    }
-
-    public void setIdPerson(String idPerson) {
-        this.idPerson = idPerson;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }*/
 
     /**
      * COnstructor Basico
@@ -218,7 +170,7 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
                     bitacora.setConsulta(strQuery);
-                    bitacora.setClaveProyecto(increment);
+                    bitacora.setClaveRegistro(increment);
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.AGREGAR);
                     admBit.setBitacora(bitacora);
@@ -227,6 +179,7 @@ class ConQuery {
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
+                    this.getBitacora().cleanDataQuery();
                 }
             }
             hsCmp.setObjData(increment);
@@ -308,8 +261,8 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ACTUALIZAR));
                     bitacora.setConsulta(strQuery);
-                    bitacora.setClaveProyecto(increment);
                     bitacora.setClaveTipoEvento(evento);
+                    bitacora.setClaveForma(campoForma.getClaveForma());
                     bitacora.setEvento(admBit.ACTUALIZAR);
                     admBit.setBitacora(bitacora);
                     if (admBit.addBitacora()){
@@ -317,6 +270,7 @@ class ConQuery {
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
+                    this.getBitacora().cleanDataQuery();
                 }
             }
             hsCmp.setObjData(increment);
@@ -395,8 +349,8 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
                     bitacora.setConsulta(strQuery);
-                    bitacora.setClaveProyecto(increment);
                     bitacora.setClaveTipoEvento(evento);
+                    bitacora.setClaveForma(campoForma.getClaveForma());
                     bitacora.setEvento(admBit.ELIMINAR);
                     admBit.setBitacora(bitacora);
                     if (admBit.addBitacora()){
@@ -404,6 +358,7 @@ class ConQuery {
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
+                    this.getBitacora().cleanDataQuery();
                 }
             }
             hsCmp.setObjData(increment);
@@ -441,6 +396,14 @@ class ConQuery {
         return hsCmp;
     }
 
+    /**
+     * Metodo para efectuar un delete e insert conjunto. NO PROBADO
+     * @param campoForma
+     * @param qryDelete
+     * @param qryInsert
+     * @return
+     * @throws ExceptionHandler
+     */
     public HashCampo executeDeleteInsert(CampoForma campoForma, String qryDelete, String qryInsert) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
@@ -481,8 +444,9 @@ class ConQuery {
                 AdmBitacora admBit = new AdmBitacora();
                 Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
                 bitacora.setConsulta(qryDelete);
-                bitacora.setClaveProyecto(increment);
+                bitacora.setClaveRegistro(increment);
                 bitacora.setClaveTipoEvento(evento);
+                bitacora.setClaveForma(campoForma.getClaveForma());
                 bitacora.setEvento(admBit.ELIMINAR);
                 admBit.setBitacora(bitacora);
                 if (admBit.addBitacora()){
@@ -496,8 +460,9 @@ class ConQuery {
                 AdmBitacora admBit = new AdmBitacora();
                 Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
                 bitacora.setConsulta(qryInsert);
-                bitacora.setClaveProyecto(increment);
+                bitacora.setClaveRegistro(increment);
                 bitacora.setClaveTipoEvento(evento);
+                bitacora.setClaveForma(campoForma.getClaveForma());
                 bitacora.setEvento(admBit.AGREGAR);
                 admBit.setBitacora(bitacora);
                 if (admBit.addBitacora()){
@@ -505,6 +470,9 @@ class ConQuery {
                     admBit.addVariablesBitacora(admBit.getIntSld());
                     admBit.setLstVariables(null);
                 }
+            }
+            if (bitacora!=null){
+                this.getBitacora().cleanDataQuery();
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
@@ -645,22 +613,12 @@ class ConQuery {
                 }else{
                     bitacora.setConsulta(queryLog);
                 }
-                if ((pk!=null)&&(!"".equals(pk))){
-                    try{
-                        Integer intPk = Integer.valueOf(pk);
-                        bitacora.setClaveProyecto(intPk);
-                    }catch(Exception e){
-                    }
-                }
                 bitacora.setClaveTipoEvento(evento);
                 bitacora.setEvento(admBit.CONSULTAR);
 
                 admBit.setBitacora(bitacora);
-                if (admBit.addBitacora()){
-                    admBit.setLstVariables(bitacora.getLstVariables());
-                    admBit.addVariablesBitacora(admBit.getIntSld());
-                    admBit.setLstVariables(null);
-                }
+                admBit.addBitacora();
+                this.getBitacora().cleanDataQuery();
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
@@ -776,22 +734,12 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
                     bitacora.setConsulta(query);
-                    if ((pk!=null)&&(!"".equals(pk))){
-                        try{
-                            Integer intPk = Integer.valueOf(pk);
-                            bitacora.setClaveProyecto(intPk);
-                        }catch(Exception e){
-                        }
-                    }
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
-                        admBit.addVariablesBitacora(admBit.getIntSld());
-                        admBit.setLstVariables(null);
-                    }
+                    admBit.addBitacora();
+                    this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
@@ -915,22 +863,12 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
                     bitacora.setConsulta(query);
-                    if ((pk!=null)&&(!"".equals(pk))){
-                        try{
-                            Integer intPk = Integer.valueOf(pk);
-                            bitacora.setClaveProyecto(intPk);
-                        }catch(Exception e){
-                        }
-                    }
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
-                        admBit.addVariablesBitacora(admBit.getIntSld());
-                        admBit.setLstVariables(null);
-                    }
+                    admBit.addBitacora();
+                    this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
@@ -1108,22 +1046,12 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
                     bitacora.setConsulta(query);
-                    if ((pk!=null)&&(!"".equals(pk))){
-                        try{
-                            Integer intPk = Integer.valueOf(pk);
-                            bitacora.setClaveProyecto(intPk);
-                        }catch(Exception e){
-                        }
-                    }
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
-                        admBit.addVariablesBitacora(admBit.getIntSld());
-                        admBit.setLstVariables(null);
-                    }
+                    admBit.addBitacora();
+                    this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
@@ -1318,22 +1246,12 @@ class ConQuery {
                     AdmBitacora admBit = new AdmBitacora();
                     Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
                     bitacora.setConsulta(query);
-                    if ((pk!=null)&&(!"".equals(pk))){
-                        try{
-                            Integer intPk = Integer.valueOf(pk);
-                            bitacora.setClaveProyecto(intPk);
-                        }catch(Exception e){
-                        }
-                    }
                     bitacora.setClaveTipoEvento(evento);
                     bitacora.setEvento(admBit.CONSULTAR);
 
                     admBit.setBitacora(bitacora);
-                    if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
-                        admBit.addVariablesBitacora(admBit.getIntSld());
-                        admBit.setLstVariables(null);
-                    }
+                    admBit.addBitacora();
+                    this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){

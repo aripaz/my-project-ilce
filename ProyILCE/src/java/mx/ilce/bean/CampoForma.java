@@ -23,10 +23,28 @@ public class CampoForma implements Serializable  {
     private Integer datoSensible;
     private Integer activo;
     private Integer tamano;
+    private Integer claveAplicacion;
 
     private String tabla;
     private String foraneo;
     private String typeData;
+
+
+    /**
+     * Obtiene la claveAplicacion del objeto
+     * @return
+     */
+    public Integer getClaveAplicacion() {
+        return claveAplicacion;
+    }
+
+    /**
+     * Asigna la claveAplicacion del objeto
+     * @param claveAplicacion
+     */
+    public void setClaveAplicacion(Integer claveAplicacion) {
+        this.claveAplicacion = claveAplicacion;
+    }
 
     /**
      * Obtiene la clavePerfil del objeto

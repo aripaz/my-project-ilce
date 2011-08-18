@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +57,8 @@ public class srvForma extends HttpServlet {
                 forma.setFormName(arrayForm);
 
                 String claveForma = (String) hsForm.get("$cf");
+                String claveAplic = (String) hsForm.get("$ca");
+
                 String pk = (String) hsForm.get("$pk");
                 String tipoAccion = (String) hsForm.get("$ta");
                 String strWhere = (String) hsForm.get("$w");
@@ -69,7 +69,11 @@ public class srvForma extends HttpServlet {
                 arrVariables = admForm.cleanVariables(arrVariables);
 
                 Bitacora bitacora = user.getBitacora();
-                bitacora.setEnableLogin(false);
+                bitacora.setEnable(false);
+                bitacora.setClaveForma(Integer.valueOf(claveForma));
+                if (claveAplic!=null){
+                    bitacora.setClaveAplicacion(Integer.valueOf(claveAplic));
+                }
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
@@ -229,29 +233,25 @@ public class srvForma extends HttpServlet {
         return strSld;
     }
 
-    private void actualizarData(HttpServletRequest request){
-        try {
-            User user = (User) request.getSession().getAttribute("user");
-            Perfil perfil = new Perfil();
-            perfil.setBitacora(user.getBitacora());
-            perfil.getBitacora().setEnable(false);
-            perfil.getBitacora().setEnableLogin(false);
-            LoginHandler lg = perfil.login(user);
-            if (lg.isLogin()) {
-                user = (User) lg.getObjectData();
-                if (user != null) {
-                    List lst = perfil.getLstAplicacion();
-                    Forma forma = new Forma();
-                    forma.getFormasByAplications(lst);
-                    request.getSession().setAttribute("perfil", perfil);
-                    request.getSession().setAttribute("forma", forma);
-                }
-            }
-        } catch (ExceptionHandler ex) {
-            try {
-                throw new ExceptionHandler(ex, this.getClass(), "Problemas al actualizar datos del usuario");
-            } catch (ExceptionHandler ex1) {
-                Logger.getLogger(srvForma.class.getName()).log(Level.SEVERE, null, ex1);
+    /**
+     * Actualiza a memoria los datos del usuario
+     * @param request
+     */
+    private void actualizarData(HttpServletRequest request) throws ExceptionHandler{
+        User user = (User) request.getSession().getAttribute("user");
+        Perfil perfil = new Perfil();
+        perfil.setBitacora(user.getBitacora());
+        perfil.getBitacora().setEnable(false);
+
+        LoginHandler lg = perfil.login(user);
+        if (lg.isLogin()) {
+            user = (User) lg.getObjectData();
+            if (user != null) {
+                List lst = perfil.getLstAplicacion();
+                Forma forma = new Forma();
+                forma.getFormasByAplications(lst);
+                request.getSession().setAttribute("perfil", perfil);
+                request.getSession().setAttribute("forma", forma);
             }
         }
     }

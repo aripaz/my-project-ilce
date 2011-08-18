@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +18,12 @@ import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
-import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
-import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
  *  Servlet implementado para hacer busqueda general de datos
- * @author vaio
+ * @author ccatrilef
  */
 public class srvFormaSearch extends HttpServlet {
 
@@ -54,6 +50,8 @@ public class srvFormaSearch extends HttpServlet {
                 HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
 
                 String claveForma = (String) hsForm.get("$cf");
+                String claveAplic = (String) hsForm.get("$ca");
+
                 String pk = (String) hsForm.get("$pk");
                 String tipoAccion = (String) hsForm.get("$ta");
                 String strWhere = (String) hsForm.get("$w");
@@ -64,6 +62,10 @@ public class srvFormaSearch extends HttpServlet {
                 arrVariables = admForm.cleanVariables(arrVariables);
 
                 Bitacora bitacora = usr.getBitacora();
+                bitacora.setClaveForma(Integer.valueOf(claveForma));
+                if (claveAplic!=null){
+                    bitacora.setClaveAplicacion(Integer.valueOf(claveAplic));
+                }
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");

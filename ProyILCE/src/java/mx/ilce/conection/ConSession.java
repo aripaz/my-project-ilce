@@ -88,7 +88,11 @@ public class ConSession {
             String[] strData = new String[2];
             strData[0] = user;
             strData[1] = password;
-
+            boolean enableBit = false;
+            
+            if (this.getBitacora()!=null){
+                enableBit = this.getBitacora().isEnable();
+            }
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
 
@@ -113,11 +117,14 @@ public class ConSession {
                 usr.setIsLogged(true);
                 usr.setLogin(user);
                 usr.setPassword(password);
+
                 this.getBitacora().setClaveEmpleado(usr.getClaveEmpleado());
                 usr.setBitacora(this.getBitacora());
-                AdmBitacora admBit = new AdmBitacora();
-                admBit.setBitacora(this.getBitacora());
-                admBit.login();
+                if (enableBit){
+                    AdmBitacora admBit = new AdmBitacora();
+                    admBit.setBitacora(this.getBitacora());
+                    admBit.login();
+                }
             }
         }catch(Exception ex){
             usr.setIsLogged(false);
@@ -143,6 +150,11 @@ public class ConSession {
             String[] strData = new String[2];
             strData[0] = usuario.getLogin();
             strData[1] = usuario.getPassword();
+            boolean enableBit = false;
+
+            if (this.getBitacora()!=null){
+                enableBit = this.getBitacora().isEnable();
+            }
 
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
@@ -168,6 +180,14 @@ public class ConSession {
                 usr.setIsLogged(true);
                 usr.setLogin(usuario.getLogin());
                 usr.setPassword(usuario.getPassword());
+
+                this.getBitacora().setClaveEmpleado(usr.getClaveEmpleado());
+                usr.setBitacora(this.getBitacora());
+                if (enableBit){
+                    AdmBitacora admBit = new AdmBitacora();
+                    admBit.setBitacora(this.getBitacora());
+                    admBit.login();
+                }
             }
         }catch(Exception ex){
             usr.setIsLogged(false);

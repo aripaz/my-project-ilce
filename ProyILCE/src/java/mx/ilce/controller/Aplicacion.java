@@ -479,15 +479,20 @@ public class Aplicacion extends Entidad {
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+
+                //obtiene la query a ejecutar
                 con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
                         strData, this.getArrVariables());
+
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
+
                 if (!dq.isEmpty()){
                     ArrayList arr = (ArrayList)dq.get(0);
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
 
+                    //agregamos el where para obtener la estructura de los campos y la tabla
                     if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()==null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
@@ -516,6 +521,7 @@ public class Aplicacion extends Entidad {
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
+
                     con.getBitacora().setEnable(false);
                     hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
                                     strData, this.getArrVariables());
@@ -547,9 +553,12 @@ public class Aplicacion extends Entidad {
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
                 strData[1] = String.valueOf(this.getTipoAccion());
+                
+                //obtenemos la query a ejecutar
                 con.getBitacora().setEnable(false);
                 HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
                         strData, this.getArrVariables());
+
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -557,6 +566,8 @@ public class Aplicacion extends Entidad {
                     Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
                     strData = new String[1];
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
+
+                    //obtenemos los datos
                     con.getBitacora().setEnable(true);
                     hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
                             strData[0], this.getArrVariables());
@@ -566,6 +577,8 @@ public class Aplicacion extends Entidad {
                     strData = new String[2];
                     strData[0] = String.valueOf(this.getClaveEmpleado());
                     strData[1] = String.valueOf(this.getClaveForma());
+
+                    //obtenemos los permisos
                     con.getBitacora().setEnable(false);
                     hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS), 
                             strData, this.getArrVariables());

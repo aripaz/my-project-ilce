@@ -54,10 +54,18 @@ public class AdmBitacora {
         inicializar();
     }
 
+    /**
+     * Obtiene el codigo numerico asignado como salida
+     * @return
+     */
     public Integer getIntSld() {
         return intSld;
     }
 
+    /**
+     * Asigna el codigo numerico que se entregara como salida
+     * @param intSld
+     */
     public void setIntSld(Integer intSld) {
         this.intSld = intSld;
     }
@@ -665,6 +673,7 @@ public class AdmBitacora {
                 StringBuffer strCampos = new StringBuffer("(");
                 StringBuffer strValues = new StringBuffer("(");
                 String strTabla = this.getLogDBProy();
+                Integer claveConsulta = Integer.valueOf(AdmBitacora.getKey(this.getProp(), AdmBitacora.CONSULTAR));
 
                 strCampos.append("fecha_bitacora,");
                 strValues.append("getdate(),");
@@ -675,22 +684,40 @@ public class AdmBitacora {
                     strValues.append(replaceChar(this.getBitacora().getBitacora()));
                     strValues.append("',");
                 }
-                if (this.getBitacora().getConsulta()!=null){
-                    strCampos.append("consulta,");
-                    strValues.append("'");
-                    strValues.append(replaceChar(this.getBitacora().getConsulta()));
-                    strValues.append("',");
+
+                if (this.getBitacora().getClaveTipoEvento()!=claveConsulta){
+                    if (this.getBitacora().getConsulta()!=null){
+                        strCampos.append("consulta,");
+                        strValues.append("'");
+                        strValues.append(replaceChar(this.getBitacora().getConsulta()));
+                        strValues.append("',");
+                    }
                 }
-                if (this.getBitacora().getClaveProyecto()!=null){
+
+                if (this.getBitacora().getClaveAplicacion()!=null){
                     strCampos.append("clave_aplicacion,");
-                    strValues.append(this.getBitacora().getClaveProyecto());
+                    strValues.append(this.getBitacora().getClaveAplicacion());
                     strValues.append(",");
                 }
+
+                if (this.getBitacora().getClaveRegistro()!=null){
+                    strCampos.append("clave_registro,");
+                    strValues.append(this.getBitacora().getClaveRegistro());
+                    strValues.append(",");
+                }
+
                 if (this.getBitacora().getClaveEmpleado()!=null){
                     strCampos.append("clave_empleado,");
                     strValues.append(this.getBitacora().getClaveEmpleado());
                     strValues.append(",");
                 }
+
+                if (this.getBitacora().getClaveForma()!=null){
+                    strCampos.append("clave_forma,");
+                    strValues.append(this.getBitacora().getClaveForma());
+                    strValues.append(",");
+                }
+
                 if (this.getBitacora().getClaveTipoEvento()!=null){
                     strCampos.append("clave_tipo_evento");
                     strValues.append(this.getBitacora().getClaveTipoEvento());
@@ -701,6 +728,7 @@ public class AdmBitacora {
                     strCampos.replace(strCampos.length()-1, strCampos.length(), " ");
                     strValues.replace(strValues.length()-1, strValues.length(), " ");
                 }
+                
                 strCampos.append(")");
                 strValues.append(")");
 
@@ -760,9 +788,19 @@ public class AdmBitacora {
                 strCampos.append(replaceChar(this.getBitacora().getConsulta()));
                 strCampos.append("',");
             }
-            if (this.getBitacora().getClaveProyecto()!=null){
+            if (this.getBitacora().getClaveAplicacion()!=null){
                 strCampos.append(" clave_aplicacion = ");
-                strCampos.append(this.getBitacora().getClaveProyecto());
+                strCampos.append(this.getBitacora().getClaveAplicacion());
+                strCampos.append(",");
+            }
+            if (this.getBitacora().getClaveForma()!=null){
+                strCampos.append(" clave_forma = ");
+                strCampos.append(this.getBitacora().getClaveForma());
+                strCampos.append(",");
+            }
+            if (this.getBitacora().getClaveRegistro()!=null){
+                strCampos.append(" clave_registro = ");
+                strCampos.append(this.getBitacora().getClaveRegistro());
                 strCampos.append(",");
             }
             if (this.getBitacora().getClaveEmpleado()!=null){
@@ -770,10 +808,16 @@ public class AdmBitacora {
                 strCampos.append(this.getBitacora().getClaveEmpleado());
                 strCampos.append(",");
             }
+            if (this.getBitacora().getClaveForma()!=null){
+                strCampos.append(" clave_forma = ");
+                strCampos.append(this.getBitacora().getClaveForma());
+                strCampos.append(",");
+            }
             if (this.getBitacora().getClaveTipoEvento()!=null){
                 strCampos.append(" clave_tipo_evento = ");
                 strCampos.append(this.getBitacora().getClaveTipoEvento());
             }
+
 
             String lastChar = strCampos.substring(strCampos.length()-1);
             if (",".equals(lastChar)){
@@ -857,8 +901,15 @@ public class AdmBitacora {
         return strSld;
     }
 
-    public void addVariablesBitacora(Integer strClaveBitacoraProy)throws ExceptionHandler{
-        boolean sld = false;
+    /**
+     * Metodo para agregar las variables asociadas a un INSERT o un UPDATE.
+     * Retorna el numero de campos operados exitosamente
+     * @param strClaveBitacoraProy
+     * @return
+     * @throws ExceptionHandler
+     */
+    public Integer addVariablesBitacora(Integer strClaveBitacoraProy)throws ExceptionHandler{
+        Integer sld = 0;
         if ( this.getBitacora()!=null){
             try {
                 if (this.getLstVariables()!=null){
@@ -878,7 +929,13 @@ public class AdmBitacora {
                         strQuery.append(strVar[2]).append("','");
                         strQuery.append(strVar[3]).append("')");
                         this.setStrQuery(strQuery.toString());
-                        executeInsert();
+                        Integer intSld = 0;
+                        try{
+                            intSld = executeInsert();
+                        }catch(Exception e){}
+                        if (intSld>0){
+                            sld++;
+                        }
                     }
                 }
             } finally {
@@ -894,6 +951,6 @@ public class AdmBitacora {
                 }
             }
         }
-        //return sld;
+        return sld;
     }
 }
