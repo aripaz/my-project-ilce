@@ -26,14 +26,16 @@ if (user == null){
         <!-- Calculator -->
         <script src="jQuery/js/jquery.calculator.min.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.calculator-es.js" type="text/javascript"></script>
-
-
+        <!-- Menu -->
+        <script src="jQuery/js/superfish.js" type="text/javascript"></script>
+        
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
-        
+        <link rel="stylesheet" type="text/css" media="screen" href="css/superfish.css"/>
+
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.gridqueue.js" type="text/javascript"></script>
@@ -44,34 +46,28 @@ if (user == null){
         <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.grid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.treeMenu.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.menu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
+        
 
     </head>
     <body>
         <div id="header">
             <div id="banner">
-                <img src="img/logo plataforma ilce 2.jpg" width="254" height="76" /></div>
+                <img src="img/logo_plataforma_ilce3.png" /></div>
+            <div id="sf-menu" ></div>
+            <div id="spacer_menu" ></div>
             <div id="session_menu">
             </div>
         </div>
-        <div id="splitterContainer">
-            <div id="leftPane">
-                <div id="apps_menu">
-
-                </div>
-            </div>
-            <div id="rightPane">
-                <div id="app_menu">
-                </div>
-                <div id="tabcontainer">
-                    <div id="tabs">
-                        <ul>
-                            <li><a href="#tabUser">Escritorio</a></li>
-                        </ul>
-                        <div id="tabUser">
-                            <p>Aquí van a ir breves reportes y alertas</p>
-                        </div>
-                    </div>
+       
+        <div id="tabcontainer">
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabUser">Escritorio</a></li>
+                </ul>
+                <div id="tabUser">
+                    <p>Aquí van a ir breves reportes y alertas</p>
                 </div>
             </div>
         </div>
