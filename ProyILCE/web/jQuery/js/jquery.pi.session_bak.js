@@ -47,10 +47,7 @@
                  else {
                     xml = data;}
                 obj.html($.fn.sessionmenu.handleSession(xml));
-                $("#ul-session").superfish({ 
-                    pathClass:  'current' 
-                });
-                
+
                 $("#lnkConfiguracion").click(function() {
 
                     //Crea el control del tab
@@ -102,20 +99,23 @@
         //Construye html de acuerdo a configuración recuperada
         if ($.fn.sessionmenu.options.foto=="")
             $.fn.sessionmenu.options.foto='img/sin_foto.jpg'
-
-        var sHtml='<ul class="sf-menu" id="ul-session">'+
-                  '<li>' +
-                  '<a href="#">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '&nbsp;<span class="sf-sub-indicator"> &#187;</span></a>'+
-                  '<ul>' +
-                  '<li>'+
-                  '<a href="#" id="lnkConfiguracion">Configuraci&oacute;n</a>' +
-                  '</li>'+
-                  '<li>'+
-                  '<a href="#" id="lnkConfiguracion">Cerrar sesi&oacute;n</a>' +
-                  '</li>'+
-                  '</ul>'+
-                  '</li>'+
-                  '</ul>';
+        var sHtml='<table border="0" cellspacing="0" cellpadding="0">'+
+                  '<tr>' +
+                  '<td valign="top">' +
+                  '<table border="0" align="center" cellpadding="5" cellspacing="5">' +
+                  '<tr>'+
+                  '<td class="session_menu">'+
+                  '<div align="right">'+
+                  '<span id="_un_">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '</span><br />' +
+                  '<a class="sesion_menu" href="#" id="lnkConfiguracion">Configuraci&oacute;n</a><br />' +
+                  '<a class="sesion_menu" href="#" id="lnkCerrarSesion">Cerrar sesi&oacute;n </a>'+
+                  '</div></td>' +
+                  '</tr>'+
+                  '</table>'+
+                  '</td>' +
+                  '<td><img src="' + $.fn.sessionmenu.options.foto + '" width="75" height="86" border="1" /></td>' +
+                  '</tr>'+
+                '</table>';
         return sHtml;
     }
 

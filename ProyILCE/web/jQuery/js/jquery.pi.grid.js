@@ -30,7 +30,8 @@
             inDesktop:false,
             editingApp:"",
             datestamp: sDateTime(new Date()),
-            originatingObject:""
+            originatingObject:"",
+            callFormWithRelationships:false
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -52,6 +53,7 @@
                 "' leyendas='" + $.fn.appgrid.options.leyendas[0] + "," + $.fn.appgrid.options.leyendas[1]+
                 "' datestamp='" + $.fn.appgrid.options.datestamp +
                 "' originatingObject='"+ $.fn.appgrid.options.originatingObject +
+                "' callFormWithRelationships='"+$.fn.appgrid.options.callFormWithRelationships+
                 "'>" +
                 "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
@@ -180,7 +182,7 @@
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
-                                width:500,
+                                width:550,
                                 originatingObject:oGrid.id
                             });
                         },
@@ -217,7 +219,8 @@
                                     filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                     height:"500",
                                     width:"500",
-                                    originatingObject: $(this).id
+                                    originatingObject: $(this).id,
+                                    showRelationships:$(this).attr("callFormWithRelationships")
                                 });
                             }
                             else {
@@ -253,10 +256,9 @@
                                         success:  function(data){
                                             oGrid.jqGrid('delRowData',nRow);
                                             //Actualiza árbol
-                                            if (nEntidad=="3") {
-                                                 sTvId=oGrid.attr("originatingObject");
-                                                $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
-                                            }
+                                            sTvId=oGrid.attr("originatingObject");
+                                            $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
+                                            
                                         },
                                         error:function(xhr,err){
                                             alert("Error al eliminar registro");
@@ -457,11 +459,11 @@
 
                 suffix=obj.children()[1].id.replace("pager","");
                 $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-                                        "<div class='ui-widget'>"+
-                                        "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
-					"<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
-					sTipoError+"</p>"+
-                                        "</div></div>");
+                    "<div class='ui-widget'>"+
+                    "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
+                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
+                    sTipoError+"</p>"+
+                    "</div></div>");
             }
         });
     };
@@ -529,9 +531,26 @@
             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
             //Crea la interfaz de la aplicación abierta
             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
-                "<div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
-                "<div id='divForeignGrids" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridContainer'></div>" +
+                "<div id='splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='splitterContainer'>"+
+                "   <div id='leftPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='leftPane'>"+
+                "       <div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
+                "   </div>"+
+                "   <div id='rigthPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp+"' class='rigthPane'>"+
+                "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridContainer'></div>" +
+                "   </div>"+
+                "</div>"+
                 "</div>");
+            
+            //Crea splitter
+            $("#splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).splitter({
+                splitVertical:true,
+                A:$('#leftPane_'+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp),
+                B:$('#rightPane'+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp),
+                closeableto:100,
+                animSpeed:100
+            });
+            
+            // Crea árbol
             $("#tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).treeMenu({
                 app:nApp,
                 entidad:nEntidad,
