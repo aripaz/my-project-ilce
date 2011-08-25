@@ -5,7 +5,7 @@
 
 $(document).ready(function() {
 
-    $("#splitterContainer").splitter({
+    /*$("#splitterContainer").splitter({
         minAsize:100,
         maxAsize:250,
         splitVertical:true,
@@ -20,13 +20,13 @@ $(document).ready(function() {
         A:$('#rightTopPane'),
         B:$('#rightBottomPane'),
         closeableto:100
-    });
+    });*/
     
     //Crea el menú de sesión
     $("#session_menu").sessionmenu();
 
     //Crea menú de aplicaciones de acuerdo al perfil
-    $("#apps_menu").appmenu({
+    $("#sf-menu").menu({
              xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp"});
 
     //Inicializa el escritorio

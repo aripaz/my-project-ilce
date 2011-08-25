@@ -64,17 +64,14 @@
                 
                 oRegistros.each( function() {
                    sDateStamp=$(o).attr("datestamp");
-                   sTypes+= '"'+$.trim($(this).find('rel').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().replace('\n','')) + '"}},';
+                   sTypes+= '"'+$.trim($(this).find('rel').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().split('\n')[0]) + '"}},';
                    nClaveNodo= $.trim($(this).find('clave_nodo').text().replace('\n','')) + "-" + sDateStamp;
                    sRel=$.trim($(this).find('rel').text().replace('\n',''));
                    sTextoNodo=$.trim($(this).find('texto_nodo').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
                    nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''))+"-"+sDateStamp;
-                   if (sRel=='aplicacion'|| sRel=='cliente')
-                       sState='open'
-                   else
-                       sState='closed'
-
-                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel +"' state='" + sState + "'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
+                   sState=$.trim($(this).find('state').text().replace('\n',''));
+                   sEvento=$.trim($(this).find('onclick').text().replace('\n',''));
+                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel +"' state='" + sState + "' evento='"+sEvento +"'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
                 });
 
                 sXML="<root>" + sXML + "</root>";
@@ -98,9 +95,10 @@
 
                
                 $("#" + o.id+ " a").live("click", function(e) {
-                      var sNodeId=this.parentNode.id;
+                      var oTheNode=this.parentNode;
+                      var sNodeId=oTheNode.id;
                       var sTitulo=$.trim(this.text);
-                      var sTipoNodo=sNodeId.split("-")[0];
+                      var sTipoNodo=$(oTheNode).attr("evento");
                       var nApp=sNodeId.split("-")[1];
                       var nForma=sNodeId.split("-")[2];
                       var sW="";
@@ -112,22 +110,22 @@
                             sW+="&"+sNodeId.split("-")[i];
                       }
 
-                      if (sTipoNodo=='foraneo'||
-                          sTipoNodo=='perfilxforma'||
-                          sTipoNodo=='aplicacion') return false;
-
+                      if (sTipoNodo=='') return false;
+                      
                       //Llama grids
-                       $(o.nextSibling).appgrid({app: nApp,
+                      var oId=o.id;
+                       $("#divForeignGrids_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appgrid({app: nApp,
                           entidad: nForma,
-                          editingApp: o.id.split("_")[3],
+                          editingApp: oId.split("_")[3],
                           pk: nPK,
                           wsParameters: sW,
                           titulo:sTitulo,
                           showFilterLink:false,
                           inQueue:false,
                           leyendas:["Nuevo registro", "Edición de registro"],
-                          height:"70%",
-                          originatingObject:o.id
+                          height:"82%",
+                          originatingObject:oId,
+                          callFormWithRelationships: sTipoNodo=="showGridAndRelationships"?true:false
                        });
 
                  });
