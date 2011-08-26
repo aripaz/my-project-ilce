@@ -45,7 +45,7 @@ public class srvFormaSearch extends HttpServlet {
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                Thread.sleep(200);
+                //Thread.sleep(200);
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
                 hs = admForm.getFormulario(request);

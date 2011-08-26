@@ -33,6 +33,15 @@ class ConQuery {
     private Connection conn;
     private boolean enableDataLog=true;
     private Bitacora bitacora;
+    private String hourMinSec;
+
+    public String getHourMinSec() {
+        return ((hourMinSec==null)?"":hourMinSec);
+    }
+
+    public void setHourMinSec(String hourMinSec) {
+        this.hourMinSec = hourMinSec;
+    }
 
     /**
      * Obtiene el objeto bitacora
@@ -596,6 +605,8 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setHourMinSec(this.getHourMinSec());
+                        this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
@@ -723,6 +734,8 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setHourMinSec(this.getHourMinSec());
+                        this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
@@ -828,6 +841,7 @@ class ConQuery {
                     }
                 }
                 query = addWhereToQuery(query,whereData);
+                query = query.toLowerCase();
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -852,6 +866,8 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setHourMinSec(this.getHourMinSec());
+                        this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
@@ -1035,6 +1051,8 @@ class ConQuery {
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                               getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                        cmp.setHourMinSec(this.getHourMinSec());
+                        this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
                         lstData.add(cmp);
                     }
@@ -1234,6 +1252,8 @@ class ConQuery {
                                                   itCmp.getTypeDataDB(),
                                                   castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                                   getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                            cmp.setHourMinSec(this.getHourMinSec());
+                            this.setHourMinSec("");
                             cmp.setIsIncrement(itCmp.getIsIncrement());
                             lstData.add(cmp);
                         }
@@ -1344,6 +1364,8 @@ class ConQuery {
                         cmp.setTypeDataDB(itCmp.getTypeDataDB());
                         cmp.setTypeDataAPL(castTypeDataDBtoAPL(itCmp.getTypeDataDB()));
                         cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
+                        cmp.setHourMinSec(this.getHourMinSec());
+                        this.setHourMinSec("");
                         lstData.add(cmp);
                     }
                     hsCmp.addListData(lstData,i++);
@@ -1459,6 +1481,7 @@ class ConQuery {
                     if (date!=null){
                         UtilDate utDate = new UtilDate(date.getDate(), date.getMonth()+1, date.getYear()+1900);
                         sld = utDate.getFecha("/");
+                        this.setHourMinSec(rs.getString(codigo.intValue()));
                     }else{
                         sld = "";
                     }

@@ -44,7 +44,7 @@ public class srvBitacora extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
-            Thread.sleep(300);
+            Thread.sleep(200);
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
@@ -119,7 +119,9 @@ public class srvBitacora extends HttpServlet {
                         forma.setIncludeForaneo(false);
                         forma.setBitacora(bitacora);
                         forma.getBitacora().setEnable(false);
+                        forma.setIncludeHour(true);
                         forma.ingresarBusquedaAvanzada();
+                        forma.setIncludeHour(false);
 
                         StringBuffer xmlForma = forma.getXmlEntidad();
 

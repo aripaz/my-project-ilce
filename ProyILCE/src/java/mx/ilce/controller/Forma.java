@@ -44,7 +44,15 @@ public class Forma extends Entidad{
     private Integer claveEmpleado;
     private String[][] arrVariables;
     private Bitacora bitacora;
+    private boolean includeHour=false;
 
+    public boolean isIncludeHour() {
+        return includeHour;
+    }
+
+    public void setIncludeHour(boolean includeHour) {
+        this.includeHour = includeHour;
+    }
 
     /**
      * Obtiene el arreglo de variables
@@ -1168,6 +1176,7 @@ public class Forma extends Entidad{
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }else{
+                            admXML.setIncludeHour(this.isIncludeHour());
                             xmlForma = admXML.getFormaByData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }
