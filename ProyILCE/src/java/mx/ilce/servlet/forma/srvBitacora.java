@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.HashCampo;
@@ -20,6 +16,12 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.Validation;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
 
 /**
  * Servlet creado como alternativa para las llamadas asincronas
@@ -42,12 +44,16 @@ public class srvBitacora extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
+            Thread.sleep(300);
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
+
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
-                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+                hs = admForm.getFormulario(request);
+                HashMap hsForm = (HashMap) hs.get("FORM");
+                hsForm = (HashMap) hs.get("FORM");
 
                 String claveForma = (String) hsForm.get("$cf");
                 String claveAplic = (String) hsForm.get("$ca");
@@ -76,9 +82,10 @@ public class srvBitacora extends HttpServlet {
                 if ("false".equals(blOK)){
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
-                    Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    Forma formaMem = (Forma) request.getSession().getAttribute("forma");
+                    Forma forma = new Forma();
+                    forma = formaMem;
                     if (forma !=null){
-
                         forma.setFormData(hsForm);
                         ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
                         forma.setFormName(arrayForm);

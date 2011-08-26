@@ -45,9 +45,12 @@ public class srvFormaSearch extends HttpServlet {
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
+                Thread.sleep(200);
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
-                HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+                hs = admForm.getFormulario(request);
+                HashMap hsForm = (HashMap) hs.get("FORM");
+                hsForm = (HashMap) hs.get("FORM");
 
                 String claveForma = (String) hsForm.get("$cf");
                 String claveAplic = (String) hsForm.get("$ca");
@@ -73,12 +76,14 @@ public class srvFormaSearch extends HttpServlet {
 
                 List lstVal = val.validationForm(arrVal, hsForm);
                 String blOK = (String) lstVal.get(0);
+
                 if ("false".equals(blOK)){
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
-                    Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    Forma formaMem = (Forma) request.getSession().getAttribute("forma");
+                    Forma forma = new Forma();
+                    forma = formaMem;                    
                     if (forma !=null){
-
                         forma.setFormData(hsForm);
                         ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
                         forma.setFormName(arrayForm);
