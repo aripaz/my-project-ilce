@@ -127,10 +127,10 @@
                                 //Se inserta el div para el grid
                                 oTabPanel.html("<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
                                     "<div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
-                                    "<h3>&nbsp;Actividad reciente<h3>" +
-                                    "<div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                    "<h3>&nbsp;Mis filtros<h3>" +
-                                    "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                        "<h3>&nbsp;Actividad reciente</h3>" +
+                                        "<div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                        "<h3>&nbsp;Mis filtros</h3>" +
+                                        "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
                                     "</div>"  );
                                 var sLeyendaNuevoRegistro=$("#newEntity_" + nAplicacion + "_" + nEntidad ).text();
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
@@ -148,18 +148,10 @@
                                     originatingObject:obj[0].id
                                 });
                                 
-                                $("#accordion_"+nAplicacion + "_" + nEntidad+"_0").accordion({
-                                    active: false,
-                                    autoHeight: false,
-                                    collapsible: true,
-                                    change: function() {
-                                        $(this).find('h3').blur();
-                                    }
-                                }
-                                );
                                         
-                                $.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);
                                 $.fn.menu.getSearchs("#filtros_"+nAplicacion + "_" + nEntidad+"_0");
+                                $.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);
+
                             }
                         }
                     });
@@ -290,84 +282,72 @@
     $.fn.menu.getLog = function(sDiv,nApp,nForm) {
         $.ajax(
         {
-            url: "srvFormaSearch?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForm),
+            url: "srvBitacora?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForm),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
-                    xmlGs = new ActiveXObject("Microsoft.XMLDOM");
-                    xmlGs.async = false;
-                    xmlGs.validateOnParse="true";
-                    xmlGs.loadXML(data);
-                    if (xmlGs.parseError.errorCode>0)
+                    xmlLog = new ActiveXObject("Microsoft.XMLDOM");
+                    xmlLog.async = false;
+                    xmlLog.validateOnParse="true";
+                    xmlLog.loadXML(data);
+                    if (xmlLog.parseError.errorCode>0)
                         alert("Error de compilación xml:" + xml.parseError.errorCode +"\nParse reason:" + xml.parseError.reason + "\nLinea:" + xml.parseError.line);
                 }                
                 else 
-                    xmlGs = data;
+                    xmlLog = data;
                 
-                var sBusquedas="<br>";
-                var nAplicacion="";
                 
-                $(xmlGs).find("registro").each( function(){
+                $(xmlLog).find("registro").each( function(){
+                    sHtml="";
                     nClave=$(this).find("clave_bitacora")[0].firstChild.data;
-                    sParametro=$(this).find("parametro")[0].firstChild.data
-                    nForma=sParametro.split(".")[2];
-                    sEtiqueta=sParametro.split(".")[3];
-                    nAplicacion =$(this).find("clave_aplicacion")[0].firstChild.data;
-                    sValor=escape($(this).find("valor")[0].firstChild.data);
-                    sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
-                    sBusquedas="<div class='link_toolbar'>"+
-                    "<a class='menu' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sEtiqueta + "</a>"+
-                    "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
-                    "</div>";
-
-                    $("#appQries_"+nAplicacion).append(sBusquedas);
-
-                    //Oculta botones
-                    $(".ui-icon-close", "#appQries_"+nAplicacion).hide();
+                    dFecha=$(this).find("fecha_bitacora")[0].firstChild.data;
+                    sFoto=$(this).find("foto")[0].firstChild.data.toLowerCase();
+                    sNombre=$(this).find("nombre")[0].firstChild.data;
+                    sTipoEvento=$(this).find("clave_tipo_evento")[0].firstChild.data;
+                    sForma=$(this).find("consulta")[0].firstChild.data;
+                    sBitacora=$(this).find("bitacora")[0].firstChild.data;
+                    nAplicacion=$(this).find("clave_aplicacion")[0].firstChild.data;
+                    nForma=$(this).find("clave_forma")[0].firstChild.data;
+                    nRegistro=$(this).find("clave_registro")[0].firstChild.data;
+                    if (nClave!="") 
+                        sHtml="<div class='user_avatar'>"+
+                           sFoto +
+                           "</div>"+
+                           "<div class='bitacora'>"+
+                           sNombre + " " + sTipoEvento + " " + sForma + " " + 
+                           "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
+                           sBitacora  + "</a> a las " + dFecha +
+                           "</div>"
+                    $(sDiv).append(sHtml);
                     //Hace bind del liga del búsqueda
-                    $("#lnkBusqueda_" + sSuffix).click(function(){
-                        nAplicacion=this.id.split("_")[1];
-                        nForma=this.id.split("_")[2];
-                        sValor=this.id.split("_")[4];
-                        /*var newE = $.Event('click');
-                        newE.gridFilter=$(this).attr("data");*/
-                        data=$(this).attr("data");
-                        $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
-                    });                    
+                    if (nAplicacion!="")
+                         $("#lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro).click(function(){
+                            $("body").form({
+                                app: this.id.split("_")[1],
+                                forma:this.id.split("_")[2],
+                                pk:this.id.split("_")[3],
+                                datestamp:$(this).attr("datestamp"),
+                                modo:"update",
+                                titulo: "Edita " + sForma.split(" ")[1],
+                                columnas:1,
+                                filtroForaneo:"2=clave_aplicacion=" + nApp,
+                                height:400,
+                                width:550,
+                                originatingObject:"#lnkBitacora_" + nApp + "_" + nForma + "_" + nRegistro
+                            });
+                    }); 
+                    
                 });
 
-                //Hace bind con los divs padres del link en el evento hover
-                $(".link_toolbar").hover(
-                    function () {
-                        //$(this).addClass('active_filter');
-                        $(".closeLnkFiltro",this).show();
-                    },
-                    function () {
-                        //$(this).removeClass('active_filter');
-                        $(".closeLnkFiltro",this).hide();
-                    }
-                    );
-                
-                //Hace bind con los botones de cerrar en el evento hover
-                $(".closeLnkFiltro").hover(
-                    function () {
-                        $(this).parent().addClass('ui-state-default');
-                        $(this).parent().addClass('ui-corner-all');
-                    },
-                    function () {
-                        $(this).parent().removeClass('ui-state-default');
-                        $(this).parent().removeClass('ui-corner-all');
-                    }
-                    );
-
-                //Hace bind del botón de búsqueda
-                $(".closeLnkFiltro").click(function(){
-                    if (!confirm('¿Desea borrar el filtro seleccionado?')) return false;
-                    $.post("srvFormaDelete","$cf=1&$pk=" + $(this).attr("pk"));
-                    $(this).parent().parent().remove();
-                });
-
-
+                $("#accordion_"+nApp + "_" + nForm +"_0").accordion({
+                                    /*active: false,
+                                    fillSpace:true,
+                                    collapsible: true,*/
+                                    change: function() {
+                                        $(this).find('h3').blur();
+                                    }
+                             }
+                   );
             }
         });
     }
