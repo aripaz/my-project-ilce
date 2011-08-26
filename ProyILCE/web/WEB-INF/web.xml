@@ -36,6 +36,14 @@
         <servlet-name>srvSendMail</servlet-name>
         <servlet-class>mx.ilce.mail.srvSendMail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SrvReport</servlet-name>
+        <servlet-class>mx.ilce.report.SrvReport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvFormaSearchSec</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvFormaSearchSec</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>srvSendMail</servlet-name>
         <url-pattern>/srvSendMail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SrvReport</servlet-name>
+        <url-pattern>/SrvReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvFormaSearchSec</servlet-name>
+        <url-pattern>/srvFormaSearchSec</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
