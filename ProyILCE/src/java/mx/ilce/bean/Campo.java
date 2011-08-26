@@ -21,7 +21,15 @@ public class Campo implements Serializable {
     private String help;
     private Integer tamano;
     private boolean isIncrement;
+    private String hourMinSec;
 
+    public String getHourMinSec() {
+        return hourMinSec;
+    }
+
+    public void setHourMinSec(String hourMinSec) {
+        this.hourMinSec = hourMinSec;
+    }
 
     /**
      * Constructor de la clase donde se entregan los distintos elementos que

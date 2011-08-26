@@ -38,6 +38,15 @@ public class AdminXML {
     private HashCampo hashPermisoForma;
     private HashMap hsForm;
     private Bitacora bitacora;
+    private boolean includeHour=false;
+
+    public boolean isIncludeHour() {
+        return includeHour;
+    }
+
+    public void setIncludeHour(boolean includeHour) {
+        this.includeHour = includeHour;
+    }
 
     public Bitacora getBitacora() {
         return bitacora;
@@ -416,9 +425,19 @@ public class AdminXML {
                         if (cmp.getIsIncrement()){
                             str.append((" autoincrement=\"TRUE\" "));
                         }
+
                         str.append((">"));
                         str.append(("<![CDATA["));
                         str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
+                        if ((this.isIncludeHour()) && 
+                                ("java.sql.Date".equals(cmp.getTypeDataAPL()))){
+                            try{
+                                String[] strHour = cmp.getHourMinSec().split(" ");
+                                if (strHour.length > 1){
+                                    str.append(" ").append(strHour[1]);
+                                }
+                            }catch(Exception e){ }
+                        }
                         str.append("]]>\n");
                         if (cmp.getNombreDB()!=null){
                             CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
