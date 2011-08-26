@@ -41,8 +41,8 @@
         <servlet-class>mx.ilce.report.SrvReport</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>srvFormaSearchSec</servlet-name>
-        <servlet-class>mx.ilce.servlet.forma.srvFormaSearchSec</servlet-class>
+        <servlet-name>srvBitacora</servlet-name>
+        <servlet-class>mx.ilce.servlet.forma.srvBitacora</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
@@ -85,8 +85,8 @@
         <url-pattern>/SrvReport</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>srvFormaSearchSec</servlet-name>
-        <url-pattern>/srvFormaSearchSec</url-pattern>
+        <servlet-name>srvBitacora</servlet-name>
+        <url-pattern>/srvBitacora</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
