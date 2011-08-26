@@ -147,6 +147,12 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 .accordionContainer {
     float: right;
     width: 20%;
+    height: 90%
+}
+
+div.user_avatar>img {
+    height: 50px;
+    width: 45px;
 }
 
 .gridForeignContainer {
@@ -267,4 +273,16 @@ div.accordionContainer > span.ui-icon {
    vertical-align:middle;
    height: 25px;
    line-height: 25px;
+}
+
+.user_avatar {
+    float: left;
+    clear: left;
+    margin-bottom: 5px;
+}
+
+.bitacora {
+    float:right;
+    width: 70%;
+    clear: right;
 }
