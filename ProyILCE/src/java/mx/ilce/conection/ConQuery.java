@@ -1,10 +1,8 @@
 package mx.ilce.conection;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.AdmBitacora;
 import mx.ilce.bitacora.Bitacora;
@@ -35,11 +34,21 @@ class ConQuery {
     private Bitacora bitacora;
     private String hourMinSec;
 
-    public String getHourMinSec() {
+    /**
+     * Obtiene un String con la hora, minuto y segundo de un dia. Se utiliza
+     * como variable local
+     * @return
+     */
+    private String getHourMinSec() {
         return ((hourMinSec==null)?"":hourMinSec);
     }
 
-    public void setHourMinSec(String hourMinSec) {
+    /**
+     * Asigna un String con la hora, minuto y segundo de un dia. Se utiliza
+     * como variable local
+     * @param hourMinSec
+     */
+    private void setHourMinSec(String hourMinSec) {
         this.hourMinSec = hourMinSec;
     }
 
@@ -92,7 +101,7 @@ class ConQuery {
     }
 
     /**
-     * COnstructor Basico
+     * Constructor Basico
      */
     public ConQuery() {
     }
@@ -103,7 +112,7 @@ class ConQuery {
      * @throws SQLException
      */
     private void getConexion() throws SQLException, ExceptionHandler{
-        StringBuffer strConexion = new StringBuffer();
+        StringBuilder strConexion = new StringBuilder();
         try {
             Properties prop = AdminFile.leerConfig();
 
@@ -138,14 +147,19 @@ class ConQuery {
      * Metodo que ejecuta una query de insercion, tras efectuarla, se obtiene el
      * ID o clave de los datos insertados, el cual es retornado en el atributo
      * Object del HashCampo. En caso que no se ejecute la operacion el numero
-     * retornado es -1, en Caso que sea una tabla sin ID o clave, el valor
+     * retornado es -1, en caso que sea una tabla sin ID o clave, el valor
      * retornado es 0.
-     * @param campoForma    Variable con datos para validacion
-     * @param arrData       Query a ejecutar
+     * Recibe como parametro un objeto CampoForma con los datos para la ejecucion
+     * y un String  con la Query a ejecutar
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeInsert(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    //public HashCampo executeInsert(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    public HashCampo executeInsert(DataTransfer dataTransfer) throws ExceptionHandler{
+
+        CampoForma campoForma = dataTransfer.getCampoForma();
+        String strQuery = dataTransfer.getQueryInsert();
+
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -173,18 +187,19 @@ class ConQuery {
                         } while(rs.next());
                     }
                 }
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraI = this.getBitacora();
+                if ((bitacoraI!=null)&&(bitacoraI.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
-                    bitacora.setConsulta(strQuery);
-                    bitacora.setClaveRegistro(increment);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setEvento(admBit.AGREGAR);
-                    admBit.setBitacora(bitacora);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp()
+                                                                ,AdmBitacora.AGREGAR));
+                    bitacoraI.setConsulta(strQuery);
+                    bitacoraI.setClaveRegistro(increment);
+                    bitacoraI.setClaveTipoEvento(evento);
+                    bitacoraI.setEvento(AdmBitacora.AGREGAR);
+                    admBit.setBitacora(bitacoraI);
                     if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.setLstVariables(bitacoraI.getLstVariables());
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
@@ -193,12 +208,14 @@ class ConQuery {
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar INSERT");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para ejecutar INSERT");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar INSERT");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para ejecutar INSERT");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
@@ -209,10 +226,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("executeInsert"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                           "Problemas al excribir el LOG");
             }
             try{
                 if (rs!=null){
@@ -223,7 +242,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                           "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -239,8 +259,8 @@ class ConQuery {
     private boolean validateInsert(String tabla, String query){
         boolean queryOK = true;
         String str = "insert into " + tabla;
-        if ((!query.toUpperCase().contains(str.toUpperCase())) &&
-                (!query.toUpperCase().contains("VALUES"))){
+        if ( (!query.toUpperCase().contains(str.toUpperCase())) &&
+             (!query.toUpperCase().contains("VALUES")) ){
             queryOK = false;
         }
         return queryOK;
@@ -255,7 +275,11 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeUpdate(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    //public HashCampo executeUpdate(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    public HashCampo executeUpdate(DataTransfer dataTransfer) throws ExceptionHandler{
+        CampoForma campoForma = dataTransfer.getCampoForma();
+        String strQuery = dataTransfer.getQueryUpdate();
+
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         try{
@@ -264,18 +288,19 @@ class ConQuery {
                 getConexion();
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(strQuery);
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraU = this.getBitacora();
+                if ((bitacoraU!=null)&&(bitacoraU.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ACTUALIZAR));
-                    bitacora.setConsulta(strQuery);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setClaveForma(campoForma.getClaveForma());
-                    bitacora.setEvento(admBit.ACTUALIZAR);
-                    admBit.setBitacora(bitacora);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp()
+                                                                ,AdmBitacora.ACTUALIZAR));
+                    bitacoraU.setConsulta(strQuery);
+                    bitacoraU.setClaveTipoEvento(evento);
+                    bitacoraU.setClaveForma(campoForma.getClaveForma());
+                    bitacoraU.setEvento(AdmBitacora.ACTUALIZAR);
+                    admBit.setBitacora(bitacoraU);
                     if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.setLstVariables(bitacoraU.getLstVariables());
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
@@ -284,12 +309,14 @@ class ConQuery {
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar UPDATE");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para ejecutar UPDATE");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar UPDATE");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para ejecutar UPDATE");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
@@ -300,10 +327,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("executeUpdate"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (st!=null){
@@ -311,7 +340,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -336,14 +366,18 @@ class ConQuery {
 
     /**
      * Metodo que efectua una query de eliminacion de datos, tras su ejecucion
-     * entrega un numero 1, que efectuo correctamente la operacion, cero en caso
-     * contrario. El valor es retornado en el atributo Object del HashCampo
-     * @param campoForma    Objeto que contiene los datos para identificar la tabla
-     * @param arrData       Arreglo con la query que se ejecutara
+     * entrega un numero: uno(1) efectuo correctamente la operacion, cero(0) en caso
+     * contrario. El valor es retornado en el atributo Object del HashCampo.
+     * Como entrada se recibe: un objeto CampoForma que contiene los datos para
+     * identificar la tabla; un String con la query que se ejecutara
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeDelete(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    //public HashCampo executeDelete(CampoForma campoForma, String strQuery) throws ExceptionHandler{
+    public HashCampo executeDelete(DataTransfer dataTransfer) throws ExceptionHandler{
+        CampoForma campoForma = dataTransfer.getCampoForma();
+        String strQuery = dataTransfer.getQueryDelete();
+        
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         try{
@@ -352,18 +386,19 @@ class ConQuery {
                 getConexion();
                 st = this.conn.createStatement();
                 increment = st.executeUpdate(strQuery);
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraD = this.getBitacora();
+                if ((bitacoraD!=null)&&(bitacoraD.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
-                    bitacora.setConsulta(strQuery);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setClaveForma(campoForma.getClaveForma());
-                    bitacora.setEvento(admBit.ELIMINAR);
-                    admBit.setBitacora(bitacora);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp()
+                                                                ,AdmBitacora.ELIMINAR));
+                    bitacoraD.setConsulta(strQuery);
+                    bitacoraD.setClaveTipoEvento(evento);
+                    bitacoraD.setClaveForma(campoForma.getClaveForma());
+                    bitacoraD.setEvento(AdmBitacora.ELIMINAR);
+                    admBit.setBitacora(bitacoraD);
                     if (admBit.addBitacora()){
-                        admBit.setLstVariables(bitacora.getLstVariables());
+                        admBit.setLstVariables(bitacoraD.getLstVariables());
                         admBit.addVariablesBitacora(admBit.getIntSld());
                         admBit.setLstVariables(null);
                     }
@@ -372,12 +407,14 @@ class ConQuery {
             }
             hsCmp.setObjData(increment);
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para ejecutar DELETE");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para ejecutar DELETE");
             eh.setStrQuery(strQuery);
             eh.setSeeStringData(true);
             throw eh;
@@ -388,10 +425,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("executeDelete"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (st!=null){
@@ -399,7 +438,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -413,7 +453,12 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo executeDeleteInsert(CampoForma campoForma, String qryDelete, String qryInsert) throws ExceptionHandler{
+    //public HashCampo executeDeleteInsert(CampoForma campoForma, String qryDelete, String qryInsert) throws ExceptionHandler{
+    public HashCampo executeDeleteInsert(DataTransfer dataTransfer) throws ExceptionHandler{
+        CampoForma campoForma = dataTransfer.getCampoForma();
+        String qryDelete = dataTransfer.getQueryDelete();
+        String qryInsert = dataTransfer.getQueryInsert();
+        
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -447,49 +492,53 @@ class ConQuery {
                 }
                 hsCmp.setObjData(increment);
             }
-            Bitacora bitacora = this.getBitacora();
-            if ((bitacora!=null)&&(bitacora.isEnable()))
+            Bitacora bitacoraO = this.getBitacora();
+            if ((bitacoraO!=null)&&(bitacoraO.isEnable()))
             {
                 AdmBitacora admBit = new AdmBitacora();
-                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.ELIMINAR));
-                bitacora.setConsulta(qryDelete);
-                bitacora.setClaveRegistro(increment);
-                bitacora.setClaveTipoEvento(evento);
-                bitacora.setClaveForma(campoForma.getClaveForma());
-                bitacora.setEvento(admBit.ELIMINAR);
-                admBit.setBitacora(bitacora);
+                Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp()
+                                                            ,AdmBitacora.ELIMINAR));
+                bitacoraO.setConsulta(qryDelete);
+                bitacoraO.setClaveRegistro(increment);
+                bitacoraO.setClaveTipoEvento(evento);
+                bitacoraO.setClaveForma(campoForma.getClaveForma());
+                bitacoraO.setEvento(AdmBitacora.ELIMINAR);
+                admBit.setBitacora(bitacoraO);
                 if (admBit.addBitacora()){
-                    admBit.setLstVariables(bitacora.getLstVariables());
+                    admBit.setLstVariables(bitacoraO.getLstVariables());
                     admBit.addVariablesBitacora(admBit.getIntSld());
                     admBit.setLstVariables(null);
                 }
             }
-            if ((bitacora!=null)&&(bitacora.isEnable()))
+            if ((bitacoraO!=null)&&(bitacoraO.isEnable()))
             {
                 AdmBitacora admBit = new AdmBitacora();
-                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.AGREGAR));
-                bitacora.setConsulta(qryInsert);
-                bitacora.setClaveRegistro(increment);
-                bitacora.setClaveTipoEvento(evento);
-                bitacora.setClaveForma(campoForma.getClaveForma());
-                bitacora.setEvento(admBit.AGREGAR);
-                admBit.setBitacora(bitacora);
+                Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp()
+                                                            ,AdmBitacora.AGREGAR));
+                bitacoraO.setConsulta(qryInsert);
+                bitacoraO.setClaveRegistro(increment);
+                bitacoraO.setClaveTipoEvento(evento);
+                bitacoraO.setClaveForma(campoForma.getClaveForma());
+                bitacoraO.setEvento(AdmBitacora.AGREGAR);
+                admBit.setBitacora(bitacoraO);
                 if (admBit.addBitacora()){
-                    admBit.setLstVariables(bitacora.getLstVariables());
+                    admBit.setLstVariables(bitacoraO.getLstVariables());
                     admBit.addVariablesBitacora(admBit.getIntSld());
                     admBit.setLstVariables(null);
                 }
             }
-            if (bitacora!=null){
+            if (bitacoraO!=null){
                 this.getBitacora().cleanDataQuery();
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para ejecutar DELETE");
             eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para ejecutar DELETE");
             eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
             eh.setSeeStringData(true);
             throw eh;
@@ -500,10 +549,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert));
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("executeDeleteInsert"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (st!=null){
@@ -511,7 +562,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -549,7 +601,12 @@ class ConQuery {
      * que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getData(Integer idQuery, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
+    //public HashCampo getData(Integer idQuery, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
+    public HashCampo getData(DataTransfer dataTransfer) throws ExceptionHandler{
+        Integer idQuery = dataTransfer.getIdQuery();
+        String[] arrData = dataTransfer.getArrData();
+        String[][] arrVariables = dataTransfer.getArrVariables();
+
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
         ResultSet rs = null;
@@ -604,7 +661,8 @@ class ConQuery {
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
-                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                                              getValueCampo(itCmp.getTypeDataDB(),
+                                              rs, itCmp.getCodigo()));
                         cmp.setHourMinSec(this.getHourMinSec());
                         this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -614,30 +672,33 @@ class ConQuery {
                 }
             }
 
-            Bitacora bitacora = this.getBitacora();
-            if ((bitacora!=null)&&(bitacora.isEnable()))
+            Bitacora bitacoraS = this.getBitacora();
+            if ((bitacoraS!=null)&&(bitacoraS.isEnable()))
             {
                 AdmBitacora admBit = new AdmBitacora();
-                Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
+                Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp(),
+                                                                    AdmBitacora.CONSULTAR));
                 if (this.isEnableDataLog()){
-                    bitacora.setConsulta(query);
+                    bitacoraS.setConsulta(query);
                 }else{
-                    bitacora.setConsulta(queryLog);
+                    bitacoraS.setConsulta(queryLog);
                 }
-                bitacora.setClaveTipoEvento(evento);
-                bitacora.setEvento(admBit.CONSULTAR);
+                bitacoraS.setClaveTipoEvento(evento);
+                bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
-                admBit.setBitacora(bitacora);
+                admBit.setBitacora(bitacoraS);
                 admBit.addBitacora();
                 this.getBitacora().cleanDataQuery();
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion de datos con ID QUERY y DATA enviada");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con ID QUERY y DATA enviada");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion de datos con ID QUERY y DATA enviada");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
@@ -652,10 +713,12 @@ class ConQuery {
                 }else{
                     log.setStrQuery(queryLog);
                 }
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
             if (rs!=null){
@@ -666,7 +729,8 @@ class ConQuery {
             }
             this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -684,7 +748,12 @@ class ConQuery {
      * que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getDataWithWhere(Integer idQuery, String whereData, String[][] arrVariables) throws ExceptionHandler{
+    //public HashCampo getDataWithWhere(Integer idQuery, String whereData, String[][] arrVariables) throws ExceptionHandler{
+    public HashCampo getDataWithWhere(DataTransfer dataTransfer) throws ExceptionHandler{
+        Integer idQuery = dataTransfer.getIdQuery();
+        String whereData = dataTransfer.getStrWhere();
+        String[][] arrVariables = dataTransfer.getArrVariables();
+
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
         ResultSet rs = null;
@@ -733,7 +802,8 @@ class ConQuery {
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
-                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                                              getValueCampo(itCmp.getTypeDataDB(),
+                                              rs, itCmp.getCodigo()));
                         cmp.setHourMinSec(this.getHourMinSec());
                         this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -741,27 +811,30 @@ class ConQuery {
                     }
                     hsCmp.addListData(lstData,i++);
                 }
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraS = this.getBitacora();
+                if ((bitacoraS!=null)&&(bitacoraS.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
-                    bitacora.setConsulta(query);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setEvento(admBit.CONSULTAR);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp(),
+                                                                        AdmBitacora.CONSULTAR));
+                    bitacoraS.setConsulta(query);
+                    bitacoraS.setClaveTipoEvento(evento);
+                    bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
-                    admBit.setBitacora(bitacora);
+                    admBit.setBitacora(bitacoraS);
                     admBit.addBitacora();
                     this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con WHERE enviado");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion de datos con WHERE enviado");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con WHERE enviado");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion de datos con WHERE enviado");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
@@ -772,10 +845,12 @@ class ConQuery {
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
                 textData.append(("WHERE: "+whereData));
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhere"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
             if (rs!=null){
@@ -786,7 +861,8 @@ class ConQuery {
             }
             this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -805,8 +881,13 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData, String[][] arrVariables)
-            throws ExceptionHandler{
+    //public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData, String[][] arrVariables)
+    public HashCampo getDataWithWhereAndData(DataTransfer dataTransfer) throws ExceptionHandler{
+        Integer idQuery = dataTransfer.getIdQuery();
+        String whereData = dataTransfer.getStrWhere();
+        String[] arrData = dataTransfer.getArrData();
+        String[][] arrVariables = dataTransfer.getArrVariables();
+
         HashCampo hsCmp = new HashCampo();
         Statement ps = null;
         ResultSet rs = null;
@@ -841,7 +922,7 @@ class ConQuery {
                     }
                 }
                 query = addWhereToQuery(query,whereData);
-                query = query.toLowerCase();
+                //query = query.toLowerCase();
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -865,7 +946,8 @@ class ConQuery {
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
-                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                                              getValueCampo(itCmp.getTypeDataDB(),
+                                              rs, itCmp.getCodigo()));
                         cmp.setHourMinSec(this.getHourMinSec());
                         this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -873,27 +955,30 @@ class ConQuery {
                     }
                     hsCmp.addListData(lstData,i++);
                 }
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraS = this.getBitacora();
+                if ((bitacoraS!=null)&&(bitacoraS.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
-                    bitacora.setConsulta(query);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setEvento(admBit.CONSULTAR);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp(),
+                                                                        AdmBitacora.CONSULTAR));
+                    bitacoraS.setConsulta(query);
+                    bitacoraS.setClaveTipoEvento(evento);
+                    bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
-                    admBit.setBitacora(bitacora);
+                    admBit.setBitacora(bitacoraS);
                     admBit.addBitacora();
                     this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos con WHERE y DATA enviada");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion de datos con WHERE y DATA enviada");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos con WHERE y DATA enviada");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion de datos con WHERE y DATA enviada");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
@@ -905,10 +990,12 @@ class ConQuery {
                 textData.append(("ENTRADA: "+arrayToString(arrData))).append("\n");
                 textData.append(("WHERE: "+whereData.toString()));
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhereAndData"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
             if (rs!=null){
@@ -919,7 +1006,8 @@ class ConQuery {
             }
             this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -936,6 +1024,7 @@ class ConQuery {
      */
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
+        String strSld = "";
         if (query!=null){
             strQuery = strQuery.toUpperCase();
             strQuery = strQuery.replace("WHERE", "WHERE ");
@@ -947,52 +1036,66 @@ class ConQuery {
                 if (strWhere.trim().length()>6){
                     //EMPIEZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
+                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
+                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
                     //EMPIEZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                            strQuery = strQuery + " " + strWhere;
+                            //strQuery = strQuery + " " + strWhere;
+                            strQuery = " " + strWhere;
                     }else{
-                            strQuery = strQuery + " AND " + strWhere;
+                            //strQuery = strQuery + " AND " + strWhere;
+                            strQuery = " AND " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //EMPIEZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = strQuery + " " + strWhere;
+                        //strQuery = strQuery + " " + strWhere;
+                        strQuery = " " + strWhere;
                     }else{
-                        strQuery = strQuery + " AND " + strWhere;
+                        //strQuery = strQuery + " AND " + strWhere;
+                        strQuery = " AND " + strWhere;
                     }
                 }else{
-                        strQuery = strQuery + " AND " + strWhere;
+                        //strQuery = strQuery + " AND " + strWhere;
+                        strQuery = " AND " + strWhere;
                 }
             }else{
                 //evaluaremos el WHERE Y el AND
                 if (strWhere.trim().length()>6){
                     //COMIENZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery = strQuery + " " + strWhere;
+                        //strQuery = strQuery + " " + strWhere;
+                        strQuery = " " + strWhere;
                     //COMIENZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        strQuery = strQuery + " WHERE " + strWhere;
+                        //strQuery = strQuery + " WHERE " + strWhere;
+                        strQuery = " WHERE " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //COMIENZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        strQuery = strQuery + " WHERE " + strWhere;
+                        //strQuery = strQuery + " WHERE " + strWhere;
+                        strQuery = " WHERE " + strWhere;
                     }
                 }else{
-                    strQuery = strQuery + " " + strWhere;
+                    //strQuery = strQuery + " " + strWhere;
+                    strQuery = " " + strWhere;
                 }
             }
         }else{
-             strQuery = query;
+             //strQuery = query;
+             strQuery = "";
         }
-        return strQuery;
+        strSld = query + strQuery;
+        return strSld;
     }
 
      /**
@@ -1003,7 +1106,11 @@ class ConQuery {
      * campos que posee la query, con sus tipos de datos
      * @throws ExceptionHandler
      */
-    public HashCampo getData(Integer idQuery, String[][] arrVariables) throws ExceptionHandler{
+    //public HashCampo getData(Integer idQuery, String[][] arrVariables) throws ExceptionHandler{
+    private HashCampo getDataSimple(DataTransfer dataTransfer) throws ExceptionHandler {
+        Integer idQuery = dataTransfer.getIdQuery();
+        String[][] arrVariables = dataTransfer.getArrVariables();
+
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -1050,7 +1157,8 @@ class ConQuery {
                                               itCmp.getCodigo(),
                                               itCmp.getTypeDataDB(),
                                               castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
-                                              getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                                              getValueCampo(itCmp.getTypeDataDB(),
+                                              rs, itCmp.getCodigo()));
                         cmp.setHourMinSec(this.getHourMinSec());
                         this.setHourMinSec("");
                         cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -1058,27 +1166,30 @@ class ConQuery {
                     }
                     hsCmp.addListData(lstData,i++);
                 }
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraS = this.getBitacora();
+                if ((bitacoraS!=null)&&(bitacoraS.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
-                    bitacora.setConsulta(query);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setEvento(admBit.CONSULTAR);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp(),
+                                                                        AdmBitacora.CONSULTAR));
+                    bitacoraS.setConsulta(query);
+                    bitacoraS.setClaveTipoEvento(evento);
+                    bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
-                    admBit.setBitacora(bitacora);
+                    admBit.setBitacora(bitacoraS);
                     admBit.addBitacora();
                     this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos por ID de Query");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion de datos por ID de Query");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos por ID de Query");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion de datos por ID de Query");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
@@ -1088,10 +1199,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (rs!=null){
@@ -1102,7 +1215,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -1130,12 +1244,14 @@ class ConQuery {
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion el campo PK de una tabla");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion el campo PK de una tabla");
             eh.setStringData("TABLA:"+tabla);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion el campo PK de una tabla");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion el campo PK de una tabla");
             eh.setStringData("TABLA: "+tabla);
             eh.setSeeStringData(true);
             throw eh;
@@ -1144,10 +1260,12 @@ class ConQuery {
                 LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("TABLA: "+tabla));
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getCampoPK"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (rs!=null){
@@ -1158,7 +1276,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return str;
@@ -1199,7 +1318,12 @@ class ConQuery {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByQuery(String query, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
+    //public HashCampo getDataByQuery(String query, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
+    public HashCampo getDataByQuery(DataTransfer dataTransfer) throws ExceptionHandler{
+        String query = dataTransfer.getQuery();
+        String[] arrData = dataTransfer.getArrData();
+        String[][] arrVariables = dataTransfer.getArrVariables();
+
         HashCampo hsCmp = new HashCampo();
         Statement st = null;
         ResultSet rs = null;
@@ -1251,7 +1375,8 @@ class ConQuery {
                                                   itCmp.getCodigo(),
                                                   itCmp.getTypeDataDB(),
                                                   castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
-                                                  getValueCampo(itCmp.getTypeDataDB(), rs, itCmp.getCodigo()));
+                                                  getValueCampo(itCmp.getTypeDataDB(),
+                                                  rs, itCmp.getCodigo()));
                             cmp.setHourMinSec(this.getHourMinSec());
                             this.setHourMinSec("");
                             cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -1260,27 +1385,30 @@ class ConQuery {
                         hsCmp.addListData(lstData,i++);
                     }
                 }
-                Bitacora bitacora = this.getBitacora();
-                if ((bitacora!=null)&&(bitacora.isEnable()))
+                Bitacora bitacoraS = this.getBitacora();
+                if ((bitacoraS!=null)&&(bitacoraS.isEnable()))
                 {
                     AdmBitacora admBit = new AdmBitacora();
-                    Integer evento = Integer.valueOf(admBit.getKey(admBit.getProp(),admBit.CONSULTAR));
-                    bitacora.setConsulta(query);
-                    bitacora.setClaveTipoEvento(evento);
-                    bitacora.setEvento(admBit.CONSULTAR);
+                    Integer evento = Integer.valueOf(AdmBitacora.getKey(admBit.getProp(),
+                                                                        AdmBitacora.CONSULTAR));
+                    bitacoraS.setConsulta(query);
+                    bitacoraS.setClaveTipoEvento(evento);
+                    bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
-                    admBit.setBitacora(bitacora);
+                    admBit.setBitacora(bitacoraS);
                     admBit.addBitacora();
                     this.getBitacora().cleanDataQuery();
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de datos mediante query");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtencion de datos mediante query");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de datos mediante query");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtencion de datos mediante query");
             eh.setStrQuery(query);
             eh.setSeeStringData(true);
             throw eh;
@@ -1290,10 +1418,12 @@ class ConQuery {
                 StringBuffer textData=new StringBuffer();
                 textData.append(("ENTRADA: "+ arrayToString(arrData)));
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
+                                             AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataByQuery"),textData);
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al excribir el LOG");
             }
             try{
                 if (rs!=null){
@@ -1304,105 +1434,8 @@ class ConQuery {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
-            }
-        }
-        return hsCmp;
-    }
-
-    /**
-     * Este metodo se debio utilizar, pero el PreparedStatement no esta
-     * guardando las variables que se le entregan y deberia reemplazar en
-     * las queries buscando el parametro con el signo de ?
-     * @param idQuery   ID de la query a buscar
-     * @param arrData   Matriz de datos a aplicar en la query
-     * @return
-     * @throws ExceptionHandler
-     */
-    @Deprecated
-    private HashCampo getDataParam(Integer idQuery, String[][] arrData) throws ExceptionHandler{
-        HashCampo hsCmp = new HashCampo();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String query = "";
-        try{
-            getConexion();
-            query = getQueryById(idQuery);
-            if (!"".equals(query)){
-                ps = this.conn.prepareStatement(query);
-                for(int i=1;i<=arrData.length;i++){
-                    String strTipo = arrData[i-1][0];
-                    String strData = arrData[i-1][1];
-                    if (strTipo.equals("1")){
-                        ps.setString(i,"'"+strData+"'");
-                    }else if (strTipo.equals("2")){
-                        ps.setInt(i,Integer.parseInt(strData));
-                    }else if (strTipo.equals("3")){
-                        ps.setBigDecimal(i,new BigDecimal(strData));
-                    }
-                }
-                rs = ps.executeQuery();
-                ResultSetMetaData rstm = rs.getMetaData();
-
-                for (int i=1;i<=rstm.getColumnCount();i++){
-                    Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
-                                          Integer.valueOf(i),
-                                          rstm.getColumnTypeName(i));
-                    cmp.setIsIncrement(rstm.isAutoIncrement(i));
-                    hsCmp.addCampo(cmp);
-                }
-                int i=0;
-                while (rs.next()){
-                    List lstData = new ArrayList();
-                    List lstCampo = hsCmp.getListCampos();
-                    Iterator it = lstCampo.iterator();
-                    while (it.hasNext()){
-                        Campo itCmp = (Campo) it.next();
-                        Campo cmp = new Campo();
-                        cmp.setNombre(itCmp.getNombre().toLowerCase());
-                        cmp.setCodigo(itCmp.getCodigo());
-                        cmp.setTypeDataDB(itCmp.getTypeDataDB());
-                        cmp.setTypeDataAPL(castTypeDataDBtoAPL(itCmp.getTypeDataDB()));
-                        cmp.setValor(getValueCampo(itCmp.getTypeDataDB(),rs,itCmp.getCodigo()));
-                        cmp.setHourMinSec(this.getHourMinSec());
-                        this.setHourMinSec("");
-                        lstData.add(cmp);
-                    }
-                    hsCmp.addListData(lstData,i++);
-                }
-            }
-        }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtencion de los datos");
-            eh.setStrQuery(query);
-            eh.setSeeStringData(true);
-            throw eh;
-        }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para obtencion de los datos");
-            eh.setStrQuery(query);
-            eh.setSeeStringData(true);
-            throw eh;
-        }finally{
-            try{
-                LogHandler log = new LogHandler();
-                StringBuffer textData=new StringBuffer();
-                textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("DATA: "+ arrayToString(arrData)));
-                log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER),
-                            new StringBuffer("getDataParam"),textData);
-            }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir el LOG");
-            }
-            try{
-                if (rs!=null){
-                    rs.close();
-                }
-                if (ps!=null){
-                    ps.close();
-                }
-                this.conn.close();
-            }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
         }
         return hsCmp;
@@ -1419,7 +1452,7 @@ class ConQuery {
         String strSld = "";
         Statement st = null;
         ResultSet rs = null;
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         try{
             if (this.conn == null){
                 getConexion();
@@ -1432,7 +1465,8 @@ class ConQuery {
                 strSld =  rs.getString(1);
             }
         }catch(Exception e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtener QUERY por su ID");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtener QUERY por su ID");
             eh.setStrQuery(query.toString());
             eh.setStringData("ID QUERY: "+idQuery);
             eh.setSeeStringData(true);
@@ -1446,7 +1480,8 @@ class ConQuery {
                     st.close();
                 }
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar Conexion a Base de datos");
             }
             //Conn no se debe cerrar ya que es llamada privada
         }
@@ -1479,7 +1514,9 @@ class ConQuery {
                 }else if(strType.toUpperCase().equals("DATETIME") ){
                     Date date = rs.getDate(codigo.intValue());
                     if (date!=null){
-                        UtilDate utDate = new UtilDate(date.getDate(), date.getMonth()+1, date.getYear()+1900);
+                        UtilDate utDate = new UtilDate(date.getDate(), 
+                                                       date.getMonth()+1,
+                                                       date.getYear()+1900);
                         sld = utDate.getFecha("/");
                         this.setHourMinSec(rs.getString(codigo.intValue()));
                     }else{
@@ -1494,7 +1531,8 @@ class ConQuery {
                 }
             }
         }catch(SQLException es){
-            throw new ExceptionHandler(es,this.getClass(),"Problemas para conversion de tipo de datos desde la Base");
+            throw new ExceptionHandler(es,this.getClass(),
+                                "Problemas para conversion de tipo de datos desde la Base");
         }
         return sld;
     }
@@ -1537,7 +1575,7 @@ class ConQuery {
      * @return
      */
     private String arrayToString(String[] strData){
-        StringBuffer sld= new StringBuffer();
+        StringBuilder sld= new StringBuilder();
         if (strData!=null){
             for (int i=0;i<strData.length;i++){
                 sld.append("nro ").append(i+1).append(": ").append(strData[i]).append("\n");
@@ -1552,7 +1590,7 @@ class ConQuery {
      * @return
      */
     private String arrayToString(String[][] strData){
-        StringBuffer sld= new StringBuffer();
+        StringBuilder sld= new StringBuilder();
         if (strData!=null){
             for (int i=0;i<strData.length;i++){
                 for (int j=0;j<strData[i].length;j++){

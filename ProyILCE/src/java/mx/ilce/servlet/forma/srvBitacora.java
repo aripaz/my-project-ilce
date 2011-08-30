@@ -20,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.ilce.bean.DataTransfer;
 
 
 
@@ -182,8 +183,14 @@ public class srvBitacora extends HttpServlet {
                     strQuery.delete(strQuery.length()-1, strQuery.length());
                     strQuery.append(" from ").append(nameTable).append(" where 1=2");
                     ConEntidad con = new ConEntidad();
-                    HashCampo hsCmp = con.getDataByQuery(strQuery.toString(),
-                            new String[0], arrVariables);
+
+                    DataTransfer dataTransfer = new DataTransfer();
+                    dataTransfer.setQuery(strQuery.toString());
+                    dataTransfer.setArrData(new String[0]);
+                    dataTransfer.setArrVariables(arrVariables);
+                    //HashCampo hsCmp = con.getDataByQuery(strQuery.toString(),new String[0], arrVariables);
+                    HashCampo hsCmp = con.getDataByQuery(dataTransfer);
+                    
                     if (hsCmp.getLengthCampo()>0){
                         for (int j=0;j<i;j++){
                             Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);

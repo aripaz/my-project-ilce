@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
@@ -482,8 +483,13 @@ public class Aplicacion extends Entidad {
 
                 //obtiene la query a ejecutar
                 con.getBitacora().setEnable(false);
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
-                        strData, this.getArrVariables());
+                DataTransfer dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+
+                //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),strData, this.getArrVariables());
+                HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -497,23 +503,47 @@ public class Aplicacion extends Entidad {
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
                         con.getBitacora().setEnable(false);
-                        hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
-                                strData[0], this.getArrVariables());
+
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setStrWhere(strData[0]);
+                        dataTransfer.setArrVariables(this.getArrVariables());
+                        //hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0], this.getArrVariables());
+                        hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
+
                     }else if ((this.getStrWhereQuery()==null)&&(this.getArrayData()!=null)){
                         con.getBitacora().setEnable(false);
-                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), 
-                                this.getArrayData(), this.getArrVariables());
+
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setArrData(this.getArrayData());
+                        dataTransfer.setArrVariables(this.getArrVariables());
+                        //hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), this.getArrayData(), this.getArrVariables());
+                        hsCmp = con.getDataByIdQuery(dataTransfer);
+
                     }else if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()!=null)){
                         strData = new String[1];
                         strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
                         con.getBitacora().setEnable(false);
-                        hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
-                                 strData[0],this.getArrayData(), this.getArrVariables());
+
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setStrWhere(strData[0]);
+                        dataTransfer.setArrData(this.getArrayData());
+                        dataTransfer.setArrVariables(this.getArrVariables());
+                        //hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strData[0],this.getArrayData(), this.getArrVariables());
+                        hsCmp = con.getDataByIdQueryAndWhereAndData(dataTransfer);
+                        
                     }else{
                         strData = new String[0];
                         con.getBitacora().setEnable(false);
-                        hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),
-                                    strData, this.getArrVariables());
+
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setArrData(strData);
+                        dataTransfer.setArrVariables(this.getArrVariables());
+                        //hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),strData, this.getArrVariables());
+                        hsCmp = con.getDataByIdQuery(dataTransfer);
                     }
                 }
                 if (this.getClaveEmpleado()!=null){
@@ -523,8 +553,15 @@ public class Aplicacion extends Entidad {
                     strData[1] = String.valueOf(this.getClaveForma());
 
                     con.getBitacora().setEnable(false);
-                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
-                                    strData, this.getArrVariables());
+
+                    dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(con.getIdQuery(AdminFile.PERMISOS));
+                    dataTransfer.setArrData(strData);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+
+                    //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData, this.getArrVariables());
+                    hsCmpPerm = con.getDataByIdQuery(dataTransfer);
+                    
                     adm.setHashPermisoForma(hsCmpPerm);
                 }
             }
@@ -556,8 +593,12 @@ public class Aplicacion extends Entidad {
                 
                 //obtenemos la query a ejecutar
                 con.getBitacora().setEnable(false);
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
-                        strData, this.getArrVariables());
+                DataTransfer dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+                //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),strData, this.getArrVariables());
+                HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -567,10 +608,14 @@ public class Aplicacion extends Entidad {
                     strData = new String[1];
                     strData[0]= ((this.getStrWhereQuery()==null)?"":this.getStrWhereQuery());
 
-                    //obtenemos los datos
                     con.getBitacora().setEnable(true);
-                    hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
-                            strData[0], this.getArrVariables());
+                    dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                    dataTransfer.setStrWhere(strData[0]);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+                    //obtenemos los datos
+                    //hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0], this.getArrVariables());
+                    hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
                 }
                 if (this.getClaveEmpleado()!=null){
                     HashCampo hsCmpPerm = new HashCampo();
@@ -580,8 +625,12 @@ public class Aplicacion extends Entidad {
 
                     //obtenemos los permisos
                     con.getBitacora().setEnable(false);
-                    hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS), 
-                            strData, this.getArrVariables());
+                    dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(con.getIdQuery(AdminFile.PERMISOS));
+                    dataTransfer.setArrData(strData);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+                    //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData, this.getArrVariables());
+                    hsCmpPerm = con.getDataByIdQuery(dataTransfer);
                     adm.setHashPermisoForma(hsCmpPerm);
                 }
             }
@@ -611,8 +660,14 @@ public class Aplicacion extends Entidad {
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
-            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
-                    arrayData, this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+            dataTransfer.setArrData(arrayData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+            //HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData, this.getArrVariables());
+            HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
+
             Campo cmp = hsCmp.getCampoByName("consulta");
             HashMap dq = hsCmp.getListData();
             if (!dq.isEmpty()){
@@ -622,8 +677,13 @@ public class Aplicacion extends Entidad {
                 String[] strSPlit2 = strSplit[1].split(" ");
                 String tabla = strSPlit2[0];
 
-                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), 
-                        arrayData, this.getArrVariables());
+                dataTransfer = new DataTransfer();
+                dataTransfer.setQuery(cmpAux.getValor());
+                dataTransfer.setArrData(arrayData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+                //HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), arrayData, this.getArrVariables());
+                HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
+
                 List lstCmp = (List) hsCmpList.getListCampos();
                 for (int i=0;i<lstCmp.size();i++){
                     Campo cmpArr = (Campo) lstCmp.get(i);

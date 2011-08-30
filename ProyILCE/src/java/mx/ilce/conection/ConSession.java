@@ -3,6 +3,7 @@ package mx.ilce.conection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.bitacora.AdmBitacora;
@@ -98,13 +99,25 @@ public class ConSession {
 
             //validamos user y password
             connQ.setEnableDataLog(false);
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.LOGIN));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
+            HashCampo hsCmp = connQ.getData(dataTransfer);
+
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=user;
                 //validamos que es problema de la password
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+                dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
+                dataTransfer.setArrData(datUser);
+                dataTransfer.setArrVariables(arrVariables);
+                //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+                HashCampo hsCmpUsr = connQ.getData(dataTransfer);
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -161,13 +174,26 @@ public class ConSession {
 
             //validamos user y password
             connQ.setEnableDataLog(false);
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.LOGIN));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
+            HashCampo hsCmp = connQ.getData(dataTransfer);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
                 String[] datUser = new String[1];
                 datUser[0]=usuario.getNombre();
                 //validamos que es problema de la password
-                HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+                dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(arrVariables);
+                
+                //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+                HashCampo hsCmpUsr = connQ.getData(dataTransfer);
+
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
                 }else{
@@ -215,8 +241,13 @@ public class ConSession {
 
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.PERFIL));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
 
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData, arrVariables);
+            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData, arrVariables);
+            HashCampo hsCmp = connQ.getData(dataTransfer);
 
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
@@ -253,14 +284,21 @@ public class ConSession {
                 connQ.setBitacora(this.getBitacora());
 
                 HashCampo hsCmpAux = null;
-                Integer lenList = hsCmp.getLengthData();
+                //Integer lenList = hsCmp.getLengthData();
                 while (it.hasNext()){
                     Aplicacion apl = (Aplicacion) it.next();
                     strData[0]= String.valueOf(apl.getClaveAplicacion());
                     strData[1]= String.valueOf(apl.getClaveFormaPrincipal());
                     strData[2]= String.valueOf(apl.getClaveAplicacion());
                     strData[3]= String.valueOf(apl.getClaveFormaPrincipal());
-                    hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData, arrVariables);
+
+                    DataTransfer dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(getIdQuery(AdminFile.TABFORMA));
+                    dataTransfer.setArrData(strData);
+                    dataTransfer.setArrVariables(arrVariables);
+
+                    //hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData, arrVariables);
+                    hsCmpAux = connQ.getData(dataTransfer);
                     if ((hsCmp.getLengthCampo()==0)&&(hsCmpAux!=null)) {
                         hsCmp.setListCampos(hsCmpAux.getListCampos());
                     }
@@ -292,7 +330,14 @@ public class ConSession {
             connQ.setBitacora(this.getBitacora());
 
             strData[0] = usuario.getClaveEmpleado().toString();
-            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData, arrVariables);
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.XMLSESSION));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData, arrVariables);
+            hsCmp = connQ.getData(dataTransfer);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
@@ -320,7 +365,14 @@ public class ConSession {
             connQ.setBitacora(this.getBitacora());
 
             strData[0] = usuario.getClavePerfil().toString();
-            hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData, arrVariables);
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.XMLMENU));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData, arrVariables);
+            hsCmp = connQ.getData(dataTransfer);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
@@ -346,7 +398,14 @@ public class ConSession {
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
 
-            hsCmp = connQ.getData(IdQuery, strData, arrVariables);
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(IdQuery);
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //hsCmp = connQ.getData(IdQuery, strData, arrVariables);
+            hsCmp = connQ.getData(dataTransfer);
+            
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");
         }finally{

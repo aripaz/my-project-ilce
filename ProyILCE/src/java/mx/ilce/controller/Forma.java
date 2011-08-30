@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
@@ -418,7 +419,13 @@ public class Forma extends Entidad{
             //Obtenemos la estructura de la tabla incluida en la forma
             String query = "select * from " + tabla;
             String[] strData = new String[0];
-            HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(query);
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+            HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuffer strQuery = new StringBuffer();
             StringBuffer strCampos = new StringBuffer("(");
@@ -555,7 +562,14 @@ public class Forma extends Entidad{
             String query = "select * from " + tabla;
             String[] strData = new String[0];
             conE.getBitacora().setEnable(false);
-            HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(query);
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+
+            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+            HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuffer strQuery = new StringBuffer();
             StringBuffer strCampos = new StringBuffer("(");
@@ -622,12 +636,16 @@ public class Forma extends Entidad{
             strQuery.append(" values ");
             strQuery.append(strValues);
             strQuery.append("");
-            
-            conE.setQuery(strQuery.toString());
-            conE.setCampoForma(cmpF);
+
+            dataTransfer = new DataTransfer();
+            dataTransfer.setQueryInsert(strQuery.toString());
+            //conE.setQuery(strQuery.toString());
+            dataTransfer.setCampoForma(cmpF);
+            //conE.setCampoForma(cmpF);
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
-            conE.ingresaEntidad();
+            conE.ingresaEntidad(dataTransfer);
+            
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
 
@@ -691,7 +709,13 @@ public class Forma extends Entidad{
             String query = "select * from " + tabla;
             String[] strData = new String[0];
             conE.getBitacora().setEnable(false);
-            HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(query);
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+            HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuffer strQuery = new StringBuffer();
             strQuery.append("update ").append(tabla).append(" set ");
@@ -769,11 +793,15 @@ public class Forma extends Entidad{
             strQuery.append(" = ").append(pkInsert);
             strQuery.append("");
 
-            conE.setQuery(strQuery.toString());
-            conE.setCampoForma(cmpF);
+            dataTransfer = new DataTransfer();
+            //conE.setQuery(strQuery.toString());
+            dataTransfer.setQueryUpdate(strQuery.toString());
+            //conE.setCampoForma(cmpF);
+            dataTransfer.setCampoForma(cmpF);
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
-            conE.editarEntidad();
+            conE.editarEntidad(dataTransfer);
+            
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
 
@@ -842,7 +870,13 @@ public class Forma extends Entidad{
                 // obtenemos la estructura de la tabla
                 String query = "select * from " + tabla;
                 String[] strData = new String[0];
-                HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
+                DataTransfer dataTransfer = new DataTransfer();
+                dataTransfer.setQuery(query);
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+                //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+                HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
                 StringBuffer strQuery = new StringBuffer();
                 strQuery.append("delete from ").append(tabla).append(" where ");
@@ -894,11 +928,15 @@ public class Forma extends Entidad{
                 }
                 strQuery.append("");
 
-                conE.setQuery(strQuery.toString());
-                conE.setCampoForma(cmpF);
+                dataTransfer = new DataTransfer();
+                //conE.setQuery(strQuery.toString());
+                dataTransfer.setQueryDelete(strQuery.toString());
+                //conE.setCampoForma(cmpF);
+                dataTransfer.setCampoForma(cmpF);
                 conE.getBitacora().setEnable(true);
                 conE.getBitacora().setLstVariables(listVariables);
-                conE.eliminaEntidad();
+                conE.eliminaEntidad(dataTransfer);
+
                 conE.getBitacora().setEnable(false);
                 conE.getBitacora().setLstVariables(null);
 
@@ -1049,8 +1087,13 @@ public class Forma extends Entidad{
                 //obtenemos el IDQUERY asociado a la forma
                 Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
                 //obtenemos los datos de la forma
-                HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,
-                        this.getArrVariables());
+                DataTransfer dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(idQuery);
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+
+                //HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData, this.getArrVariables());
+                HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -1061,8 +1104,12 @@ public class Forma extends Entidad{
 
                     //obtenemos la data buscada
                     con.getBitacora().setEnable(enableBitac);
-                    HashCampo hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), 
-                            strWhere, this.getArrVariables());
+                    dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                    dataTransfer.setStrWhere(strWhere);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+                    //HashCampo hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()),strWhere, this.getArrVariables());
+                    HashCampo hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
                         admXML.setBitacora(this.getBitacora());
@@ -1128,8 +1175,12 @@ public class Forma extends Entidad{
                 Integer idQuery = con.getIdQuery(AdminFile.FORMAQUERY);
                 con.getBitacora().setEnable(false);
                 //obtenemos los datos de la forma
-                HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,
-                                        this.getArrVariables());
+                DataTransfer dataTransfer = new DataTransfer();
+                dataTransfer.setIdQuery(idQuery);
+                dataTransfer.setArrData(strData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+                //HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,this.getArrVariables());
+                HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
                 HashMap dq = hsCmpQ.getListData();
@@ -1141,8 +1192,13 @@ public class Forma extends Entidad{
 
                     //obtenemos los datos de la consulta
                     con.getBitacora().setEnable(enableBitac);
-                    HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()), 
-                                            strWhere, strData, this.getArrVariables());
+                    dataTransfer = new DataTransfer();
+                    dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                    dataTransfer.setStrWhere(strWhere);
+                    dataTransfer.setArrData(strData);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+                    //HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strWhere, strData, this.getArrVariables());
+                    HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(dataTransfer);
 
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
@@ -1155,8 +1211,13 @@ public class Forma extends Entidad{
                             strData[1] = String.valueOf(this.getClaveForma());
 
                             con.getBitacora().setEnable(false);
-                            hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),
-                                                    strData,this.getArrVariables());
+                            dataTransfer = new DataTransfer();
+                            dataTransfer.setIdQuery(con.getIdQuery(AdminFile.PERMISOS));
+                            dataTransfer.setArrData(strData);
+                            dataTransfer.setArrVariables(this.getArrVariables());
+                            //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData,this.getArrVariables());
+                            hsCmpPerm = con.getDataByIdQuery(dataTransfer);
+                            
                             admXML.setHashPermisoForma(hsCmpPerm);
                         }
                         admXML.setHsForm(this.getFormData());
@@ -1262,7 +1323,12 @@ public class Forma extends Entidad{
                     if (con.getBitacora()!=null){
                         con.getBitacora().setEnable(false);
                     }
-                    List lstE = con.getListFormaById(strData,this.getArrVariables());
+                    DataTransfer dataTransfer = new DataTransfer();
+                    dataTransfer.setArrData(strData);
+                    dataTransfer.setArrVariables(this.getArrVariables());
+
+                    //List lstE = con.getListFormaById(strData,this.getArrVariables());
+                    List lstE = con.getListFormaById(dataTransfer);
                     addForma(idForma, lstE);
                 }
             }
@@ -1313,7 +1379,13 @@ public class Forma extends Entidad{
             con.setBitacora(this.getBitacora());
 
             con.getBitacora().setEnable(false);
-            lst = con.getListFormaById(arrayData,this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setArrData(arrayData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+            //lst = con.getListFormaById(arrayData,this.getArrVariables());
+            lst = con.getListFormaById(dataTransfer);
+
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el List con la configuracion de la Forma");
         }
@@ -1335,10 +1407,14 @@ public class Forma extends Entidad{
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
-
             con.getBitacora().setEnable(false);
-            HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
-                    arrayData,this.getArrVariables());
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+            dataTransfer.setArrData(arrayData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+            //HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData,this.getArrVariables());
+            HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
 
             Campo cmp = hsCmp.getCampoByName("consulta");
             HashMap dq = hsCmp.getListData();
@@ -1350,8 +1426,13 @@ public class Forma extends Entidad{
                 String tabla = strSPlit2[0];
 
                 con.getBitacora().setEnable(false);
-                HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), 
-                        arrayData, this.getArrVariables());
+                dataTransfer = new DataTransfer();
+                dataTransfer.setQuery(cmpAux.getValor());
+                dataTransfer.setArrData(arrayData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+                //HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(),arrayData, this.getArrVariables());
+                HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
+
                 List lstCmp = (List) hsCmpList.getListCampos();
                 for (int i=0;i<lstCmp.size();i++){
                     Campo cmpArr = (Campo) lstCmp.get(i);
