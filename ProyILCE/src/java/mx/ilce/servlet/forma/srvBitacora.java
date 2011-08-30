@@ -157,15 +157,15 @@ public class srvBitacora extends HttpServlet {
      * @throws ExceptionHandler
      */
     private String getWhereData(HashMap hsDataForm, List lstForma) throws ExceptionHandler{
-        String strSal = new String("");
+        String strSal = "";
         try{
-            int numMaxParam = 10;
+            //int numMaxParam = 10;
             HashMap hsForm = (HashMap) hsDataForm.get("FORM");
-            StringBuffer str = new StringBuffer();
+            StringBuilder str = new StringBuilder();
 
             if ((lstForma != null) && (!lstForma.isEmpty())){
                 String[][] strCampos = new String[lstForma.size()][2];
-                StringBuffer strQuery = new StringBuffer("select ");
+                StringBuilder strQuery = new StringBuilder("select ");
                 String nameTable ="";
                 Iterator it = lstForma.iterator();
                 int i=0;

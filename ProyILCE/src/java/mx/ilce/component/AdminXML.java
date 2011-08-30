@@ -8,7 +8,6 @@ import java.net.URL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.xml.crypto.Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1079,7 +1078,7 @@ public class AdminXML {
     }
 
     public String salidaXML(String data){
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
         str.append("<qry>\n");
         str.append("<resultado>").append(data).append("</resultado>\n");

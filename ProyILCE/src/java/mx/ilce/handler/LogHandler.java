@@ -215,7 +215,7 @@ public class LogHandler {
                 sld = guardarArchivo(strTexto, strNameFile);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return sld;
     }
@@ -248,7 +248,7 @@ public class LogHandler {
                 sld = guardarArchivo(strTexto, strNameFile);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return sld;
     }

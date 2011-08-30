@@ -218,15 +218,15 @@ public class Perfil extends Entidad{
             String user = usuario.getLogin();
             String password = usuario.getPassword();
             ConSession con = new ConSession();
-            Bitacora bitacora = this.getBitacora();
+            Bitacora bitacoraI = this.getBitacora();
             boolean enableBit = this.getBitacora().isEnable();
-            con.setBitacora(bitacora);
+            con.setBitacora(bitacoraI);
 
             con.getBitacora().setEnable(enableBit);
             User usr = con.getUser(user, password, this.getArrVariables());
             if (usr.isLogged()){
-                bitacora.setEnable(false);
-                usr.setBitacora(bitacora);
+                bitacoraI.setEnable(false);
+                usr.setBitacora(bitacoraI);
                 lg.setIsLogin(true);
                 //completar los datos del perfil
                 con.getBitacora().setEnable(false);

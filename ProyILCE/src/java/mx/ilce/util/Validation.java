@@ -174,7 +174,7 @@ public class Validation {
     public List validationForm(ArrayList lst, HashMap form){
         List sld = new ArrayList();
         String ok = "true";
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
 
         if ((!form.isEmpty())&&(!lst.isEmpty())) {
             Iterator it = lst.iterator();
