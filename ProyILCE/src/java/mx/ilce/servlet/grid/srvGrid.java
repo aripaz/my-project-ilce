@@ -54,6 +54,9 @@ public class srvGrid extends HttpServlet {
                 String tipoAccion = "select";
                 String strWhere = (String) hsForm.get("$w");
 
+                String sidx = (String) hsForm.get("sidx");
+                String sord = (String) hsForm.get("sord");
+
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
                 arrVal.add("$dp");
@@ -95,6 +98,12 @@ public class srvGrid extends HttpServlet {
                                 String numRows = (String) hsForm.get("rows");
                                 apl.setNumPage(numPage);
                                 apl.setNumRows(numRows);
+
+
+                                if (sidx!=null){
+                                    sidx = admForm.cleanSIDX(sidx,"_",3);
+                                    apl.setOrderBY(sidx + " " + sord);
+                                }
 
                                 bitacora.setBitacora("Busqueda de datos para Grid.");
                                 bitacora.setEnable(true);

@@ -18,6 +18,7 @@ public class DataTransfer {
     private Campo campo;
     private String[] arrData;
     private String[][] arrVariables;
+    private String orderBY;
 
     public DataTransfer() {
         
@@ -111,5 +112,12 @@ public class DataTransfer {
         this.tabla = tabla;
     }
 
+    public String getOrderBY() {
+        return orderBY;
+    }
+
+    public void setOrderBY(String orderBY) {
+        this.orderBY = orderBY;
+    }
 
 }
