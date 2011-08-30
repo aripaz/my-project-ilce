@@ -3,6 +3,7 @@ package mx.ilce.conection;
 import java.util.List;
 import java.util.Properties;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
@@ -32,7 +33,8 @@ public class ConEntidad {
         try{
             this.prop = AdminFile.leerIdQuery();
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para abrir Conexion ConSession");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para abrir Conexion ConSession");
         }
     }
 
@@ -50,7 +52,8 @@ public class ConEntidad {
             }
             intSld = AdminFile.getIdQuery(prop,key);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener ID QUERY desde properties");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener ID QUERY desde properties");
         }
         return intSld;
     }
@@ -60,32 +63,16 @@ public class ConEntidad {
      * (CampoForma y Query)
      * @throws ExceptionHandler
      */
-    public void ingresaEntidad() throws ExceptionHandler{
+    public void ingresaEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
         try{
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
-
-            HashCampo hs = con.executeInsert(this.campoForma,this.query);
+            //HashCampo hs = con.executeInsert(this.campoForma,this.query);
+            HashCampo hs = con.executeInsert(dataTransfer);
             this.hashCampo = hs;
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Ingresar la Entidad");
-        }
-    }
-
-    /**
-     * Se ejecuta la eliminacion de los datos configurados en el objeto
-     * (CampoForma y Query)
-     * @throws ExceptionHandler
-     */
-    public void eliminaEntidad() throws ExceptionHandler{
-        try {
-            ConQuery con = new ConQuery();
-            con.setBitacora(this.getBitacora());
-
-            HashCampo hs = con.executeDelete(this.campoForma,this.query);
-            this.hashCampo = hs;
-        }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Eliminar la Entidad");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para Ingresar la Entidad");
         }
     }
 
@@ -94,27 +81,51 @@ public class ConEntidad {
      * (CampoForma y Query)
      * @throws ExceptionHandler
      */
-    public void editarEntidad() throws ExceptionHandler{
+    public void editarEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            HashCampo hs = con.executeUpdate(this.campoForma,this.query);
+            //HashCampo hs = con.executeUpdate(this.campoForma,this.query);
+            HashCampo hs = con.executeUpdate(dataTransfer);
             this.hashCampo = hs;
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Editar la Entidad");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para Editar la Entidad");
         }
     }
 
-    public void ingresarDataPermisos() throws ExceptionHandler{
+    /**
+     * Se ejecuta la eliminacion de los datos configurados en el objeto
+     * (CampoForma y Query)
+     * @throws ExceptionHandler
+     */
+    public void eliminaEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            HashCampo hs = con.executeDeleteInsert(this.campoForma,this.queryDel,this.query);
+            //HashCampo hs = con.executeDelete(this.campoForma,this.query);
+            HashCampo hs = con.executeDelete(dataTransfer);
+            
             this.hashCampo = hs;
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Borrar y Agregar Permisos de la Entidad");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para Eliminar la Entidad");
+        }
+    }
+
+    public void ingresarDataPermisos(DataTransfer dataTransfer) throws ExceptionHandler{
+        try {
+            ConQuery con = new ConQuery();
+            con.setBitacora(this.getBitacora());
+            //HashCampo hs = con.executeDeleteInsert(this.campoForma,this.queryDel,this.query);
+            HashCampo hs = con.executeDeleteInsert(dataTransfer);
+
+            this.hashCampo = hs;
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para Borrar y Agregar Permisos de la Entidad");
         }
     }
 
@@ -141,20 +152,25 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public List getListFormaByIdAndCampos(String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    //public List getListFormaByIdAndCampos(String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    public List getListFormaByIdAndCampos(DataTransfer dataTransfer) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
-
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData, arrVariables);
+            Integer idQuery = getIdQuery(AdminFile.FORMACAMPOS);
+            dataTransfer.setIdQuery(idQuery);
+            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData, arrVariables);
+            HashCampo hsCmp = connQ.getData(dataTransfer);
+            
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
                 lstSld = lst.getListBean(CampoForma.class, hsCmp);
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el listado de Formas por ID y Campos");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener el listado de Formas por ID y Campos");
         }finally{
 
         }
@@ -168,20 +184,26 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public List getListFormaById(String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    //public List getListFormaById(String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    public List getListFormaById(DataTransfer dataTransfer) throws ExceptionHandler{
         List lstSld=null;
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
 
-            HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
+            Integer idQuery = getIdQuery(AdminFile.FORMA);
+            dataTransfer.setIdQuery(idQuery);
+            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
+            HashCampo hsCmp = connQ.getData(dataTransfer);
+
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
                 ListHash lst = new ListHash();
                 lstSld = lst.getListBean(CampoForma.class, hsCmp);
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el listado de Formas por ID");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener el listado de Formas por ID");
         }finally{
 
         }
@@ -196,15 +218,19 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByQuery(String strQuery, String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    //public HashCampo getDataByQuery(String strQuery, String[] strData, String[][] arrVariables) throws ExceptionHandler{
+    public HashCampo getDataByQuery(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            hsCmp = con.getDataByQuery(strQuery, strData, arrVariables);
+            //hsCmp = con.getDataByQuery(strQuery, strData, arrVariables);
+            hsCmp = con.getDataByQuery(dataTransfer);
+            
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Datos por una QUERY");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener Datos por una QUERY");
         }
         return hsCmp;
     }
@@ -223,7 +249,8 @@ public class ConEntidad {
 
             campo = con.getCampoPK(tabla);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el Campo PK de una tabla");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener el Campo PK de una tabla");
         }
         return campo;
     }
@@ -237,15 +264,18 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
+    //public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
+    public HashCampo getDataByIdQuery(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
+            //hsCmp = connQ.getData(IdQuery, strData, arrVariables);
+            hsCmp = connQ.getData(dataTransfer);
 
-            hsCmp = connQ.getData(IdQuery, strData, arrVariables);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener datos por el ID QUERY");
         }finally{
 
         }
@@ -261,15 +291,18 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData, String[][] arrVariables ) throws ExceptionHandler{
+    //public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData, String[][] arrVariables ) throws ExceptionHandler{
+    public HashCampo getDataByIdQueryAndWhere(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
+            //hsCmp = connQ.getDataWithWhere(IdQuery, strData, arrVariables);
+            hsCmp = connQ.getDataWithWhere(dataTransfer);
 
-            hsCmp = connQ.getDataWithWhere(IdQuery, strData, arrVariables);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY y WHERE");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener datos por el ID QUERY y WHERE");
         }finally{
 
         }
@@ -286,16 +319,19 @@ public class ConEntidad {
      * @return
      * @throws ExceptionHandler
      */
-    public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData, String[][] arrVariables )
+    //public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData, String[][] arrVariables )
+    public HashCampo getDataByIdQueryAndWhereAndData(DataTransfer dataTransfer)
             throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
-            
-            hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData, arrVariables);
+            //hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData, arrVariables);
+            hsCmp = connQ.getDataWithWhereAndData(dataTransfer);
+
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener datos por el ID QUERY, WHERE y DATA");
+            throw new ExceptionHandler(ex,this.getClass(),
+                                "Problemas para obtener datos por el ID QUERY, WHERE y DATA");
         }finally{
 
         }

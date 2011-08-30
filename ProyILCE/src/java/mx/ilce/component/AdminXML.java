@@ -8,11 +8,13 @@ import java.net.URL;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.xml.crypto.Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.bitacora.Bitacora;
@@ -711,7 +713,14 @@ public class AdminXML {
         StringBuffer str = new StringBuffer("");
         try {
             ConEntidad con = new ConEntidad();
-            HashCampo hsData = con.getDataByQuery(query, strData, arrVariables);
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(query);
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            //HashCampo hsData = con.getDataByQuery(query, strData, arrVariables);
+            HashCampo hsData = con.getDataByQuery(dataTransfer);
+            
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
             if (!hsDat.isEmpty()){
@@ -757,7 +766,14 @@ public class AdminXML {
             strDataQ[0] =strData[0];
             strDataQ[1] ="foreign";
             con.getBitacora().setEnable(false);
-            HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ, arrVariables);
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+            dataTransfer.setArrData(strDataQ);
+            dataTransfer.setArrVariables(arrVariables);
+            //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ, arrVariables);
+            HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
+
             Campo cmpQ = hsCmpQ.getCampoByName("claveconsulta");
             HashMap dq = hsCmpQ.getListData();
                 if (!dq.isEmpty()){
@@ -768,13 +784,25 @@ public class AdminXML {
                     //ejecutamos la query, con el filtro entregado
                     if ("".equals(strData[1])){
                         con.getBitacora().setEnable(false);
-                        hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro, arrVariables);
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setArrData(strDataFiltro);
+                        dataTransfer.setArrVariables(arrVariables);
+                        //hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro, arrVariables);
+                        hsData = con.getDataByIdQuery(dataTransfer);
+
                     }else{
                         con.getBitacora().setEnable(false);
-                        hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
-                                                                    strData[1],
-                                                                    strDataFiltro,
-                                                                    arrVariables);
+                        dataTransfer = new DataTransfer();
+                        dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
+                        dataTransfer.setStrWhere(strData[1]);
+                        dataTransfer.setArrData(strDataFiltro);
+                        dataTransfer.setArrVariables(arrVariables);
+                        //hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
+                          //                                          strData[1],
+                            //                                        strDataFiltro,
+                              //                                      arrVariables);
+                        hsData = con.getDataByIdQueryAndWhereAndData(dataTransfer);
                     }
                 }
             List lstCmp = hsData.getListCampos();

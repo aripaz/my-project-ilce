@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
 import mx.ilce.bitacora.Bitacora;
@@ -45,7 +46,7 @@ public class srvFormaSearch extends HttpServlet {
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                //Thread.sleep(200);
+                Thread.sleep(100);
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
                 hs = admForm.getFormulario(request);
@@ -178,8 +179,14 @@ public class srvFormaSearch extends HttpServlet {
                     strQuery.delete(strQuery.length()-1, strQuery.length());
                     strQuery.append(" from ").append(nameTable).append(" where 1=2");
                     ConEntidad con = new ConEntidad();
-                    HashCampo hsCmp = con.getDataByQuery(strQuery.toString(), 
-                            new String[0], arrVariables);
+
+                    DataTransfer dataTransfer = new DataTransfer();
+                    dataTransfer.setQuery(strQuery.toString());
+                    dataTransfer.setArrData(new String[0]);
+                    dataTransfer.setArrVariables(arrVariables);
+                    //HashCampo hsCmp = con.getDataByQuery(strQuery.toString(),new String[0], arrVariables);
+                    HashCampo hsCmp = con.getDataByQuery(dataTransfer);
+
                     if (hsCmp.getLengthCampo()>0){
                         for (int j=0;j<i;j++){
                             Campo cmp = hsCmp.getCampoByNameDB(strCampos[j][0]);
