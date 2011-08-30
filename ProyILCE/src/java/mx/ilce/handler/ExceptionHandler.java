@@ -98,77 +98,77 @@ public final class ExceptionHandler extends Throwable {
         setTypeError(obj.getClass().getSimpleName());
         setTextMessage(message);
 
-        if (getTypeError().equals(AddressException.class.getSimpleName())){
+        if (getTypeError().toString().equals(AddressException.class.getSimpleName())){
             AddressException e = (AddressException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(MessagingException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(MessagingException.class.getSimpleName())){
             MessagingException e = (MessagingException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(InvocationTargetException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(InvocationTargetException.class.getSimpleName())){
             InvocationTargetException e = (InvocationTargetException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(IllegalArgumentException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(IllegalArgumentException.class.getSimpleName())){
             IllegalArgumentException e = (IllegalArgumentException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(IllegalAccessException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(IllegalAccessException.class.getSimpleName())){
             IllegalAccessException e = (IllegalAccessException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(InstantiationException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(InstantiationException.class.getSimpleName())){
             InstantiationException e = (InstantiationException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(NoSuchMethodException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(NoSuchMethodException.class.getSimpleName())){
             NoSuchMethodException e = (NoSuchMethodException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(URISyntaxException.class.getSimpleName())){
+        }else if (getTypeError().toString().equals(URISyntaxException.class.getSimpleName())){
             URISyntaxException e = (URISyntaxException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
-        }else if (getTypeError().equals(NullPointerException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(NullPointerException.class.getSimpleName())) {
             NullPointerException e = (NullPointerException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
 
-        }else if (getTypeError().equals(ClassNotFoundException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(ClassNotFoundException.class.getSimpleName())) {
             ClassNotFoundException e = (ClassNotFoundException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
 
-        }else if (getTypeError().equals(ClassCastException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(ClassCastException.class.getSimpleName())) {
             ClassCastException e = (ClassCastException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
 
-        }else if (getTypeError().equals(IOException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(IOException.class.getSimpleName())) {
             IOException e = (IOException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
 
-        }else if (getTypeError().equals(SQLException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(SQLException.class.getSimpleName())) {
             SQLException e = (SQLException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
             setSecuenceError(getStringSecuenceError().toString());
 
-        }else if (getTypeError().equals(FileNotFoundException.class.getSimpleName())) {
+        }else if (getTypeError().toString().equals(FileNotFoundException.class.getSimpleName())) {
             FileNotFoundException e = (FileNotFoundException)obj;
             setTextError(e.getMessage());
             getStackTrace(e.getStackTrace(),clase);
@@ -205,7 +205,7 @@ public final class ExceptionHandler extends Throwable {
                     strAdicional.append("El Directorio configurado para Log no es un directorio\n");
                     sld = false;
                 }
-                if ((strAdicional!=null) && (!"".equals(strAdicional))){
+                if ((strAdicional!=null) && (!"".equals(strAdicional.toString()))){
                     this.setStringData(strAdicional.toString());
                 }
                 UtilDate ut = new UtilDate();

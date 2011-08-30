@@ -427,7 +427,7 @@ public class Forma extends Entidad{
             //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
             HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
-            StringBuffer strQuery = new StringBuffer();
+            StringBuilder strQuery = new StringBuilder();
             StringBuffer strCampos = new StringBuffer("(");
             StringBuffer strValues = new StringBuffer("(");
             //recorremos los campos de la forma y los constrastamos contra los de la tabla
@@ -477,7 +477,7 @@ public class Forma extends Entidad{
             conE.setQuery(strQuery.toString());
             conE.setCampoForma(cmpF);
 
-            StringBuffer strQueryDel = new StringBuffer();
+            StringBuilder strQueryDel = new StringBuilder();
             strQueryDel.append("delete from ").append(tabla).append(" where ");
             String strCampoPK = "";
             for (int i=0;i<lstForma.size();i++){
@@ -587,7 +587,7 @@ public class Forma extends Entidad{
                 String valor = (String) hsForm.get(cmpFL.getCampo());
                 // si es autoIncremental, no se necesita enviar
                 if (!cmpHS.getIsIncrement()){
-                    String[] arrVariables = new String[4];
+                    String[] arrVariablesI = new String[4];
                     AdminForm admForm = new AdminForm();
                     valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                     if (valor!=null){
@@ -616,11 +616,11 @@ public class Forma extends Entidad{
                                 }
                                 strValues.append(valor).append(",");
                             }
-                            arrVariables[0]=cmpFL.getCampo();
-                            arrVariables[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
-                            arrVariables[2]=valor;
-                            arrVariables[3]=cmpHS.getTypeDataAPL();
-                            listVariables.add(arrVariables);
+                            arrVariablesI[0]=cmpFL.getCampo();
+                            arrVariablesI[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
+                            arrVariablesI[2]=valor;
+                            arrVariablesI[3]=cmpHS.getTypeDataAPL();
+                            listVariables.add(arrVariablesI);
                         }else{
                             hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                         }
@@ -734,7 +734,7 @@ public class Forma extends Entidad{
                 if (cmpHS!=null){
                     // si es autoIncremental, no se necesita enviar
                     if (!cmpHS.getIsIncrement()){
-                        String[] arrVariables = new String[4];
+                        String[] arrVariablesI = new String[4];
                         AdminForm admForm = new AdminForm();
                         valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
                         if (valor!=null){
@@ -766,11 +766,11 @@ public class Forma extends Entidad{
                             }else{
                                 hsCmpRepetidos.put(intRep++,cmpFL.getCampo());
                             }
-                            arrVariables[0]=cmpFL.getCampo();
-                            arrVariables[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
-                            arrVariables[2]=valor;
-                            arrVariables[3]=cmpHS.getTypeDataAPL();
-                            listVariables.add(arrVariables);
+                            arrVariablesI[0]=cmpFL.getCampo();
+                            arrVariablesI[1]=((cmpFL.getAliasCampo()==null)?cmpFL.getCampo():cmpFL.getAliasCampo());
+                            arrVariablesI[2]=valor;
+                            arrVariablesI[3]=cmpHS.getTypeDataAPL();
+                            listVariables.add(arrVariablesI);
                         }
                     }else{
                         strCampoPK = cmpFL.getCampo();
@@ -855,10 +855,10 @@ public class Forma extends Entidad{
             List listVariables = new ArrayList();
 
             if (lstForma==null){
-                String[] arrayData = new String[2];
-                arrayData[0]=String.valueOf(claveFormaInsert);
-                arrayData[1]="insert";
-                lstForma = forma.getNewFormaById(arrayData);
+                String[] arrayDataI = new String[2];
+                arrayDataI[0]=String.valueOf(claveFormaInsert);
+                arrayDataI[1]="insert";
+                lstForma = forma.getNewFormaById(arrayDataI);
             }
             if (lstForma!=null){
                 CampoForma cmpF = (CampoForma) lstForma.get(0);
@@ -878,7 +878,7 @@ public class Forma extends Entidad{
                 //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
                 HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
-                StringBuffer strQuery = new StringBuffer();
+                StringBuilder strQuery = new StringBuilder();
                 strQuery.append("delete from ").append(tabla).append(" where ");
                 String strCampoPK = "";
 
@@ -895,16 +895,16 @@ public class Forma extends Entidad{
                     }
                 }
                 if (pkInsert!=null){
-                    String[] arrVariables = new String[4];
+                    String[] arrVariablesI = new String[4];
                     if ((pkInsert.trim().length()>0)&&(!pkInsert.trim().equals("0"))){
                         if (strCampoPK !=null){
                             strQuery.append(strCampoPK);
                             strQuery.append(" = ").append(pkInsert);
-                            arrVariables[0]=strCampoPK;
-                            arrVariables[1]=strCampoPK;
-                            arrVariables[2]=pkInsert;
-                            arrVariables[3]=Integer.class.getName();
-                            listVariables.add(arrVariables);
+                            arrVariablesI[0]=strCampoPK;
+                            arrVariablesI[1]=strCampoPK;
+                            arrVariablesI[2]=pkInsert;
+                            arrVariablesI[3]=Integer.class.getName();
+                            listVariables.add(arrVariablesI);
                         }
                     }
                 }
@@ -1033,7 +1033,7 @@ public class Forma extends Entidad{
                                     this.getTipoAccion(),this.getArrVariables());
                         }
                     }else{
-                        StringBuffer strEmpty = new StringBuffer();
+                        StringBuilder strEmpty = new StringBuilder();
                         strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                         strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                         strEmpty.append("PK: ").append(this.getPk()).append(", ");
@@ -1042,7 +1042,7 @@ public class Forma extends Entidad{
                                 "No se encontro datos para la forma, accion y PK solicitada");
                     }
                 }else{
-                    StringBuffer strEmpty = new StringBuffer();
+                    StringBuilder strEmpty = new StringBuilder();
                     strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(idQuery);
@@ -1127,7 +1127,7 @@ public class Forma extends Entidad{
                                     this.getTipoAccion(), this.getArrVariables());
                         }
                     }else{
-                        StringBuffer strEmpty = new StringBuffer();
+                        StringBuilder strEmpty = new StringBuilder();
                         strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                         strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                         strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
@@ -1135,7 +1135,7 @@ public class Forma extends Entidad{
                                 "No se encontro datos para la forma y accion solicitada");
                     }
                 }else{
-                    StringBuffer strEmpty = new StringBuffer();
+                    StringBuilder strEmpty = new StringBuilder();
                     strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(idQuery);
@@ -1242,7 +1242,7 @@ public class Forma extends Entidad{
                                     this.getTipoAccion(),this.getArrVariables());
                         }
                     }else{
-                        StringBuffer strEmpty = new StringBuffer();
+                        StringBuilder strEmpty = new StringBuilder();
                         strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                         strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                         strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
@@ -1250,7 +1250,7 @@ public class Forma extends Entidad{
                                 "No se encontro datos para la forma y accion solicitada");
                     }
                 }else{
-                    StringBuffer strEmpty = new StringBuffer();
+                    StringBuilder strEmpty = new StringBuilder();
                     strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(String.valueOf(idQuery));

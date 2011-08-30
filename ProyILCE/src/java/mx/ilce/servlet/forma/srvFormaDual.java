@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -29,7 +24,8 @@ import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
- *
+ * Servlet implementado para ejecutar una instruccion de eliminacion de los
+ * antiguos permisos y agregar los nuevos. NO PROBADO
  * @author ccatrilef
  */
 public class srvFormaDual extends HttpServlet {
