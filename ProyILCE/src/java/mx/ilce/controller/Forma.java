@@ -46,6 +46,16 @@ public class Forma extends Entidad{
     private String[][] arrVariables;
     private Bitacora bitacora;
     private boolean includeHour=false;
+    private String orderBY;
+
+
+    public String getOrderBY() {
+        return orderBY;
+    }
+
+    public void setOrderBY(String orderBY) {
+        this.orderBY = orderBY;
+    }
 
     public boolean isIncludeHour() {
         return includeHour;

@@ -556,6 +556,13 @@ public class AdminForm {
         return strSld;
     }
 
+    /**
+     * Metodo para la entrega de valores por defecto a algunos tipos de datos
+     * especialmente definidos
+     * @param className
+     * @param value
+     * @return
+     */
     public String getDefaultValueByClass(String className, String value){
         String strSld = null;
         if (value==null){
@@ -570,4 +577,21 @@ public class AdminForm {
         return strSld;
     }
 
+
+    public String cleanSIDX(String strData, String separador, int numPaso){
+        String strSld = strData;
+
+        if ((strSld !=null)&&(!"".equals(strSld))){
+            String[] strPaso = strSld.split(separador);
+            int pos = strPaso.length - numPaso;
+            if (pos>0){
+                strSld = "";
+                for(int i=0;i<pos;i++){
+                    strSld = strSld + separador + strPaso[i];
+                }
+                strSld = strSld.substring(1,strSld.length());
+            }
+        }
+        return strSld;
+    }
 }

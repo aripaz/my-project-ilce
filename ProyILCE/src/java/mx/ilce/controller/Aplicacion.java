@@ -38,6 +38,16 @@ public class Aplicacion extends Entidad {
     private boolean cleanIncrement;
     private String[][] arrVariables;
     private Bitacora bitacora;
+    private String orderBY;
+
+
+    public String getOrderBY() {
+        return orderBY;
+    }
+
+    public void setOrderBY(String orderBY) {
+        this.orderBY = orderBY;
+    }
 
     /**
      * Constructor Basico de la clase, inicializa las variables de la clase
@@ -613,6 +623,9 @@ public class Aplicacion extends Entidad {
                     dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                     dataTransfer.setStrWhere(strData[0]);
                     dataTransfer.setArrVariables(this.getArrVariables());
+                    if (this.getOrderBY()!=null){
+                        dataTransfer.setOrderBY(this.getOrderBY());
+                    }
                     //obtenemos los datos
                     //hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0], this.getArrVariables());
                     hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);

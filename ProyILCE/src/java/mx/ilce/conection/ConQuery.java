@@ -765,8 +765,6 @@ class ConQuery {
             if ((!"".equals(query)) && (whereData != null)){
                 ps =this.conn.createStatement();
                 query = addWhereToQuery(query,whereData);
-                rs = ps.executeQuery(query);
-                ResultSetMetaData rstm = rs.getMetaData();
 
                 if (arrVariables!=null){
                     for (int i=0; i<arrVariables.length;i++){
@@ -781,6 +779,12 @@ class ConQuery {
                         }
                     }
                 }
+                if ((dataTransfer.getOrderBY()!=null)&&(!"".equals(dataTransfer.getOrderBY()) )){
+                    query = "SELECT * FROM (" + query + ") AS TORDER ORDER BY " + dataTransfer.getOrderBY();
+                }
+
+                rs = ps.executeQuery(query);
+                ResultSetMetaData rstm = rs.getMetaData();
 
                 for (int i=1;i<=rstm.getColumnCount();i++){
                     Campo cmp = new Campo(rstm.getColumnName(i).toLowerCase(),
