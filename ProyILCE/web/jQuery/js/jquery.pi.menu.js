@@ -194,8 +194,15 @@
 
     $.fn.menu.getSearchs = function(sDiv) {
         $(sDiv).html("");
-        var nApp=sDiv.split("_")[1];
-        var nForma=sDiv.split("_")[2];
+        var nApp;
+        var nForma; 
+        if (sDiv.split("_").length==4) {
+             nApp=sDiv.split("_")[1];
+             nForma=sDiv.split("_")[2]; }
+        else  {
+             nApp=sDiv.split("_")[1];
+             nForma=sDiv.split("_")[3];   
+            }
         $.ajax(
         {
             url: "srvFormaSearch?$cf=93&$ta=select&$w=" + escape("clave_empleado=" +$("#_ce_").val()+ " AND clave_forma="+nForma),
@@ -339,7 +346,7 @@
                     
                 });
 
-                $("#accordion_"+nApp + "_" + nForm +"_0").accordion({
+                $(sDiv).parent().accordion({
                                     /*active: false,
                                     fillSpace:true,
                                     collapsible: true,*/

@@ -111,7 +111,7 @@
                       }
 
                       if (sTipoNodo=='') return false;
-                      
+
                       //Llama grids
                       var oId=o.id;
                        $("#divForeignGrids_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appgrid({app: nApp,
@@ -127,6 +127,10 @@
                           originatingObject:oId,
                           callFormWithRelationships: sTipoNodo=="showGridAndRelationships"?true:false
                        });
+                       
+                       $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).menu.getSearchs("#filtros_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]);
+                       setTimeout('$("#accordion_'+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]+'").menu.getLog("#bitacora_'+oId.split('_')[1]+'_'+oId.split('_')[2]+'_'+oId.split('_')[3]+'_'+oId.split('_')[4]+'",'+oId.split('_')[1] + ',' +oId.split('_')[3]+')',4000);
+
 
                  });
 
