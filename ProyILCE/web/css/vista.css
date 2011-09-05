@@ -25,7 +25,7 @@ select.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetic
 height:95%;width:100%;margin:0;padding:0;
 }
 .leftPane{
-float:left;width:250px;height:100%;border-top:solid 1px #9cbdff;
+float:left;width:220px;height:100%;border-top:solid 1px #9cbdff;
 background:#c4dcfb;
 overflow: auto;
 }
@@ -133,21 +133,26 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
     border: 1px solid gray;
     float: left;
     height: 97%;
-    overflow: auto;
+    overflow:auto;
     width: 97%;
     background-color:white;
 }
 
 .gridContainer {
     float: left;
-    width: 78%;
+    width: 76%;
     margin-left:5px
 }
 
+.gridKardexContainer {
+    float: left;
+    width: 56%;
+    margin-left:5px
+}
 .accordionContainer {
     float: right;
     width: 20%;
-    height: 90%
+    height: 65%
 }
 
 div.user_avatar>img {
@@ -158,7 +163,7 @@ div.user_avatar>img {
 .gridForeignContainer {
     /*overflow:auto;*/
     float: left;
-    width: 450px;
+    width: 430px;
     height: 400px;
 }
 
@@ -200,7 +205,19 @@ td.etiqueta_perfil {
 }
 
 .link_toolbar {
-     height: 15px;
+    display: inline-block;
+    margin-bottom: 1px;
+    width: 100%;
+}
+
+a.linkSearch {
+
+} 
+
+div.linkSearch {
+    float: left;
+    width: 85%;
+    margin-bottom: 10px;
 }
 
 #tabUser {
@@ -262,6 +279,7 @@ div.accordionContainer > span.ui-icon {
     margin-top: 3px;
 }
 
+
 .accordionContainer>h3>span.ui-icon {
     float: right;
     margin-left: -16px !important;
@@ -283,6 +301,17 @@ div.accordionContainer > span.ui-icon {
 
 .bitacora {
     float:right;
-    width: 70%;
+    width: 100%;
     clear: right;
+    /*border-bottom: #9AAEDB thin solid;*/
+    margin-bottom: 10px;
+}
+
+img.bitacora {
+    float: left;
+    margin-right: 5px;
+    vertical-align:top;
+    width: 35px;
+    height: 40px;
+    border-bottom:none;
 }
