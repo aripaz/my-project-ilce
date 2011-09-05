@@ -44,6 +44,14 @@
         <servlet-name>srvBitacora</servlet-name>
         <servlet-class>mx.ilce.servlet.forma.srvBitacora</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>srvLogout</servlet-name>
+        <servlet-class>mx.ilce.servlet.Login.srvLogout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvRegister</servlet-name>
+        <servlet-class>mx.ilce.servlet.Login.srvRegister</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -87,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>srvBitacora</servlet-name>
         <url-pattern>/srvBitacora</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvLogout</servlet-name>
+        <url-pattern>/srvLogout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvRegister</servlet-name>
+        <url-pattern>/srvRegister</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
