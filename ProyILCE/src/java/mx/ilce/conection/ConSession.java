@@ -3,6 +3,7 @@ package mx.ilce.conection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
@@ -415,10 +416,81 @@ public class ConSession {
     }
 
     /**
-     * NO IMPLEMENTADO
+     * Metodo para la insercion del usuario
      */
-    public boolean insertUser(User user){
-        throw new UnsupportedOperationException("Not supported yet.");
+    public User insertUser(User user) throws ExceptionHandler{
+        User usr = new User();
+        try{
+            String[] strData = new String[1];
+            strData[0] = user.getLogin();
+            boolean enableBit = false;
+
+            if (this.getBitacora()!=null){
+                enableBit = this.getBitacora().isEnable();
+            }
+
+            ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+
+            //validamos user y password
+            connQ.setEnableDataLog(false);
+            usr.setIsLogged(false);
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
+            dataTransfer.setArrData(strData);
+
+            //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+            HashCampo hsCmpUsr = connQ.getData(dataTransfer);
+
+            if (!hsCmpUsr.getListData().isEmpty()){
+                usr.setMessage("Existe un usuario con ese mail en los registros");
+            }else{
+                String strQuery = "insert into empleado "
+                        + "(nombre, apellido_paterno, apellido_materno,"
+                        + "email, password, clave_area, activo)"
+                        + "values ('"+ user.getNombre() + "','"
+                        + user.getApellidoPaterno() + "','"
+                        + user.getApellidoMaterno() + "','"
+                        + user.getEmail() + "','"
+                        + user.getPassword() + "',"
+                        + user.getClaveArea() + ",1)";
+                
+                dataTransfer.setQueryInsert(strQuery);
+                CampoForma campoForma = new CampoForma();
+                campoForma.setTabla("empleado");
+                dataTransfer.setCampoForma(campoForma);
+
+                HashCampo hs = connQ.executeInsert(dataTransfer);
+
+                Integer intReg = (Integer) hs.getObjData();
+
+                usr.setIsLogged(true);
+                usr.setNombre(user.getNombre());
+                usr.setApellidoPaterno(user.getApellidoPaterno());
+                usr.setApellidoMaterno(user.getApellidoMaterno());
+                usr.setClaveEmpleado(intReg);
+                usr.setEmail(user.getEmail());
+                usr.setPassword(user.getPassword());
+                usr.setMessage("Usuario registrado correctamente");
+                usr.setLogin(user.getEmail());
+
+                this.getBitacora().setClaveEmpleado(usr.getClaveEmpleado());
+                usr.setBitacora(this.getBitacora());
+                if (enableBit){
+                    AdmBitacora admBit = new AdmBitacora();
+                    admBit.setBitacora(this.getBitacora());
+                    admBit.login();
+                }
+            }
+        }catch(Exception ex){
+            usr.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+        }finally{
+
+        }
+        return usr;
     }
 
     /**

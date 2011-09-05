@@ -594,7 +594,7 @@ public class AdmBitacora {
     public boolean logout() throws ExceptionHandler{
         boolean sld = true;
         try {
-            StringBuffer strData = new StringBuffer();
+            StringBuilder strData = new StringBuilder();
             StringBuffer strCampos = new StringBuffer("(");
             StringBuffer strValues = new StringBuffer("(");
             String strTabla = this.getLogDB();
@@ -622,7 +622,7 @@ public class AdmBitacora {
             if (this.getBitacora().getError()!=null){
                 strCampos.append("error");
                 strValues.append("'");
-                strValues.append(this.getBitacora().getError());
+                strValues.append(this.getBitacora().getBitacora());
                 strValues.append("'");
             }
             String lastChar = strCampos.substring(strCampos.length()-1);
