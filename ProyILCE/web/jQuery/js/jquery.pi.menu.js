@@ -150,8 +150,8 @@
                                 
                                         
                                 $.fn.menu.getSearchs("#filtros_"+nAplicacion + "_" + nEntidad+"_0");
-                                $.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);
-
+                                setTimeout('$.fn.menu.getLog("#bitacora_'+nAplicacion + '_' + nEntidad+'_0",'+nAplicacion+','+nEntidad+')',4000);
+                                //$.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
                             }
                         }
                     });
@@ -193,6 +193,7 @@
     };
 
     $.fn.menu.getSearchs = function(sDiv) {
+        $(sDiv).html("");
         var nApp=sDiv.split("_")[1];
         var nForma=sDiv.split("_")[2];
         $.ajax(
@@ -223,14 +224,14 @@
                     sW=escape($(this).find("consulta")[0].firstChild.data);
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div class='link_toolbar'>"+
-                    "<a class='menu' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a>"+
+                    "<div class='linkSearch'><a class='linkSearch' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a></div>"+
                     "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
                     "</div>";
 
                     $(sDiv).append(sBusquedas);
 
                     //Oculta botones
-                    $(".ui-icon-close", "#appQries_"+nAplicacion).hide();
+                    $(".ui-icon-close", "#filtros_"+nAplicacion+"_"+nForma+"_0").hide();
                     //Hace bind del liga del búsqueda
                     $("#lnkBusqueda_" + sSuffix).click(function(){
                         nAplicacion=this.id.split("_")[1];
@@ -278,8 +279,9 @@
             }
         });
     }
-
+    
     $.fn.menu.getLog = function(sDiv,nApp,nForm) {
+        $(sDiv).html("");
         $.ajax(
         {
             url: "srvBitacora?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForm),
@@ -310,14 +312,12 @@
                     nForma=$(this).find("clave_forma")[0].firstChild.data;
                     nRegistro=$(this).find("clave_registro")[0].firstChild.data;
                     if (nClave!="") 
-                        sHtml="<div class='user_avatar'>"+
-                           sFoto +
-                           "</div>"+
-                           "<div class='bitacora'>"+
-                           sNombre + " " + sTipoEvento + " " + sForma + " " + 
-                           "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
-                           sBitacora  + "</a> a las " + dFecha +
-                           "</div>"
+                        sHtml="<div class='bitacora'>" +
+                                sFoto +
+                              sNombre + " " + sTipoEvento + " " + sForma + " " + 
+                              "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
+                                sBitacora  + "</a> a las " + dFecha +
+                                "</div>"
                     $(sDiv).append(sHtml);
                     //Hace bind del liga del búsqueda
                     if (nAplicacion!="")
