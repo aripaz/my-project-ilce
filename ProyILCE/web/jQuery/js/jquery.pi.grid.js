@@ -536,11 +536,18 @@
                 "       <div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
                 "   </div>"+
                 "   <div id='rigthPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp+"' class='rigthPane'>"+
-                "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridContainer'></div>" +
+                "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridKardexContainer'></div>" +
+                "       <div id='accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "' class='accordionContainer'>"+
+                "               <h3>&nbsp;Actividad reciente</h3>" +
+                "               <div id='bitacora_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
+                "               <h3>&nbsp;Mis filtros</h3>" +
+                "               <div id='filtros_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
+                "       </div>"+
                 "   </div>"+
                 "</div>"+
                 "</div>");
-            
+
+                                  
             //Crea splitter
             $("#splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).splitter({
                 splitVertical:true,
@@ -557,6 +564,10 @@
                 pk:id
             });
 
+            //Crea acordeón
+            //$("#accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp).accordion();
+            
+            
         }
         $("#pager"+suffix+"_left").html("");
     }
