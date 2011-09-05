@@ -1,8 +1,16 @@
 package mx.ilce.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import mx.ilce.bean.Campo;
+import mx.ilce.bean.DataTransfer;
+import mx.ilce.bean.HashCampo;
 import mx.ilce.bean.User;
+import mx.ilce.bitacora.AdmBitacora;
 import mx.ilce.bitacora.Bitacora;
+import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
@@ -19,6 +27,23 @@ public class Perfil extends Entidad{
     private List lstAplicacion;
     private String[][] arrVariables;
     private Bitacora bitacora;
+    private User user;
+
+    /**
+     * Obtencion del user
+     * @return
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Asignacion del user
+     * @param user
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     /**
      * Obtiene el objeto bitacora
@@ -252,10 +277,24 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * NO IMPLEMENTADO
+     * Se registra un nuevo usuario
+     * @return
      */
-    public ExecutionHandler registrarUsuario(){
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ExecutionHandler registrarUsuario() throws ExceptionHandler{
+        ExecutionHandler sld = new ExecutionHandler();
+        ConSession con = new ConSession();
+
+        User newUser = con.insertUser(this.getUser());
+        sld.setTextExecution(newUser.getMessage());
+
+        if (newUser.getIDUser()!=null){
+            sld.setObjectData(newUser);
+            sld.setExecutionOK(false);
+        }else{
+            sld.setExecutionOK(true);
+        }
+
+        return sld;
     }
 
     /**
@@ -265,17 +304,66 @@ public class Perfil extends Entidad{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     /**
-     * NO IMPLEMENTADO
+     * Metodo para registrar en base de datos el logout de un usuario
+     * @throws ExceptionHandler
      */
-    public void cerrarSession(){
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void cerrarSession() throws ExceptionHandler{
+        try{
+            boolean enableBit = this.getBitacora().isEnable();
+
+            this.getBitacora().setClaveEmpleado(this.getUser().getClaveEmpleado());
+            this.getUser().setBitacora(this.getBitacora());
+            if (enableBit){
+                AdmBitacora admBit = new AdmBitacora();
+                admBit.setBitacora(this.getBitacora());
+                admBit.logout();
+            }
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
+        }finally{
+        }
     }
 
     /**
      * NO IMPLEMENTADO
      */
     public List obtenerVisitas() {
+
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List getListArea() throws ExceptionHandler{
+        List lst = null;
+        try{
+            ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+
+            String strQuery = "select clave_area, area from area";
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(strQuery);
+            dataTransfer.setArrData(new String[0]);
+
+            HashCampo hsCmp = con.getDataByQuery(dataTransfer);
+            HashMap hs = hsCmp.getListData();
+            if (!hs.isEmpty()){
+                lst = new ArrayList();
+                for (int i=0; i<hs.size();i++){
+                    ArrayList arrLst = (ArrayList) hs.get(Integer.valueOf(i));
+                    Campo cmp1 = (Campo) arrLst.get(0);
+                    Campo cmp2 = (Campo) arrLst.get(1);
+                    String[] str = new String[2];
+                    str[0]= cmp1.getValor();
+                    str[1]= cmp2.getValor();
+                    lst.add(str);
+                }
+            }
+        }catch(Exception ex){
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
+        }finally{
+
+        }
+        return lst;
     }
 }
