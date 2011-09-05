@@ -226,7 +226,6 @@
                         'showFilterLink:false,'+
                         'insertInDesktopEnabled:"0"});';
                     setTimeout(sGridDef,1000);
-                    setTimeout(sGridDef,2000);
             }
             //nWidth=$("#divFormProfiles_" + suffix).width();
 
@@ -392,24 +391,24 @@
                             sBusqueda=document.getElementById("$b").value;
                             postConfig = "$cf=93&$ta=insert&$pk=0"+
                             "&clave_aplicacion=" + $.fn.form.options.app +
-                            "&clave_forma="+nForma+
+                            "&clave_forma="+$.fn.form.options.forma+
                             "&clave_empleado="+ $("#_ce_").val() +
                             "&filtro="+sBusqueda +
                             "&consulta=" +sData;
                             $.post("srvFormaInsert",postConfig);
                                     
-                            // Aqui va método del accordion para actualizarlo
-                            $("#apps_menu").appmenu().appmenu.getSearchs("#filtros_"+nApp + "_" + nForma+"_0")
+                            // Aqui va método del filtro para actualizarlo
+                            $("#apps_menu").menu().menu.getSearchs("#filtros_"+$.fn.form.options.app + "_" + $.fn.form.options.forma+"_0")
+                            $("#apps_menu").menu().menu.getLog("#bitacora_"+$.fn.form.options.app+"_"+$.fn.form.options.forma+"_0", $.fn.form.options.app, $.fn.form.options.forma)
                         }
 
                         $("#grid_" + gridSuffix).jqGrid('setGridParam',{
-                            url:"srvGrid?$cf=" + nForma + "&$w=" + sData+ "&$dp=body&page=1"
+                            url:"srvGrid?$cf=" +  $.fn.form.options.forma + "&$w=" + sData+ "&$dp=body&page=1"
                         }).trigger("reloadGrid")
                         $("#dlgModal_"+ formSuffix).dialog("destroy");
                         $("#dlgModal_"+ formSuffix).remove();
                     }
                 }
-
 
                 return false;
 
@@ -616,7 +615,6 @@
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' ><table class='forma'>" + sForm + "</table></form>"
-
 
         return sForm;
     }
