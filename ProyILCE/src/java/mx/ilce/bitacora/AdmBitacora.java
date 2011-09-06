@@ -542,7 +542,7 @@ public class AdmBitacora {
                 if (this.getBitacora().getNavegador()!=null){
                     strCampos.append("navegador,");
                     strValues.append("'");
-                    strValues.append(this.getBitacora().getNavegador());
+                    strValues.append(this.getBitacora().getNavegador().substring(0,50));
                     strValues.append("',");
                 }
                 if (this.getBitacora().getError()!=null){
