@@ -61,6 +61,7 @@ public class srvLogin extends HttpServlet {
                     Forma forma = new Forma();
                     //bitacora.setBitacora("Obtencion de Formas");
                     //forma.setBitacora(bitacora);
+                    forma.setStrWhereQuery("cf.clave_perfil="+perfil.getClavePerfil() );
                     forma.getFormasByAplications(lst);
 
                     user.getBitacora().setBitacora("");

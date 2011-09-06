@@ -194,7 +194,8 @@ public class ConEntidad {
             Integer idQuery = getIdQuery(AdminFile.FORMA);
             dataTransfer.setIdQuery(idQuery);
             //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
-            HashCampo hsCmp = connQ.getData(dataTransfer);
+            //HashCampo hsCmp = connQ.getData(dataTransfer);
+            HashCampo hsCmp = connQ.getDataWithWhereAndData(dataTransfer);
 
             if (!hsCmp.getListData().isEmpty()){
                 //introducimos en el Bean los datos obtenidos
