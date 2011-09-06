@@ -118,9 +118,15 @@ public class srvFormaSearch extends HttpServlet {
                         forma.setIncludeForaneo(false);
                         forma.setBitacora(bitacora);
                         forma.getBitacora().setEnable(false);
-                        forma.ingresarBusquedaAvanzada();
-                        
-                        StringBuffer xmlForma = forma.getXmlEntidad();
+
+                        String registerOK = (String) request.getSession().getAttribute("registerOK");
+                        StringBuffer xmlForma = new StringBuffer("");
+                        if ((registerOK!=null) && ("OK".equals(registerOK))){
+                            xmlForma = getXMLFormaEmpty();
+                        }else{
+                            forma.ingresarBusquedaAvanzada();
+                            xmlForma = forma.getXmlEntidad();
+                        }
 
                         request.getSession().removeAttribute("xmlForma");
                         request.getSession().setAttribute("xmlForma", xmlForma);
@@ -142,6 +148,16 @@ public class srvFormaSearch extends HttpServlet {
             out.close();
         }
     } 
+
+    private StringBuffer getXMLFormaEmpty(){
+        StringBuffer str = new StringBuffer();
+        str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        str.append("<qry>");
+        str.append("<registro id='0'>");
+        str.append("</registro>");
+        str.append("</qry>");
+        return str;
+    }
 
     /**
      * Genera un String con la estrucura adicional de una query, con la data
