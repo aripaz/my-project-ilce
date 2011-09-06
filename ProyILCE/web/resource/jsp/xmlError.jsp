@@ -1,4 +1,4 @@
-<%response.setContentType("text/html;charset=UTF-8");
+<%response.setContentType("text/html");
 response.setHeader("Cache-Control", "no-cache");
 response.setHeader("pragma","no-cache");
 StringBuffer xmlSession = (StringBuffer) request.getSession().getAttribute("xmlError");
