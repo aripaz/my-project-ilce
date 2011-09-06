@@ -1057,7 +1057,7 @@ public class Forma extends Entidad{
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(idQuery);
                     val.executeErrorEmptyData(strEmpty.toString(), this.getClass(), 
-                            "No se encontro datos para la forma y accion solicitada");
+                            "No se encontró consulta de la forma y acción solicitadas");
                 }
             } 
             this.setXmlEntidad(xmlForma);
@@ -1257,7 +1257,7 @@ public class Forma extends Entidad{
                         strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                         strEmpty.append("ID QUERY: ").append(String.valueOf(cmpAux.getValor()));
                         val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
-                                "No se encontro datos para la forma y accion solicitada");
+                                "No se encontró consulta de la forma y acción solicitadas");
                     }
                 }else{
                     StringBuilder strEmpty = new StringBuilder();
@@ -1265,7 +1265,7 @@ public class Forma extends Entidad{
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(String.valueOf(idQuery));
                     val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
-                            "No se encontro datos para la forma y accion solicitada");
+                            "No se encontró consulta de la forma y acción solicitadas");
                 }
             }
             this.setXmlEntidad(xmlForma);
