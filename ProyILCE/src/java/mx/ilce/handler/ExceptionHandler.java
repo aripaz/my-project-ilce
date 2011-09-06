@@ -263,7 +263,7 @@ public final class ExceptionHandler extends Throwable {
             if ((this.strQuery!=null) && (!"".equals(this.strQuery))) {
                 str.append("<query>");
                 str.append(this.getStrQuery());
-                str.append("<query>").append("\n");
+                str.append("</query>").append("\n");
             }
             if ((this.stringData!=null) && (!"".equals(this.stringData))) {
                 str.append("<dataAdicional>");
