@@ -1336,6 +1336,7 @@ public class Forma extends Entidad{
                     DataTransfer dataTransfer = new DataTransfer();
                     dataTransfer.setArrData(strData);
                     dataTransfer.setArrVariables(this.getArrVariables());
+                    dataTransfer.setStrWhere(this.getStrWhereQuery());
 
                     //List lstE = con.getListFormaById(strData,this.getArrVariables());
                     List lstE = con.getListFormaById(dataTransfer);
