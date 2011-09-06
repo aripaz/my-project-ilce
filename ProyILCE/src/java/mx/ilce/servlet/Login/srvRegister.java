@@ -54,78 +54,90 @@ public class srvRegister extends HttpServlet {
             String nombre = (String) hsForm.get("nombre");
             String appPat = (String) hsForm.get("appPat");
             String appMat = (String) hsForm.get("appMat");
-            String email = (String) hsForm.get("e_mail");
-            String pass = (String) hsForm.get("passw1");
+            String e_mail = (String) hsForm.get("e_mail");
+            String passw1 = (String) hsForm.get("passw1");
+            String passw2 = (String) hsForm.get("passw2");
             String cmbArea = (String) hsForm.get("cmbArea");
 
             if ((lstAreas!=null)
              && (nombre!=null) && (!"".equals(nombre))
              && (appPat!=null) && (!"".equals(appPat))
              && (appMat!=null) && (!"".equals(appMat))
-             && (email!=null)  && (!"".equals(email))
-             && (pass!=null)   && (!"".equals(pass))
-             && (cmbArea!=null)   && (!"0".equals(pass))
+             && (e_mail!=null)  && (!"".equals(e_mail))
+             && (passw1!=null)   && (!"".equals(passw1))
+             && (cmbArea!=null)   && (!"0".equals(cmbArea))
              ) {
 
                 User user = new User();
                 user.setNombre(nombre);
                 user.setApellidoPaterno(appPat);
                 user.setApellidoMaterno(appMat);
-                user.setEmail(email);
-                user.setPassword(pass);
-                user.setLogin(email);
+                user.setEmail(e_mail);
+                user.setPassword(passw1);
+                user.setLogin(e_mail);
                 user.setClaveArea(Integer.valueOf(cmbArea));
 
                 perfil.setUser(user);
-                ExecutionHandler exeHn = perfil.registrarUsuario();
                 LoginHandler lg = new LoginHandler();
-                if (exeHn.isExecutionOK()){
-                    perfil.getBitacora().setEnable(true);
-                    lg = perfil.login(user);
-                    if (lg.isLogin()){
-                        user = (User) lg.getObjectData();
-                        if (user != null){
-                            if(user.getBitacora()!=null){
-                                user.getBitacora().setEnable(false);
+
+                if (!perfil.existUser()){
+                    ExecutionHandler exeHn = perfil.registrarUsuario();
+                    if (exeHn.isExecutionOK()){
+                        perfil.getBitacora().setEnable(true);
+                        perfil.setArrVariables(new String[0][0]);
+                        lg = perfil.login(user);
+                        if (lg.isLogin()){
+                            user = (User) lg.getObjectData();
+                            if (user != null){
+                                if(user.getBitacora()!=null){
+                                    user.getBitacora().setEnable(false);
+                                }
+                                Forma forma = new Forma();
+                                forma.setAliasTab("");
+                                forma.setHsForma(new HashMap());
+                                forma.setPk("0");
+                                forma.setTipoAccion("");
+
+                                user.getBitacora().setBitacora("");
+                                request.getSession().setAttribute("user", user);
+                                request.getSession().setAttribute("perfil", perfil);
+                                request.getSession().setAttribute("forma", forma);
+
+                                //StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
+                                StringBuffer xmlSession = getXMLSession(user);
+
+                                //StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
+                                StringBuffer xmlMenu = getXMLMenuEmpty();
+
+                                request.getSession().setAttribute("xmlSession", xmlSession );
+                                request.getSession().setAttribute("xmlMenu",xmlMenu);
+                                request.getSession().setAttribute("user",user);
+                                request.getSession().setAttribute("registerOK","OK");
+
+                                request.getRequestDispatcher("/vista.jsp").forward(request, response);
+                            }else{
+                                lg.setTextExecution("Error en obtención de datos del Usuario, aunque se logro Login");
+                                request.getSession().setAttribute("loginHand",lg);
+                                request.getRequestDispatcher("/index.jsp").forward(request, response);
                             }
-                            bitacora = user.getBitacora();
-                            List lst = perfil.getLstAplicacion();
-                            Forma forma = new Forma();
-                            //bitacora.setBitacora("Obtencion de Formas");
-                            //forma.setBitacora(bitacora);
-                            forma.getFormasByAplications(lst);
-
-                            user.getBitacora().setBitacora("");
-                            request.getSession().setAttribute("user", user);
-                            request.getSession().setAttribute("perfil", perfil);
-                            request.getSession().setAttribute("forma", forma);
-
-                            AdminXML adm = new AdminXML();
-                            String[][] arrVariables = null;
-
-                            //bitacora.setBitacora("Obtener datos Session");
-                            //adm.setBitacora(bitacora);
-                            StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
-
-                            //bitacora.setBitacora("Obtener datos Menu");
-                            //adm.setBitacora(bitacora);
-                            StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
-
-                            request.getSession().setAttribute("xmlSession", xmlSession );
-                            request.getSession().setAttribute("xmlMenu",xmlMenu);
-                            request.getSession().setAttribute("user",user);
-
-                            request.getRequestDispatcher("/vista.jsp").forward(request, response);
-                        }else{
-                            lg.setTextExecution("Error en obtención de datos del Usuario, aunque se logro Login");
-                            request.getSession().setAttribute("loginHand",lg);
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
                         }
+                    }else{
+                        lg.setTextExecution("Error en el Login del Usuario, aunque se logro registrar");
+                        request.getSession().setAttribute("loginHand",lg);
+                        request.getRequestDispatcher("/index.jsp").forward(request, response);
                     }
                 }else{
-                    lg.setTextExecution("Error en el Login del Usuario, aunque se logro registrar");
-                    request.getSession().setAttribute("loginHand",lg);
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getSession().setAttribute("nombre", nombre);
+                    request.getSession().setAttribute("appPat", appPat);
+                    request.getSession().setAttribute("appMat", appMat);
+                    request.getSession().setAttribute("e_mail", e_mail);
+                    request.getSession().setAttribute("passw1", passw1);
+                    request.getSession().setAttribute("passw2", passw2);
+                    request.getSession().setAttribute("lstAreas", lstAreas);
+
+                    request.getSession().setAttribute("lstAreas", lstAreas);
+                    request.getSession().setAttribute("msgExist", "Existe un usuario usando ese mail");
+                    request.getRequestDispatcher("/register.jsp").forward(request, response);
                 }
             }else{
                 lstAreas = perfil.getListArea();
@@ -146,6 +158,41 @@ public class srvRegister extends HttpServlet {
             out.close();
         }
     } 
+
+    private StringBuffer getXMLSession(User user){
+        StringBuffer str = new StringBuffer();
+        str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        str.append("<registro id=\"0\">");
+        str.append("<clave_empleado tipo_dato=\"string\"><![CDATA[");
+        str.append(user.getClaveEmpleado());
+        str.append("]]></clave_empleado>");
+        str.append("<nombre tipo_dato=\"string\"><![CDATA[");
+        str.append(user.getNombre());
+        str.append("]]></nombre>");
+        str.append("<apellido_paterno tipo_dato=\"string\"><![CDATA[");
+        str.append(user.getApellidoPaterno());
+        str.append("]]></apellido_paterno>");
+        str.append("<apellido_materno tipo_dato=\"string\"><![CDATA[");
+        str.append(user.getApellidoMaterno());
+        str.append("]]></apellido_materno>");
+        str.append("<email tipo_dato=\"string\"><![CDATA[");
+        str.append(user.getEmail());
+        str.append("]]></email>");
+        str.append("<clave_perfil tipo_dato=\"integer\"><![CDATA[");
+        str.append(0);
+        str.append("]]></clave_perfil>");
+        str.append("<foto tipo_dato=\"string\"><![CDATA[]]></foto>");
+        str.append("</registro>");
+        return str;
+    }
+
+    private StringBuffer getXMLMenuEmpty(){
+        StringBuffer str = new StringBuffer();
+        str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><qry>");
+        str.append("<registro id=\"0\">");
+        str.append("</registro></qry>");
+        return str;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

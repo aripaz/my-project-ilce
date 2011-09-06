@@ -449,12 +449,13 @@ public class ConSession {
             }else{
                 String strQuery = "insert into empleado "
                         + "(nombre, apellido_paterno, apellido_materno,"
-                        + "email, password, clave_area, activo)"
+                        + "email, password, clave_perfil, clave_area, activo)"
                         + "values ('"+ user.getNombre() + "','"
                         + user.getApellidoPaterno() + "','"
                         + user.getApellidoMaterno() + "','"
                         + user.getEmail() + "','"
                         + user.getPassword() + "',"
+                        + "0,"
                         + user.getClaveArea() + ",1)";
                 
                 dataTransfer.setQueryInsert(strQuery);

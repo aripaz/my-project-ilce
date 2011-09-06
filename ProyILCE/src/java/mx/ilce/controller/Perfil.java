@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
@@ -257,9 +259,9 @@ public class Perfil extends Entidad{
                 con.getBitacora().setEnable(false);
                 Perfil perf = con.getPerfil(usr, this.getArrVariables());
 
-                this.clavePerfil = perf.getClavePerfil();
-                this.lstAplicacion = perf.getLstAplicacion();
-                this.perfil = perf.getPerfil();
+                this.clavePerfil = ((perf.getClavePerfil()==null)?Integer.valueOf(0):perf.getClavePerfil());
+                this.lstAplicacion = ((perf.getLstAplicacion()==null)?new ArrayList():perf.getLstAplicacion());
+                this.perfil = ((perf.getPerfil()==null)?"":perf.getPerfil());
 
                 lg.setObjectData(usr);
                 this.setData(usr);
@@ -283,6 +285,7 @@ public class Perfil extends Entidad{
     public ExecutionHandler registrarUsuario() throws ExceptionHandler{
         ExecutionHandler sld = new ExecutionHandler();
         ConSession con = new ConSession();
+        con.setBitacora(this.getBitacora());
 
         User newUser = con.insertUser(this.getUser());
         sld.setTextExecution(newUser.getMessage());
@@ -360,10 +363,37 @@ public class Perfil extends Entidad{
                 }
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para buscar las areas");
         }finally{
 
         }
         return lst;
+    }
+
+    public boolean existUser() throws ExceptionHandler{
+        boolean sld = false;
+        try {
+            ConEntidad con = new ConEntidad();
+
+            con.setBitacora(this.getBitacora());
+
+            String strQuery = "select * from empleado "
+                    + "where email = '" + this.getUser().getEmail().trim() + "'";
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(strQuery);
+            dataTransfer.setArrData(new String[0]);
+
+            HashCampo hsCmp = con.getDataByQuery(dataTransfer);
+            HashMap hs = hsCmp.getListData();
+            if (!hs.isEmpty()){
+                sld = true;
+            }
+
+        } catch (ExceptionHandler ex) {
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para buscar si existe el usuario");
+        }finally{
+
+        }
+        return sld;
     }
 }

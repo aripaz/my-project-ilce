@@ -35,6 +35,8 @@ public class srvLogin extends HttpServlet {
         PrintWriter out = response.getWriter();
         Validation val = new Validation();
         try {
+            cleanSessionMemory(request);
+            
             Bitacora bitacora = new Bitacora(request);
             bitacora.setEnable(true);
             bitacora.setBitacora("Ingreso del usuario");
@@ -108,6 +110,20 @@ public class srvLogin extends HttpServlet {
         } finally {
             out.close();
         }
+    }
+
+    private void cleanSessionMemory(HttpServletRequest request){
+
+        request.getSession().removeAttribute("loginHand");
+        request.getSession().removeAttribute("xmlSession");
+        request.getSession().removeAttribute("xmlMenu");
+        request.getSession().removeAttribute("xmlForma");
+        request.getSession().removeAttribute("user");
+        request.getSession().removeAttribute("perfil");
+        request.getSession().removeAttribute("forma");
+        request.getSession().removeAttribute("lstAreas");
+        request.getSession().removeAttribute("registerOK");
+        request.getSession().removeAttribute("xmlTab");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

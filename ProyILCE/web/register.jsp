@@ -3,12 +3,20 @@
     Created on : 05-sep-2011, 11:47:33
     Author     : ccatrilef
 --%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
     List lstAreas = (List) request.getSession().getAttribute("lstAreas");
+    String strMsgExist = (String) request.getSession().getAttribute("msgExist");
+    String _strNombre = (String) request.getSession().getAttribute("nombre");
+    String _strAppPat = (String) request.getSession().getAttribute("appPat");
+    String _strAppMat = (String) request.getSession().getAttribute("appMat");
+    String _strEmail = (String) request.getSession().getAttribute("e_mail");
+    String _strPassw1 = (String) request.getSession().getAttribute("passw1");
+    String _strPassw2 = (String) request.getSession().getAttribute("passw2");
 
     String strNombre = request.getParameter("nombre");
     String strAppPat = request.getParameter("appPat");
@@ -18,13 +26,15 @@
     String strPassw1 = request.getParameter("passw1");
     String strPassw2 = request.getParameter("passw2");
 
-    if (strNombre==null){strNombre = "";}
-    if (strAppPat==null){strAppPat = "";}
-    if (strAppMat==null){strAppMat = "";}
-    if (strEmail==null){strEmail = "";}
+    if (strMsgExist==null){strMsgExist="";}
+    if (lstAreas==null){lstAreas = new ArrayList();}
+    if (strNombre==null){strNombre = (_strNombre==null)?"":_strNombre;}
+    if (strAppPat==null){strAppPat = (_strAppPat==null)?"":_strAppPat;}
+    if (strAppMat==null){strAppMat = (_strAppMat==null)?"":_strAppMat;}
+    if (strEmail==null){strEmail = (_strEmail==null)?"":_strEmail;}
     if (strCmbArea==null){strCmbArea="0";}
-    if (strPassw1==null){strPassw1 = "";}
-    if (strPassw2==null){strPassw2 = "";}
+    if (strPassw1==null){strPassw1 = (_strPassw1==null)?"":_strPassw1;}
+    if (strPassw2==null){strPassw2 = (_strPassw2==null)?"":_strPassw2;}
 %>
 <script>
 function retipePass(entrada){
@@ -206,6 +216,16 @@ function validarDatos(){
                                 <div align="center">
                                     <button id="iniciarsesion" onclick="actualizarForm(retipePass(validarDatos()))">Ingresar</button>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan ="2">
+<%
+if (strMsgExist.length()>0){
+%>
+                                <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                                    <p id="msjLogin"><%=strMsgExist%></p></div>
+<%}%>
                             </td>
                         </tr>
                     </table>
