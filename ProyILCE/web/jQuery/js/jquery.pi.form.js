@@ -140,7 +140,10 @@
         
     };
     
-    $.fn.form.setFormObjects = function(){    
+    $.fn.form.setFormObjects = function(){  
+   
+    var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+   
     $.ajax(
     {   
         url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk + "&" + $.fn.form.options.filtroForaneo,
@@ -159,7 +162,18 @@
                 xml = data;
             }
             
-            var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+            var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
+            /*Verifica el estatus de error*/
+            var oError=$(xml).find("error");
+            if (oError.length>0) {
+                var sDescripcionError=oError.find("descripcion").text();
+                $("#pager_"+ gridSuffix+"_left").html(sDescripcionError);
+                $("#dlgModal_"+ formSuffix).remove();
+                alert(sDescripcionError);
+                return false;
+            }
+            
+            formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
             /* Procesamiento de permisos */
             var sPermiso="";
             var oPermisos=$(xml).find("clave_permiso");
@@ -251,8 +265,6 @@
             oForm.find('.widgetbutton').fieldtoolbar({
                 app:$.fn.form.options.app
             });
-
-            var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
 
             //Se captura el submit
             oForm.submit(function() {
@@ -364,11 +376,15 @@
                     });
 
                     if (sData=="") {
-                        alert("Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
+                        $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
+                        alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
                     }
                     else {
 
-                        oGridHeader=$("span.ui-jqgrid-title, #grid_"+gridSuffix );
+                        oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
+                        oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().next().children();
+                        sBitacoraId=oMenuAccordion[1].id;
+                        sBusquedasId=oMenuAccordion[3].id;
                         nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
                         nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
                         sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
@@ -398,8 +414,14 @@
                             $.post("srvFormaInsert",postConfig);
                                     
                             // Aqui va método del filtro para actualizarlo
-                            $("#apps_menu").menu().menu.getSearchs("#filtros_"+$.fn.form.options.app + "_" + $.fn.form.options.forma+"_0")
-                            $("#apps_menu").menu().menu.getLog("#bitacora_"+$.fn.form.options.app+"_"+$.fn.form.options.forma+"_0", $.fn.form.options.app, $.fn.form.options.forma)
+                            sMenuDivPrefix=sBitacoraId.split("_")[1]+"_"+
+                                   sBitacoraId.split("_")[2]+"_"+
+                                   sBitacoraId.split("_")[3];
+                            sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
+                            $("#accordion_"+sMenuDivPrefix).menu.getFullMenu(sMenuDivPrefix,
+                                $.fn.form.options.app,
+                                $.fn.form.options.forma)
+
                         }
 
                         $("#grid_" + gridSuffix).jqGrid('setGridParam',{
