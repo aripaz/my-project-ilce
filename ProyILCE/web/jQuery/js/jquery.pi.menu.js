@@ -76,33 +76,10 @@
                             $tabs.tabs("select", "#tab"+this.id);
 
                             //Recupera el id del grid del tab
+                            
                             sGridIdSuffix=$("#tab" + this.id).children()[0].children[0].id.replace("gbox_grid_","");
-
-                            //Recarga el grid por si tiene algún filtro
-                            if (data==undefined){
-                                data="";
-                                $("#lnkRemoveFilter_grid_" +sGridIdSuffix ).remove();
-                            }
-                            else {
-                                //Si no existe el link para quitar filtro, lo establece
-                                if ($("#lnkRemoveFilter_grid_" + sGridIdSuffix).length==0) {                                        
-                                    oGridHeader=$("#gview_grid_" +sGridIdSuffix).find("span.ui-jqgrid-title");
-                                    $(oGridHeader[0]).append("<a style='margin-left:10px' href='#' id='lnkRemoveFilter_grid_" + sGridIdSuffix +"'>(Quitar filtro)</a>");
-
-                                    //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                                    $("#lnkRemoveFilter_grid_" + sGridIdSuffix).click(function() {
-                                        $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{
-                                            url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"
-                                            }).trigger("reloadGrid")
-                                        $(this).remove();
-                                    });
-                                }
-                            }
-
-                            $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data
-                                }).trigger("reloadGrid");
-
+                            $.fn.menu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
+   
                         }
                         else {
 
@@ -127,10 +104,10 @@
                                 //Se inserta el div para el grid
                                 oTabPanel.html("<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
                                     "<div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
-                                        "<h3>&nbsp;Actividad reciente</h3>" +
-                                        "<div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                        "<h3>&nbsp;Mis filtros</h3>" +
-                                        "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "<h3>&nbsp;Actividad reciente</h3>" +
+                                    "<div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "<h3>&nbsp;Mis filtros</h3>" +
+                                    "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
                                     "</div>"  );
                                 var sLeyendaNuevoRegistro=$("#newEntity_" + nAplicacion + "_" + nEntidad ).text();
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
@@ -149,15 +126,12 @@
                                 });
                                 
                                         
-                                $.fn.menu.getSearchs("#filtros_"+nAplicacion + "_" + nEntidad+"_0");
-                                setTimeout('$.fn.menu.getLog("#bitacora_'+nAplicacion + '_' + nEntidad+'_0",'+nAplicacion+','+nEntidad+')',4000);
+                                $.fn.menu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
                                 //$.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
                             }
                         }
                     });
                 });
-
-
 
                 //Mecanismo para forzar a que el DOM no se cargue del cache
                 // ya que esto hace que se dupliquen los ids de los grid en cola
@@ -191,18 +165,40 @@
             }
         });
     };
+    
+    $.fn.menu.setGridFilter = function (sGridIdSuffix,nApp, nEntidad,data ) {
+        //Recarga el grid por si tiene algún filtro
+        if (data==undefined){
+            data="";
+            $("#lnkRemoveFilter_grid_" +sGridIdSuffix ).remove();
+        }
+        else {
+            //Si no existe el link para quitar filtro, lo establece
+            if ($("#lnkRemoveFilter_grid_" + sGridIdSuffix).length==0) {                                        
+                oGridHeader=$("#gview_grid_" +sGridIdSuffix).find("span.ui-jqgrid-title");
+                $(oGridHeader[0]).append("<a style='margin-left:10px' href='#' id='lnkRemoveFilter_grid_" + sGridIdSuffix +"'>(Quitar filtro)</a>");
 
-    $.fn.menu.getSearchs = function(sDiv) {
-        $(sDiv).html("");
-        var nApp;
-        var nForma; 
-        if (sDiv.split("_").length==4) {
-             nApp=sDiv.split("_")[1];
-             nForma=sDiv.split("_")[2]; }
-        else  {
-             nApp=sDiv.split("_")[1];
-             nForma=sDiv.split("_")[3];   
+                //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                $("#lnkRemoveFilter_grid_" + sGridIdSuffix).click(function() {
+                    $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{
+                        url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"
+                    }).trigger("reloadGrid")
+                    $(this).remove();
+                });
             }
+        }
+
+        $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{
+            url:"srvGrid?$cf=" + nEntidad + "&$dp=body&$w=" +data
+        }).trigger("reloadGrid");
+    };
+
+    $.fn.menu.getFullMenu = function (sDivSuffix, nApp, nForma) {
+        $.fn.menu.getSearchs(sDivSuffix, nApp, nForma,1)
+    };
+    
+    $.fn.menu.getSearchs = function(sDivSuffix, nApp, nForma, bGetLog) {
+        $("#filtros_"+sDivSuffix).html("");
         $.ajax(
         {
             url: "srvFormaSearch?$cf=93&$ta=select&$w=" + escape("clave_empleado=" +$("#_ce_").val()+ " AND clave_forma="+nForma),
@@ -231,14 +227,14 @@
                     sW=escape($(this).find("consulta")[0].firstChild.data);
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div class='link_toolbar'>"+
-                    "<div class='linkSearch'><a class='linkSearch' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a></div>"+
-                    "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
-                    "</div>";
+                        "<div class='linkSearch'><a class='linkSearch' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a></div>"+
+                        "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
+                        "</div>";
 
-                    $(sDiv).append(sBusquedas);
+                    $("#filtros_"+sDivSuffix).append(sBusquedas);
 
                     //Oculta botones
-                    $(".ui-icon-close", "#filtros_"+nAplicacion+"_"+nForma+"_0").hide();
+                    $(".ui-icon-close", "#filtros_"+sDivSuffix).hide();
                     //Hace bind del liga del búsqueda
                     $("#lnkBusqueda_" + sSuffix).click(function(){
                         nAplicacion=this.id.split("_")[1];
@@ -247,33 +243,38 @@
                         /*var newE = $.Event('click');
                         newE.gridFilter=$(this).attr("data");*/
                         data=$(this).attr("data");
-                        $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
+                        if ($("#showEntity_" + nAplicacion + "_" + nForma).length>0)
+                            $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
+                        else {
+                                aGridIdSuffix=$("#divForeignGrids_"+sDivSuffix).children()[0].id.split("_");
+                                $.fn.menu.setGridFilter(aGridIdSuffix[2]+"_"+aGridIdSuffix[3]+"_"+aGridIdSuffix[4],nAplicacion,nForma,data);
+                        }
                     });                    
                 });
 
                 //Hace bind con los divs padres del link en el evento hover
                 $(".link_toolbar").hover(
-                    function () {
-                        //$(this).addClass('active_filter');
-                        $(".closeLnkFiltro",this).show();
-                    },
-                    function () {
-                        //$(this).removeClass('active_filter');
-                        $(".closeLnkFiltro",this).hide();
-                    }
-                    );
+                function () {
+                    //$(this).addClass('active_filter');
+                    $(".closeLnkFiltro",this).show();
+                },
+                function () {
+                    //$(this).removeClass('active_filter');
+                    $(".closeLnkFiltro",this).hide();
+                }
+            );
                 
                 //Hace bind con los botones de cerrar en el evento hover
                 $(".closeLnkFiltro").hover(
-                    function () {
-                        $(this).parent().addClass('ui-state-default');
-                        $(this).parent().addClass('ui-corner-all');
-                    },
-                    function () {
-                        $(this).parent().removeClass('ui-state-default');
-                        $(this).parent().removeClass('ui-corner-all');
-                    }
-                    );
+                function () {
+                    $(this).parent().addClass('ui-state-default');
+                    $(this).parent().addClass('ui-corner-all');
+                },
+                function () {
+                    $(this).parent().removeClass('ui-state-default');
+                    $(this).parent().removeClass('ui-corner-all');
+                }
+            );
 
                 //Hace bind del botón de búsqueda
                 $(".closeLnkFiltro").click(function(){
@@ -281,17 +282,19 @@
                     $.post("srvFormaDelete","$cf=93&$pk=" + $(this).attr("pk"));
                     $(this).parent().parent().remove();
                 });
-
+                
+                if (bGetLog==1)
+                    $.fn.menu.getLog(sDivSuffix,nApp,nForma,bGetLog);
 
             }
         });
     }
     
-    $.fn.menu.getLog = function(sDiv,nApp,nForm) {
-        $(sDiv).html("");
+    $.fn.menu.getLog = function(sDivSuffix,nApp,nForma,bGetAccordion) {
+        $("#bitacora_"+sDivSuffix).html("");
         $.ajax(
         {
-            url: "srvBitacora?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForm),
+            url: "srvBitacora?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForma),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -320,15 +323,15 @@
                     nRegistro=$(this).find("clave_registro")[0].firstChild.data;
                     if (nClave!="") 
                         sHtml="<div class='bitacora'>" +
-                                sFoto +
-                              sNombre + " " + sTipoEvento + " " + sForma + " " + 
-                              "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
-                                sBitacora  + "</a> a las " + dFecha +
-                                "</div>"
-                    $(sDiv).append(sHtml);
+                        sFoto +
+                        sNombre + " " + sTipoEvento + " " + sForma + " " + 
+                        "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
+                        sBitacora  + "</a> a las " + dFecha +
+                        "</div>"
+                    $("#bitacora_"+sDivSuffix).append(sHtml);
                     //Hace bind del liga del búsqueda
                     if (nAplicacion!="")
-                         $("#lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro).click(function(){
+                        $("#lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro).click(function(){
                             $("body").form({
                                 app: this.id.split("_")[1],
                                 forma:this.id.split("_")[2],
@@ -345,16 +348,17 @@
                     }); 
                     
                 });
-
-                $(sDiv).parent().accordion({
-                                    /*active: false,
-                                    fillSpace:true,
-                                    collapsible: true,*/
-                                    change: function() {
-                                        $(this).find('h3').blur();
-                                    }
-                             }
-                   );
+                if (bGetAccordion==1) 
+                    $("#accordion_"+sDivSuffix).accordion({
+                        active: false,
+                        /*fillSpace:true, */
+                        autoHeight: false,
+                        collapsible: true,
+                        change: function() {
+                            $(this).find('h3').blur();
+                        }
+                }
+            );
             }
         });
     }
@@ -375,8 +379,8 @@
             nMostrar = $(this).find("mostrar").text();
 
             sHtml+="<li>" +
-            "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu'>" + sTituloAplicacion + "</a>"+
-            "</li>"
+                "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu'>" + sTituloAplicacion + "</a>"+
+                "</li>"
 
         })
         sHtml+="</ul></il></ul>"

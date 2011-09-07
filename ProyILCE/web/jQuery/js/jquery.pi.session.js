@@ -111,7 +111,7 @@
                   '<a href="#" id="lnkConfiguracion">Configuraci&oacute;n</a>' +
                   '</li>'+
                   '<li>'+
-                  '<a href="#" id="lnkConfiguracion">Cerrar sesi&oacute;n</a>' +
+                  '<a href="srvLogout" id="lnkConfiguracion">Cerrar sesi&oacute;n</a>' +
                   '</li>'+
                   '</ul>'+
                   '</li>'+

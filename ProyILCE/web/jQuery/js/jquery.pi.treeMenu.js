@@ -128,10 +128,7 @@
                           callFormWithRelationships: sTipoNodo=="showGridAndRelationships"?true:false
                        });
                        
-                       $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).menu.getSearchs("#filtros_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]);
-                       setTimeout('$("#accordion_'+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]+'").menu.getLog("#bitacora_'+oId.split('_')[1]+'_'+oId.split('_')[2]+'_'+oId.split('_')[3]+'_'+oId.split('_')[4]+'",'+oId.split('_')[1] + ',' +oId.split('_')[3]+')',4000);
-
-
+                       $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).menu.getFullMenu(oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4],nApp,nForma);
                  });
 
             },
