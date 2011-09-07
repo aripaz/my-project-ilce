@@ -2,10 +2,7 @@ package mx.ilce.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
@@ -290,21 +287,36 @@ public class Perfil extends Entidad{
         User newUser = con.insertUser(this.getUser());
         sld.setTextExecution(newUser.getMessage());
 
-        if (newUser.getIDUser()!=null){
-            sld.setObjectData(newUser);
+        if (newUser.getClaveEmpleado()==null){
             sld.setExecutionOK(false);
         }else{
             sld.setExecutionOK(true);
         }
-
+        sld.setObjectData(newUser);
         return sld;
     }
 
     /**
-     * NO IMPLEMENTADO
+     * Metodo utilizado para la recuperacion de la password del usuario
      */
-    public ExecutionHandler enviarPasswordPerdido() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ExecutionHandler enviarPasswordPerdido() throws ExceptionHandler {
+        ExecutionHandler sld = new ExecutionHandler();
+        ConSession con = new ConSession();
+        con.setBitacora(this.getBitacora());
+
+        DataTransfer dataTransfer = new DataTransfer();
+        dataTransfer.setDataObject(this.getUser());
+        
+        User newUser = con.getUserByMail(dataTransfer);
+        sld.setTextExecution(newUser.getMessage());
+
+        if (newUser.getClaveEmpleado()==null){
+            sld.setExecutionOK(false);
+        }else{
+            sld.setExecutionOK(true);
+        }
+        sld.setObjectData(newUser);
+        return sld;
     }
 
 

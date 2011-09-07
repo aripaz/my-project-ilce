@@ -225,6 +225,49 @@ public class ConSession {
         return usr;
     }
 
+    public User getUserByMail(DataTransfer dataTrans) throws ExceptionHandler{
+        User usuario = (User) dataTrans.getDataObject();
+        String[][] arrVariables = dataTrans.getArrVariables();
+
+        User usr = new User();
+        try{
+            String[] strData = new String[1];
+            strData[0] = usuario.getEmail();
+            boolean enableBit = false;
+            if (this.getBitacora()!=null){
+                enableBit = this.getBitacora().isEnable();
+            }
+            ConQuery connQ = new ConQuery();
+            connQ.setBitacora(this.getBitacora());
+            //validamos user y password
+            connQ.setEnableDataLog(false);
+            DataTransfer dataTransfer = new DataTransfer();
+
+            usr.setIsLogged(false);
+            //validamos que es problema de la password
+            dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
+            dataTransfer.setArrData(strData);
+            dataTransfer.setArrVariables(arrVariables);
+
+            HashCampo hsCmpUsr = connQ.getData(dataTransfer);
+
+            if (hsCmpUsr.getListData().isEmpty()){
+                usr.setMessage("Usuario no existe en los registros");
+            }else{
+                ListHash lh = new ListHash();
+                usr = (User) lh.getBean(User.class, hsCmpUsr);
+            }
+
+        }catch(Exception ex){
+            usr.setIsLogged(false);
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+        }finally{
+
+        }
+        return usr;
+    }
+
     /**
      * Obtiene los datos del perfil de un usuario, desde el bean User se utiliza
      * el campo clavePerfil como parametro de entrada. Ademas de los datos del

@@ -19,6 +19,15 @@ public class DataTransfer {
     private String[] arrData;
     private String[][] arrVariables;
     private String orderBY;
+    private Object dataObject;
+
+    public Object getDataObject() {
+        return dataObject;
+    }
+
+    public void setDataObject(Object dataObject) {
+        this.dataObject = dataObject;
+    }
 
     public DataTransfer() {
         

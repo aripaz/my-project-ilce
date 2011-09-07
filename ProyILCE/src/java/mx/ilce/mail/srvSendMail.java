@@ -36,13 +36,23 @@ public class srvSendMail extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         Validation val = new Validation();
+        String PagDispacher = (String) request.getSession().getAttribute("PagDispacher");
         try {
-            if (!val.validateUser(request)){
+            String GOTSESS = (String) request.getSession().getAttribute("GOTSESS");
+
+            if ((!val.validateUser(request)) && (GOTSESS==null)) {
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
                 AdminForm admForm = new AdminForm();
-                HashMap hs = admForm.getFormulario(request);
-                HashMap hsForm = (HashMap) hs.get("FORM");
+                HashMap hs = null;
+                HashMap hsForm = new HashMap();
+
+                if ((GOTSESS!=null) && ("OK".equals(GOTSESS))){
+                    hsForm = getDataFromSession(request);
+                }else{
+                    hs = admForm.getFormulario(request);
+                    hsForm = (HashMap) hs.get("FORM");
+                }
 
                 String origen = (String) hsForm.get("from");
                 String destino = (String) hsForm.get("to");
@@ -116,17 +126,29 @@ public class srvSendMail extends HttpServlet {
                         Transport.send(message, message.getAllRecipients());
                     }
                     // Cierre.
+                    cleanMemory(request);
+
                     AdminXML admXML = new AdminXML();
                     request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
-                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+
+                    if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
+                        request.getRequestDispatcher(PagDispacher).forward(request, response);
+                    }else{
+                        request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+                    }
                 }
             }
         }catch (ExceptionHandler eh){
-            try{
-                val.executeErrorHandler(eh,request, response);
-            }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvForma");
-                val.executeErrorException(es, request, response);
+            if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
+                request.getSession().setAttribute("xmlTab",eh.getXmlError());
+                request.getRequestDispatcher(PagDispacher).forward(request, response);
+            }else{
+                try{
+                    val.executeErrorHandler(eh,request, response);
+                }catch (Exception es){
+                    val.setTextMessage("Problemas en la execucion del Error de srvForma");
+                    val.executeErrorException(es, request, response);
+                }
             }
         }catch(Exception e){
             val.setTextMessage("Problemas en la execucion de srvForma");
@@ -134,6 +156,50 @@ public class srvSendMail extends HttpServlet {
         } finally {
         }
     } 
+
+    private void cleanMemory(HttpServletRequest request){
+        request.getSession().removeAttribute("from");
+        request.getSession().removeAttribute("to");
+        request.getSession().removeAttribute("subject");
+        request.getSession().removeAttribute("message");
+        request.getSession().removeAttribute("copy");
+        request.getSession().removeAttribute("copyO");
+        request.getSession().removeAttribute("GOTSESS");
+        request.getSession().removeAttribute("e_mail");
+        request.getSession().removeAttribute("msgExist");
+    }
+
+    private HashMap getDataFromSession(HttpServletRequest request){
+        HashMap hs = new HashMap();
+
+        String strFrom = (String) request.getSession().getAttribute("from");
+        String strTo = (String) request.getSession().getAttribute("to");
+        String strSubject = (String) request.getSession().getAttribute("subject");
+        String strMessage = (String) request.getSession().getAttribute("message");
+        String strCopy = (String) request.getSession().getAttribute("copy");
+        String strCopyO = (String) request.getSession().getAttribute("copyO");
+
+        if (strFrom!=null){
+            hs.put("from", strFrom);
+        }
+        if (strTo!= null){
+            hs.put("to", strTo);
+        }
+        if (strSubject!=null){
+            hs.put("subject", strSubject);
+        }
+        if (strMessage!=null){
+            hs.put("message", strMessage);
+        }
+        if (strCopy!=null){
+            hs.put("copy", strCopy);
+        }
+        if (strCopyO!=null){
+            hs.put("copyO", strCopyO);
+        }
+        
+        return hs;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
