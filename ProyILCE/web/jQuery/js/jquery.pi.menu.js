@@ -109,7 +109,7 @@
                                     "<h3>&nbsp;Mis filtros</h3>" +
                                     "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
                                     "</div>"  );
-                                var sLeyendaNuevoRegistro=$("#newEntity_" + nAplicacion + "_" + nEntidad ).text();
+                                var sLeyendaNuevoRegistro=$("#showEntity_" + nAplicacion + "_" + nEntidad ).attr("nueva_entidad");
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
 
                                 $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
@@ -379,7 +379,7 @@
             nMostrar = $(this).find("mostrar").text();
 
             sHtml+="<li>" +
-                "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu'>" + sTituloAplicacion + "</a>"+
+                "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>"+
                 "</li>"
 
         })

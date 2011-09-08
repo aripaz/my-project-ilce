@@ -465,6 +465,7 @@
             //Genera etiqueta
             sAlias= oCampo.find('alias_campo').text();
             bDatoSensible=oCampo.find('dato_sensible').text();
+            bActivo=oCampo.find('activo').text();
 
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
@@ -490,6 +491,9 @@
             if (nFormaForanea!=undefined) {
                 sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ' + oCampo.find('evento').text() + ' ';
                 
+                if (bActivo!="1") 
+                     sRenglon+=' disabled="disabled" ';
+                 
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted'
                 }
@@ -536,7 +540,10 @@
                 if (oCampo.find('tipo_control').text()=="textarea" || sTipoCampo=="text") {
                     sRenglon+='<td class="etiqueta_forma">' +
                     '<textarea tabindex="' + tabIndex + '" ';
-
+                
+                     if (bActivo!="1") 
+                         sRenglon+=' disabled="disabled" ';
+                         
                     sWidgetButton="";
 
                     if (sTipoCampo=='money') {
@@ -565,6 +572,9 @@
                     '<div style="width:10px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
                     '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
 
+                     if (bActivo!="1") 
+                         sRenglon+=' disabled="disabled" ';
+                     
                     // Establece la marca de obligatorio con la seudoclase obligatorio
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
                         sRenglon+='class="singleInput obligatorio" ';
@@ -581,6 +591,9 @@
                     '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '"' +
                     'tabindex="' + tabIndex + '" ';
 
+                     if (bActivo!="1") 
+                         sRenglon+=' disabled="disabled" ';
+                     
                     sWidgetButton="";
 
                     if (sTipoCampo=='money') {
