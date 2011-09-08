@@ -161,9 +161,8 @@ div.user_avatar>img {
 }
 
 .gridForeignContainer {
-    /*overflow:auto;*/
     float: left;
-    width: 430px;
+    width: 450px;
     height: 400px;
 }
 
