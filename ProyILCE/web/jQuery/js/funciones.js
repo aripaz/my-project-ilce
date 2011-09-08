@@ -513,3 +513,20 @@ function validaAnteproyectoXAutorizar (sControl,mustBe,sObligatorios) {
         }
     }
 }
+
+function calcula_iva(sFormSuffix){ 
+nSubtotal=parseFloat($("#importe_"+sFormSuffix).val());
+
+if ($("#iva_"+sFormSuffix).val()=="")
+    nIVA=0;
+else
+    nIVA=parseFloat($("#iva_"+sFormSuffix+" option:selected").html().split("-")[1])/100 ;
+
+$("#total_"+sFormSuffix).val(nSubtotal+(nSubtotal*nIVA));
+}
+
+function calcula_total(sFormSuffix){ 
+nCantidad=parseFloat($("#cantidad_"+sFormSuffix).val());
+nPrecio=parseFloat($("#precio_unitario_"+sFormSuffix).val());
+$("#total_"+sFormSuffix).val(nCantidad*nPrecio);
+}
