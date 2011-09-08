@@ -143,6 +143,13 @@ function validarDatos(){
                 </td>
             </tr>
 <%}%>
+            <tr>
+                <td  align="center">
+                    <div>
+                        <a href="<%=request.getContextPath()%>/login.jsp" class="sesion_menu">Regresar al Inicio</a>
+                    </div>
+                </td>
+            </tr>
         </table>
     </form>
     </body>
