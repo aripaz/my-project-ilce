@@ -140,7 +140,7 @@ public class srvSendMail extends HttpServlet {
             }
         }catch (ExceptionHandler eh){
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
-                request.getSession().setAttribute("xmlTab",eh.getXmlError());
+                request.getSession().setAttribute("xmlTab",eh.getXmlError().toString());
                 request.getRequestDispatcher(PagDispacher).forward(request, response);
             }else{
                 try{
@@ -151,8 +151,14 @@ public class srvSendMail extends HttpServlet {
                 }
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvForma");
-            val.executeErrorException(e, request, response);
+            if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
+                ExceptionHandler eh = new ExceptionHandler(e,srvSendMail.class,"Error al porcesar Mail");
+                request.getSession().setAttribute("xmlTab",eh.getXmlError().toString());
+                request.getRequestDispatcher(PagDispacher).forward(request, response);
+            }else{
+                val.setTextMessage("Problemas en la execucion de srvForma");
+                val.executeErrorException(e, request, response);
+            }
         } finally {
         }
     } 

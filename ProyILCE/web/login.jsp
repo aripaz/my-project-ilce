@@ -26,9 +26,13 @@
         <p>&nbsp;</p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <table width="28%" border="0" align="center" cellpadding="5" cellspacing="0">
+        <table width="35%" border="0" align="center" cellpadding="5" cellspacing="0">
             <tr>
-                <td><div align="center"><img src="img/logo_plataforma_ilce.jpg" width="197" height="154" /></div></td>
+                <td>
+                    <div align="center">
+                        <img src="img/logo_plataforma_ilce.jpg" width="197" height="154" />
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -58,7 +62,7 @@
                                     <td><div align="right">
                                         </div></td>
                                     <td><div align="right">
-                                            <a href="#" id="lnkRecuperaPw" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
+                                            <a href="<%=request.getContextPath()%>/forgotPass.jsp" id="lnkRecuperaPwX" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
                                         </div></td>
                                 </tr>
                                 <tr>

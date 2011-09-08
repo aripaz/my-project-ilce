@@ -39,7 +39,7 @@ public class srvForgotPass extends HttpServlet {
         PrintWriter out = response.getWriter();
         HashMap hsForm = null;
         Validation val = new Validation();
-        String PagDispacher = "/forgotPassResp.jsp";
+        String PagDispacher = "/forgotPass.jsp";
         try {
             AdminForm admForm = new AdminForm();
             HashMap hs = admForm.getFormulario(request);
@@ -58,7 +58,7 @@ public class srvForgotPass extends HttpServlet {
                 if (!perfil.existUser()){
                     request.getSession().setAttribute("e_mail",e_mail);
                     request.getSession().setAttribute("msgExist", "No Existe un usuario usando ese mail");
-                    request.getRequestDispatcher("/forgotPass.jsp").forward(request, response);
+                    request.getRequestDispatcher(PagDispacher).forward(request, response);
                 }else{
                     ExecutionHandler exeHn = perfil.enviarPasswordPerdido();
 

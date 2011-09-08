@@ -13,6 +13,25 @@
     if (strMsgExist==null){strMsgExist="";}
     if (strMail==null){strMail = (_strEmail==null)?"":_strEmail;}
 
+    String strRespuesta = (String) request.getSession().getAttribute("xmlTab");
+
+    if (strRespuesta==null){strRespuesta="";}
+
+    String[] strError = strRespuesta.split("<error>");
+    String[] strQuery = strRespuesta.split("<resultado>");
+    String strPart = "";
+
+    String strSalida = "";
+    if ((strError!=null)&&(strError.length > 1)){
+        String[] desc1 = strError[1].split("<descripcion>");
+        String[] desc2 = desc1[1].split("</descripcion>");
+        strPart = "Se ha producido un error en el envio del mail de Recuperacion";
+        strSalida = desc2[0];
+    }else if((strQuery!=null)&&(strQuery.length>1)){
+        String[] query1 = strQuery[1].split("</resultado>");
+        strSalida = query1[0] + "<br><br>Revice su correo y siga las instrucciones";
+    }
+
 %>
 <script language="javascript">
 function actualizarForm(entrada){
@@ -45,8 +64,11 @@ function validarDatos(){
         <title>Recuperacion de Password</title>
     </head>
     <body>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
     <form action="" method="post" name="frmForgotPass" id="frmForgotPass">
-        <table width="25%" border="0" align="center" cellspacing="0">
+        <table width="35%" border="0" align="center" cellpadding="5" cellspacing="0">
             <tr>
                 <td>
                     <div align="center">
@@ -54,21 +76,28 @@ function validarDatos(){
                     </div>
                 </td>
             </tr>
+<%
+    if (strRespuesta.length()==0){
+%>
             <tr>
-                <td>
-                    Para la recuperacion de su password, ingrese su email de usuario.
+                <td align="center">
+                    <br>
+                    <span style="font-size:12pt" >
+                    Para la recuperacion de su password, ingrese su email de usuario.<br>
                     Un correo sera enviado a dicha direccion con su password.
+                    </span>
+                    <br><br><br>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <div  align="center">
+                    <div  align="left">
                         <table width="100%" align="center">
                         <tr>
-                            <td width="50%">
+                            <td width="15%">
                                 <div id="e_mail" align="left" class="etiqueta_forma">Email</div>
                             </td>
-                            <td width="50%" class="etiqueta_forma">
+                            <td width="85%" class="etiqueta_forma">
                                 <div align="left">
                                     <input name="e_mail" type="text" id="e_mail" size="24" value="<%=strMail%>"/>
                                 </div>
@@ -83,18 +112,37 @@ function validarDatos(){
                         </tr>
                         <tr>
                             <td colspan ="2">
-<%
-if (strMsgExist.length()>0){
-%>
+                <%if (strMsgExist.length()>0){%>
                                 <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
                                     <p id="msjLogin"><%=strMsgExist%></p></div>
-<%}%>
+                <%}%>
                             </td>
                         </tr>
                     </table>
                     </div>
                 </td>
             </tr>
+<%}else{%>
+            <tr>
+                <td align="center">
+                    <br><br><br>
+                    <%if (strPart.length()>0){%>
+                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                            <p id="msjLogin"><%=strPart%></p>
+                        </div>
+                        <br><br>
+                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                            <p id="msjLogin">
+                                <%=strSalida%></p>
+                        </div>
+                    <%}else{%>
+                        <span style="font-size: 12pt">
+                            <p><%=strSalida%></p>
+                        </span>
+                    <%}%>
+                </td>
+            </tr>
+<%}%>
         </table>
     </form>
     </body>
