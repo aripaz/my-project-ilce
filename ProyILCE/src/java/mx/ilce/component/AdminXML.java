@@ -279,9 +279,9 @@ public class AdminXML {
                 str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
-                    str.append("\t<cell>");
+                    str.append("\t<cell><![CDATA[");
                     str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
-                    str.append("</cell>\n");
+                    str.append("]]></cell>\n");
                 }
                 str.append("</row>\n");
             }
