@@ -29,6 +29,43 @@ public class CampoForma implements Serializable  {
     private String foraneo;
     private String typeData;
 
+    private Integer visible;
+    private String valorPredeterminado;
+    private Integer justificarCambio;
+    private String aliasTab;
+
+    public String getAliasTab() {
+        return aliasTab;
+    }
+
+    public void setAliasTab(String aliasTab) {
+        this.aliasTab = aliasTab;
+    }
+
+    public Integer getJustificarCambio() {
+        return justificarCambio;
+    }
+
+    public void setJustificarCambio(Integer justificarCambio) {
+        this.justificarCambio = justificarCambio;
+    }
+
+    public String getValorPredeterminado() {
+        return valorPredeterminado;
+    }
+
+    public void setValorPredeterminado(String valorPredeterminado) {
+        this.valorPredeterminado = valorPredeterminado;
+    }
+
+    public Integer getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Integer visible) {
+        this.visible = visible;
+    }
+
 
     /**
      * Obtiene la claveAplicacion del objeto
