@@ -29,7 +29,7 @@
         strSalida = desc2[0];
     }else if((strQuery!=null)&&(strQuery.length>1)){
         String[] query1 = strQuery[1].split("</resultado>");
-        strSalida = query1[0] + "<br><br>Revice su correo y siga las instrucciones";
+        strSalida = query1[0] + "<br><br>Revise su correo y siga las instrucciones";
     }
 
 %>

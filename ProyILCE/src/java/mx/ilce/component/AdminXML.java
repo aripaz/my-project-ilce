@@ -520,6 +520,26 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getTamano()).trim())
                                             + "</tamano>\n"));
                                 }
+                                if (cmpAux.getVisible()!=null){
+                                            str.append(("\t\t<visible>"
+                                            + castNULL(String.valueOf(cmpAux.getVisible()).trim())
+                                            + "</visible>\n"));
+                                }
+                                if (cmpAux.getValorPredeterminado()!=null){
+                                            str.append(("\t\t<valor_predeterminado>"
+                                            + castNULL(String.valueOf(cmpAux.getValorPredeterminado()).trim())
+                                            + "</valor_predeterminado>\n"));
+                                }
+                                if (cmpAux.getJustificarCambio()!=null){
+                                            str.append(("\t\t<justificar_cambio>"
+                                            + castNULL(String.valueOf(cmpAux.getJustificarCambio()).trim())
+                                            + "</justificar_cambio>\n"));
+                                }
+                                if (cmpAux.getAliasTab()!=null){
+                                            str.append(("\t\t<alias_tab>"
+                                            + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
+                                            + "</alias_tab>\n"));
+                                }
                             }
                         }
                         str.append(("\t</"+cmp.getNombreDB()+">\n"));
@@ -680,6 +700,26 @@ public class AdminXML {
                                     str.append(("\t\t<tamano>"
                                             + castNULL(String.valueOf(cmpAux.getTamano()).trim())
                                             + "</tamano>\n"));
+                                }
+                                if (cmpAux.getVisible()!=null){
+                                            str.append(("\t\t<visible>"
+                                            + castNULL(String.valueOf(cmpAux.getVisible()).trim())
+                                            + "</visible>\n"));
+                                }
+                                if (cmpAux.getValorPredeterminado()!=null){
+                                            str.append(("\t\t<valor_predeterminado>"
+                                            + castNULL(String.valueOf(cmpAux.getValorPredeterminado()).trim())
+                                            + "</valor_predeterminado>\n"));
+                                }
+                                if (cmpAux.getJustificarCambio()!=null){
+                                            str.append(("\t\t<justificar_cambio>"
+                                            + castNULL(String.valueOf(cmpAux.getJustificarCambio()).trim())
+                                            + "</justificar_cambio>\n"));
+                                }
+                                if (cmpAux.getAliasTab()!=null){
+                                            str.append(("\t\t<alias_tab>"
+                                            + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
+                                            + "</alias_tab>\n"));
                                 }
                             }
                         }
