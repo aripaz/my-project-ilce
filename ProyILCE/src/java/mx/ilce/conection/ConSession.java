@@ -281,7 +281,7 @@ public class ConSession {
         Perfil perfil = new Perfil();
         try{
             String[] strData = new String[1];
-            strData[0] = String.valueOf(user.getClavePerfil());
+            strData[0] = String.valueOf(user.getClaveEmpleado());
 
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
