@@ -153,7 +153,9 @@ public class srvFormaInsert extends HttpServlet {
 
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     AdminXML admXML = new AdminXML();
-                    request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf(xml)));
+                    //request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf(xml)));
+                    request.getSession().setAttribute("xmlTab",admXML.salidaXMLBitacora(String.valueOf(xml),
+                                                               String.valueOf(forma.getBitacora().getIdBitacora())));
                     request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
             }

@@ -29,8 +29,17 @@ public final class Bitacora implements Serializable {
     private String consulta;
     private boolean enable;
     private List lstVariables;
+    private Integer idBitacora;
 
     private static Integer cero = Integer.valueOf(0);
+
+    public Integer getIdBitacora() {
+        return ((idBitacora==null)?Integer.valueOf(0):idBitacora);
+    }
+
+    public void setIdBitacora(Integer idBitacora) {
+        this.idBitacora = idBitacora;
+    }
 
     /**
      * Constructor a partir de los datos del request
