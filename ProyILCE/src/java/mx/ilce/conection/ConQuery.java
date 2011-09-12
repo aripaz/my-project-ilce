@@ -204,6 +204,7 @@ class ConQuery {
                         admBit.setLstVariables(null);
                     }
                     this.getBitacora().cleanDataQuery();
+                    this.getBitacora().setIdBitacora(admBit.getIntSld());
                 }
             }
             hsCmp.setObjData(increment);
@@ -305,6 +306,7 @@ class ConQuery {
                         admBit.setLstVariables(null);
                     }
                     this.getBitacora().cleanDataQuery();
+                    this.getBitacora().setIdBitacora(admBit.getIntSld());
                 }
             }
             hsCmp.setObjData(increment);
@@ -403,6 +405,7 @@ class ConQuery {
                         admBit.setLstVariables(null);
                     }
                     this.getBitacora().cleanDataQuery();
+                    this.getBitacora().setIdBitacora(admBit.getIntSld());
                 }
             }
             hsCmp.setObjData(increment);

@@ -1127,6 +1127,17 @@ public class AdminXML {
         return str.toString();
     }
 
+    public String salidaXMLBitacora(String data, String idBitacora){
+        StringBuilder str = new StringBuilder();
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+        str.append("<qry>\n");
+        str.append("<resultado>").append(data).append("</resultado>\n");
+        str.append("<idbitacora>").append(idBitacora).append("</idbitacora>\n");
+        str.append("</qry>");
+
+        return str.toString();
+    }
+
     /**
      * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
      * @param data  String de datos donde se buscaran los caracteres especiales

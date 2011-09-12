@@ -665,6 +665,7 @@ public class Forma extends Entidad{
             if (!intHs.equals(0)){
                 ex.setExecutionOK(true);
                 ex.setObjectData(intHs);
+                this.getBitacora().setIdBitacora(conE.getBitacora().getIdBitacora());
             }else{
                 ex.setExecutionOK(false);
             }
@@ -820,6 +821,7 @@ public class Forma extends Entidad{
             ex = new ExecutionHandler();
             if (intHs.equals(1)){
                 ex.setExecutionOK(true);
+                this.getBitacora().setIdBitacora(conE.getBitacora().getIdBitacora());
             }else{
                 ex.setExecutionOK(false);
             }
@@ -956,6 +958,7 @@ public class Forma extends Entidad{
                 if (intHs.equals(1)){
                     ex.setExecutionOK(true);
                     ex.setObjectData(intHs);
+                    this.getBitacora().setIdBitacora(conE.getBitacora().getIdBitacora());
                 }else{
                     ex.setExecutionOK(false);
                     ex.setObjectData(intHs);
