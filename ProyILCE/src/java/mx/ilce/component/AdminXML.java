@@ -1169,7 +1169,7 @@ public class AdminXML {
         StringBuilder str = new StringBuilder();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
         str.append("<qry>\n");
-        str.append("<resultado>").append(data).append("</resultado>\n");
+        str.append("<pk>").append(data).append("</pk>\n");
         str.append("</qry>");
 
         return str.toString();
@@ -1179,8 +1179,8 @@ public class AdminXML {
         StringBuilder str = new StringBuilder();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
         str.append("<qry>\n");
-        str.append("<resultado>").append(data).append("</resultado>\n");
-        str.append("<idbitacora>").append(idBitacora).append("</idbitacora>\n");
+        str.append("<pk>").append(data).append("</pk>\n");
+        str.append("<clave_bitacora>").append(idBitacora).append("</clave_bitacora>\n");
         str.append("</qry>");
 
         return str.toString();
