@@ -18,7 +18,7 @@
     if (strRespuesta==null){strRespuesta="";}
 
     String[] strError = strRespuesta.split("<error>");
-    String[] strQuery = strRespuesta.split("<resultado>");
+    String[] strQuery = strRespuesta.split("<pk>");
     String strPart = "";
 
     String strSalida = "";

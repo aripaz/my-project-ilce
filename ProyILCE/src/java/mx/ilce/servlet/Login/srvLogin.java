@@ -33,7 +33,7 @@ public class srvLogin extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Validation val = new Validation();
+        LoginHandler lg = new LoginHandler();
         try {
             cleanSessionMemory(request);
             
@@ -51,7 +51,7 @@ public class srvLogin extends HttpServlet {
             Perfil perfil = new Perfil();
             perfil.setBitacora(bitacora);
             perfil.getBitacora().setEnable(true);
-            LoginHandler lg = perfil.login(user);
+            lg = perfil.login(user);
             if (lg.isLogin()){
                 user = (User) lg.getObjectData();
                 if (user != null){
@@ -61,8 +61,7 @@ public class srvLogin extends HttpServlet {
                     bitacora = user.getBitacora();
                     List lst = perfil.getLstAplicacion();
                     Forma forma = new Forma();
-                    //bitacora.setBitacora("Obtencion de Formas");
-                    //forma.setBitacora(bitacora);
+
                     forma.setStrWhereQuery("cf.clave_perfil="+perfil.getClavePerfil() );
                     forma.getFormasByAplications(lst);
 
@@ -74,12 +73,7 @@ public class srvLogin extends HttpServlet {
                     AdminXML adm = new AdminXML();
                     String[][] arrVariables = null;
 
-                    //bitacora.setBitacora("Obtener datos Session");
-                    //adm.setBitacora(bitacora);
                     StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
-
-                    //bitacora.setBitacora("Obtener datos Menu");
-                    //adm.setBitacora(bitacora);
                     StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
 
                     request.getSession().setAttribute("xmlSession", xmlSession );
@@ -99,14 +93,18 @@ public class srvLogin extends HttpServlet {
             }
         }catch (ExceptionHandler eh){
             try{
-                val.executeErrorHandler(eh,request, response);
+                lg.setTextExecution(eh.getTextMessage().toString());
+                request.getSession().setAttribute("loginHand",lg);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvLogin");
-                val.executeErrorException(es, request, response);
+                lg.setTextExecution("Problemas en la execucion del Error de srvLogin.");
+                request.getSession().setAttribute("loginHand",lg);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas para efectuar el Login");
-            val.executeErrorException(e, request, response);
+            lg.setTextExecution("Problemas patra efectuar el Login.");
+            request.getSession().setAttribute("loginHand",lg);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } finally {
             out.close();
         }

@@ -12,6 +12,7 @@ import mx.ilce.bean.User;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.handler.LoginHandler;
 
 /**
  *  Servlet para ser invocado pra efectuar el logout del usuario
@@ -48,7 +49,11 @@ public class srvLogout extends HttpServlet {
             request.getSession().removeAttribute("perfil");
             request.getSession().removeAttribute("xmlSession");
             request.getSession().removeAttribute("xmlMenu");
-            request.getRequestDispatcher("/logout.jsp").forward(request, response);
+            LoginHandler lg = new LoginHandler();
+            lg.setTextExecution("Session Cerrada");
+            request.getSession().setAttribute("loginHand",lg);
+
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (ExceptionHandler ex) {
             Logger.getLogger(srvLogout.class.getName()).log(Level.SEVERE, null, ex);
         } finally { 

@@ -18,6 +18,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
+import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -39,7 +40,8 @@ public class srvForgotPass extends HttpServlet {
         PrintWriter out = response.getWriter();
         HashMap hsForm = null;
         Validation val = new Validation();
-        String PagDispacher = "/forgotPass.jsp";
+        //String PagDispacher = "/forgotPass.jsp";
+        String PagDispacher = "/index.jsp";
         try {
             AdminForm admForm = new AdminForm();
             HashMap hs = admForm.getFormulario(request);
@@ -93,8 +95,11 @@ public class srvForgotPass extends HttpServlet {
             }
         } catch (ExceptionHandler eh) {
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
-                request.getSession().setAttribute("xmlTab",eh.getXmlError());
-                request.getRequestDispatcher(PagDispacher).forward(request, response);
+                LoginHandler lg = new LoginHandler();
+                lg.setTextExecution(eh.getTextMessage().toString());
+                request.getSession().setAttribute("loginHand",lg);
+                cleanMemory(request);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }else{
                 try{
                     val.executeErrorHandler(eh,request, response);

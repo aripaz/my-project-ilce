@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -132,6 +133,11 @@ public class srvSendMail extends HttpServlet {
                     request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
 
                     if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
+                        LoginHandler lg = new LoginHandler();
+                        lg.setTextExecution("Mail Enviado, revice su correo");
+                        request.getSession().setAttribute("loginHand",lg);
+                        cleanMemory(request);
+                        request.getSession().removeAttribute("xmlTab");
                         request.getRequestDispatcher(PagDispacher).forward(request, response);
                     }else{
                         request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
@@ -140,7 +146,10 @@ public class srvSendMail extends HttpServlet {
             }
         }catch (ExceptionHandler eh){
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
-                request.getSession().setAttribute("xmlTab",eh.getXmlError().toString());
+                LoginHandler lg = new LoginHandler();
+                lg.setTextExecution(eh.getXmlError().toString());
+                request.getSession().setAttribute("loginHand",lg);
+                cleanMemory(request);
                 request.getRequestDispatcher(PagDispacher).forward(request, response);
             }else{
                 try{
@@ -152,8 +161,10 @@ public class srvSendMail extends HttpServlet {
             }
         }catch(Exception e){
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
-                ExceptionHandler eh = new ExceptionHandler(e,srvSendMail.class,"Error al porcesar Mail");
-                request.getSession().setAttribute("xmlTab",eh.getXmlError().toString());
+                LoginHandler lg = new LoginHandler();
+                lg.setTextExecution("Error al procesar el envio de Mail");
+                request.getSession().setAttribute("loginHand",lg);
+                cleanMemory(request);
                 request.getRequestDispatcher(PagDispacher).forward(request, response);
             }else{
                 val.setTextMessage("Problemas en la execucion de srvForma");
