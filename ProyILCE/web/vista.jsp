@@ -1,9 +1,9 @@
 <%@ page import="mx.ilce.bean.User" %>
 <%
-User user = (User) request.getSession().getAttribute("user");
-if (user == null){
- request.getRequestDispatcher("/index.jsp");
-}
+    User user = (User) request.getSession().getAttribute("user");
+    if (user == null) {
+        request.getRequestDispatcher("/index.jsp");
+    }
 %>
 <html>
     <head>
@@ -28,7 +28,7 @@ if (user == null){
         <script src="jQuery/js/jquery.calculator-es.js" type="text/javascript"></script>
         <!-- Menu -->
         <script src="jQuery/js/superfish.js" type="text/javascript"></script>
-        
+
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
@@ -42,13 +42,14 @@ if (user == null){
         <script src="jQuery/js/jquery.pi.field_toolbar.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.session.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.form.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.formqueue.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.accordion.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.grid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.treeMenu.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.menu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
-        
+
 
     </head>
     <body>
@@ -60,20 +61,47 @@ if (user == null){
             <div id="session_menu">
             </div>
         </div>
-       
+
         <div id="tabcontainer">
             <div id="tabs">
                 <ul>
                     <li><a href="#tabUser">Escritorio</a></li>
                 </ul>
                 <div id="tabUser">
-                    <p>Aquí van a ir breves reportes y alertas</p>
-                </div>
+                    <div class="portlet">
+                        <div class="portlet-header">Avisos</div>
+                        <div class="portlet-content">
+                            <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
+                        </div>
+                    </div>
+
+                    <div class="column ui-sortable">
+                        <div class="portlet">
+                            <div class="portlet-header">Mis pendientes</div>
+                            <div class="portlet-content">
+                                <div id="grid_1_101_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Actividades pendientes" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" ></div>
+                            </div>
+                        </div>
+                        <div class="portlet">
+                            <div class="portlet-header">Pendientes que asigné</div>
+                            <div class="portlet-content">
+                                <div id="grid_1_102_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Actividades que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column ui-sortable">
+                        <div class="portlet">
+                            <div class="portlet-header">Mis favoritos</div>
+                            <div class="portlet-content">(No hay listados registrados)</div>
+                        </div>                        
+                    </div>
+                
             </div>
         </div>
-        <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
-        <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
-        <input type="hidden" name="_gq_" id="_gq_" value="" />
-        <input type="hidden" name="_ts_" id="_ts_" value="" />
-    </body>
+    </div>
+    <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
+    <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
+    <input type="hidden" name="_gq_" id="_gq_" value="" />
+    <input type="hidden" name="_ts_" id="_ts_" value="" />
+</body>
 </html>

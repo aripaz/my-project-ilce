@@ -31,6 +31,7 @@ $.fn.gridqueue.getGridConfig= function(obj){
           height:$.fn.gridqueue.options.height,
           openKardex:obj.attr("openKardex"),
           removeGridTitle:true,
+          showFilterLink:false,
           inQueue:true,
           insertInDesktopEnabled:0,
           editingApp:"1"

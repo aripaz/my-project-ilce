@@ -220,6 +220,14 @@
             
             //Se llama a cola de grids
             if ($(".queued_grids:first").length>0) {
+                
+                //Entrega los valores del formulario
+                //para establecer posible relación de forma y grid
+                sWSParameters="";
+                aWSParameters=$("#form_" + formSuffix).serialize().split("&");
+                for (i=0; i<aWSParameters.length;i++) {
+                    sWSParameters+=(i+4)+"="+aWSParameters[i].replace("_"+formSuffix,"")+"&";
+                }
                 oGrid=$(".queued_grids:first")[0]; 
                 $(oGrid).removeClass('queued_grids').addClass('gridForeignContainer');
                 sTitulo=$(oGrid).attr("titulo");
@@ -229,7 +237,7 @@
                         'entidad:"'+ gridId.split("_")[2]+'",'+
                         'pk:"0",'+
                         'editingApp:"1",'+
-                        'wsParameters:"' +$.fn.form.options.pk_name+"="+$.fn.form.options.pk+'",'+
+                        'wsParameters:"' +$.fn.form.options.pk_name+"="+$.fn.form.options.pk+'&'+sWSParameters+'",'+
                         'titulo:"'+sTitulo+'",'+
                         'height:"250",'+
                         'width:"100",'+
@@ -250,6 +258,9 @@
                 $("#msgvalida_" + this.name).hide();
             });
 
+            //Se ocultan los campos con clase invisible
+             $(".invisible").parent().hide();
+             
             $(".fecha").datepicker({
                 dateFormat: 'dd/mm/yy',
                 dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
@@ -351,6 +362,27 @@
                             //Cierra el dialogo
                             $("#dlgModal_"+ suffix).dialog("destroy");
                             $("#dlgModal_"+ suffix).remove();
+                            
+                            //La forma se vuelve a abrir cuando se solicita
+                            //que muestre sus relaciones
+                            //y es una alta 
+                            if ($.fn.form.options.showRelationships=='true' &&
+                                $.fn.form.options.modo=="insert")
+                               
+                                $("body").formqueue({
+                                    app: $.fn.form.options.app,
+                                    forma:$.fn.form.options.forma,
+                                    datestamp:$.fn.form.options.datestamp,
+                                    modo:"update",
+                                    titulo: $.fn.form.options.titulo,
+                                    columnas:1,
+                                    pk:sResultado,
+                                    filtroForaneo:$.fn.form.options.filtroForaneo,
+                                    height:"500",
+                                    width:"500",
+                                    originatingObject: $.fn.form.options.originatingObject,
+                                    showRelationships: $.fn.form.options.showRelationships
+                                });    
 
                         },
                         error:function(xhr,err){
@@ -457,6 +489,7 @@
         bVDS=$("#formTab" + sSuffix).attr("security").indexOf("5")!=-1?true:false;
         var bAutoIncrement=false;
         oCampos.each(function(){
+            sValorPredeterminado="";
             oCampo=$(this);
             sTipoCampo= oCampo.attr("tipo_dato").toLowerCase();
             bAutoIncrement=(oCampo.attr("autoincrement")!=undefined)?true:false;
@@ -466,15 +499,24 @@
             sAlias= oCampo.find('alias_campo').text();
             bDatoSensible=oCampo.find('dato_sensible').text();
             bActivo=oCampo.find('activo').text();
-
+            sValorPredeterminado=oCampo.find('valor_predeterminado').text();
+            bVisible=oCampo.find('visible').text();
+                
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
 
+            sRenglon += '<td id="td_' +oCampo[0].nodeName + sSuffix + '" ';
+            sRenglon += ' class="etiqueta_forma' 
+            if (bVisible=='0')
+                    sRenglon +=' invisible';
+                
+            sRenglon += '">';    
+                    
             if (sAlias!='') {
-                sRenglon += '<td class="etiqueta_forma" id="td_' +oCampo[0].nodeName + sSuffix + '">' +sAlias;
+                sRenglon+=sAlias;
             }
             else {
-                sRenglon += '<td class="etiqueta_forma" id="td_' + oCampo[0].nodeName + sSuffix + '">' + oCampo[0].nodeName;
+                sRenglon+=oCampo[0].nodeName;
             }
 
             //Verifica si el campo es obligatorio para incluir la leyenda en el alias
@@ -565,7 +607,14 @@
 
                     sRenglon += ' id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
                     oCampo.find('evento').text() +
-                    '>' + oCampo[0].childNodes[0].data + '</textarea></td>|';
+                    '>';
+                    
+                    if ($.fn.form.options.modo=='insert')
+                        sRenglon+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
+                    else 
+                        sRenglon+=oCampo[0].childNodes[0].data;
+                    
+                    sRenglon+='</textarea></td>|';
                 }
                 else if ($(this).find('tipo_control').text()=="checkbox" || sTipoCampo=="bit") {
                     sRenglon += '<td class="etiqueta_forma">' +
@@ -582,8 +631,12 @@
                     else {
                         sRenglon+='class="singleInput" ';
                     }
+                    
+                    if ($.fn.form.options.modo=='insert')
+                        sRenglon+=(sValorPredeterminado=='1')?'checked="checked" ':'';
+                    else 
+                        sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':'';
 
-                    sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':''
                     sRenglon+=oCampo.find('evento').text() + ' /></div></td>|';
                 }
                 else {
@@ -615,7 +668,14 @@
                     if (sTipoCampo=="money")
                         sRenglon +=' money';
 
-                    sRenglon +='" type="text" value="' + oCampo[0].childNodes[0].data + '" ' + oCampo.find('evento').text();
+                    sRenglon +='" type="text" value="';
+                    
+                    if ($.fn.form.options.modo=='insert')
+                        sRenglon+=(sValorPredeterminado!="")?(eval(sValorPredeterminado)):"";
+                    else 
+                        sRenglon+=oCampo[0].childNodes[0].data;
+                    
+                   sRenglon+='" ' + oCampo.find('evento').text();
 
                     //Validación para inputs estandar de acuerdo al tipo de datos del campo
                     if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {
@@ -639,7 +699,7 @@
         var sForm="";
         var i;
         for (i=0; i<nRows; i++) {
-            sForm+="<tr>";
+            sForm+="<tr >";
             sForm+=aRows[i];
             if (aRows.length>nRows+i && nCols>1) {
                 sForm+="<td>&nbsp;</td>"+aRows[nRows+i] ;

@@ -83,7 +83,13 @@
                 $.fn.appgrid.handleGridDefinition(xml);
 
                 if ($.fn.appgrid.options.colModel==null) {
-                    obj.html("<div class='etiqueta_perfil' align='center'><br><br><br><br><br>Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema<br><br><br><br><br></div>");
+                    sTipoError="Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema";
+                    obj.html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+                    "<div class='ui-widget'>"+
+                    "<div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
+                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
+                    sTipoError+"</p>"+
+                    "</div></div>");     
                     return true;
                 }
 
@@ -183,7 +189,8 @@
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
                                 width:550,
-                                originatingObject:oGrid.id
+                                originatingObject:oGrid.id,
+                                showRelationships:$(this).attr("callFormWithRelationships")
                             });
                         },
                         position: "last",

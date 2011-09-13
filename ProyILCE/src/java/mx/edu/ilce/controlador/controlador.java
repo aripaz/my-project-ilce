@@ -69,10 +69,12 @@ String sNextAction="";
             else if (cmd.equals("sesion")) { //Carga datos de sesion
 
             }
-            else if (cmd.equals("")) { //Carga datos de sesion
+            else if (cmd.equals("grid")) { //Carga datos de grid
 
             }
-
+            else if(cmd.equals("form")) { //Carga datos de forma
+                
+            }
             else {
                 sNextAction="<error><![CDATA[Comando no válido]]></error>";
         }

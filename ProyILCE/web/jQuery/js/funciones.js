@@ -229,7 +229,7 @@ if (window.ActiveXObject) // for IE
 	}
 }
 
-function setXMLInSelect3(sSelect,cf,ta,pk) {
+function setXMLInSelect3(sSelect,cf,ta,pk,w) {
 var httpRequest;
 if (window.ActiveXObject) // for IE 
     httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
@@ -237,10 +237,13 @@ else if (window.XMLHttpRequest) // for other browsers
     httpRequest = new XMLHttpRequest();
 
 var s="";
+if (w==undefined)
+    w="";
+
 if (pk!=null)
-    s="srvFormaSearch?$cf="+cf+"&$ta="+ta+"&$pk="+pk
+    s="srvFormaSearch?$cf="+cf+"&$ta="+ta+"&$pk="+pk+"&$w="+w
 else
-    s="srvFormaSearch?$cf="+cf+"&$ta="+ta
+    s="srvFormaSearch?$cf="+cf+"&$ta="+ta+"&$w="+w
 
 httpRequest.open('GET',s, false);
 httpRequest.send(null);
@@ -266,14 +269,9 @@ for (i=0;i<x.length;i++) {
         /*if (pk!=null)
             addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
         else*/
-            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace("&aacute;","á");
-            display=display.replace("&eacute;","é");
-            display=display.replace("&iacute;","í");
-            display=display.replace("&oacute;","ó");
-            display=display.replace("&uacute;","ú");
-
-            addOption = new Option(display,x[i].childNodes[1].childNodes[0].nodeValue);
-         oSelect.options[oSelect.length] = addOption;
+        var display=x[i].childNodes[3].childNodes[0].nodeValue.replace(/&aacute;/g,"á").replace(/&eacute;/g,"é").replace(/&iacute;/g,"í").replace(/&oacute;/g,"ó").replace(/&uacute;/g,"ú").replace(/&ntilde;/g,"ñ");
+        addOption = new Option(display,x[i].childNodes[1].childNodes[0].nodeValue);
+        oSelect.options[oSelect.length] = addOption;
         }
 }
 }
@@ -354,7 +352,29 @@ return true;
 }
 // End -->
 
+function sDateToString(dDate) {
+	var nDay=dDate.getDate();
+	var nMonth=dDate.getMonth()+1;
+	var nYear=dDate.getFullYear();
+	var sDate="";
 
+
+	if (nDay<10) {
+		sDate=sDate + '0' + nDay; }
+	else {
+		sDate=sDate + nDay; }
+        
+        sDate+="/";
+        
+        if (nMonth<10) {
+		sDate= sDate + '0' + nMonth; }
+	else {
+		sDate= sDate + nMonth;  }
+
+        sDate+="/"+nYear;
+        
+	return sDate;
+}
 
 function sDate(dDate) {
 	var nDay=dDate.getDate();

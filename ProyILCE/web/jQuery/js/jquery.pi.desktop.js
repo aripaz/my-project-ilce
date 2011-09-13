@@ -14,14 +14,27 @@
 
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
-             obj = $(this);
-             obj.html("<div align='center' class='cargando' id='isotope'><br /><br />Cargando informaci&oacute;n...  <br /><img src='img/loading.gif' /></div>")
+            obj = $(this);
+
+            $( ".column" ).sortable({
+			connectWith: ".column"
+            });
+            
+            $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+			.find( ".portlet-header" )
+				.addClass( "ui-widget-header ui-corner-all" )
+				.prepend( "<span class='ui-icon ui-icon-minusthick'></span>")
+				.end()
+			.find( ".portlet-content" );
+
+            $( ".portlet-header .ui-icon" ).click(function() {
+			$( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
+			$( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
+            });
+
+            $( ".column" ).disableSelection();
              $.fn.desktop.ajax(obj);
-             /*$('#isotope').isotope({
-                // options
-                itemSelector : '.queued_grids',
-                layoutMode : 'fitRows'
-            });*/
+
 
         });
 
@@ -45,6 +58,7 @@
                     xmlConfig= data;}
 
                 $.fn.desktop.handleSession(xmlConfig);
+                $('.queued_grids:first').gridqueue();
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -54,7 +68,6 @@
 
     $.fn.desktop.handleSession = function(xml){
         var sFondo="";
-        $('#isotope').html("");
         $(xml).find("registro").each(function(){
             //Carga los datos del xml en la variable de configuración
             sParametro=$(this).find("parametro").text().split("\n")[0];
@@ -74,7 +87,7 @@
                 leyendas=sValor.split(",")[4].split(":")[1].replace("/",",");
                 openKardex=sValor.split(",")[5].split(":")[1];
                 inDesktop=sValor.split(",")[6].split(":")[1];
-                $('#isotope').append("<div class='queued_grids'" + 
+                obj.append("<div class='queued_grids'" + 
                                      " id='divDesktopGrid_" + nApp + "_" + nForm + "' " +
                                      " app='" + nApp + "' " + 
                                      " form='" + nForm + "' " +
@@ -88,10 +101,7 @@
                                      " insertInDesktopEnabled='0'></div>"+
                                      "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
                                  );
-
-                setTimeout("$('.queued_grids:first').gridqueue()",2000);
             }
-
 
         })
         
