@@ -70,6 +70,10 @@ public class srvGrid extends HttpServlet {
                     User user = (User) request.getSession().getAttribute("user");
                     user.getClaveEmpleado();
 
+                    arrVariables = admForm.getVariablesFromProperties(hsForm);
+                    arrVariables = admForm.getVariableByObject(user, arrVariables);
+                    arrVariables = admForm.cleanVariables(arrVariables);
+
                     Bitacora bitacora = user.getBitacora();
                     bitacora.setBitacora("");
                     bitacora.setClaveForma(Integer.valueOf(claveForma));
@@ -94,6 +98,7 @@ public class srvGrid extends HttpServlet {
                                 apl.setTipoAccion(tipoAccion);
                                 apl.setStrWhereQuery(strWhere);
                                 apl.setArrayData(strData);
+                                apl.setArrVariables(arrVariables);
                                 String numPage = (String) hsForm.get("page");
                                 String numRows = (String) hsForm.get("rows");
                                 apl.setNumPage(numPage);
