@@ -50,7 +50,7 @@ public class srvLogout extends HttpServlet {
             request.getSession().removeAttribute("xmlSession");
             request.getSession().removeAttribute("xmlMenu");
             LoginHandler lg = new LoginHandler();
-            lg.setTextExecution("Sesion Finalizada");
+            lg.setTextExecution("Sesión finalizada");
             request.getSession().setAttribute("loginHand",lg);
 
             request.getRequestDispatcher("/index.jsp").forward(request, response);
