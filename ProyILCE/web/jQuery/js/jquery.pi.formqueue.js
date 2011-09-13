@@ -7,13 +7,13 @@
 
         $.fn.formqueue.settings = {
             titulo:"",
-            app:"",
+            app:"", 
             forma:"",
             pk:"",
             pk_name:"",
             xmlUrl : "srvForma", //"xml_tests/forma.app.xml",
             filtroForaneo: "",
-            columnas: 2,
+            columnas: 1,
             modo:"",
             top: 122,
             height:500,
@@ -27,21 +27,21 @@
            
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
-          $.fn.form.options = $.extend($.fn.form.settings, opc);
+          $.fn.formqueue.options = $.extend($.fn.formqueue.settings, opc);
           
-          $("body").formqueue({
-            app: nApp,
-            forma:nEntidad,
-            datestamp:$(this).attr("datestamp"),
-            modo:"update",
-            titulo: $.fn.appgrid.options.leyendas[1],
-            columnas:1,
-            pk:sResultado,
-            filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
-            height:"500",
-            width:"500",
-            originatingObject: $(this).id,
-            showRelationships:$(this).attr("callFormWithRelationships")
+          $("body").form({
+            app:  $.fn.formqueue.options.app,
+            forma: $.fn.formqueue.options.forma,
+            datestamp: $.fn.formqueue.options.datestamp,
+            modo: $.fn.formqueue.options.modo,
+            titulo:  $.fn.formqueue.options.leyenda,
+            columnas: $.fn.formqueue.options.columnas,
+            pk: $.fn.formqueue.options.pk,
+            filtroForaneo:$.fn.formqueue.options.filtroForaneo,
+            height:$.fn.formqueue.options.height,
+            width:$.fn.formqueue.options.width,
+            originatingObject: $.fn.formqueue.options.originatingObject,
+            showRelationships:$.fn.formqueue.options.showRelationships
         });    
         });
 
