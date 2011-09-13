@@ -18,10 +18,10 @@ public class CampoForma implements Serializable  {
     private String evento;
     private Integer claveFormaForanea;
     private String filtroForaneo;
-    private Integer editaFormaForanea;
+    private Integer editaFormaForanea;//BIT
     private String ayuda;
-    private Integer datoSensible;
-    private Integer activo;
+    private Integer datoSensible;//BIT
+    private Integer activo;//BIT
     private Integer tamano;
     private Integer claveAplicacion;
 
@@ -29,10 +29,19 @@ public class CampoForma implements Serializable  {
     private String foraneo;
     private String typeData;
 
-    private Integer visible;
+    private Integer visible;//BIT
     private String valorPredeterminado;
-    private Integer justificarCambio;
+    private Integer justificarCambio;//BIT
     private String aliasTab;
+    private Integer usadoParaAgrupar;//BIT
+
+    public Integer getUsadoParaAgrupar() {
+        return usadoParaAgrupar;
+    }
+
+    public void setUsadoParaAgrupar(Integer usadoParaAgrupar) {
+        this.usadoParaAgrupar = usadoParaAgrupar;
+    }
 
     public String getAliasTab() {
         return aliasTab;
