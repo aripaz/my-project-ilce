@@ -57,9 +57,13 @@ public class AdminFile {
      * Query para obtener la query en base a la forma
      */
     public static String FORMAQUERY = "FORMAQUERY";
+    /**
+     * Query para obtener el evento asociado a una forma
+     */
+    public static String EVENTO = "EVENTO";
 
     /**
-     * Numero con el tamaÃ±o maximo de un archivo en Bytes
+     * Numero con el tamaño maximo de un archivo en Bytes
      */
     public static String MAXSIZEFILE = "MAXSIZEFILE";
 
@@ -67,6 +71,8 @@ public class AdminFile {
      * Ruta del server para depositar los archivos enviados por usuarios
      */
     public static String FILESERVER = "FILESERVER";
+
+
 
     /**
      * Ruta del server para depositar los archivos de Log
