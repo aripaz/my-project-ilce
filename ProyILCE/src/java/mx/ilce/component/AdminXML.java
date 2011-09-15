@@ -41,34 +41,68 @@ public class AdminXML {
     private Bitacora bitacora;
     private boolean includeHour=false;
 
+    /**
+     * Obtiene el valor al Validador que indica si se debe incluir la hora con
+     * los campos de tipo fecha
+     * @return
+     */
     public boolean isIncludeHour() {
         return includeHour;
     }
 
+    /**
+     * Asigna un valor al Validador que indica si se debe incluir la hora con
+     * los campos de tipo fecha
+     * @param includeHour
+     */
     public void setIncludeHour(boolean includeHour) {
         this.includeHour = includeHour;
     }
 
+    /**
+     * Obtiene el objeto Bitacora
+     * @return
+     */
     public Bitacora getBitacora() {
         return bitacora;
     }
 
+    /**
+     * Asigna el Objeto Bitacora
+     * @param bitacora
+     */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
     }
 
+    /**
+     * Obtiene el HashMap que contiene la data captura desde un formulario
+     * @return
+     */
     public HashMap getHsForm() {
         return hsForm;
     }
 
+    /**
+     * Asigna el HashMap que contiene la data captura desde un formulario
+     * @param hsForm
+     */
     public void setHsForm(HashMap hsForm) {
         this.hsForm = hsForm;
     }
 
+    /**
+     * Obtiene los permisos de la forma
+     * @return
+     */
     public HashCampo getHashPermisoForma() {
         return hashPermisoForma;
     }
 
+    /**
+     * Asigna los permisos de la Forma
+     * @param hashPermisoForma
+     */
     public void setHashPermisoForma(HashCampo hashPermisoForma) {
         this.hashPermisoForma = hashPermisoForma;
     }
@@ -279,9 +313,15 @@ public class AdminXML {
                 str.append(("<row id='"+String.valueOf(i+1)+"'>\n"));
                 for (int j=0; j<lstCmp.size();j++){
                     cmp = (Campo) arr.get(j) ;
-                    str.append("\t<cell><![CDATA[");
-                    str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
-                    str.append("]]></cell>\n");
+                    if (Integer.class.getName().equals(cmp.getTypeDataAPL())){
+                        str.append("\t<cell>");
+                        str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
+                        str.append("</cell>\n");
+                    }else{
+                        str.append("\t<cell><![CDATA[");
+                        str.append(replaceHtml(castNULL(String.valueOf(cmp.getValor()).trim())));
+                        str.append("]]></cell>\n");
+                    }
                 }
                 str.append("</row>\n");
             }
@@ -544,21 +584,16 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getUsadoParaAgrupar()).trim())
                                             + "</usado_para_agrupar>\n"));
                                 }
+                                if (cmpAux.getNoPermitirValorForaneoNulo()!=null){
+                                            strCampos.append(("\t\t<no_permitir_valor_foraneo_nulo>"
+                                            + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
+                                            + "</no_permitir_valor_foraneo_nulo>\n"));
+                                }
                                 if ((cmpAux.getAliasTab()!=null)&&(addForma)){
                                     strForma.append(("\t<alias_tab>"
                                             + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
                                             + "</alias_tab>\n"));
-                                    strForma.append("\t<evento tipo=\"xxx\">");
-                                    strForma.append("<![CDATA[$.post(\"mail.jsp?");
-                                    strForma.append("listmail=1");
-                                    strForma.append("&subject=asunto");
-                                    strForma.append("&message=prueba\"");
-                                    strForma.append("]]>");
-                                    strForma.append("");
-                                    strForma.append("</evento>\n");
-                                    strForma.append("\t<forma>");
-                                    strForma.append(idForma);
-                                    strForma.append("</forma>\n");
+                                    strForma.append(getEventoForma(idForma));
                                     addForma=false;
                                 }
                             }
@@ -578,6 +613,7 @@ public class AdminXML {
         return str;
     }
 
+    /*
     private String getCampoIncrement(List lstCmp){
         String sld = "";
         if ((lstCmp!=null)&&(lstCmp.isEmpty())){
@@ -587,7 +623,7 @@ public class AdminXML {
             }
         }
         return sld;
-    }
+    }*/
 
     /**
      * Entrega un XML en base a la Forma indicada y con la estructura de los 
@@ -749,21 +785,16 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getUsadoParaAgrupar()).trim())
                                             + "</usado_para_agrupar>\n"));
                                 }
+                                if (cmpAux.getNoPermitirValorForaneoNulo()!=null){
+                                            strCampos.append(("\t\t<no_permitir_valor_foraneo_nulo>"
+                                            + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
+                                            + "</no_permitir_valor_foraneo_nulo>\n"));
+                                }
                                 if ((cmpAux.getAliasTab()!=null)&&(addForma)){
                                     strForma.append(("\t<alias_tab>"
                                             + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
                                             + "</alias_tab>\n"));
-                                    strForma.append("\t<evento tipo=\"xxx\">");
-                                    strForma.append("<![CDATA[$.post(\"mail.jsp?");
-                                    strForma.append("listmail=1");
-                                    strForma.append("&subject=asunto");
-                                    strForma.append("&message=prueba\"");
-                                    strForma.append("]]>");
-                                    strForma.append("");
-                                    strForma.append("</evento>\n");
-                                    strForma.append("\t<forma>");
-                                    strForma.append(idForma);
-                                    strForma.append("</forma>\n");
+                                    strForma.append(getEventoForma(idForma));
                                     addForma=false;
                                 }
                             }
@@ -783,6 +814,70 @@ public class AdminXML {
         return str;
     }
 
+    /**
+     * Trae la seccion de XML asociada al Evento de una Forma
+     * @param claveForma    Clave de la forma a buscar
+     * @return
+     * @throws ExceptionHandler
+     */
+    private StringBuffer getEventoForma(Integer claveForma) throws ExceptionHandler{
+        StringBuffer strSld = new StringBuffer();
+
+        ConEntidad conE = new ConEntidad();
+        conE.setBitacora(this.getBitacora());
+        DataTransfer dataTransfer = new DataTransfer();
+        dataTransfer.setIdQuery(Integer.valueOf(AdminFile.getKey(AdminFile.leerIdQuery(),AdminFile.EVENTO)));
+        String[] arrData = new String[1];
+        arrData[0] = claveForma.toString();
+        dataTransfer.setArrData(arrData);
+        HashCampo hsCmp = conE.getDataByIdQuery(dataTransfer);
+        HashMap hsMp = hsCmp.getListData();
+        if (!hsMp.isEmpty()){
+            List lst = (List) hsMp.get(0);
+            String strTipoEvento = "";
+            String strEvento = "";
+            for (int i=0;i<lst.size();i++){
+                Campo cmp = (Campo) lst.get(i);
+                if ("tipo_evento".equals(cmp.getNombreDB())){
+                    strTipoEvento = cmp.getValor();
+                }
+                if ("evento".equals(cmp.getNombreDB())){
+                    strEvento = cmp.getValor();
+                }
+            }
+            strSld.append("\t<evento tipo=\"");
+            strSld.append(strTipoEvento);
+            strSld.append("\">");
+            strSld.append("<![CDATA[");
+            strSld.append(strEvento);
+            strSld.append("]]>");
+            strSld.append("</evento>\n");
+        }
+        dataTransfer = new DataTransfer();
+        dataTransfer.setIdQuery(Integer.valueOf(AdminFile.getKey(AdminFile.leerIdQuery(),AdminFile.FORMA)));
+        dataTransfer.setArrData(arrData);
+        hsCmp = conE.getDataByIdQuery(dataTransfer);
+        hsMp = hsCmp.getListData();
+        if (!hsMp.isEmpty()){
+            List lst = (List) hsMp.get(0);
+            String strForma = "";
+            boolean bool = true;
+            for (int i=0;i<lst.size()&&bool;i++){
+                Campo cmp = (Campo) lst.get(i);
+                if ("forma".equals(cmp.getNombreDB())){
+                    strForma = cmp.getValor();
+                    bool=false;
+                }
+            }
+            strSld.append("\t<forma>");
+            strSld.append("<![CDATA[");
+            strSld.append(strForma);
+            strSld.append("]]>");
+            strSld.append("</forma>\n");
+        }
+        return strSld;
+    }
+
 
     /**
      * Metodo que permite crear la seccion de un XML a partir de la query que
@@ -795,6 +890,7 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
+    /*
     private StringBuffer getXmlByQueryAndData(String query, String[] strData, 
             String strRegistro, String[][] arrVariables) throws ExceptionHandler {
         StringBuffer str = new StringBuffer("");
@@ -805,7 +901,6 @@ public class AdminXML {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //HashCampo hsData = con.getDataByQuery(query, strData, arrVariables);
             HashCampo hsData = con.getDataByQuery(dataTransfer);
             
             List lstCmp = hsData.getListCampos();
@@ -831,7 +926,7 @@ public class AdminXML {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML de una QUERY y DATA");
         }
         return str;
-    }
+    }*/
 
     /**
      * Metodo que permite crear la seccion de un XML a partir de la forma que
@@ -858,7 +953,7 @@ public class AdminXML {
             dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
             dataTransfer.setArrData(strDataQ);
             dataTransfer.setArrVariables(arrVariables);
-            //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), strDataQ, arrVariables);
+
             HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
             Campo cmpQ = hsCmpQ.getCampoByName("claveconsulta");
@@ -875,7 +970,7 @@ public class AdminXML {
                         dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                         dataTransfer.setArrData(strDataFiltro);
                         dataTransfer.setArrVariables(arrVariables);
-                        //hsData = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), strDataFiltro, arrVariables);
+
                         hsData = con.getDataByIdQuery(dataTransfer);
 
                     }else{
@@ -885,10 +980,7 @@ public class AdminXML {
                         dataTransfer.setStrWhere(strData[1]);
                         dataTransfer.setArrData(strDataFiltro);
                         dataTransfer.setArrVariables(arrVariables);
-                        //hsData = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),
-                          //                                          strData[1],
-                            //                                        strDataFiltro,
-                              //                                      arrVariables);
+
                         hsData = con.getDataByIdQueryAndWhereAndData(dataTransfer);
                     }
                 }
@@ -927,6 +1019,7 @@ public class AdminXML {
      * @return
      * @throws ExceptionHandler
      */
+    /*
     private String[] getStringData (String query, ArrayList lst) throws ExceptionHandler{
         String[] strData = null;
         try {
@@ -956,7 +1049,7 @@ public class AdminXML {
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el Array de data de una query");
         }
         return strData;
-    }
+    }*/
 
     /**
      * Obtiene los datos de un campo, obtenidos desde la forma que se le entrega
@@ -1035,7 +1128,7 @@ public class AdminXML {
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
         try {
-            ArrayList lst = (ArrayList) hsCmp.getListCampos();
+            //ArrayList lst = (ArrayList) hsCmp.getListCampos();
             Campo cmp = null;
             String strPadre = "";
             boolean endRow = false;
@@ -1165,6 +1258,11 @@ public class AdminXML {
         return str;
     }
 
+    /**
+     * Metodo para entregar las respuestas en un formato de XML
+     * @param data  Data de la respuesta
+     * @return
+     */
     public String salidaXML(String data){
         StringBuilder str = new StringBuilder();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
@@ -1175,6 +1273,13 @@ public class AdminXML {
         return str.toString();
     }
 
+    /**
+     * Metodo para entregar las respuestas de la operacion y la bitacora
+     * en un formato XML
+     * @param data  Data de la respuesta
+     * @param idBitacora    ID de la bitacora
+     * @return
+     */
     public String salidaXMLBitacora(String data, String idBitacora){
         StringBuilder str = new StringBuilder();
         str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");

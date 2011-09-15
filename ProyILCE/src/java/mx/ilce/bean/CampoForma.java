@@ -3,7 +3,9 @@ package mx.ilce.bean;
 import java.io.Serializable;
 
 /**
- *  Clase implementada para contener los datos del CampoForma
+ * Clase implementada para contener los datos del CampoForma
+ * Esta es una de las clases PILARES de la aplicacion y debe estar en
+ * correspondencia con la tabla Campo_Forma
  * @author ccatrilef
  */
 public class CampoForma implements Serializable  {
@@ -34,47 +36,103 @@ public class CampoForma implements Serializable  {
     private Integer justificarCambio;//BIT
     private String aliasTab;
     private Integer usadoParaAgrupar;//BIT
+    private Integer noPermitirValorForaneoNulo;//BIT
 
+    /**
+     * Obtiene el valor del Validador de si debe permitir foraneo o no
+     * @return
+     */
+    public Integer getNoPermitirValorForaneoNulo() {
+        return noPermitirValorForaneoNulo;
+    }
+
+    /**
+     * Asigna el valor del Validador de si debe permitir foraneo o no
+     * @param noPermitirValorForaneoNulo
+     */
+    public void setNoPermitirValorForaneoNulo(Integer noPermitirValorForaneoNulo) {
+        this.noPermitirValorForaneoNulo = noPermitirValorForaneoNulo;
+    }
+
+    /**
+     * Obtiene el valor del Validador de si se debe agrupar o no
+     * @return
+     */
     public Integer getUsadoParaAgrupar() {
         return usadoParaAgrupar;
     }
 
+    /**
+     * Asigna el valor del Validador de si se debe agrupar o no
+     * @param usadoParaAgrupar
+     */
     public void setUsadoParaAgrupar(Integer usadoParaAgrupar) {
         this.usadoParaAgrupar = usadoParaAgrupar;
     }
 
+    /**
+     * Obtiene el valor del AliasTab
+     * @return
+     */
     public String getAliasTab() {
         return aliasTab;
     }
 
+    /**
+     * Asigna el valor del AliasTab
+     * @param aliasTab
+     */
     public void setAliasTab(String aliasTab) {
         this.aliasTab = aliasTab;
     }
 
+    /**
+     * Obtiene el valor del Validador de si debe Justificar cambio o no
+     * @return
+     */
     public Integer getJustificarCambio() {
         return justificarCambio;
     }
 
+    /**
+     * Asigna el valor del Validador de si debe Justificar cambio o no
+     * @param justificarCambio
+     */
     public void setJustificarCambio(Integer justificarCambio) {
         this.justificarCambio = justificarCambio;
     }
 
+    /**
+     * Obtiene el valor predeterminado
+     * @return
+     */
     public String getValorPredeterminado() {
         return valorPredeterminado;
     }
 
+    /**
+     * Asigna el valor predeterminado
+     * @param valorPredeterminado
+     */
     public void setValorPredeterminado(String valorPredeterminado) {
         this.valorPredeterminado = valorPredeterminado;
     }
 
+    /**
+     * Obtiene el valor del Validador de si es visible o no el campo
+     * @return
+     */
     public Integer getVisible() {
         return visible;
     }
 
+    /**
+     * Asigna el valor del Validador de si es visible o no el campo
+     * @param visible
+     */
     public void setVisible(Integer visible) {
         this.visible = visible;
     }
-
 
     /**
      * Obtiene la claveAplicacion del objeto
