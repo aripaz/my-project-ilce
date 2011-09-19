@@ -85,7 +85,7 @@
                         <div class="portlet">
                             <div class="portlet-header">Pendientes que asigné</div>
                             <div class="portlet-content">
-                                <div id="grid_1_102_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Actividades que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
+                                <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Actividades que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
                             </div>
                         </div>
                     </div>
