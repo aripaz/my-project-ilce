@@ -303,7 +303,7 @@ public class LogHandler {
         public UtilDate() {
             java.util.Calendar now = java.util.Calendar.getInstance();
             this.dia = now.get(java.util.Calendar.DAY_OF_MONTH);
-            this.mes = now.get(java.util.Calendar.MONTH);
+            this.mes = now.get(java.util.Calendar.MONTH)+1;
             this.anio = now.get(java.util.Calendar.YEAR);
             this.hour = now.get(java.util.Calendar.HOUR);
             this.min = now.get(java.util.Calendar.MINUTE);
@@ -351,7 +351,7 @@ public class LogHandler {
         public void recargaFecha(){
             java.util.Calendar now = java.util.Calendar.getInstance();
             this.dia = now.get(java.util.Calendar.DAY_OF_MONTH);
-            this.mes = now.get(java.util.Calendar.MONTH);
+            this.mes = now.get(java.util.Calendar.MONTH)+1;
             this.anio = now.get(java.util.Calendar.YEAR);
             this.hour = now.get(java.util.Calendar.HOUR);
             this.min = now.get(java.util.Calendar.MINUTE);
