@@ -104,7 +104,7 @@
                     $(xmlRelation).find("registro").each(function() {
                         $(this).find("clave_forma").each(function() {
                             formaForanea=$(this).text().split("\n")[0];
-                            nombreForma=$($(xmlRelation).find("forma")[$(this).index()]).text().split("\n")[0];
+                            nombreForma=$($(xmlRelation).find("registro").find("forma")[$(this).index()]).text().split("\n")[0];
                             sUlTabs+="<li><a href='#formTab_" + $.fn.form.options.app +"_"+ formaForanea +"'>"+ nombreForma + "</a></li>";
                             sDivTabs+="<div id='formTab_" + $.fn.form.options.app +"_"+ formaForanea+"'>"+
                             "<div id='formGrid_"+ $.fn.form.options.app+"_"+formaForanea+
@@ -354,11 +354,29 @@
 
                             sResultado=$(xmlResult).find("resultado").text();
 
-                            if ($("#formTab_" + suffix).attr("updateControl")=="")
-                                $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid");
-                            else
-                                setXMLInSelect3($   ("#formTab_" + suffix).attr("updateControl"),$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
+                            //Verifica el tipo de control por actualizar
+                            sControl=$("#formTab_" + suffix).attr("updateControl");
+                            if (sControl=="") {
+                                /*Si no fue definido el control, por default se actualia el grid*/
+                                 $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                            } else {
+                                oControl=$("#"+sControl);
+                                /*Verifica si en realidad existe el control ...*/
+                                if (oControl.length>0) {
+                                    
+                                    /* Verifica si es un arbol */
+                                    if (oControl[0].nodeName="DIV" && 
+                                         oControl[0].className.indexOf("jstree",0)>1) {
+	                               $("#"+sControl).treeMenu.getTreeDefinition($("#"+sControl))
+                                        $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                                       }
+                                    /* en caso de que no lo sea actualiza un combo*/ 
+                                    else
+                                         setXMLInSelect3(sControl,$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
 
+                                }
+                            }
+                            
                             //Cierra el dialogo
                             $("#dlgModal_"+ suffix).dialog("destroy");
                             $("#dlgModal_"+ suffix).remove();
@@ -501,7 +519,8 @@
             bActivo=oCampo.find('activo').text();
             sValorPredeterminado=oCampo.find('valor_predeterminado').text();
             bVisible=oCampo.find('visible').text();
-                
+            bNoPermitirValorForaneoNulo=oCampo.find('no_permitir_valor_foraneo_nulo').text();
+            
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
 
@@ -554,11 +573,12 @@
 
 
                 sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
-                sRenglon+="<option ";
-                if ($.fn.form.options.modo=='insert')
-                    sRenglon+="selected='selected' ";
-                sRenglon +="></option>";
-
+                if (bNoPermitirValorForaneoNulo!="1") {
+                    sRenglon+="<option ";
+                    if ($.fn.form.options.modo=='insert')
+                        sRenglon+="selected='selected' ";
+                    sRenglon +="></option>";
+                }
                 oCamposForaneos=oCampo.find('registro_' + oCampo[0].nodeName)
                 
                 oCamposForaneos.each(

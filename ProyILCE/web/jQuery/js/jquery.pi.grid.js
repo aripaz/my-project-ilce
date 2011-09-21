@@ -31,7 +31,8 @@
             editingApp:"",
             datestamp: sDateTime(new Date()),
             originatingObject:"",
-            callFormWithRelationships:false
+            callFormWithRelationships:false,
+            updateTreeAfterPost:false
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -54,6 +55,7 @@
                 "' datestamp='" + $.fn.appgrid.options.datestamp +
                 "' originatingObject='"+ $.fn.appgrid.options.originatingObject +
                 "' callFormWithRelationships='"+$.fn.appgrid.options.callFormWithRelationships+
+                "' updateTreeAfterPost='" + $.fn.appgrid.options.updateTreeAfterPost +
                 "'>" +
                 "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
@@ -176,8 +178,13 @@
                         buttonicon:"ui-icon-plus",
                         onClickButton:function() {
                             $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
-
                             nEditingApp=$(this).attr("editingApp");
+                            
+                            //Verifica si se actualiza árbol
+                            sUpdateControl="";
+                            if ($(this).attr("updateTreeAfterPost")=="true") 
+                                    sUpdateControl=oGrid.attr("originatingObject");
+                                
                             $("body").form({
                                 app: nApp,
                                 forma:nEntidad,
@@ -190,7 +197,8 @@
                                 height:400,
                                 width:550,
                                 originatingObject:oGrid.id,
-                                showRelationships:$(this).attr("callFormWithRelationships")
+                                showRelationships:$(this).attr("callFormWithRelationships"),
+                                updateControl:sUpdateControl
                             });
                         },
                         position: "last",
@@ -215,6 +223,12 @@
                                 $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                                 nPK= $(this).getCell(nRow,0);
                                 nEditingApp=$(this).attr("editingApp");
+                                
+                                //Verifica si se actualiza árbol
+                                sUpdateControl="";
+                                if ($(this).attr("updateTreeAfterPost")=="true")
+                                    sUpdateControl=oGrid.attr("originatingObject");
+                                            
                                 $("body").form({
                                     app: nApp,
                                     forma:nEntidad,
@@ -227,7 +241,8 @@
                                     height:"500",
                                     width:"500",
                                     originatingObject: $(this).id,
-                                    showRelationships:$(this).attr("callFormWithRelationships")
+                                    showRelationships:$(this).attr("callFormWithRelationships"),
+                                    updateControl:sUpdateControl
                                 });
                             }
                             else {
@@ -263,9 +278,10 @@
                                         success:  function(data){
                                             oGrid.jqGrid('delRowData',nRow);
                                             //Actualiza árbol
-                                            sTvId=oGrid.attr("originatingObject");
-                                            $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
-                                            
+                                            if ($.fn.appgrid.options.updateTreeAfterPost=true) {
+                                                sTvId=oGrid.attr("originatingObject");
+                                                $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
+                                            }
                                         },
                                         error:function(xhr,err){
                                             alert("Error al eliminar registro");
