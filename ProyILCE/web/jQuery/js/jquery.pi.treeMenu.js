@@ -71,7 +71,8 @@
                    nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''))+"-"+sDateStamp;
                    sState=$.trim($(this).find('state').text().replace('\n',''));
                    sEvento=$.trim($(this).find('onclick').text().replace('\n',''));
-                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel +"' state='" + sState + "' evento='"+sEvento +"'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
+                   nRefrescaArbol=$.trim($(this).find('refresca_arbol').text().replace('\n',''));
+                   sXML+="<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel +"' state='" + sState + "' evento='"+sEvento +"' refresca_arbol='" +nRefrescaArbol + "'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
                 });
 
                 sXML="<root>" + sXML + "</root>";
@@ -101,6 +102,7 @@
                       var sTipoNodo=$(oTheNode).attr("evento");
                       var nApp=sNodeId.split("-")[1];
                       var nForma=sNodeId.split("-")[2];
+                      var nRefrescaArbol=$(oTheNode).attr("refresca_arbol");
                       var sW="";
 
                       for (i=3; i<sNodeId.split("-").length-1;i++) {
@@ -114,7 +116,8 @@
 
                       //Llama grids
                       var oId=o.id;
-                       $("#divForeignGrids_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appgrid({app: nApp,
+                       $("#divForeignGrids_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appgrid({
+                           app: nApp,
                           entidad: nForma,
                           editingApp: oId.split("_")[3],
                           pk: nPK,
@@ -125,7 +128,8 @@
                           leyendas:["Nuevo registro", "Edición de registro"],
                           height:"82%",
                           originatingObject:oId,
-                          callFormWithRelationships: sTipoNodo=="showGridAndRelationships"?true:false
+                          callFormWithRelationships: sTipoNodo=="showGridAndRelationships"?true:false,
+                          updateTreeAfterPost:nRefrescaArbol=="1"?true:false
                        });
                        
                        $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).menu.getFullMenu(oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4],nApp,nForma);
