@@ -105,7 +105,9 @@ public class srvGrid extends HttpServlet {
                                 apl.setNumRows(numRows);
 
 
-                                if (sidx!=null){
+                                if ((sidx!=null)&&(!"".equals(sidx)) &&
+                                    (sord!=null)&&(!"".equals(sord)))
+                                {
                                     sidx = admForm.cleanSIDX(sidx,"_",3);
                                     apl.setOrderBY(sidx + " " + sord);
                                 }
