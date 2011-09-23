@@ -49,6 +49,20 @@ public class srvLogout extends HttpServlet {
             request.getSession().removeAttribute("perfil");
             request.getSession().removeAttribute("xmlSession");
             request.getSession().removeAttribute("xmlMenu");
+
+            request.getSession().removeAttribute("xmlTab");
+            request.getSession().removeAttribute("from");
+            request.getSession().removeAttribute("to");
+            request.getSession().removeAttribute("subject");
+            request.getSession().removeAttribute("message");
+            request.getSession().removeAttribute("copy");
+            request.getSession().removeAttribute("copyO");
+            request.getSession().removeAttribute("GOTSESS");
+            request.getSession().removeAttribute("e_mail");
+            request.getSession().removeAttribute("msgExist");
+            request.getSession().removeAttribute("MAILPK");
+            request.getSession().removeAttribute("MAILBITAC");
+
             LoginHandler lg = new LoginHandler();
             lg.setTextExecution("Sesión finalizada");
             request.getSession().setAttribute("loginHand",lg);

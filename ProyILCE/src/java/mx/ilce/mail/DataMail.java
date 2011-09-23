@@ -31,6 +31,34 @@ public class DataMail implements Serializable{
     private List listCopy;
     private List ListO;
 
+    private String strTo;
+    private String strCopy;
+    private String strCopyO;
+
+    public String getStrCopy() {
+        return strCopy;
+    }
+
+    public void setStrCopy(String strCopy) {
+        this.strCopy = strCopy;
+    }
+
+    public String getStrCopyO() {
+        return strCopyO;
+    }
+
+    public void setStrCopyO(String strCopyO) {
+        this.strCopyO = strCopyO;
+    }
+
+    public String getStrTo() {
+        return strTo;
+    }
+
+    public void setStrTo(String strTo) {
+        this.strTo = strTo;
+    }
+    
     /**
      * Obtiene la clave de la forma
      * @return
