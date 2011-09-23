@@ -41,7 +41,7 @@ public class SendMailNotif {
         boolean sld = false;
 
         String queryRegitro = "select clave_registro , "
-                + " fecha_bitacora , clave_empleado "
+                + " fecha_bitacora , clave_empleado , clave_forma, clave_aplicacion"
                 + " from bitacora_aplicacion "
                 + " where clave_bitacora = " + this.getBitacora().getIdBitacora();
 
@@ -57,6 +57,8 @@ public class SendMailNotif {
         String idRegistro = null;
         String fechaBitacora = null;
         String claveUser = null;
+        String claveForma = null;
+        String claveAplicacion = null;
         if (!hsMap.isEmpty()){
             lstCmp = (List) hsMap.get(0);
             if (!lstCmp.isEmpty()){
@@ -66,6 +68,10 @@ public class SendMailNotif {
                 fechaBitacora = cmp.getValor();
                 cmp = (Campo) lstCmp.get(2);
                 claveUser = cmp.getValor();
+                cmp = (Campo) lstCmp.get(3);
+                claveForma = cmp.getValor();
+                cmp = (Campo) lstCmp.get(4);
+                claveAplicacion = cmp.getValor();
             }
         }
         String idStatus = null;
@@ -95,8 +101,8 @@ public class SendMailNotif {
                     + ", ct.categoria, tr.fecha_inicial, py.proyecto "
                     + " from flujo_datos_forma fdf , categoria_tarea ct "
                     + ", tarea tr , proyecto py "
-                    + " where fdf.clave_forma = " + this.getBitacora().getClaveForma()
-                    + " and   fdf.clave_aplicacion = " + this.getBitacora().getClaveAplicacion()
+                    + " where fdf.clave_forma = " + claveForma
+                    + " and   fdf.clave_aplicacion = " + claveAplicacion
                     + " and   fdf.secuencia = " + idStatus
                     + " and   tr.clave_tarea = " + idRegistro
                     + " and   tr.clave_categoria = ct.clave_categoria "
@@ -209,7 +215,7 @@ public class SendMailNotif {
                         if ("".equals(strData)){
                             strData = cmp.getValor();
                         }else{
-                            strData = strData + "," + cmp.getValor();
+                            strData = strData + ";" + cmp.getValor();
                         }
                     }
                 }
