@@ -53,13 +53,16 @@
 
     </head>
     <body>
-        <div id="header">
-            <div id="banner">
-                <img src="img/logo_plataforma_ilce3.png" /></div>
-            <div id="sf-menu" ></div>
-            <div id="spacer_menu" ></div>
-            <div id="session_menu">
+        <div id="banner">
+            <img src="img/logo ilce.jpg" />
+            <img src="img/logo_plataforma.png" class="logo_plataforma"/>
+        </div>
+        <div id="nav_menu">
+            <div id="sf-menu" >
+                <ul id='app_menu' class='sf-menu'>
+                </ul>
             </div>
+            <div > </div>
         </div>
 
         <div id="tabcontainer">
@@ -68,34 +71,59 @@
                     <li><a href="#tabUser">Escritorio</a></li>
                 </ul>
                 <div id="tabUser">
-                    <div class="portlet">
-                        <div class="portlet-header">Avisos</div>
-                        <div class="portlet-content">
-                            <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
-                        </div>
-                    </div>
 
-                    <div class="column ui-sortable">
+                    <div class="column1 ui-sortable">
                         <div class="portlet">
                             <div class="portlet-header">Mis pendientes</div>
                             <div class="portlet-content">
+                                <div id='notification_1_101_0' class='notification'></div>
                                 <div id="grid_1_101_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Actividades pendientes" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" ></div>
                             </div>
                         </div>
                         <div class="portlet">
                             <div class="portlet-header">Pendientes que asigné</div>
                             <div class="portlet-content">
+                                <div id='notification_1_103_0' class='notification'></div>
                                 <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Actividades que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
-                            </div>
                         </div>
                     </div>
-                    <div class="column ui-sortable">
-                        <div class="portlet">
-                            <div class="portlet-header">Mis favoritos</div>
-                            <div class="portlet-content">(No hay listados registrados)</div>
-                        </div>                        
+                    <div class="portlet">
+                        <div class="portlet-header">Mis favoritos</div>
+                        <div class="portlet-content">
+                            <div id='notification_1_103_0' class='notification'>(No hay listados registrados)</div>
+                        </div>
                     </div>
-                
+                </div>
+                <div class="column2 ui-sortable">
+                    <div class="portlet">
+                        <div class="portlet-header">Avisos</div>
+                        <div class="portlet-content">
+                            <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
+                        </div>
+                    </div>
+                    <div class="portlet">
+                        <div class="portlet-header">Recursos</div>
+                        <div class="portlet-content">
+                            <p>En esta sección encontrarás recursos de propósito general
+                            <ul>
+                                <li>Base de conocimiento
+                                    <ul>
+                                        <li><a href="#" onclick="alert('Por implementar');">Vistazo general a la plataforma</a></li>
+                                        <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de promoción</a></li>
+                                        <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de proyectos</a></li>
+                                    </ul>
+                                </li>
+                                <li>Foros</li>
+                                <ul>
+                                    <li><a href="#" onclick="alert('Por implementar');">General</a></li>
+                                    <li><a href="#" onclick="alert('Por implementar');">Módulo de promoción</a></li>
+                                    <li><a href="#" onclick="alert('Por implementar');">Módulo de proyectos</a></li> 
+                                </ul> 
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

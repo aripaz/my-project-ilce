@@ -23,7 +23,6 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
-             obj.html("<div align='center' class='cargando' ><br /><br />Cargando informaci&oacute;n...  <br /><img src='img/loading.gif' /></div>")
              $.fn.sessionmenu.ajax(obj);
              
         });
@@ -46,10 +45,8 @@
                 }
                  else {
                     xml = data;}
-                obj.html($.fn.sessionmenu.handleSession(xml));
-                $("#ul-session").superfish({ 
-                    pathClass:  'current' 
-                });
+                
+                obj.append($.fn.sessionmenu.handleSession(xml));
                 
                 $("#lnkConfiguracion").click(function() {
 
@@ -103,7 +100,7 @@
         if ($.fn.sessionmenu.options.foto=="")
             $.fn.sessionmenu.options.foto='img/sin_foto.jpg'
 
-        var sHtml='<ul class="sf-menu" id="ul-session">'+
+        var sHtml="<li><div id='spacer_menu'>&nbsp;</div></li>"+
                   '<li>' +
                   '<a href="#">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '&nbsp;<span class="sf-sub-indicator"> &#187;</span></a>'+
                   '<ul>' +
@@ -114,8 +111,7 @@
                   '<a href="srvLogout" id="lnkConfiguracion">Cerrar sesi&oacute;n</a>' +
                   '</li>'+
                   '</ul>'+
-                  '</li>'+
-                  '</ul>';
+                  '</li>';
         return sHtml;
     }
 
