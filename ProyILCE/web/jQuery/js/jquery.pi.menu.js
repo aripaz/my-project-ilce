@@ -19,7 +19,6 @@
         return this.each( function(){
             obj = $(this);
             if ($.fn.menu.options.xmlUrl!="") {
-                obj.html("<div align='center' class='cargando'><br /><br />Cargando informaci&oacute;n...<br /><img src='img/loading.gif' /></div>");
                 $.fn.menu.options.ts="U2FsdGVkX1+K/UZ+8JLyZRxlM2+sjv0subeoJS4mtaQ=";
                 $.fn.menu.ajax(obj);
             }
@@ -45,7 +44,7 @@
                 else {
                     xml = data;
                 }
-                obj.html($.fn.menu.handleMenu(xml));
+                obj.append($.fn.menu.handleMenu(xml));
                 $("#apps_menu").superfish({ 
                     pathClass:  'current' 
                 });
@@ -100,7 +99,8 @@
                                 $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
                                 $tabs.tabs( "select", "#tab"+this.id);
                                 oTabPanel=$("#tab"+this.id);
-                                    
+                                /* Aqui va a ir la barra de avisos */
+                                oTabPanel.html(""); 
                                 //Se inserta el div para el grid
                                 oTabPanel.html("<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
                                     "<div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
@@ -363,11 +363,8 @@
         });
     }
    
-    $.fn.menu.handleMenu = function(xml){
-        sHtml="<ul id='apps_menu' class='sf-menu'>"/*+
-                "<li>"+
-                "<a class='sf-with-ul' href='#'>Aplicaciones<span class='sf-sub-indicator'> &#187;</span></a>"+
-                "<ul>"*/;
+    $.fn.menu.handleMenu = function(xml){   
+        sHtml="";
 
         $(xml).find("registro").each(function(){
             nAplicacion=$(this).find("clave_aplicacion").text();
@@ -378,13 +375,11 @@
             nInsertar = $(this).find("insertar").text();
             nMostrar = $(this).find("mostrar").text();
 
-            sHtml+="<li>" +
-                "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>"+
-                "</li>"
+            sHtml+="<li>"+
+                   "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>"+
+                   "</li>"
 
         })
-        sHtml+="</ul></il></ul>"
-
         return sHtml;
     }
     

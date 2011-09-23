@@ -120,6 +120,7 @@
                     });
                     sUlTabs+="</ul>";
                     sMainDivTabs+=sUlTabs+sDivTabs+sBotonera+"</div>";
+                    /* Verifica si se está construyendo una forma previa */ 
                     sDialogo+="<div id='dlgModal_"+ formSuffix + "' title='" + $.fn.form.options.titulo +"'>" + sMainDivTabs + "</div>";
                     obj.append(sDialogo);
                     $.fn.form.setFormObjects();
@@ -142,359 +143,378 @@
     
     $.fn.form.setFormObjects = function(){  
    
-    var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+        var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
    
-    $.ajax(
-    {   
-        url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk + "&" + $.fn.form.options.filtroForaneo,
-        dataType: ($.browser.msie) ? "text" : "xml",
-        success:  function(data){
-            if (typeof data == "string") {
-                xml = new ActiveXObject("Microsoft.XMLDOM");
-                xml.async = false;
-                xml.validateOnParse="true";
-                xml.loadXML(data);
-                if (xml.parseError.errorCode>0) {
-                    alert("Error de compilación xml:" + xml.parseError.errorCode +"\nParse reason:" + xml.parseError.reason + "\nLinea:" + xml.parseError.line);
-                }
-            }
-            else {
-                xml = data;
-            }
-            
-            var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
-            /*Verifica el estatus de error*/
-            var oError=$(xml).find("error");
-            if (oError.length>0) {
-                var sDescripcionError=oError.find("descripcion").text();
-                $("#pager_"+ gridSuffix+"_left").html(sDescripcionError);
-                $("#dlgModal_"+ formSuffix).remove();
-                alert(sDescripcionError);
-                return false;
-            }
-            
-            formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-            /* Procesamiento de permisos */
-            var sPermiso="";
-            var oPermisos=$(xml).find("clave_permiso");
-            oPermisos.each( function() {
-                sPermiso+=$(this).text()+",";
-            })
-            sPermiso=sPermiso.substr(0,sPermiso.length-1);
-
-            if (sPermiso.indexOf("2")==-1 && $.fn.form.options.modo=='insert') {
-                alert("Su perfil no cuenta con permisos para insertar registros de esta forma, consulte al administrador del sistema");
-                return false;
-            }
-
-            if (sPermiso.indexOf("3")==-1 && $.fn.form.options.modo=='update') {
-                alert("Su perfil no cuenta con permisos para actualizar registros de esta forma, consulte al administrador del sistema");
-                return false;
-            }
-
-            //Se genera el HTML de la forma general
-            $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
-            
-            //Establece atributo de seguridad
-            $("#formTab_" + formSuffix).attr("security",sPermiso);
-            //Se asigna evento a botón de guardar
-            $("#btnGuardar_"+ formSuffix).click(function() {
-                suffix=this.id.split("_")[1]+ "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3]
-                $("#form_" + suffix).submit();
-            })
-            
-            //Se crea el diálogo con el HTML completo
-            $("#dlgModal_"+ formSuffix).dialog({
-                modal: true,
-                /*height:$.fn.form.options.height, */
-                top:$.fn.form.options.top,
-                width:$.fn.form.options.width,
-                close: function(event, ui) {
-                    $(this).dialog("destroy");
-                    $(this).remove();
-                }
-            });
-            
-            //Se crean los tabs
-            $("#formTab_" + formSuffix).tabs();
-            
-            //Se llama a cola de grids
-            if ($(".queued_grids:first").length>0) {
-                
-                //Entrega los valores del formulario
-                //para establecer posible relación de forma y grid
-                sWSParameters="";
-                aWSParameters=$("#form_" + formSuffix).serialize().split("&");
-                for (i=0; i<aWSParameters.length;i++) {
-                    sWSParameters+=(i+4)+"="+aWSParameters[i].replace("_"+formSuffix,"")+"&";
-                }
-                oGrid=$(".queued_grids:first")[0]; 
-                $(oGrid).removeClass('queued_grids').addClass('gridForeignContainer');
-                sTitulo=$(oGrid).attr("titulo");
-                gridId=oGrid.id;
-                sGridDef='$("#'+gridId+'").appgrid({'+
-                        'app: "'+$.fn.form.options.app+'",'+
-                        'entidad:"'+ gridId.split("_")[2]+'",'+
-                        'pk:"0",'+
-                        'editingApp:"1",'+
-                        'wsParameters:"' +$.fn.form.options.pk_name+"="+$.fn.form.options.pk+'&'+sWSParameters+'",'+
-                        'titulo:"'+sTitulo+'",'+
-                        'height:"250",'+
-                        'width:"100",'+
-                        'leyendas:["Nuev@ ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'",'+
-                                  '"Edición de ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'"],'+
-                        'openKardex:false,'+
-                        'originatingObject:"",'+
-                        'showFilterLink:false,'+
-                        'insertInDesktopEnabled:"0"});';
-                    setTimeout(sGridDef,1000);
-            }
-            //nWidth=$("#divFormProfiles_" + suffix).width();
-
-            oForm=$("#form_" + formSuffix);
-
-            // Se ocultan los mensajes de validación
-            oForm.find('.obligatorio').each(function() {
-                $("#msgvalida_" + this.name).hide();
-            });
-
-            //Se ocultan los campos con clase invisible
-             $(".invisible").parent().hide();
-             
-            $(".fecha").datepicker({
-                dateFormat: 'dd/mm/yy',
-                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-            });
-
-            $(".money").calculator({
-                useThemeRoller: true,
-                prompt: 'Calculadora'
-            });
-
-            //Se activa el foreign toolbar para editar registros foraneos
-            oForm.find('.widgetbutton').fieldtoolbar({
-                app:$.fn.form.options.app
-            });
-
-            //Se captura el submit
-            oForm.submit(function() {
-                //Deshabilita el botón guardar
-                nApp=this.id.split("_")[1];
-                nForma=this.id.split("_")[2];
-                nPK=this.id.split("_")[3];
-                formSuffix =this.id.split("_")[1] + "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3];
-
-                $("#btnGuardar_"+formSuffix).disabled=true;
-                //Actualiza el estatus bar
-                $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
-
-                var sWS="";
-                var oCampos;
-                var sData="";
-
-
-                if ($("#formTab_" + suffix).attr("modo")!="lookup") {
-                    var bCompleto=true;
-                    $(this).find('.obligatorio').each(function() {
-                        if ($.trim(this.value)=="") {
-                            $("#td_" + this.name).addClass("errorencampo")
-                            $(this).addClass("errorencampo");
-                            $("#msgvalida_" + this.name).show();
-                            bCompleto=false;
-                        }
-                        else {
-                            $("#td_" + this.name).removeClass("errorencampo")
-                            $("#msgvalida_" + this.name).hide();
-                            $(this).removeClass("errorencampo");
-                        }
-                    });
-
-                    if (!bCompleto){
-                        $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique    ");
-                        return false;
+        $.ajax(
+        {   
+            url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk + "&" + $.fn.form.options.filtroForaneo,
+            dataType: ($.browser.msie) ? "text" : "xml",
+            success:  function(data){
+                if (typeof data == "string") {
+                    xml = new ActiveXObject("Microsoft.XMLDOM");
+                    xml.async = false;
+                    xml.validateOnParse="true";
+                    xml.loadXML(data);
+                    if (xml.parseError.errorCode>0) {
+                        alert("Error de compilación xml:" + xml.parseError.errorCode +"\nParse reason:" + xml.parseError.reason + "\nLinea:" + xml.parseError.line);
                     }
-
-                    //Preparando la información para enviarla via POST
-                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando informacion...");
-                    sWS="srvFormaInsert";
-
-                    oCampos = $(this).serializeArray();
-                    jQuery.each(oCampos, function(i, oCampo){
-                        sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                        sData+=sNombreCampo+"="+escape(encodeURIComponent(oCampo.value))+ "&";
-                    });
-                    sData+="$cf=" +$("#formTab_" + formSuffix).attr("forma") +
-                    "&$pk=" + $("#formTab_" + formSuffix).attr("pk")+
-                    "&$ta=" + $("#formTab_" + formSuffix).attr("modo")+
-                    "&$ca=" + nApp;
-
-                    $.ajax({
-                        type: "POST",
-                        url: sWS,
-                        data:sData,
-                        dataType: ($.browser.msie) ? "text" : "xml",
-                        success: function(data){
-                            if (typeof data == "string") {
-                                xmlResult = new ActiveXObject("Microsoft.XMLDOM");
-                                xmlResult.async = false;
-                                xmlResult.validateOnParse="true";
-                                xmlResult.loadXML(data);
-                                if (xmlResult.parseError.errorCode>0) {
-                                    alert("Error de compilación xml:" + xmlResult.parseError.errorCode +"\nParse reason:" + xmlResult.parseError.reason + "\nLinea:" + xmlResult.parseError.line);
-                                }
-                            }
-                            else {
-                                xmlResult = data;
-                            }
-
-                            var nApp=$("#formTab_" + suffix).attr("app")
-                            var nForma=$("#formTab_" + suffix).attr("forma");
-                            var nPK=$("#formTab_" + suffix).attr("pk")
-
-                            sResultado=$(xmlResult).find("resultado").text();
-
-                            //Verifica el tipo de control por actualizar
-                            sControl=$("#formTab_" + suffix).attr("updateControl");
-                            if (sControl=="") {
-                                /*Si no fue definido el control, por default se actualia el grid*/
-                                 $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
-                            } else {
-                                oControl=$("#"+sControl);
-                                /*Verifica si en realidad existe el control ...*/
-                                if (oControl.length>0) {
-                                    
-                                    /* Verifica si es un arbol */
-                                    if (oControl[0].nodeName="DIV" && 
-                                         oControl[0].className.indexOf("jstree",0)>1) {
-	                               $("#"+sControl).treeMenu.getTreeDefinition($("#"+sControl))
-                                        $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
-                                       }
-                                    /* en caso de que no lo sea actualiza un combo*/ 
-                                    else
-                                         setXMLInSelect3(sControl,$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
-
-                                }
-                            }
-                            
-                            //Cierra el dialogo
-                            $("#dlgModal_"+ suffix).dialog("destroy");
-                            $("#dlgModal_"+ suffix).remove();
-                            
-                            //La forma se vuelve a abrir cuando se solicita
-                            //que muestre sus relaciones
-                            //y es una alta 
-                            if ($.fn.form.options.showRelationships=='true' &&
-                                $.fn.form.options.modo=="insert")
-                               
-                                $("body").formqueue({
-                                    app: $.fn.form.options.app,
-                                    forma:$.fn.form.options.forma,
-                                    datestamp:$.fn.form.options.datestamp,
-                                    modo:"update",
-                                    titulo: $.fn.form.options.titulo,
-                                    columnas:1,
-                                    pk:sResultado,
-                                    filtroForaneo:$.fn.form.options.filtroForaneo,
-                                    height:"500",
-                                    width:"500",
-                                    originatingObject: $.fn.form.options.originatingObject,
-                                    showRelationships: $.fn.form.options.showRelationships
-                                });    
-
-                        },
-                        error:function(xhr,err){
-                            $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
-                            alert("Error al actualizar registro: \n"+ +xhr.responseText);
-                        }
-                    });
                 }
                 else {
-                    //Valida que traiga al menos un dato:
-                    sData = "";
-                    oCampos = $(this).serializeArray();
-                    $.each(oCampos, function(i, oCampo){
-                        sTipoDato=$("#" + oCampo.name).attr("tipo_dato");
-                        sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                        if ($.trim(oCampo.value)!="")
-                            if (sTipoDato=="string")
-                                sData+=sNombreCampo+" like '"+oCampo.value + "%'&";
-                            else if (sTipoDato=='date')
-                                sData+=sNombreCampo+"='"+oCampo.value + "'&";
-                            else
-                                sData+=sNombreCampo+"="+oCampo.value + "&";
-                    });
+                    xml = data;
+                }
+            
+                var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
+                /*Verifica el estatus de error*/
+                var oError=$(xml).find("error");
+                if (oError.length>0) {
+                    var sDescripcionError=oError.find("descripcion").text();
+                    $("#grid_"+gridSuffix+"_toppager_right").children(0).html(sDescripcionError);
+                    $("#dlgModal_"+ formSuffix).remove();
+                    alert(sDescripcionError);
+                    return false;
+                }
+            
+                formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
+            
+                /* Procesamiento de permisos */
+                var sPermiso="";
+                var oPermisos=$(xml).find("clave_permiso");
+                oPermisos.each( function() {
+                    sPermiso+=$(this).text()+",";
+                })
+                sPermiso=sPermiso.substr(0,sPermiso.length-1);
 
-                    if (sData=="") {
-                        $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
-                        alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
-                    }
-                    else {
-
-                        oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
-                        oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().next().children();
-                        sBitacoraId=oMenuAccordion[1].id;
-                        sBusquedasId=oMenuAccordion[3].id;
-                        nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
-                        nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                        sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
-                        $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
-
-                        //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                        $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
-                            var sGridId="#grid_" +gridSuffix ;
-                            $(sGridId).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" + nForma + "&$dp=body"
-                            }).trigger("reloadGrid")
-                            $(this).remove();
-                        });
-
-                        // Si el usuario le dió un nombre a la consulta
-                        // Significa que la desea guardar
-                        sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
-
-                        if (document.getElementById("$b").value!="") {
-                            sBusqueda=document.getElementById("$b").value;
-                            postConfig = "$cf=93&$ta=insert&$pk=0"+
-                            "&clave_aplicacion=" + $.fn.form.options.app +
-                            "&clave_forma="+$.fn.form.options.forma+
-                            "&clave_empleado="+ $("#_ce_").val() +
-                            "&filtro="+sBusqueda +
-                            "&consulta=" +sData;
-                            $.post("srvFormaInsert",postConfig);
-                                    
-                            // Aqui va método del filtro para actualizarlo
-                            sMenuDivPrefix=sBitacoraId.split("_")[1]+"_"+
-                                   sBitacoraId.split("_")[2]+"_"+
-                                   sBitacoraId.split("_")[3];
-                            sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
-                            $("#accordion_"+sMenuDivPrefix).menu.getFullMenu(sMenuDivPrefix,
-                                $.fn.form.options.app,
-                                $.fn.form.options.forma)
-
-                        }
-
-                        $("#grid_" + gridSuffix).jqGrid('setGridParam',{
-                            url:"srvGrid?$cf=" +  $.fn.form.options.forma + "&$w=" + sData+ "&$dp=body&page=1"
-                        }).trigger("reloadGrid")
-                        $("#dlgModal_"+ formSuffix).dialog("destroy");
-                        $("#dlgModal_"+ formSuffix).remove();
-                    }
+                if (sPermiso.indexOf("2")==-1 && $.fn.form.options.modo=='insert') {
+                    alert("Su perfil no cuenta con permisos para insertar registros de esta forma, consulte al administrador del sistema");
+                    return false;
                 }
 
-                return false;
+                if (sPermiso.indexOf("3")==-1 && $.fn.form.options.modo=='update') {
+                    alert("Su perfil no cuenta con permisos para actualizar registros de esta forma, consulte al administrador del sistema");
+                    return false;
+                }
+            
+                //Se extraen datos generales de la forma
+                sAliasLog=$(xml).find("configuracion_forma").find("alias_tab").text();
+            
+                sTitulo="";
+                if (sAliasLog.split(' ').length>1) {
+                    if (sAliasLog.split(' ')[0]=='la' &&
+                        $.fn.form.options.modo=='insert')
+                        sTitulo="Nueva " + sAliasLog.split(' ')[1];
+            
+                    if (sAliasLog.split(' ')[0]=='el' && 
+                        $.fn.form.options.modo=='insert')
+                        sTitulo="Nuevo "+sAliasLog.split(' ')[1];
+            
+                    if ($.fn.form.options.modo=='update')
+                        sTitulo="Edición de "+sAliasLog.split(' ')[1];
+                }
+            
+                //Se genera el HTML de la forma general
+                $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
+            
+                //Establece atributo de seguridad
+                $("#formTab_" + formSuffix).attr("security",sPermiso);
+                //Se asigna evento a botón de guardar
+                $("#btnGuardar_"+ formSuffix).click(function() {
+                    suffix=this.id.split("_")[1]+ "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3]
+                    $("#form_" + suffix).submit();
+                })
+            
+                //Se crea el diálogo con el HTML completo
+                $("#dlgModal_"+ formSuffix).dialog({
+                    modal: true,
+                    title: sTitulo,    
+                    /*height:$.fn.form.options.height, */
+                    top:$.fn.form.options.top,
+                    width:$.fn.form.options.width,
+                    close: function(event, ui) {
+                        $(this).dialog("destroy");
+                        $(this).remove();
+                    }
+                });
+            
+                //Se crean los tabs
+                $("#formTab_" + formSuffix).tabs();
+            
+                //Se llama a cola de grids
+                if ($(".queued_grids:first").length>0) {
+                
+                    //Entrega los valores del formulario
+                    //para establecer posible relación de forma y grid
+                    sWSParameters="";
+                    aWSParameters=$("#form_" + formSuffix).serialize().split("&");
+                    for (i=0; i<aWSParameters.length;i++) {
+                        sWSParameters+=(i+4)+"="+aWSParameters[i].replace("_"+formSuffix,"")+"&";
+                    }
+                    oGrid=$(".queued_grids:first")[0]; 
+                    $(oGrid).removeClass('queued_grids').addClass('gridForeignContainer');
+                    sTitulo=$(oGrid).attr("titulo");
+                    gridId=oGrid.id;
+                    sGridDef='$("#'+gridId+'").appgrid({'+
+                    'app: "'+$.fn.form.options.app+'",'+
+                    'entidad:"'+ gridId.split("_")[2]+'",'+
+                    'pk:"0",'+
+                    'editingApp:"1",'+
+                    'wsParameters:"' +$.fn.form.options.pk_name+"="+$.fn.form.options.pk+'&'+sWSParameters+'",'+
+                    'titulo:"'+sTitulo+'",'+
+                    'height:"250",'+
+                    'width:"100",'+
+                    'leyendas:["Nuev@ ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'",'+
+                    '"Edición de ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'"],'+
+                    'openKardex:false,'+
+                    'originatingObject:"",'+
+                    'showFilterLink:false,'+
+                    'insertInDesktopEnabled:"0"});';
+                    setTimeout(sGridDef,1000);
+                }
+                //nWidth=$("#divFormProfiles_" + suffix).width();
 
-            });
+                oForm=$("#form_" + formSuffix);
 
-            $("#pager_"+ gridSuffix+"_left").html("");
+                // Se ocultan los mensajes de validación
+                oForm.find('.obligatorio').each(function() {
+                    $("#msgvalida_" + this.name).hide();
+                });
 
-        },
-        error:function(xhr,err){
-            if ($("#tdEstatus_" +formSuffix).length>0)
-                $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
-            alert("responseText: "+xhr.responseText);
-        }
-    });
+                //Se ocultan los campos con clase invisible
+                $(".invisible").parent().hide();
+             
+                $(".fecha").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+                });
+
+                $(".money").calculator({
+                    useThemeRoller: true,
+                    prompt: 'Calculadora'
+                });
+
+                //Se activa el foreign toolbar para editar registros foraneos
+                oForm.find('.widgetbutton').fieldtoolbar({
+                    app:$.fn.form.options.app
+                });
+
+                //Se captura el submit
+                oForm.submit(function() {
+                    //Deshabilita el botón guardar
+                    nApp=this.id.split("_")[1];
+                    nForma=this.id.split("_")[2];
+                    nPK=this.id.split("_")[3];
+                    formSuffix =this.id.split("_")[1] + "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3];
+
+                    $("#btnGuardar_"+formSuffix).disabled=true;
+                    //Actualiza el estatus bar
+                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
+
+                    var sWS="";
+                    var oCampos;
+                    var sData="";
+
+
+                    if ($("#formTab_" + suffix).attr("modo")!="lookup") {
+                        var bCompleto=true;
+                        $(this).find('.obligatorio').each(function() {
+                            if ($.trim(this.value)=="") {
+                                $("#td_" + this.name).addClass("errorencampo")
+                                $(this).addClass("errorencampo");
+                                $("#msgvalida_" + this.name).show();
+                                bCompleto=false;
+                            }
+                            else {
+                                $("#td_" + this.name).removeClass("errorencampo")
+                                $("#msgvalida_" + this.name).hide();
+                                $(this).removeClass("errorencampo");
+                            }
+                        });
+
+                        if (!bCompleto){
+                            $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique    ");
+                            return false;
+                        }
+
+                        //Preparando la información para enviarla via POST
+                        $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando informacion...");
+                        sWS="srvFormaInsert";
+
+                        oCampos = $(this).serializeArray();
+                        jQuery.each(oCampos, function(i, oCampo){
+                            sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
+                            sData+=sNombreCampo+"="+escape(encodeURIComponent(oCampo.value))+ "&";
+                        });
+                        sData+="$cf=" +$("#formTab_" + formSuffix).attr("forma") +
+                        "&$pk=" + $("#formTab_" + formSuffix).attr("pk")+
+                        "&$ta=" + $("#formTab_" + formSuffix).attr("modo")+
+                        "&$ca=" + nApp;
+
+                        $.ajax({
+                            type: "POST",
+                            url: sWS,
+                            data:sData,
+                            dataType: ($.browser.msie) ? "text" : "xml",
+                            success: function(data){
+                                if (typeof data == "string") {
+                                    xmlResult = new ActiveXObject("Microsoft.XMLDOM");
+                                    xmlResult.async = false;
+                                    xmlResult.validateOnParse="true";
+                                    xmlResult.loadXML(data);
+                                    if (xmlResult.parseError.errorCode>0) {
+                                        alert("Error de compilación xml:" + xmlResult.parseError.errorCode +"\nParse reason:" + xmlResult.parseError.reason + "\nLinea:" + xmlResult.parseError.line);
+                                    }
+                                }
+                                else {
+                                    xmlResult = data;
+                                }
+
+                                var nApp=$("#formTab_" + suffix).attr("app")
+                                var nForma=$("#formTab_" + suffix).attr("forma");
+                                var nPK=$("#formTab_" + suffix).attr("pk")
+
+                                sResultado=$(xmlResult).find("resultado").text();
+
+                                //Verifica el tipo de control por actualizar
+                                sControl=$("#formTab_" + suffix).attr("updateControl");
+                                if (sControl=="") {
+                                    /*Si no fue definido el control, por default se actualia el grid*/
+                                    $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                                } else {
+                                    oControl=$("#"+sControl);
+                                    /*Verifica si en realidad existe el control ...*/
+                                    if (oControl.length>0) {
+                                    
+                                        /* Verifica si es un arbol */
+                                        if (oControl[0].nodeName="DIV" && 
+                                            oControl[0].className.indexOf("jstree",0)>1) {
+                                            $("#"+sControl).treeMenu.getTreeDefinition($("#"+sControl))
+                                            $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                                        }
+                                        /* en caso de que no lo sea actualiza un combo*/ 
+                                        else
+                                            setXMLInSelect3(sControl,$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
+
+                                    }
+                                }
+                            
+                                //Cierra el dialogo
+                                $("#dlgModal_"+ suffix).dialog("destroy");
+                                $("#dlgModal_"+ suffix).remove();
+                            
+                                //La forma se vuelve a abrir cuando se solicita
+                                //que muestre sus relaciones
+                                //y es una alta 
+                                if ($.fn.form.options.showRelationships=='true' &&
+                                    $.fn.form.options.modo=="insert")
+                               
+                                    $("body").formqueue({
+                                        app: $.fn.form.options.app,
+                                        forma:$.fn.form.options.forma,
+                                        datestamp:$.fn.form.options.datestamp,
+                                        modo:"update",
+                                        titulo: $.fn.form.options.titulo,
+                                        columnas:1,
+                                        pk:sResultado,
+                                        filtroForaneo:$.fn.form.options.filtroForaneo,
+                                        height:"500",
+                                        width:"500",
+                                        originatingObject: $.fn.form.options.originatingObject,
+                                        showRelationships: $.fn.form.options.showRelationships
+                                    });    
+
+                            },
+                            error:function(xhr,err){
+                                $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
+                                alert("Error al actualizar registro: \n"+ +xhr.responseText);
+                            }
+                        });
+                    }
+                    else {
+                        //Valida que traiga al menos un dato:
+                        sData = "";
+                        oCampos = $(this).serializeArray();
+                        $.each(oCampos, function(i, oCampo){
+                            sTipoDato=$("#" + oCampo.name).attr("tipo_dato");
+                            sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
+                            if ($.trim(oCampo.value)!="")
+                                if (sTipoDato=="string")
+                                    sData+=sNombreCampo+" like '"+oCampo.value + "%'&";
+                                else if (sTipoDato=='date')
+                                    sData+=sNombreCampo+"='"+oCampo.value + "'&";
+                                else
+                                    sData+=sNombreCampo+"="+oCampo.value + "&";
+                        });
+
+                        if (sData=="") {
+                            $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
+                            alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
+                        }
+                        else {
+
+                            oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
+                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().next().children();
+                            sBitacoraId=oMenuAccordion[1].id;
+                            sBusquedasId=oMenuAccordion[3].id;
+                            nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
+                            nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
+                            sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
+                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
+
+                            //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                            $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
+                                var sGridId="#grid_" +gridSuffix ;
+                                $(sGridId).jqGrid('setGridParam',{
+                                    url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                                }).trigger("reloadGrid")
+                                $(this).remove();
+                            });
+
+                            // Si el usuario le dió un nombre a la consulta
+                            // Significa que la desea guardar
+                            sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
+
+                            if (document.getElementById("$b").value!="") {
+                                sBusqueda=document.getElementById("$b").value;
+                                postConfig = "$cf=93&$ta=insert&$pk=0"+
+                                "&clave_aplicacion=" + $.fn.form.options.app +
+                                "&clave_forma="+$.fn.form.options.forma+
+                                "&clave_empleado="+ $("#_ce_").val() +
+                                "&filtro="+sBusqueda +
+                                "&consulta=" +sData;
+                                $.post("srvFormaInsert",postConfig);
+                                    
+                                // Aqui va método del filtro para actualizarlo
+                                sMenuDivPrefix=sBitacoraId.split("_")[1]+"_"+
+                                sBitacoraId.split("_")[2]+"_"+
+                                sBitacoraId.split("_")[3];
+                                sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
+                                $("#accordion_"+sMenuDivPrefix).menu.getFullMenu(sMenuDivPrefix,
+                                    $.fn.form.options.app,
+                                    $.fn.form.options.forma)
+
+                            }
+
+                            $("#grid_" + gridSuffix).jqGrid('setGridParam',{
+                                url:"srvGrid?$cf=" +  $.fn.form.options.forma + "&$w=" + sData+ "&$dp=body&page=1"
+                            }).trigger("reloadGrid")
+                            $("#dlgModal_"+ formSuffix).dialog("destroy");
+                            $("#dlgModal_"+ formSuffix).remove();
+                        }
+                    }
+
+                    return false;
+
+                });
+
+                $("#grid_"+gridSuffix+"_toppager_right").children(0).html("");
+
+            },
+            error:function(xhr,err){
+                if ($("#tdEstatus_" +formSuffix).length>0)
+                    $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
+                alert("responseText: "+xhr.responseText);
+            }
+        });
     }
 
     $.fn.form.handleForm = function(xml){
@@ -527,7 +547,7 @@
             sRenglon += '<td id="td_' +oCampo[0].nodeName + sSuffix + '" ';
             sRenglon += ' class="etiqueta_forma' 
             if (bVisible=='0')
-                    sRenglon +=' invisible';
+                sRenglon +=' invisible';
                 
             sRenglon += '">';    
                     
@@ -553,7 +573,7 @@
                 sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ' + oCampo.find('evento').text() + ' ';
                 
                 if (bActivo!="1") 
-                     sRenglon+=' disabled="disabled" ';
+                    sRenglon+=' disabled="disabled" ';
                  
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted'
@@ -603,8 +623,8 @@
                     sRenglon+='<td class="etiqueta_forma">' +
                     '<textarea tabindex="' + tabIndex + '" ';
                 
-                     if (bActivo!="1") 
-                         sRenglon+=' disabled="disabled" ';
+                    if (bActivo!="1") 
+                        sRenglon+=' disabled="disabled" ';
                          
                     sWidgetButton="";
 
@@ -641,8 +661,8 @@
                     '<div style="width:10px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
                     '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
 
-                     if (bActivo!="1") 
-                         sRenglon+=' disabled="disabled" ';
+                    if (bActivo!="1") 
+                        sRenglon+=' disabled="disabled" ';
                      
                     // Establece la marca de obligatorio con la seudoclase obligatorio
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
@@ -664,8 +684,8 @@
                     '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '"' +
                     'tabindex="' + tabIndex + '" ';
 
-                     if (bActivo!="1") 
-                         sRenglon+=' disabled="disabled" ';
+                    if (bActivo!="1") 
+                        sRenglon+=' disabled="disabled" ';
                      
                     sWidgetButton="";
 
@@ -695,7 +715,7 @@
                     else 
                         sRenglon+=oCampo[0].childNodes[0].data;
                     
-                   sRenglon+='" ' + oCampo.find('evento').text();
+                    sRenglon+='" ' + oCampo.find('evento').text();
 
                     //Validación para inputs estandar de acuerdo al tipo de datos del campo
                     if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {

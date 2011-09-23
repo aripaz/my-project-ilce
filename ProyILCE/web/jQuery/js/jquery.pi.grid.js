@@ -4,7 +4,6 @@
  */
 ( function($) {
     $.fn.appgrid = function(opc){
-
         $.fn.appgrid.settings = {
             xmlUrl : "srvGrid", // "xml_tests/widget.grid.xml"
             wsParameters:"",
@@ -84,10 +83,9 @@
                 }
                 $.fn.appgrid.handleGridDefinition(xml);
 
-                if ($.fn.appgrid.options.colModel==null) {
+                if ($.fn.appgrid.options.colModel==null) {  
                     sTipoError="Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema";
-                    obj.html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-                    "<div class='ui-widget'>"+
+                    obj.html("<div class='ui-widget'>"+
                     "<div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
                     "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
                     sTipoError+"</p>"+
@@ -177,7 +175,7 @@
                         caption:"",
                         buttonicon:"ui-icon-plus",
                         onClickButton:function() {
-                            $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
+                            $("#grid"+suffix+"_toppager_right").children(0).html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                             nEditingApp=$(this).attr("editingApp");
                             
                             //Verifica si se actualiza árbol
@@ -220,7 +218,7 @@
                         onClickButton:function() {
                             nRow=$(this).getGridParam('selrow');
                             if (nRow) {
-                                $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
+                                $("#grid"+suffix+"_toppager_right").children(0).html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                                 nPK= $(this).getCell(nRow,0);
                                 nEditingApp=$(this).attr("editingApp");
                                 
@@ -270,7 +268,7 @@
                             if (nRow) {
                                 nPK= $(this).getCell(nRow,0);
                                 if (confirm("¿Está seguro que desea eliminar el registro? No es posible deshacer esta acción.")){
-                                    $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Eliminando registro...");
+                                    $("#grid"+suffix+"_toppager_right").children(0).html("<img src='img/throbber.gif'>&nbsp;Eliminando registro...");
                                     $.ajax(
                                     {
                                         url: "srvFormaDelete?$cf="+ nEntidad + "&$pk="+ nPK,
@@ -287,7 +285,7 @@
                                             alert("Error al eliminar registro");
                                         }
                                     });
-                                    $("#pager"+suffix+"_left").html("");
+                                    $("#grid"+suffix+"_toppager_right").children(0).html("");
                                 }
                             }
                             else {
@@ -311,7 +309,7 @@
                     caption:"",
                     buttonicon:"ui-icon-search",
                     onClickButton:  function() {
-                        $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
+                        $("#grid"+suffix+"_toppager_right").children(0).html("<img src='img/throbber.gif'>&nbsp;Generando forma...");
                         $("body").form({
                             app: nApp,
                             forma:nEntidad,
@@ -344,7 +342,7 @@
                         var sDateStamp=this.id.split("_")[3];
                         nRow=$(this).getGridParam('selrow');
                         if (nRow) {
-                            $("#pager"+suffix+"_left").html("<img src='img/throbber.gif'>&nbsp;Abriendo kardex...");
+                            $("#grid"+suffix+"_toppager_right").children(0).html("<img src='img/throbber.gif'>&nbsp;Abriendo kardex...");
                             nPK= $(this).getCell(nRow,0);
                             $.fn.appgrid.openKardex(nApp,nForm,sDateStamp,nPK);
                         }
@@ -592,6 +590,6 @@
             
             
         }
-        $("#pager"+suffix+"_left").html("");
+        $("#grid"+suffix+"_toppager_right").children(0).html("");
     }
 })(jQuery);
