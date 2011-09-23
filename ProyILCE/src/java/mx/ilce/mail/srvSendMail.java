@@ -126,12 +126,19 @@ public class srvSendMail extends HttpServlet {
                     }else{
                         Transport.send(message, message.getAllRecipients());
                     }
+                    String strMAILPK = (String) request.getSession().getAttribute("MAILPK");
+                    String strMAILBITAC = (String) request.getSession().getAttribute("MAILBITAC");
                     // Cierre.
                     cleanMemory(request);
 
                     AdminXML admXML = new AdminXML();
-                    request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
 
+                    if ((strMAILPK!=null)&&(!"".equals(strMAILPK)) &&
+                        (strMAILBITAC!=null)&&(!"".equals(strMAILBITAC))){
+                        request.getSession().setAttribute("xmlTab",admXML.salidaXMLBitacora(strMAILPK,strMAILBITAC));
+                    }else{
+                        request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
+                    }
                     if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                         LoginHandler lg = new LoginHandler();
                         lg.setTextExecution("Mail Enviado, revice su correo");
@@ -184,6 +191,8 @@ public class srvSendMail extends HttpServlet {
         request.getSession().removeAttribute("GOTSESS");
         request.getSession().removeAttribute("e_mail");
         request.getSession().removeAttribute("msgExist");
+        request.getSession().removeAttribute("MAILPK");
+        request.getSession().removeAttribute("MAILBITAC");
     }
 
     private HashMap getDataFromSession(HttpServletRequest request){

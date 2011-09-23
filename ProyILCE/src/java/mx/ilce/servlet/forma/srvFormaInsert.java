@@ -148,15 +148,31 @@ public class srvFormaInsert extends HttpServlet {
                         ex.setExecutionOK(false);
                         AdminFile.deleFileFromServer(hsFile);
                     }
-                    
-                    actualizarData(request);
-
+                    //actualizarData(request);
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
-                    AdminXML admXML = new AdminXML();
-                    //request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf(xml)));
-                    request.getSession().setAttribute("xmlTab",admXML.salidaXMLBitacora(String.valueOf(xml),
-                                                               String.valueOf(forma.getBitacora().getIdBitacora())));
-                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+
+                    if (forma.getDataMail()!=null){
+                        User user = (User) request.getSession().getAttribute("user");
+                        request.getSession().setAttribute("from",user.getEmail());
+                        //request.getSession().setAttribute("to",forma.getDataMail().getStrTo());
+                        request.getSession().setAttribute("to",user.getEmail());
+                        request.getSession().setAttribute("copy",user.getEmail());
+                        request.getSession().setAttribute("copyO",forma.getDataMail().getStrCopyO());
+                        request.getSession().setAttribute("subject",forma.getDataMail().getSubJect());
+                        request.getSession().setAttribute("message",forma.getDataMail().getTexto());
+                        request.getSession().setAttribute("MAILPK",xml.toString());
+                        request.getSession().setAttribute("MAILBITAC",forma.getBitacora().getIdBitacora().toString());
+                        request.getSession().setAttribute("GOTSESS","OK");
+
+                        request.getRequestDispatcher("/srvSendMail").forward(request, response);                        
+                    }else{
+
+                        AdminXML admXML = new AdminXML();
+                        //request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf(xml)));
+                        request.getSession().setAttribute("xmlTab",admXML.salidaXMLBitacora(String.valueOf(xml),
+                                                                   String.valueOf(forma.getBitacora().getIdBitacora())));
+                        request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+                    }
                 }
             }
         }catch (ExceptionHandler eh){
@@ -170,8 +186,23 @@ public class srvFormaInsert extends HttpServlet {
             val.setTextMessage("Problemas en la execucion de srvFormaInsert");
             val.executeErrorException(e, request, response);
         } finally {
+            cleanMemory(request);
             out.close();
         }
+    }
+
+    private void cleanMemory(HttpServletRequest request){
+        request.getSession().removeAttribute("from");
+        request.getSession().removeAttribute("to");
+        request.getSession().removeAttribute("subject");
+        request.getSession().removeAttribute("message");
+        request.getSession().removeAttribute("copy");
+        request.getSession().removeAttribute("copyO");
+        request.getSession().removeAttribute("GOTSESS");
+        request.getSession().removeAttribute("e_mail");
+        request.getSession().removeAttribute("msgExist");
+        request.getSession().removeAttribute("MAILPK");
+        request.getSession().removeAttribute("MAILBITAC");
     }
 
     /**

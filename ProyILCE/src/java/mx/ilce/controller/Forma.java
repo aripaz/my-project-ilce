@@ -17,6 +17,8 @@ import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LogHandler;
+import mx.ilce.mail.DataMail;
+import mx.ilce.mail.SendMailNotif;
 import mx.ilce.util.Validation;
 
 /**   
@@ -48,7 +50,16 @@ public class Forma extends Entidad{
     private boolean includeHour=false;
     private String orderBY;
 
+    private DataMail dataMail;
 
+    public DataMail getDataMail() {
+        return dataMail;
+    }
+
+    public void setDataMail(DataMail dataMail) {
+        this.dataMail = dataMail;
+    }
+    
     public String getOrderBY() {
         return orderBY;
     }
@@ -655,7 +666,13 @@ public class Forma extends Entidad{
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
             conE.ingresaEntidad(dataTransfer);
-            
+
+            SendMailNotif sen = new SendMailNotif();
+            sen.setBitacora(conE.getBitacora());
+            if (sen.admSendMail()){
+                this.setDataMail(sen.getDataMail());
+            }
+
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
 
@@ -812,7 +829,12 @@ public class Forma extends Entidad{
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
             conE.editarEntidad(dataTransfer);
-            
+
+            SendMailNotif sen = new SendMailNotif();
+            sen.setBitacora(conE.getBitacora());
+            if (sen.admSendMail()){
+                this.setDataMail(sen.getDataMail());
+            }
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
 
