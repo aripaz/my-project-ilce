@@ -154,8 +154,8 @@ public class srvFormaInsert extends HttpServlet {
                     if (forma.getDataMail()!=null){
                         User user = (User) request.getSession().getAttribute("user");
                         request.getSession().setAttribute("from",user.getEmail());
-                        //request.getSession().setAttribute("to",forma.getDataMail().getStrTo());
-                        request.getSession().setAttribute("to",user.getEmail());
+                        request.getSession().setAttribute("to",forma.getDataMail().getStrTo());
+                        //request.getSession().setAttribute("to",user.getEmail());
                         request.getSession().setAttribute("copy",user.getEmail());
                         request.getSession().setAttribute("copyO",forma.getDataMail().getStrCopyO());
                         request.getSession().setAttribute("subject",forma.getDataMail().getSubJect());
