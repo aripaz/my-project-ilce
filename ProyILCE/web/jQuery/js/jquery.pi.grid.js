@@ -145,12 +145,41 @@
                             groupDataSorted : true
                     },
                     footerrow: true,
-                    userDataOnFooter: true,,
+                    userDataOnFooter: true */,
                     gridComplete:function(){
-                         nWidth=$("#grid_"+suffix).parent().width();
-                         $("#grid_"+suffix).jqGrid().setGridWidth(nWidth);
-                    }*/
-                })
+                        /* Establece eventos a los link del interior del grid*/ 
+                        $(".gridlink").click(function(e, data) {
+                            var nApp=this.id.split("_")[1];
+                            var nEntidad=this.id.split("_")[2];
+                            var nPK=this.id.split("_")[3];
+                            var sW=this.id.split("_")[4];
+                            var sModo="";
+                            
+                            if (nPK=="0") 
+                                sModo="insert";
+                            else
+                                sModo="update";
+                            
+                            $("body").form({
+                                app: nApp,
+                                forma:nEntidad,
+                                datestamp:oGrid.attr("datestamp"),
+                                modo:sModo,
+                                columnas:1,
+                                pk:0,
+                                filtroForaneo:"",
+                                height:400,
+                                width:550,
+                                originatingObject:oGrid.id,
+                                updateControl:""
+                            });
+                    });
+                    
+                    $(".progressbar").each( function(){
+                        $(this).progressbar({value: $(this).attr("avance")});
+                    });
+                        
+                }});
 
 
                 //Quita agrupamiento

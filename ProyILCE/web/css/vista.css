@@ -328,7 +328,6 @@ img.bitacora {
 .portlet-content { padding: 0.4em; }
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 30px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
-
-.app_error {
-    
-}
+.blank_space { border-bottom: 10px; width: 15px}
+.progressbar {width: 85%; float: left;}
+.progress_percentage{float:right;}
