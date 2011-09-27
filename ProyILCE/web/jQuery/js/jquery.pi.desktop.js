@@ -59,6 +59,7 @@
 
                 $.fn.desktop.handleSession(xmlConfig);
                 $('.queued_grids:first').gridqueue();
+                
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
