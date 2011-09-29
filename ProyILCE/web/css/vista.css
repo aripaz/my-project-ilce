@@ -22,73 +22,37 @@ select.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetic
 #header{height:32px; background-color: #BDD2FF}/* Header */
 
 .splitterContainer {/* Main splitter element */
-height:95%;width:100%;margin:0;padding:0;
+height:100%;
+width:100%;
+margin:0;padding:0;
+border: 0px solid #aaa;
 }
+
+.vsplitbar {
+	width: 5px;
+	background:  url(img/vgrabber.gif) no-repeat center;        
+}
+
+
 .leftPane{
-float:left;width:220px;height:100%;border-top:solid 1px #9cbdff;
-background:#c4dcfb;
+/*float:left;width:220px;height:100%;border-top:solid 1px #9cbdff;
+background:#c4dcfb; */
+width:220px;
 overflow: auto;
+
 }
 .rightPane{	/*Contains toolbar and horizontal splitter*/
-float:right;width:auto;height:100%;
-background:#f4f4f4;
-}
-#rightSplitterContainer{/*horizontal splitter*/
-width:100%;
-background:#FFFFFF;border-top:solid 1px #9cbdff;
+    /*float:right;width:auto;height:100%;
+    background:#f4f4f4;*/
+    width:auto;
+    overflow: auto;
 }
 
-#rightTopPane{/*Top nested in horizontal splitter */
-width:100%;height:50%;overflow:auto;background:#f4f4f4;
-}
-#rightBottomPane{/*Bottom nested in horizontal splitter */
-background:#f4f4f4;width:100%;overflow:auto;
-}
-
-/* Splitbar styles; these are the default class names and required styles */
-.splitbarV {
-float:left;width:6px;height:100%;
-line-height:0px;font-size:0px;
-border-left:solid 1px #9cbdff;border-right:solid 1px #9cbdff;
-background:#cbe1fb url(img/panev.gif) 0% 50%;
-}
-
-.splitbarH {
-height:6px;text-align:left;line-height:0px;font-size:0px;
-border-top:solid 1px #9cbdff;border-bottom:solid 1px #9cbdff;
-background:#cbe1fb url(img/paneh.gif) 50% 0%;
-}
-
-.splitbuttonV{
-margin-top:-41px;margin-left:-4px;top:50%;position:relative;
-height:83px;width:10px;
-background:transparent url(img/panevc.gif) 10px 50%;
-}
-.splitbuttonV.invert{
-margin-left:0px; background:transparent url(img/panevc.gif) 0px 50%;
-}
-.splitbuttonH{
-margin-left:-41px;left:50%;position:relative;
-height:10px; width:83px;
-background:transparent url(img/panehc.gif) 50% 0px;
-}
-.splitbuttonH.invert{
-margin-top:-4px;background:transparent url(img/panehc.gif) 50% -10px;
-}
-.splitbarV.working,.splitbarH.working,.splitbuttonV.working,.splitbuttonH.working{
- -moz-opacity:.50; filter:alpha(opacity=50); opacity:.50;
-}
-
-a.sesion_menu,td.session_menu {
-color:#FF6600; font-size:12px; font-family:Verdana, Arial, Helvetica, sans-serif; font-weight:bold; text-decoration: none;
-}
 
 
 #banner{height: 80px;}
 .logo_plataforma {float:right;}
-#spacer_menu {background-color: #BDD2FF; width: 50%}
 
-#nav_menu {width: 100%; height: 32px; background-color: #BDD2FF;}
 
 .txtBusquedaSencilla {width:80%; font-family:Verdana, Arial, Helvetica, sans-serif !important; font-size: 12px !important; }
 .btnBusquedaSencilla { font-family:Verdana, Arial, Helvetica, sans-serif !important; font-size: 12px !important; }
@@ -135,27 +99,27 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 
 .treeContainer {
     border: 1px solid gray;
-    float: left;
-    height: 97%;
+    /*float: left;*/
+    height: 100%;
     overflow:auto;
-    width: 97%;
+    width:auto; 
     background-color:white;
 }
 
 .gridContainer {
-    float: left;
-    width: 76%;
+    /*float: right;
+    width: 100%; */
     margin-left:5px
 }
 
 .gridKardexContainer {
-    float: left;
-    width: 56%;
+    /*float: left;
+    width: 56%;*/
     margin-left:5px
 }
 .accordionContainer {
-    float: right;
-    width: 20%;
+    float: left;
+    width: 100%;
     height: 65%
 }
 
@@ -214,19 +178,20 @@ td.etiqueta_perfil {
 }
 
 a.linkSearch {
+    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 11px;
 
 } 
 
 div.linkSearch {
     float: left;
-    width: 85%;
+    width: 80%;
     margin-bottom: 10px;
 }
 
 #tabUser {
     height: 100%; 
     margin: 1px; 
-    
 }
 
 td.estatus_bar {
@@ -294,7 +259,9 @@ div.accordionContainer > span.ui-icon {
 .accordionContainer>h3 {
    vertical-align:middle;
    height: 25px;
-   line-height: 25px;
+   line-height: 25px; 
+   font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+   font-size: 11px;
 }
 
 .user_avatar {
@@ -329,5 +296,12 @@ img.bitacora {
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 30px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
 .blank_space { border-bottom: 10px; width: 15px}
-.progressbar {width: 85%; float: left;}
+.progressbar {width: 85%; height: 10px; float: left;}
 .progress_percentage{float:right;}
+
+.paddingzero {padding: 0 !important}
+.fileinput-input { width: 90px !important;}
+.ui-menu { position: absolute;  z-index: 100;}
+.menus_plataforma {
+    display: inline-block;
+    width: 100%; }

@@ -46,7 +46,35 @@
                  else {
                     xml = data;}
                 
-                obj.append($.fn.sessionmenu.handleSession(xml));
+                obj.html($.fn.sessionmenu.handleSession(xml));
+                
+                /* Crea el widget botón */   
+                $("#lnkSesion").button()
+		.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+                }).click( function() {
+				var menu = $(this).parent().next().show().position({
+					my: "left top",
+					at: "left bottom",
+					of: this
+				});
+                                //Cuando se hace click en cualquier parte del documento se
+                                //oculta el menú
+				$(document).one("click", function() {
+					menu.hide();
+				});
+				return false;
+			})        
+		.parent()
+			.buttonset()
+		.next()
+			.hide()
+			.menu();
+                             
                 
                 $("#lnkConfiguracion").click(function() {
 
@@ -75,7 +103,17 @@
                                               leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
                     }
                     
+                    
                 });
+                
+                $("#lnkLogout").click(function() {
+                    window.location.href="srvLogout";
+                }
+                );
+                    
+                
+                //Inicializa el escritorio
+                $("#tabUser").desktop();
                
             },
             error:function(xhr,err){
@@ -85,33 +123,23 @@
     };
 
     $.fn.sessionmenu.handleSession = function(xml){
-        $(xml).find("registro").each(function(){
-            //Carga los datos del xml en la variable de coniguración
-            $.fn.sessionmenu.options.empleado=$(this).find("clave_empleado").text();
-            $.fn.sessionmenu.options.nombre=$(this).find("nombre").text();
-            $.fn.sessionmenu.options.apellido_paterno=$(this).find("apellido_paterno").text();
-            $.fn.sessionmenu.options.apellido_materno=$(this).find("apellido_materno").text();
-            $.fn.sessionmenu.options.email=$(this).find("email").text();
-            $.fn.sessionmenu.options.perfil=$(this).find("clave_perfil").text();
-            $.fn.sessionmenu.options.foto=$(this).find("foto").text();
-        })
+        var oReg=$(xml).find("registro:first");
+        //Carga los datos del xml en la variable de coniguración
+        $.fn.sessionmenu.options.empleado=oReg.find("clave_empleado").text();
+        $.fn.sessionmenu.options.nombre=oReg.find("nombre").text();
+        $.fn.sessionmenu.options.apellido_paterno=oReg.find("apellido_paterno").text();
+        $.fn.sessionmenu.options.apellido_materno=oReg.find("apellido_materno").text();
+        $.fn.sessionmenu.options.email=oReg.find("email").text();
+        $.fn.sessionmenu.options.perfil=oReg.find("clave_perfil").text();
+        $.fn.sessionmenu.options.foto=oReg.find("foto").text();
 
         //Construye html de acuerdo a configuración recuperada
         if ($.fn.sessionmenu.options.foto=="")
             $.fn.sessionmenu.options.foto='img/sin_foto.jpg'
 
-        var sHtml="<li><div id='spacer_menu'>&nbsp;</div></li>"+
-                  '<li>' +
-                  '<a href="#">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '&nbsp;<span class="sf-sub-indicator"> &#187;</span></a>'+
-                  '<ul>' +
-                  '<li>'+
-                  '<a href="#" id="lnkConfiguracion">Configuraci&oacute;n</a>' +
-                  '</li>'+
-                  '<li>'+
-                  '<a href="srvLogout" id="lnkConfiguracion">Cerrar sesi&oacute;n</a>' +
-                  '</li>'+
-                  '</ul>'+
-                  '</li>';
+        var sHtml='<a href="#" id="lnkSesion">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '</a>'+
+                  '<a href="#" >Seleccione una opcion</a>'+
+                  '<div id="switcher"></div>';
         return sHtml;
     }
 

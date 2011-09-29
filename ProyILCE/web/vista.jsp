@@ -12,30 +12,36 @@
 
         <!-- librerias para cargar dialogo  -->
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
-        <script type="text/javascript" src="jQuery/js/jquery-ui-1.8.7.custom.min.js"></script>
+        <script type="text/javascript" src="jQuery/js/jquery-ui-1.8.16.custom.min.js"></script>
 
         <script type="text/javascript" src="jQuery/js/splitter.js" type="text/javascript"</script>
-
-        <!-- Theme Switcher Widget -->
-        <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+     
         <!-- jqGrid -->
         <script src="jQuery/js/grid.locale-es.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
         <script src="jQuery/js/grid.subgrid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.jstree.js"  type="text/javascript"></script>
+        
+        <!-- Cookie for splitter -->
+        <script  src="jQuery/js/jquery.cookie.js" type="text/javascript"></script>
+        
         <!-- Calculator -->
         <script src="jQuery/js/jquery.calculator.min.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.calculator-es.js" type="text/javascript"></script>
+        
         <!-- Menu -->
-        <script src="jQuery/js/superfish.js" type="text/javascript"></script>
-
-        <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui-1.8.7.custom.css" />
+        <script src="jQuery/js/jquery.ui.menu.js" type="text/javascript"></script>
+       
+        <!-- upload skinner  -->
+        <script type="text/javascript" src="jQuery/js/jquery.fileinput.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.8.9.custom.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/superfish.css"/>
-
+        <link rel="stylesheet" type="text/css" media="screen" href="css/fileinput.css" />
+        
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.gridqueue.js" type="text/javascript"></script>
@@ -47,22 +53,26 @@
         <script src="jQuery/js/jquery.pi.tab.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.grid.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.treeMenu.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.pi.menu.js" type="text/javascript"></script>
+        <script src="jQuery/js/jquery.pi.appmenu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
-
-
     </head>
     <body>
+        <script type="text/javascript"
+        src="http://jqueryui.com/themeroller/themeswitchertool/">
+        </script>
         <div id="banner">
             <img src="img/logo ilce.jpg" />
             <img src="img/logo_plataforma.png" class="logo_plataforma"/>
         </div>
-        <div id="nav_menu">
-            <div id="sf-menu" >
-                <ul id='app_menu' class='sf-menu'>
-                </ul>
-            </div>
-            <div > </div>
+
+        <div class="menus_plataforma">
+            <div id="app_menu" style="float:left"> </div>
+            <div id="session_menu" style="float:right"></div>
+            <ul>
+                <li><a href="#" id="lnkConfiguracion">Configuraci&oacute;n</a></li>
+                <li><a href="srvLogout" id="lnkLogout">Cerrar sesi&oacute;n</a></li>
+            </ul>
+            <div id="switcher" style="float:right; padding-right: 5px;  padding-top: 3px;"></div>
         </div>
 
         <div id="tabcontainer">

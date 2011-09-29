@@ -3,9 +3,9 @@
  * 
  */
 ( function($) {
-    $.fn.menu = function(opc){
+    $.fn.appmenu = function(opc){
 
-        $.fn.menu.settings = {
+        $.fn.appmenu.settings = {
             xmlUrl : "", //"/ProyILCE/xml_tests/widget.accordion.xml",
             usuario:"",
             ts:""
@@ -13,23 +13,23 @@
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
-        $.fn.menu.options = $.extend($.fn.menu.settings, opc);
+        $.fn.appmenu.options = $.extend($.fn.appmenu.settings, opc);
 
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
             obj = $(this);
-            if ($.fn.menu.options.xmlUrl!="") {
-                $.fn.menu.options.ts="U2FsdGVkX1+K/UZ+8JLyZRxlM2+sjv0subeoJS4mtaQ=";
-                $.fn.menu.ajax(obj);
+            if ($.fn.appmenu.options.xmlUrl!="") {
+                $.fn.appmenu.options.ts="U2FsdGVkX1+K/UZ+8JLyZRxlM2+sjv0subeoJS4mtaQ=";
+                $.fn.appmenu.ajax(obj);
             }
         });
 
     };
 
-    $.fn.menu.ajax = function(obj){
+    $.fn.appmenu.ajax = function(obj){
         $.ajax(
         {
-            url: $.fn.menu.options.xmlUrl,
+            url: $.fn.appmenu.options.xmlUrl,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -44,10 +44,121 @@
                 else {
                     xml = data;
                 }
-                obj.append($.fn.menu.handleMenu(xml));
-                $("#apps_menu").superfish({ 
-                    pathClass:  'current' 
-                });
+                
+                /* Insert el html en el elemento obj */
+                obj.append($.fn.appmenu.handleMenu(xml));
+                
+                $(".menu").button()
+                .click(function(e, data) {
+                    
+                    link_id="#"+this.id;
+
+                    //Verifica si existe
+                    var nAplicacion=this.id.split("_")[1];
+                    var nEntidad=this.id.split("_")[2];
+                    var sTitulo=$($(this).children()[0]).html();
+
+                    if ($("#tab"+this.id).length) {
+                        //Selecciona el tab correspondiente
+                        $tabs.tabs("select", "#tab"+this.id);
+
+                        //Recupera el id del grid del tab       
+                        sGridIdSuffix=$("#tab" + this.id).children()[0].children[0].id.replace("gbox_grid_","");
+                        $.fn.appmenu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
+   
+                    }
+                    else {
+
+                        if (this.id.split("_")[0]=="newEntity") {
+                            $("body").form({
+                                app: nAplicacion,
+                                forma:nEntidad,
+                                modo:"insert",
+                                pk:0,
+                                titulo: sTitulo,
+                                columnas:1,
+                                height:400,
+                                width:500,
+                                originatingObject:obj.id
+                            });
+                        }
+                        else {
+                            $tabs.tabs( "add", "#tab"+this.id, $($(this).children()[0]).html());
+                            $tabs.tabs( "select", "#tab"+this.id);
+                            oTabPanel=$("#tab"+this.id);
+                            /* Aqui va a ir la barra de avisos */
+                            oTabPanel.html(""); 
+                            //Se inserta el div para el grid
+                            oTabPanel.html(
+                                "<div id='splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0' class='splitterContainer'>"+
+                                "   <div id='leftPane_"+ nAplicacion + "_" + nEntidad + "_0' class='leftPane'>"+           
+                                "       <div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
+                                "           <h3>&nbsp;Actividad reciente</h3>" +
+                                "           <div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                "           <h3>&nbsp;Mis filtros</h3>" +
+                                "           <div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                "       </div>"+
+                                "   </div>"+
+                                "   <div id='rigthPane_"+ nAplicacion + "_" + nEntidad + "_0' class='rigthPane'>"+
+                                "       <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
+                                "   </div>"+
+                                "</div>");
+
+                            $("#splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0").splitter({
+                                type: "v",
+                                outline: true,
+                                minLeft: 100, 
+                                sizeLeft: 200, 
+                                minRight: 500,
+                                resizeToWidth: true,
+                                cookie: "vsplitter",
+                                accessKey: 'I'
+                            });
+                                
+                            var sLeyendaNuevoRegistro=$("#showEntity_" + nAplicacion + "_" + nEntidad ).attr("nueva_entidad");
+                            var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
+
+                            $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
+                                app: nAplicacion,
+                                entidad: nEntidad,
+                                pk:0,
+                                editingApp:nAplicacion,
+                                wsParameters:data,
+                                titulo:sTitulo,
+                                height:"70%",
+                                leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
+                                openKardex:true,
+                                originatingObject:obj[0].id
+                            });
+                                
+                                        
+                            $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
+                        //$.fn.appmenu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
+                        }
+                    }                
+                }).parent()
+                .buttonset();
+                
+                
+                /*.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+			})
+			.click( function() {
+				var menu = $(this).parent().next().show().position({
+					my: "left top",
+					at: "left bottom",
+					of: this
+				});
+			})
+		.parent()
+			.buttonset()
+		.next()
+			.hide()
+			.appmenu();*/
 
                 //Crea el control tab aqui, puesto que desde este control se va a manipular
                 var $tabs = $('#tabs').tabs({
@@ -61,7 +172,7 @@
                 
                 //Hace el binding de las ligas con sus eventos
                 //seleccionando todas las ligas
-                $("a.menu").each( function(){
+                /*$("a.appmenu").each( function(){
                     link_id="#"+this.id;
 
                     $(link_id).click(function(e, data) {
@@ -74,10 +185,9 @@
                             //Selecciona el tab correspondiente
                             $tabs.tabs("select", "#tab"+this.id);
 
-                            //Recupera el id del grid del tab
-                            
+                            //Recupera el id del grid del tab       
                             sGridIdSuffix=$("#tab" + this.id).children()[0].children[0].id.replace("gbox_grid_","");
-                            $.fn.menu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
+                            $.fn.appmenu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
    
                         }
                         else {
@@ -99,16 +209,35 @@
                                 $tabs.tabs( "add", "#tab"+this.id, this.childNodes[0].data);
                                 $tabs.tabs( "select", "#tab"+this.id);
                                 oTabPanel=$("#tab"+this.id);
-                                /* Aqui va a ir la barra de avisos */
+                                // Aqui va a ir la barra de avisos 
                                 oTabPanel.html(""); 
                                 //Se inserta el div para el grid
-                                oTabPanel.html("<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
-                                    "<div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
-                                    "<h3>&nbsp;Actividad reciente</h3>" +
-                                    "<div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                    "<h3>&nbsp;Mis filtros</h3>" +
-                                    "<div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                    "</div>"  );
+                                oTabPanel.html(
+                                    "<div id='splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0' class='splitterContainer'>"+
+                                    "   <div id='leftPane_"+ nAplicacion + "_" + nEntidad + "_0' class='leftPane'>"+           
+                                    "       <div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
+                                    "           <h3>&nbsp;Actividad reciente</h3>" +
+                                    "           <div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "           <h3>&nbsp;Mis filtros</h3>" +
+                                    "           <div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "       </div>"+
+                                    "   </div>"+
+                                    "   <div id='rigthPane_"+ nAplicacion + "_" + nEntidad + "_0' class='rigthPane'>"+
+                                    "       <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
+                                    "   </div>"+
+                                    "</div>");
+
+                                $("#splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0").splitter({
+                                    type: "v",
+                                    outline: true,
+                                    minLeft: 100, 
+                                    sizeLeft: 200, 
+                                    minRight: 500,
+                                    resizeToWidth: true,
+                                    cookie: "vsplitter",
+                                    accessKey: 'I'
+                                });
+                                
                                 var sLeyendaNuevoRegistro=$("#showEntity_" + nAplicacion + "_" + nEntidad ).attr("nueva_entidad");
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
 
@@ -126,12 +255,12 @@
                                 });
                                 
                                         
-                                $.fn.menu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
-                                //$.fn.menu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
+                                $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
+                            //$.fn.appmenu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
                             }
                         }
                     });
-                });
+                });*/
 
                 //Mecanismo para forzar a que el DOM no se cargue del cache
                 // ya que esto hace que se dupliquen los ids de los grid en cola
@@ -154,7 +283,7 @@
                         if (h!=undefined)
                             $("#_ts_").val(h);
                         else
-                            $("#_ts_").val($.fn.menu.options.ts);
+                            $("#_ts_").val($.fn.appmenu.options.ts);
                     });
                 }
                  
@@ -166,7 +295,7 @@
         });
     };
     
-    $.fn.menu.setGridFilter = function (sGridIdSuffix,nApp, nEntidad,data ) {
+    $.fn.appmenu.setGridFilter = function (sGridIdSuffix,nApp, nEntidad,data ) {
         //Recarga el grid por si tiene algún filtro
         if (data==undefined){
             data="";
@@ -193,11 +322,11 @@
         }).trigger("reloadGrid");
     };
 
-    $.fn.menu.getFullMenu = function (sDivSuffix, nApp, nForma) {
-        $.fn.menu.getSearchs(sDivSuffix, nApp, nForma,1)
+    $.fn.appmenu.getFullMenu = function (sDivSuffix, nApp, nForma) {
+        $.fn.appmenu.getSearchs(sDivSuffix, nApp, nForma,1)
     };
     
-    $.fn.menu.getSearchs = function(sDivSuffix, nApp, nForma, bGetLog) {
+    $.fn.appmenu.getSearchs = function(sDivSuffix, nApp, nForma, bGetLog) {
         $("#filtros_"+sDivSuffix).html("");
         $.ajax(
         {
@@ -227,9 +356,9 @@
                     sW=escape($(this).find("consulta")[0].firstChild.data);
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div class='link_toolbar'>"+
-                        "<div class='linkSearch'><a class='linkSearch' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a></div>"+
-                        "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
-                        "</div>";
+                    "<div class='linkSearch'><a class='linkSearch' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sW+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sFiltro + "</a></div>"+
+                    "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
+                    "</div>";
 
                     $("#filtros_"+sDivSuffix).append(sBusquedas);
 
@@ -246,35 +375,35 @@
                         if ($("#showEntity_" + nAplicacion + "_" + nForma).length>0)
                             $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
                         else {
-                                aGridIdSuffix=$("#divForeignGrids_"+sDivSuffix).children()[0].id.split("_");
-                                $.fn.menu.setGridFilter(aGridIdSuffix[2]+"_"+aGridIdSuffix[3]+"_"+aGridIdSuffix[4],nAplicacion,nForma,data);
+                            aGridIdSuffix=$("#divForeignGrids_"+sDivSuffix).children()[0].id.split("_");
+                            $.fn.appmenu.setGridFilter(aGridIdSuffix[2]+"_"+aGridIdSuffix[3]+"_"+aGridIdSuffix[4],nAplicacion,nForma,data);
                         }
                     });                    
                 });
 
                 //Hace bind con los divs padres del link en el evento hover
                 $(".link_toolbar").hover(
-                function () {
-                    //$(this).addClass('active_filter');
-                    $(".closeLnkFiltro",this).show();
-                },
-                function () {
-                    //$(this).removeClass('active_filter');
-                    $(".closeLnkFiltro",this).hide();
-                }
-            );
+                    function () {
+                        //$(this).addClass('active_filter');
+                        $(".closeLnkFiltro",this).show();
+                    },
+                    function () {
+                        //$(this).removeClass('active_filter');
+                        $(".closeLnkFiltro",this).hide();
+                    }
+                    );
                 
                 //Hace bind con los botones de cerrar en el evento hover
                 $(".closeLnkFiltro").hover(
-                function () {
-                    $(this).parent().addClass('ui-state-default');
-                    $(this).parent().addClass('ui-corner-all');
-                },
-                function () {
-                    $(this).parent().removeClass('ui-state-default');
-                    $(this).parent().removeClass('ui-corner-all');
-                }
-            );
+                    function () {
+                        $(this).parent().addClass('ui-state-default');
+                        $(this).parent().addClass('ui-corner-all');
+                    },
+                    function () {
+                        $(this).parent().removeClass('ui-state-default');
+                        $(this).parent().removeClass('ui-corner-all');
+                    }
+                    );
 
                 //Hace bind del botón de búsqueda
                 $(".closeLnkFiltro").click(function(){
@@ -284,13 +413,13 @@
                 });
                 
                 if (bGetLog==1)
-                    $.fn.menu.getLog(sDivSuffix,nApp,nForma,bGetLog);
+                    $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,bGetLog);
 
             }
         });
     }
     
-    $.fn.menu.getLog = function(sDivSuffix,nApp,nForma,bGetAccordion) {
+    $.fn.appmenu.getLog = function(sDivSuffix,nApp,nForma,bGetAccordion) {
         $("#bitacora_"+sDivSuffix).html("");
         $.ajax(
         {
@@ -345,7 +474,7 @@
                                 width:550,
                                 originatingObject:"#lnkBitacora_" + nApp + "_" + nForma + "_" + nRegistro
                             });
-                    }); 
+                        }); 
                     
                 });
                 if (bGetAccordion==1) 
@@ -357,13 +486,14 @@
                         change: function() {
                             $(this).find('h3').blur();
                         }
-                }
-            );
+                    }
+                    );
             }
         });
     }
    
-    $.fn.menu.handleMenu = function(xml){   
+    /*Crea el HTML que conforma los botones */
+    $.fn.appmenu.handleMenu = function(xml){   
         sHtml="";
 
         $(xml).find("registro").each(function(){
@@ -375,9 +505,7 @@
             nInsertar = $(this).find("insertar").text();
             nMostrar = $(this).find("mostrar").text();
 
-            sHtml+="<li>"+
-                   "<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>"+
-                   "</li>"
+            sHtml+="<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>";
 
         })
         return sHtml;
