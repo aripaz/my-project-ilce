@@ -583,28 +583,30 @@
             $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
                 "<div id='splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='splitterContainer'>"+
                 "   <div id='leftPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='leftPane'>"+
-                "       <div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
+                "       <div id='accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "' class='accordionContainer'>"+
+                "               <h3>&nbsp;Catálogos relacionados</h3>" +
+                "                   <div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
+                "               <h3>&nbsp;Actividad reciente</h3>" +
+                "                   <div id='bitacora_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
+                "               <h3>&nbsp;Mis filtros</h3>" +
+                "                   <div id='filtros_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
+                "       </div>"+                
                 "   </div>"+
                 "   <div id='rigthPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp+"' class='rigthPane'>"+
                 "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridKardexContainer'></div>" +
-                "       <div id='accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "' class='accordionContainer'>"+
-                "               <h3>&nbsp;Actividad reciente</h3>" +
-                "               <div id='bitacora_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
-                "               <h3>&nbsp;Mis filtros</h3>" +
-                "               <div id='filtros_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
-                "       </div>"+
                 "   </div>"+
                 "</div>"+
                 "</div>");
 
                                   
-            //Crea splitter
+            //Crea splitter           
             $("#splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).splitter({
-                splitVertical:true,
-                A:$('#leftPane_'+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp),
-                B:$('#rightPane'+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp),
-                closeableto:100,
-                animSpeed:100
+		type: "v",
+		outline: true,
+		minLeft: 100, sizeLeft: 200, minRight: 500,
+		resizeToWidth: true,
+		cookie: "vs"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp,
+		accessKey: '1'
             });
             
             // Crea árbol
@@ -615,8 +617,10 @@
             });
 
             //Crea acordeón
-            //$("#accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp).accordion();
+            $("#accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp).accordion();
             
+            //Quita el padding al acordeón
+            $("#tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp).addClass('paddingzero');
             
         }
         $("#grid"+suffix+"_toppager_right").children(0).html("");

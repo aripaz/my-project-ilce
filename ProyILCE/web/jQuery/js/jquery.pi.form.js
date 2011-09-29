@@ -296,6 +296,12 @@
                 oForm.find('.widgetbutton').fieldtoolbar({
                     app:$.fn.form.options.app
                 });
+                
+                //Se activa los campos para subir achivos al servidor
+                $(".file").fileinput({
+		inputText: "",
+		buttonText: "Anexar archivo"
+                });    
 
                 //Se captura el submit
                 oForm.submit(function() {
@@ -452,7 +458,7 @@
                         else {
 
                             oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
-                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().next().children();
+                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
                             sBitacoraId=oMenuAccordion[1].id;
                             sBusquedasId=oMenuAccordion[3].id;
                             nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
@@ -708,7 +714,10 @@
                     if (sTipoCampo=="money")
                         sRenglon +=' money';
 
-                    sRenglon +='" type="text" value="';
+                    if (oCampo.find('tipo_control').text()=="file" && $.fn.form.options.modo!="lookup")
+                        sRenglon +=' file" type="' + oCampo.find('tipo_control').text() + '" value="';
+                    else
+                        sRenglon +='" type="text" value="';
                     
                     if ($.fn.form.options.modo=='insert')
                         sRenglon+=(sValorPredeterminado!="")?(eval(sValorPredeterminado)):"";

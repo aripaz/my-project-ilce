@@ -5,13 +5,11 @@
 
 $(document).ready(function() {
 
-
+    
+    $('#switcher').themeswitcher(); 
     //Crea menú de aplicaciones de acuerdo al perfil
-    $("#app_menu").sessionmenu().menu({
-             xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp"});
-    
-    
-    //Inicializa el escritorio
-    $("#tabUser").desktop();
+    $("#app_menu").appmenu({ xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp"});
+    $("#session_menu").sessionmenu();
+
 
 }); //close $(
