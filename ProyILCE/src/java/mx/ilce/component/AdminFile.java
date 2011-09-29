@@ -2,15 +2,23 @@ package mx.ilce.component;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import mx.ilce.bean.CampoForma;
+import mx.ilce.bean.DataTransfer;
+import mx.ilce.bitacora.Bitacora;
+import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
@@ -80,6 +88,71 @@ public class AdminFile {
     public static String LOGFILESERVER = "LOGFILESERVER";
 
     public static String PERMISOS = "PERMISOS";
+
+
+    private String rutaFile;
+    private String rutaDest;
+    private String nameFile;
+    private Integer idUser;
+    private Integer idForma;
+    private Integer idRegister;
+    private Bitacora bitacora;
+
+    public Bitacora getBitacora() {
+        return bitacora;
+    }
+
+    public void setBitacora(Bitacora bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    public Integer getIdRegister() {
+        return idRegister;
+    }
+
+    public void setIdRegister(Integer idRegister) {
+        this.idRegister = idRegister;
+    }
+
+    private Integer getIdForma() {
+        return idForma;
+    }
+
+    public void setIdForma(Integer idForma) {
+        this.idForma = idForma;
+    }
+
+    public String getNameFile() {
+        return nameFile;
+    }
+
+    private void setNameFile(String nameFile) {
+        this.nameFile = nameFile;
+    }
+
+    private String getRutaFile() {
+        return rutaFile;
+    }
+
+    public void setRutaFile(String rutaFile) {
+        this.rutaFile = rutaFile;
+    }
+
+    private Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
+    private String getRutaDest() {
+        return rutaDest;
+    }
+
+    private void setRutaDest(String rutaDest) {
+        this.rutaDest = rutaDest;
+    }
 
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
@@ -240,5 +313,100 @@ public class AdminFile {
             throw new ExceptionHandler(ex,AdminFile.class,"Problemas para borrar los archivos desde el Server");
         }
         return isOK;
+    }
+
+    public boolean putFile() throws ExceptionHandler{
+        boolean sld = false;
+
+        String ruta = this.getRutaFile();
+        if (ruta!=null){
+            Properties prop = leerConfig();
+            String rutaBibl = getKey(prop, "BIBLIOTECA");
+            String nameF = this.getRutaFile();
+            nameF = nameF.replace(getKey(prop, FILESERVER),"");
+            this.setNameFile(nameF);
+            if (rutaBibl!=null){
+                rutaBibl = rutaBibl + getIdUser();
+                setRutaDest(rutaBibl);  
+                try {
+                    if (copiarArchivo()){
+                        String nameSld = getKey(prop, "RUTAWEB");
+                        nameSld = nameSld + getIdUser() + "/" + this.getNameFile();
+                        this.setNameFile(nameSld);
+                        sld = true;
+                    }
+                } catch (IOException ex) {
+                    ex.fillInStackTrace();
+                }
+            }
+        }
+        return sld;
+    }
+
+    private boolean copiarArchivo() throws IOException{
+        boolean sld = false;
+        FileInputStream in = null;
+        FileOutputStream out = null;
+        File srcDir = null;
+        try{
+            String source = null;
+            String dest = null;
+            //asignamos la ruta del usuario
+            dest = this.getRutaDest();
+            srcDir = new File(dest);
+            //crear directorio si no existe
+            if (!srcDir.exists()) {
+                srcDir.mkdir();
+            }
+            source = this.getRutaFile();
+            dest = dest + File.separator + this.getNameFile();
+
+            //copiar archivo subido a destino
+            in = (new FileInputStream(source));
+            out = (new FileOutputStream(dest));
+            int c;
+            while( (c = in.read() ) != -1)
+                out.write(c);
+            sld = true;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }finally{
+            if (in!=null){
+                in.close();
+            }
+            if (out!=null){
+                out.close();
+            }
+        }
+        return sld;
+    }
+
+    public Integer registerFile() throws ExceptionHandler{
+        Integer sld = null;
+            String nameF = this.getNameFile();
+            if (nameF.length()>255){
+                nameF = nameF.substring(0,254);
+            }
+            String query = "insert into archivo "
+                    + "(archivo,fecha,clave_empleado,clave_forma,clave_registro)"
+                    + " values ('" + nameF + "'"
+                    + " , getDate()," + this.getIdUser()
+                    + ", " + this.getIdForma()
+                    + ", " + this.getIdRegister() + ")";
+
+            
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQueryInsert(query);
+            CampoForma campoForma = new CampoForma();
+            campoForma.setTabla("archivo");
+            dataTransfer.setCampoForma(campoForma);
+            
+            ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
+            conE.ingresaEntidad(dataTransfer);
+
+        return sld;
     }
 }

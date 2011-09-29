@@ -20,6 +20,15 @@ public class DataTransfer {
     private String[][] arrVariables;
     private String orderBY;
     private Object dataObject;
+    private String rutaFile;
+
+    public String getRutaFile() {
+        return rutaFile;
+    }
+
+    public void setRutaFile(String rutaFile) {
+        this.rutaFile = rutaFile;
+    }
 
     /**
      * Obtiene un objeto del tipo Object, para soportar cualquier tipo de

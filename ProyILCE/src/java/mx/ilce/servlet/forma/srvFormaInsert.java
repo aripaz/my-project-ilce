@@ -88,7 +88,9 @@ public class srvFormaInsert extends HttpServlet {
                 if ("false".equals(blOK)){
                         val.executeErrorValidation(lstVal, this.getClass(), request, response);
                 }else{
+                    AdminFile admFile = new AdminFile();
                     Forma forma = (Forma) request.getSession().getAttribute("forma");
+                    User user = (User) request.getSession().getAttribute("user");
 
                     forma.setPk(pk);
                     forma.setClaveForma(Integer.valueOf(claveForma));
@@ -111,6 +113,7 @@ public class srvFormaInsert extends HttpServlet {
                     }
                     //Analizamos segun la forma obtenida
                     boolean obligatorioOk = true;
+                    boolean addFile = false;
                     if ((!lstForma.isEmpty())&&(obligatorioOk)){
                         Iterator it = lstForma.iterator();
                         while ((it.hasNext())&&(obligatorioOk)){
@@ -122,6 +125,12 @@ public class srvFormaInsert extends HttpServlet {
                                 //Si es NULL, por el formato del formulario no se subio el archivo
                                 if (hsFile!=null){
                                     dato = (String) hsFile.get(cmp.getCampo());
+                                    admFile.setRutaFile(dato);
+                                    admFile.setIdUser(user.getClaveEmpleado());
+                                    addFile = admFile.putFile();
+                                    if (addFile){
+                                        dato = admFile.getNameFile();
+                                    }
                                 }
                             }
                             dato = val.replaceComillas(dato);
@@ -148,14 +157,21 @@ public class srvFormaInsert extends HttpServlet {
                         ex.setExecutionOK(false);
                         AdminFile.deleFileFromServer(hsFile);
                     }
+
                     //actualizarData(request);
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
+                    
+                    if (addFile && (xml>0)){
+                        admFile.setBitacora(bitacora);
+                        admFile.setIdUser(user.getClaveEmpleado());
+                        admFile.setIdForma(Integer.valueOf(claveForma));
+                        admFile.setIdRegister(xml);
+                        admFile.registerFile() ;
+                    }
 
                     if (forma.getDataMail()!=null){
-                        User user = (User) request.getSession().getAttribute("user");
                         request.getSession().setAttribute("from",user.getEmail());
                         request.getSession().setAttribute("to",forma.getDataMail().getStrTo());
-                        //request.getSession().setAttribute("to",user.getEmail());
                         request.getSession().setAttribute("copy",user.getEmail());
                         request.getSession().setAttribute("copyO",forma.getDataMail().getStrCopyO());
                         request.getSession().setAttribute("subject",forma.getDataMail().getSubJect());
