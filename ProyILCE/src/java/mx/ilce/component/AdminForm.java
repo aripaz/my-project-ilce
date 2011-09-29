@@ -121,7 +121,8 @@ public class AdminForm {
         HashMap hsForm = null;
         HashMap hsFile = null;
         try{
-            AdminFile admF = new AdminFile();
+            HashMap hsTypeAcepted = getContentTypeAcepted();
+
             Properties prop = AdminFile.leerConfig();
 
             String FileServerPath = AdminFile.getKey(prop, AdminFile.FILESERVER);
@@ -132,6 +133,7 @@ public class AdminForm {
 
             MultipartParser mp = new MultipartParser(request, maxPostSize,true,true);
             mp.setEncoding("UTF-8");
+
             Part part;
             while ((part = mp.readNextPart()) != null) {
                 if (hs==null){
@@ -150,21 +152,30 @@ public class AdminForm {
                     arrayFORM.add(name);
                 }else if (part.isFile()) {
                     FilePart filePart = (FilePart) part;
-                    String fileName = filePart.getFileName();
-                    if (fileName != null) {
-                        if (hsFile==null){
-                            hsFile = new HashMap();
+                    String typeFile = filePart.getContentType();
+                    String evalType = (String) hsTypeAcepted.get(typeFile);
+
+                    if ((evalType!=null) &&("OK".equals(evalType))){
+                        String fileName = filePart.getFileName();
+                        if (fileName != null) {
+                            if (hsFile==null){
+                                hsFile = new HashMap();
+                            }
+                            UtilDate ud = new UtilDate();
+                            //String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"_");
+                            String strDia = ud.getFecha(UtilDate.formato.AMD,"");
+                            //strDia = strDia.replaceAll(":",".");
+                            String dirName = FileServerPath + strDia + "." + fileName;
+                            File dir = new File(dirName);
+                            long size = filePart.writeTo(dir);
+                            if (size>0){
+                                hsFile.put(name, dirName);
+                                arrayFILE.add(name);
+                            }
                         }
-                        UtilDate ud = new UtilDate();
-                        String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"_");
-                        strDia = strDia.replaceAll(":",".");
-                        String dirName = FileServerPath + fileName+"."+strDia;
-                        File dir = new File(dirName);
-                        long size = filePart.writeTo(dir);
-                        if (size>0){
-                            hsFile.put(name, dirName);
-                            arrayFILE.add(name);
-                        }
+                    }else{
+                        throw new ExceptionHandler("Captura de archivo", AdminForm.class, 
+                                "Formato de archivo no aceptado", "Tipo de archivo enviado:" + typeFile);
                     }
                 }
             }
@@ -177,6 +188,66 @@ public class AdminForm {
         }
         return hs;
     }
+
+    private HashMap getContentTypeAcepted(){
+        HashMap hs = new HashMap();
+        //IMAGENES
+        hs.put("image/gif", "OK");
+        hs.put("image/x-png", "OK");
+        hs.put("image/jpeg", "OK");        
+        hs.put("image/x-ms-bmp", "OK");
+        hs.put("image/bmp", "OK");
+        //WORD
+        hs.put("application/msword", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "OK");
+        //EXCEL
+        hs.put("application/x-excel", "OK");
+        hs.put("application/vnd.ms-excel", "OK");
+        hs.put("application/x-msexcel", "OK");
+        hs.put("application/ms-excel", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.template", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.template", "OK");
+        //POWERPOINT
+        hs.put("application/vnd.ms-powerpoint", "OK");
+        hs.put("application/ms-powerpoint", "OK");
+        hs.put("application/mspowerpoint", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.presentationml.presentation", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow", "OK");
+        //PROYECT
+        hs.put("application/vnd.ms-project", "OK");
+        //WORK
+        hs.put("application/vnd.ms-works", "OK");
+        hs.put("application/vnd.ms-tnef", "OK");
+        hs.put("application/vnd.artgalry", "OK");
+        //ZIP
+        hs.put("application/zip", "OK");
+        hs.put("application/x-compressed", "OK");
+        //RTF
+        hs.put("application/rtf", "OK");
+        //PDF
+        hs.put("application/pdf", "OK");
+        hs.put("application/x-pdf", "OK");
+        //HTML
+        hs.put("text/html", "OK");
+        //VISIO
+        hs.put("application/visio", "OK");
+        hs.put("application/x-visio", "OK");
+        hs.put("application/vnd.visio", "OK");
+        hs.put("application/visio.drawing", "OK");
+        hs.put("application/vsd", "OK");
+        hs.put("application/x-vsd", "OK");
+        //NO PERMITIDOS
+        hs.put("application/octet-stream", "NOK");
+        hs.put("text/asp", "NOK");
+        hs.put("text/jsp", "NOK");
+        hs.put("text/js", "NOK");
+        hs.put("text/php", "NOK");
+        hs.put("text/x-script.perl", "NOK");
+        
+        return hs;
+    }
+
 
     /**
      * Entrega un Hash con el contenido de un formulario, en el Hash de
