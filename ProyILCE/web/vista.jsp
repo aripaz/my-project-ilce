@@ -13,21 +13,22 @@
         <!-- librerias para cargar dialogo  -->
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
         <script type="text/javascript" src="jQuery/js/jquery-ui-1.8.16.custom.min.js"></script>
-
-        <script type="text/javascript" src="jQuery/js/splitter.js" type="text/javascript"</script>
-     
+             
         <!-- jqGrid -->
-        <script src="jQuery/js/grid.locale-es.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.jqGrid.min.js" type="text/javascript"></script>
-        <script src="jQuery/js/grid.subgrid.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.jstree.js"  type="text/javascript"></script>
+        <script type="text/javascript" src="jQuery/js/grid.locale-es.js" ></script>
+        <script type="text/javascript" src="jQuery/js/jquery.jqGrid.min.js"></script>
+        <script type="text/javascript" src="jQuery/js/grid.subgrid.js"></script>
+        <script type="text/javascript" src="jQuery/js/jquery.jstree.js"></script>
         
+        <!-- splitter -->
+        <script type="text/javascript" src="jQuery/js/splitter.js" type="text/javascript"</script>
+
         <!-- Cookie for splitter -->
-        <script  src="jQuery/js/jquery.cookie.js" type="text/javascript"></script>
+        <script type="text/javascript"  src="jQuery/js/jquery.cookie.js" ></script>
         
         <!-- Calculator -->
-        <script src="jQuery/js/jquery.calculator.min.js" type="text/javascript"></script>
-        <script src="jQuery/js/jquery.calculator-es.js" type="text/javascript"></script>
+        <script type="text/javascript" src="jQuery/js/jquery.calculator.min.js" ></script>
+        <script type="text/javascript" src="jQuery/js/jquery.calculator-es.js" ></script>
         
         <!-- Menu -->
         <script src="jQuery/js/jquery.ui.menu.js" type="text/javascript"></script>
@@ -63,15 +64,17 @@
         <div id="banner">
             <img src="img/logo ilce.jpg" />
             <img src="img/logo_plataforma.png" class="logo_plataforma"/>
+            <div id="session_menu" style="float:right"></div>
         </div>
 
         <div class="menus_plataforma">
             <div id="app_menu" style="float:left"> </div>
-            <div id="session_menu" style="float:right"></div>
+            <!-- 
             <ul>
-                <li><a href="#" id="lnkConfiguracion">Configuraci&oacute;n</a></li>
-                <li><a href="srvLogout" id="lnkLogout">Cerrar sesi&oacute;n</a></li>
+                <li><a href="#" id="lnkConfiguracionX">Configuraci&oacute;n</a></li>
+                <li><a href="srvLogout" id="lnkLogoutX">Cerrar sesi&oacute;n</a></li>
             </ul>
+             -->
             <div id="switcher" style="float:right; padding-right: 5px;  padding-top: 3px;"></div>
         </div>
 
