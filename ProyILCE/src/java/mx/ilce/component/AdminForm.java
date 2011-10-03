@@ -162,9 +162,10 @@ public class AdminForm {
                                 hsFile = new HashMap();
                             }
                             UtilDate ud = new UtilDate();
-                            //String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"_");
-                            String strDia = ud.getFecha(UtilDate.formato.AMD,"");
-                            //strDia = strDia.replaceAll(":",".");
+                            String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"");
+                            //String strDia = ud.getFecha(UtilDate.formato.AMD,"");
+                            strDia = strDia.replaceAll(":","");
+                            strDia = strDia.replaceAll(" ","_");
                             String dirName = FileServerPath + strDia + "." + fileName;
                             File dir = new File(dirName);
                             long size = filePart.writeTo(dir);
