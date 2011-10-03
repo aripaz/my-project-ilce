@@ -63,7 +63,7 @@
                         $tabs.tabs("select", "#tab"+this.id);
 
                         //Recupera el id del grid del tab       
-                        sGridIdSuffix=$("#tab" + this.id).children()[0].children[0].id.replace("gbox_grid_","");
+                        sGridIdSuffix=$($($($("#tab" + this.id).children()[0]).children()[2]).children()[0]).children()[0].id.replace("gbox_grid_","");
                         $.fn.appmenu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
    
                     }

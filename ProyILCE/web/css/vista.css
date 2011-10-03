@@ -51,7 +51,7 @@ overflow: auto;
 
 
 #banner{height: 80px;}
-.logo_plataforma {float:right;}
+.logo_plataforma {}
 
 
 .txtBusquedaSencilla {width:80%; font-family:Verdana, Arial, Helvetica, sans-serif !important; font-size: 12px !important; }
@@ -305,3 +305,17 @@ img.bitacora {
 .menus_plataforma {
     display: inline-block;
     width: 100%; }
+
+span.session_menu {
+   border: 0 !important;
+   background: url("");
+   font-size: 14px;
+   text-decoration: none;
+}
+
+a.session_menu {
+   border: 0 !important;
+   background: url("");
+   font-size: 12.5px;
+   text-decoration: none;
+}

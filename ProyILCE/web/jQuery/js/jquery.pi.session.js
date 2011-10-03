@@ -23,6 +23,7 @@
         // Devuelvo la lista de objetos jQuery
         return this.each( function(){
              obj = $(this);
+             obj.html("<div align='center' class='cargando' ><br /><br />Cargando informaci&oacute;n...  <br /><img src='img/loading.gif' /></div>")
              $.fn.sessionmenu.ajax(obj);
              
         });
@@ -45,37 +46,8 @@
                 }
                  else {
                     xml = data;}
-                
                 obj.html($.fn.sessionmenu.handleSession(xml));
-                
-                /* Crea el widget botón */   
-                $("#lnkSesion").button()
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-                }).click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-                                //Cuando se hace click en cualquier parte del documento se
-                                //oculta el menú
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})        
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
-                             
-                
+
                 $("#lnkConfiguracion").click(function() {
 
                     //Crea el control del tab
@@ -103,18 +75,10 @@
                                               leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
                     }
                     
-                    
                 });
-                
-                $("#lnkLogout").click(function() {
-                    window.location.href="srvLogout";
-                }
-                );
-                    
                 
                 //Inicializa el escritorio
                 $("#tabUser").desktop();
-               
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
@@ -123,23 +87,37 @@
     };
 
     $.fn.sessionmenu.handleSession = function(xml){
-        var oReg=$(xml).find("registro:first");
-        //Carga los datos del xml en la variable de coniguración
-        $.fn.sessionmenu.options.empleado=oReg.find("clave_empleado").text();
-        $.fn.sessionmenu.options.nombre=oReg.find("nombre").text();
-        $.fn.sessionmenu.options.apellido_paterno=oReg.find("apellido_paterno").text();
-        $.fn.sessionmenu.options.apellido_materno=oReg.find("apellido_materno").text();
-        $.fn.sessionmenu.options.email=oReg.find("email").text();
-        $.fn.sessionmenu.options.perfil=oReg.find("clave_perfil").text();
-        $.fn.sessionmenu.options.foto=oReg.find("foto").text();
+        oRegistro=$(xml).find("registro");
+            //Carga los datos del xml en la variable de coniguración
+        $.fn.sessionmenu.options.empleado=oRegistro.find("clave_empleado").text();
+        $.fn.sessionmenu.options.nombre=oRegistro.find("nombre").text();
+        $.fn.sessionmenu.options.apellido_paterno=oRegistro.find("apellido_paterno").text();
+        $.fn.sessionmenu.options.apellido_materno=oRegistro.find("apellido_materno").text();
+        $.fn.sessionmenu.options.email=oRegistro.find("email").text();
+        $.fn.sessionmenu.options.perfil=oRegistro.find("clave_perfil").text();
+        $.fn.sessionmenu.options.foto=oRegistro.find("foto").text();
+
 
         //Construye html de acuerdo a configuración recuperada
         if ($.fn.sessionmenu.options.foto=="")
             $.fn.sessionmenu.options.foto='img/sin_foto.jpg'
-
-        var sHtml='<a href="#" id="lnkSesion">Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '</a>'+
-                  '<a href="#" >Seleccione una opcion</a>'+
-                  '<div id="switcher"></div>';
+        var sHtml='<table border="0" cellspacing="0" cellpadding="0">'+
+                  '<tr>' +
+                  '<td valign="top">' +
+                  '<table border="0" align="center" cellpadding="5" cellspacing="5">' +
+                  '<tr>'+
+                  '<td class="session_menu">'+
+                  '<div align="right"  class="ui-widget">'+
+                  '<span id="_un_" class="ui-state-default session_menu"><strong>Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '</strong></span><br />' +
+                  '<a class="ui-state-default session_menu" href="#" id="lnkConfiguracion">Configuraci&oacute;n</a><br />' +
+                  '<a class="ui-state-default session_menu" href="srvLogout" id="lnkCerrarSesion">Cerrar sesi&oacute;n </a>'+
+                  '</div></td>' +
+                  '</tr>'+
+                  '</table>'+
+                  '</td>' +
+                  '<td><img src="' + $.fn.sessionmenu.options.foto + '" width="75" height="86" border="1" /></td>' +
+                  '</tr>'+
+                '</table>';
         return sHtml;
     }
 
