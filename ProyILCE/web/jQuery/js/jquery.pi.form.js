@@ -753,7 +753,7 @@
               "<input type='hidden' id='$ta' name='$ta' value='" + $.fn.form.options.modo + "' />" +
               "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
               "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
-              "<input type='hidden' id='$pk' name='$pk' value='" + $.fn.form.options.app+ "' /></form>"
+              "<input type='hidden' id='$pk' name='$pk' value='" + $.fn.form.options.pk + "' /></form>"
 
         return sForm;
     }
