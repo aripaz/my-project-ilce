@@ -75,10 +75,6 @@
         "</div>";
     
         sBotonera+="<div align='right' style='clear:left'><table style='width:100%'>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +formSuffix+"' class='estatus_bar'>&nbsp;</td><td align='right'>"+
-        "<input type='hidden' id='$ta' name='$cmd' value='" + $.fn.form.options.modo + "' />" +
-        "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
-        "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
-        "<input type='hidden' id='$pk' name='$pk' value='" + $.fn.form.options.app+ "' />" +
         "<input type='button' class='formButton' id='btnGuardar_" + formSuffix +"' value='" + sButtonCaption + "' /></td></tr></table></div>";
                     
         if ($.fn.form.options.showRelationships=='true' &&
@@ -753,7 +749,11 @@
 
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' method='POST' ><table class='forma'>" + sForm + "</table></form>"
+        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' method='POST' ><table class='forma'>" + sForm + "</table>"+
+              "<input type='hidden' id='$ta' name='$ta' value='" + $.fn.form.options.modo + "' />" +
+              "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
+              "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
+              "<input type='hidden' id='$pk' name='$pk' value='" + $.fn.form.options.app+ "' /></form>"
 
         return sForm;
     }
