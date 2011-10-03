@@ -70,7 +70,9 @@ public class srvFormaInsert extends HttpServlet {
                 arrVariables = admF.cleanVariables(arrVariables);
 
                 Bitacora bitacora = usr.getBitacora();
-                bitacora.setClaveForma(Integer.valueOf(claveForma));
+                if (claveForma!=null){
+                    bitacora.setClaveForma(Integer.valueOf(claveForma));
+                }
                 if (claveAplic!=null){
                     bitacora.setClaveAplicacion(Integer.valueOf(claveAplic));
                 }
