@@ -75,10 +75,12 @@
         "</div>";
     
         sBotonera+="<div align='right' style='clear:left'><table style='width:100%'>"+ sBusqueda + "<tr><td align='left' id='tdEstatus_" +formSuffix+"' class='estatus_bar'>&nbsp;</td><td align='right'>"+
-        "<input type='hidden' id='$cmd' name='$cmd' value='" + $.fn.form.options.modo + "' />" +
+        "<input type='hidden' id='$ta' name='$cmd' value='" + $.fn.form.options.modo + "' />" +
         "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
+        "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
+        "<input type='hidden' id='$pk' name='$pk' value='" + $.fn.form.options.app+ "' />" +
         "<input type='button' class='formButton' id='btnGuardar_" + formSuffix +"' value='" + sButtonCaption + "' /></td></tr></table></div>";
-                
+                    
         if ($.fn.form.options.showRelationships=='true' &&
             $.fn.form.options.modo=='update') {
             //Busca las relaciones en la base de datos basadas en los
@@ -216,10 +218,45 @@
             
                 //Establece atributo de seguridad
                 $("#formTab_" + formSuffix).attr("security",sPermiso);
+                
+                //Borra la leyenda del grid
+                
+                $("#grid_"+gridSuffix+"_toppager_right").children(0).html("");
+                var oForm=$("#form_" + formSuffix);
+
                 //Se asigna evento a botón de guardar
                 $("#btnGuardar_"+ formSuffix).click(function() {
-                    suffix=this.id.split("_")[1]+ "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3]
-                    $("#form_" + suffix).submit();
+                    nApp=this.id.split("_")[1];
+                    nForma=this.id.split("_")[2];
+                    nPK=this.id.split("_")[3];
+                    formSuffix =this.id.split("_")[1] + "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3];
+
+                    $("#btnGuardar_"+formSuffix).disabled=true;
+                    //Actualiza el estatus bar
+                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
+
+                    // inside event callbacks 'this' is the DOM element so we first 
+                    // wrap it in a jQuery object and then invoke ajaxSubmit 
+                                    //Se activa los campos para subir achivos al servidor
+                    var options = { 
+                        beforeSubmit:  validateForm,  // pre-submit callback 
+                        success:       processXml,  // post-submit callback 
+                        dataType:  ($.browser.msie) ? "text" : "xml",
+                        url: "srvFormaInsert"       // override for form's 'action' attribute 
+                        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+                        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+                        //clearForm: true        // clear all form fields after successful submit 
+                        //resetForm: true        // reset the form after successful submit 
+
+                        // $.ajax options can be used here too, for example: 
+                        //timeout:   3000 
+                    }; 
+                    
+                    oForm.ajaxSubmit(options); 
+
+                    // !!! Important !!! 
+                    // always return false to prevent standard browser submit and page navigation 
+                    return false; 
                 })
             
                 //Se crea el diálogo con el HTML completo
@@ -271,7 +308,6 @@
                 }
                 //nWidth=$("#divFormProfiles_" + suffix).width();
 
-                oForm=$("#form_" + formSuffix);
 
                 // Se ocultan los mensajes de validación
                 oForm.find('.obligatorio').each(function() {
@@ -297,32 +333,12 @@
                     app:$.fn.form.options.app
                 });
                 
-                //Se activa los campos para subir achivos al servidor
-                $(".file").fileinput({
-		inputText: "",
-		buttonText: "Anexar archivo"
-                });    
-
-                //Se captura el submit
-                oForm.submit(function() {
-                    //Deshabilita el botón guardar
-                    nApp=this.id.split("_")[1];
-                    nForma=this.id.split("_")[2];
-                    nPK=this.id.split("_")[3];
-                    formSuffix =this.id.split("_")[1] + "_" + this.id.split("_")[2] + "_" + this.id.split("_")[3];
-
-                    $("#btnGuardar_"+formSuffix).disabled=true;
-                    //Actualiza el estatus bar
-                    $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
-
-                    var sWS="";
-                    var oCampos;
-                    var sData="";
-
-
-                    if ($("#formTab_" + suffix).attr("modo")!="lookup") {
-                        var bCompleto=true;
-                        $(this).find('.obligatorio').each(function() {
+                
+                function validateForm(formData, jqForm, options) { 
+                    var bCompleto=true;
+                    
+                    if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
+                       $(jqForm[0]).find('.obligatorio').each(function() {
                             if ($.trim(this.value)=="") {
                                 $("#td_" + this.name).addClass("errorencampo")
                                 $(this).addClass("errorencampo");
@@ -335,110 +351,12 @@
                                 $(this).removeClass("errorencampo");
                             }
                         });
-
-                        if (!bCompleto){
-                            $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique    ");
-                            return false;
-                        }
-
-                        //Preparando la información para enviarla via POST
-                        $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Guardando informacion...");
-                        sWS="srvFormaInsert";
-
-                        oCampos = $(this).serializeArray();
-                        jQuery.each(oCampos, function(i, oCampo){
-                            sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                            sData+=sNombreCampo+"="+escape(encodeURIComponent(oCampo.value))+ "&";
-                        });
-                        sData+="$cf=" +$("#formTab_" + formSuffix).attr("forma") +
-                        "&$pk=" + $("#formTab_" + formSuffix).attr("pk")+
-                        "&$ta=" + $("#formTab_" + formSuffix).attr("modo")+
-                        "&$ca=" + nApp;
-
-                        $.ajax({
-                            type: "POST",
-                            url: sWS,
-                            data:sData,
-                            dataType: ($.browser.msie) ? "text" : "xml",
-                            success: function(data){
-                                if (typeof data == "string") {
-                                    xmlResult = new ActiveXObject("Microsoft.XMLDOM");
-                                    xmlResult.async = false;
-                                    xmlResult.validateOnParse="true";
-                                    xmlResult.loadXML(data);
-                                    if (xmlResult.parseError.errorCode>0) {
-                                        alert("Error de compilación xml:" + xmlResult.parseError.errorCode +"\nParse reason:" + xmlResult.parseError.reason + "\nLinea:" + xmlResult.parseError.line);
-                                    }
-                                }
-                                else {
-                                    xmlResult = data;
-                                }
-
-                                var nApp=$("#formTab_" + suffix).attr("app")
-                                var nForma=$("#formTab_" + suffix).attr("forma");
-                                var nPK=$("#formTab_" + suffix).attr("pk")
-
-                                sResultado=$(xmlResult).find("resultado").text();
-
-                                //Verifica el tipo de control por actualizar
-                                sControl=$("#formTab_" + suffix).attr("updateControl");
-                                if (sControl=="") {
-                                    /*Si no fue definido el control, por default se actualia el grid*/
-                                    $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
-                                } else {
-                                    oControl=$("#"+sControl);
-                                    /*Verifica si en realidad existe el control ...*/
-                                    if (oControl.length>0) {
-                                    
-                                        /* Verifica si es un arbol */
-                                        if (oControl[0].nodeName="DIV" && 
-                                            oControl[0].className.indexOf("jstree",0)>1) {
-                                            $("#"+sControl).treeMenu.getTreeDefinition($("#"+sControl))
-                                            $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
-                                        }
-                                        /* en caso de que no lo sea actualiza un combo*/ 
-                                        else
-                                            setXMLInSelect3(sControl,$("#formTab_" + suffix).attr("updateForeignForm"),'foreign',null)
-
-                                    }
-                                }
-                            
-                                //Cierra el dialogo
-                                $("#dlgModal_"+ suffix).dialog("destroy");
-                                $("#dlgModal_"+ suffix).remove();
-                            
-                                //La forma se vuelve a abrir cuando se solicita
-                                //que muestre sus relaciones
-                                //y es una alta 
-                                if ($.fn.form.options.showRelationships=='true' &&
-                                    $.fn.form.options.modo=="insert")
-                               
-                                    $("body").formqueue({
-                                        app: $.fn.form.options.app,
-                                        forma:$.fn.form.options.forma,
-                                        datestamp:$.fn.form.options.datestamp,
-                                        modo:"update",
-                                        titulo: $.fn.form.options.titulo,
-                                        columnas:1,
-                                        pk:sResultado,
-                                        filtroForaneo:$.fn.form.options.filtroForaneo,
-                                        height:"500",
-                                        width:"500",
-                                        originatingObject: $.fn.form.options.originatingObject,
-                                        showRelationships: $.fn.form.options.showRelationships
-                                    });    
-
-                            },
-                            error:function(xhr,err){
-                                $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
-                                alert("Error al actualizar registro: \n"+ +xhr.responseText);
-                            }
-                        });
+                        
                     }
                     else {
                         //Valida que traiga al menos un dato:
                         sData = "";
-                        oCampos = $(this).serializeArray();
+                        oCampos = $(jqForm[0]).serializeArray();
                         $.each(oCampos, function(i, oCampo){
                             sTipoDato=$("#" + oCampo.name).attr("tipo_dato");
                             sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
@@ -451,12 +369,9 @@
                                     sData+=sNombreCampo+"="+oCampo.value + "&";
                         });
 
-                        if (sData=="") {
-                            $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
-                            alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
-                        }
+                        if (sData=="") 
+                           bCompleto=false;
                         else {
-
                             oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
                             oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
                             sBitacoraId=oMenuAccordion[1].id;
@@ -494,7 +409,7 @@
                                 sBitacoraId.split("_")[2]+"_"+
                                 sBitacoraId.split("_")[3];
                                 sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
-                                $("#accordion_"+sMenuDivPrefix).menu.getFullMenu(sMenuDivPrefix,
+                                $("#accordion_"+sMenuDivPrefix).appmenu.getFullMenu(sMenuDivPrefix,
                                     $.fn.form.options.app,
                                     $.fn.form.options.forma)
 
@@ -505,24 +420,102 @@
                             }).trigger("reloadGrid")
                             $("#dlgModal_"+ formSuffix).dialog("destroy");
                             $("#dlgModal_"+ formSuffix).remove();
+                            return false;
+                        }
+                            
+                    }
+                    
+                    if (!bCompleto){
+                        if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
+                            $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique");
+                        }
+                        else {
+                            alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
+                            $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
+                        }    
+                        return false;
+                     }
+                     else {
+                         $("#tdEstatus_" +formSuffix).html("Enviando información");
+                         return true;
+                     }                        
+                }
+
+                function processXml(data) { 
+                    // 'responseXML' is the XML document returned by the server; we use 
+                    // jQuery to extract the content of the message node from the XML doc 
+                    if (typeof data == "string") {
+                        xmlResult = new ActiveXObject("Microsoft.XMLDOM");
+                        xmlResult.async = false;
+                        xmlResult.validateOnParse="true";
+                        xmlResult.loadXML(data);
+                        if (xmlResult.parseError.errorCode>0) {
+                            alert("Error de compilación xml:" + xmlResult.parseError.errorCode +"\nParse reason:" + xmlResult.parseError.reason + "\nLinea:" + xmlResult.parseError.line);
                         }
                     }
-
-                    return false;
-
-                });
-
-                $("#grid_"+gridSuffix+"_toppager_right").children(0).html("");
-
-            },
-            error:function(xhr,err){
-                if ($("#tdEstatus_" +formSuffix).length>0)
-                    $("#tdEstatus_" +formSuffix).html("Error al actualizar registro");
-                alert("responseText: "+xhr.responseText);
+                    else {
+                        xmlResult = data;
+                    }
+                    
+                    var nApp=$("#formTab_" + formSuffix).attr("app")
+                    var nForma=$("#formTab_" + formSuffix).attr("forma");
+                    var nPK=$("#formTab_" + formSuffix).attr("pk")
+                    
+                    sResultado=$(xmlResult).find("resultado").text();
+                    
+                    //Verifica el tipo de control por actualizar
+                    sControl=$("#formTab_" + formSuffix).attr("updateControl");
+                    if (sControl=="") {
+                        /*Si no fue definido el control, por default se actualia el grid*/
+                        $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                    } else {
+                        oControl=$("#"+sControl);
+                        /*Verifica si en realidad existe el control ...*/
+                        if (oControl.length>0) {
+                            
+                            /* Verifica si es un arbol */
+                            if (oControl[0].nodeName="DIV" && 
+                                oControl[0].className.indexOf("jstree",0)>1) {
+                                $("#"+sControl).treeMenu.getTreeDefinition($("#"+sControl))
+                                $("#grid_" + gridSuffix).jqGrid().trigger("reloadGrid"); 
+                            }
+                            /* en caso de que no lo sea actualiza un combo*/ 
+                            else
+                            setXMLInSelect3(sControl,$("#formTab_" + formSuffix).attr("updateForeignForm"),'foreign',null)
+                            
+                        }
+                    }
+                    
+                    //Cierra el dialogo
+                    $("#dlgModal_"+ formSuffix).dialog("destroy");
+                    $("#dlgModal_"+ formSuffix).remove();
+                    
+                    //La forma se vuelve a abrir cuando se solicita
+                    //que muestre sus relaciones
+                    //y es una alta 
+                    if ($.fn.form.options.showRelationships=='true' &&
+                        $.fn.form.options.modo=="insert")
+                    
+                    $("body").formqueue({
+                        app: $.fn.form.options.app,
+                        forma:$.fn.form.options.forma,
+                        datestamp:$.fn.form.options.datestamp,
+                        modo:"update",
+                        titulo: $.fn.form.options.titulo,
+                        columnas:1,
+                        pk:sResultado,
+                        filtroForaneo:$.fn.form.options.filtroForaneo,
+                        height:"500",
+                        width:"500",
+                        originatingObject: $.fn.form.options.originatingObject,
+                        showRelationships: $.fn.form.options.showRelationships
+                    }); 
+                }
+                
             }
         });
     }
-
+    
     $.fn.form.handleForm = function(xml){
         var sRenglon='';
         var nFormaForanea=0;
@@ -598,7 +591,8 @@
                 }
 
 
-                sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
+                //sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
+                sRenglon+='id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" >';
                 if (bNoPermitirValorForaneoNulo!="1") {
                     sRenglon+="<option ";
                     if ($.fn.form.options.modo=='insert')
@@ -651,7 +645,8 @@
                     else 
                         sRenglon+='"';
 
-                    sRenglon += ' id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
+                    //sRenglon += ' id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
+                    sRenglon += ' id="' + oCampo[0].nodeName + '" name="' +  oCampo[0].nodeName + '" ' +
                     oCampo.find('evento').text() +
                     '>';
                     
@@ -665,7 +660,7 @@
                 else if ($(this).find('tipo_control').text()=="checkbox" || sTipoCampo=="bit") {
                     sRenglon += '<td class="etiqueta_forma">' +
                     '<div style="width:10px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
-                    '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" ';
+                    '" id="'+ oCampo[0].nodeName+ '" name="' + oCampo[0].nodeName + '" ';
 
                     if (bActivo!="1") 
                         sRenglon+=' disabled="disabled" ';
@@ -687,7 +682,7 @@
                 }
                 else {
                     sRenglon += '<td class="etiqueta_forma">' + 
-                    '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '"' +
+                    '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '"' +
                     'tabindex="' + tabIndex + '" ';
 
                     if (bActivo!="1") 
@@ -758,7 +753,7 @@
 
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' ><table class='forma'>" + sForm + "</table></form>"
+        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' method='POST' ><table class='forma'>" + sForm + "</table></form>"
 
         return sForm;
     }

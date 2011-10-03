@@ -32,16 +32,15 @@
         
         <!-- Menu -->
         <script src="jQuery/js/jquery.ui.menu.js" type="text/javascript"></script>
+        
+        <!-- form plugin para considerar uploads  -->
+        <script type="text/javascript" src="jQuery/js/jquery.form.js"></script>
        
-        <!-- upload skinner  -->
-        <script type="text/javascript" src="jQuery/js/jquery.fileinput.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.8.9.custom.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/fileinput.css" />
         
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
@@ -56,6 +55,7 @@
         <script src="jQuery/js/jquery.pi.treeMenu.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.appmenu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
+        
     </head>
     <body>
         <script type="text/javascript"
