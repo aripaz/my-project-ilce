@@ -555,7 +555,7 @@
 
             //Verifica si el campo es obligatorio para incluir la leyenda en el alias
             if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
-                sRenglon += ' (<span id="msgvalida_' + oCampo[0].nodeName + sSuffix + '">Obligatorio</span>*)</td>'
+                sRenglon += ' (<span id="msgvalida_' + oCampo[0].nodeName + '">Obligatorio</span>*)</td>'
             }
             else {
                 sRenglon += '</td>'

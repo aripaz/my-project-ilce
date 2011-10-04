@@ -477,7 +477,7 @@
                         }); 
                     
                 });
-                if (bGetAccordion==1) 
+                if (bGetAccordion==1 && $("#accordion_"+sDivSuffix)[0].classList.length<=1) 
                     $("#accordion_"+sDivSuffix).accordion({
                         active: false,
                         /*fillSpace:true, */
