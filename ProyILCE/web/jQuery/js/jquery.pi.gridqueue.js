@@ -17,6 +17,13 @@
              $.fn.gridqueue.getGridConfig(obj);
              obj.removeClass("queued_grids");
              obj.addClass("desktopGridContainer");
+             
+             //Verifica si hay grids pendientes en la cola y destruye el dialogo de espera
+             //si este es el caso
+             if ($(".queued_grids").length==0) {
+                 $("#divwait").dialog( "close" )
+                 $("#divwait").dialog("destroy");
+             }
         });
 
  };
