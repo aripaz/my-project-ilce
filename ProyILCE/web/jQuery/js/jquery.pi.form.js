@@ -432,7 +432,7 @@
                         return false;
                      }
                      else {
-                         $("#tdEstatus_" +formSuffix).html("Enviando información");
+                         $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Enviando información...");
                          return true;
                      }                        
                 }
