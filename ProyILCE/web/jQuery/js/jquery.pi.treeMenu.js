@@ -132,7 +132,7 @@
                           updateTreeAfterPost:nRefrescaArbol=="1"?true:false
                        });
                        
-                       $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).menu.getFullMenu(oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4],nApp,nForma);
+                       $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appmenu.getFullMenu(oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4],nApp,nForma);
                  });
 
             },
