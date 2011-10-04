@@ -230,30 +230,105 @@
                     $("#btnGuardar_"+formSuffix).disabled=true;
                     //Actualiza el estatus bar
                     $("#tdEstatus_" +formSuffix).html("<img src='img/throbber.gif'>&nbsp;Validando informacion...");
-
+                    
                     // inside event callbacks 'this' is the DOM element so we first 
                     // wrap it in a jQuery object and then invoke ajaxSubmit 
-                                    //Se activa los campos para subir achivos al servidor
-                    var options = { 
-                        beforeSubmit:  validateForm,  // pre-submit callback 
-                        success:       processXml,  // post-submit callback 
-                        dataType:  ($.browser.msie) ? "text" : "xml",
-                        url: "srvFormaInsert"       // override for form's 'action' attribute 
-                        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
-                        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
-                        //clearForm: true        // clear all form fields after successful submit 
-                        //resetForm: true        // reset the form after successful submit 
+                    if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
 
-                        // $.ajax options can be used here too, for example: 
-                        //timeout:   3000 
-                    }; 
-                    
-                    oForm.ajaxSubmit(options); 
+                        var options = { 
+                            beforeSubmit:  validateForm,  // pre-submit callback 
+                            success:       processXml,  // post-submit callback 
+                            dataType:  ($.browser.msie) ? "text" : "xml",
+                            url: "srvFormaInsert"       // override for form's 'action' attribute 
+                            //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+                            //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+                            //clearForm: true        // clear all form fields after successful submit 
+                            //resetForm: true        // reset the form after successful submit 
 
-                    // !!! Important !!! 
-                    // always return false to prevent standard browser submit and page navigation 
-                    return false; 
-                })
+                            // $.ajax options can be used here too, for example: 
+                            //timeout:   3000 
+                        }; 
+
+                        oForm.ajaxSubmit(options); 
+
+                        // !!! Important !!! 
+                        // always return false to prevent standard browser submit and page navigation 
+                        return false; 
+                    }
+                    else {
+                        //Valida que traiga al menos un dato:
+                        sData = "";
+                        oCampos =oForm.serializeArray();
+                        $.each(oCampos, function(i, oCampo){
+                            sTipoDato=$(document.getElementById(oCampos[i].name)).attr("tipo_dato");
+                            sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
+                            if ($.trim(oCampo.value)!="")
+                                if (sTipoDato=="string")
+                                    sData+=sNombreCampo+" like '"+oCampo.value + "%'&";
+                                else if (sTipoDato=='date')
+                                    sData+=sNombreCampo+"='"+oCampo.value + "'&";
+                                else
+                                    sData+=sNombreCampo+"="+oCampo.value + "&";
+                        });
+
+                        if (sData=="") {
+                            alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
+                            $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
+                        }    
+                        else {
+                            oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
+                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
+                            sBitacoraId=oMenuAccordion[1].id;
+                            sBusquedasId=oMenuAccordion[3].id;
+                            nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
+                            nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
+                            sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
+                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
+
+                            //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
+                            $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
+                                var sGridId="#grid_" +gridSuffix ;
+                                $(sGridId).jqGrid('setGridParam',{
+                                    url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                                }).trigger("reloadGrid")
+                                $(this).remove();
+                            });
+
+                            // Si el usuario le dió un nombre a la consulta
+                            // Significa que la desea guardar
+                            sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
+
+                            if (document.getElementById("$b").value!="") {
+                                sBusqueda=document.getElementById("$b").value;
+                                postConfig = "$cf=93&$ta=insert&$pk=0"+
+                                "&clave_aplicacion=" + $.fn.form.options.app +
+                                "&clave_forma="+$.fn.form.options.forma+
+                                "&clave_empleado="+ $("#_ce_").val() +
+                                "&filtro="+sBusqueda +
+                                "&consulta=" +sData;
+                                $.post("srvFormaInsert",postConfig);
+                                    
+                                // Aqui va método del filtro para actualizarlo
+                                sMenuDivPrefix=sBitacoraId.split("_")[1]+"_"+
+                                sBitacoraId.split("_")[2]+"_"+
+                                sBitacoraId.split("_")[3];
+                                sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
+                                $("#accordion_"+sMenuDivPrefix).appmenu.getFullMenu(sMenuDivPrefix,
+                                    $.fn.form.options.app,
+                                    $.fn.form.options.forma)
+
+                            }
+
+                            $("#grid_" + gridSuffix).jqGrid('setGridParam',{
+                                url:"srvGrid?$cf=" +  $.fn.form.options.forma + "&$w=" + sData+ "&$dp=body&page=1"
+                            }).trigger("reloadGrid")
+                            $("#dlgModal_"+ formSuffix).dialog("destroy");
+                            $("#dlgModal_"+ formSuffix).remove();
+                            return false;
+                        }                       
+                    }
+                        
+                });
             
                 //Se crea el diálogo con el HTML completo
                 $("#dlgModal_"+ formSuffix).dialog({
@@ -331,104 +406,24 @@
                 
                 
                 function validateForm(formData, jqForm, options) { 
-                    var bCompleto=true;
+                   var bCompleto=true;
                     
-                    if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
-                       $(jqForm[0]).find('.obligatorio').each(function() {
-                            if ($.trim(this.value)=="") {
-                                $("#td_" + this.name).addClass("errorencampo")
-                                $(this).addClass("errorencampo");
-                                $("#msgvalida_" + this.name).show();
-                                bCompleto=false;
-                            }
-                            else {
-                                $("#td_" + this.name).removeClass("errorencampo")
-                                $("#msgvalida_" + this.name).hide();
-                                $(this).removeClass("errorencampo");
-                            }
-                        });
-                        
-                    }
-                    else {
-                        //Valida que traiga al menos un dato:
-                        sData = "";
-                        oCampos = $(jqForm[0]).serializeArray();
-                        $.each(oCampos, function(i, oCampo){
-                            sTipoDato=$("#" + oCampo.name).attr("tipo_dato");
-                            sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                            if ($.trim(oCampo.value)!="")
-                                if (sTipoDato=="string")
-                                    sData+=sNombreCampo+" like '"+oCampo.value + "%'&";
-                                else if (sTipoDato=='date')
-                                    sData+=sNombreCampo+"='"+oCampo.value + "'&";
-                                else
-                                    sData+=sNombreCampo+"="+oCampo.value + "&";
-                        });
-
-                        if (sData=="") 
-                           bCompleto=false;
-                        else {
-                            oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
-                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
-                            sBitacoraId=oMenuAccordion[1].id;
-                            sBusquedasId=oMenuAccordion[3].id;
-                            nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
-                            nForma=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[3];
-                            sDateStamp=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[4];
-                            $(oGridHeader[0]).append("&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid_" + nAplicacion + "_" + nForma + "_" + sDateStamp + "'>(Quitar filtro)</a>");
-
-                            //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
-                            $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
-                                var sGridId="#grid_" +gridSuffix ;
-                                $(sGridId).jqGrid('setGridParam',{
-                                    url:"srvGrid?$cf=" + nForma + "&$dp=body"
-                                }).trigger("reloadGrid")
-                                $(this).remove();
-                            });
-
-                            // Si el usuario le dió un nombre a la consulta
-                            // Significa que la desea guardar
-                            sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
-
-                            if (document.getElementById("$b").value!="") {
-                                sBusqueda=document.getElementById("$b").value;
-                                postConfig = "$cf=93&$ta=insert&$pk=0"+
-                                "&clave_aplicacion=" + $.fn.form.options.app +
-                                "&clave_forma="+$.fn.form.options.forma+
-                                "&clave_empleado="+ $("#_ce_").val() +
-                                "&filtro="+sBusqueda +
-                                "&consulta=" +sData;
-                                $.post("srvFormaInsert",postConfig);
-                                    
-                                // Aqui va método del filtro para actualizarlo
-                                sMenuDivPrefix=sBitacoraId.split("_")[1]+"_"+
-                                sBitacoraId.split("_")[2]+"_"+
-                                sBitacoraId.split("_")[3];
-                                sMenuDivPrefix+=(sBitacoraId.split("_").length>4)?"_"+sBitacoraId.split("_")[4]:"";
-                                $("#accordion_"+sMenuDivPrefix).appmenu.getFullMenu(sMenuDivPrefix,
-                                    $.fn.form.options.app,
-                                    $.fn.form.options.forma)
-
-                            }
-
-                            $("#grid_" + gridSuffix).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" +  $.fn.form.options.forma + "&$w=" + sData+ "&$dp=body&page=1"
-                            }).trigger("reloadGrid")
-                            $("#dlgModal_"+ formSuffix).dialog("destroy");
-                            $("#dlgModal_"+ formSuffix).remove();
-                            return false;
+                   $(jqForm[0]).find('.obligatorio').each(function() {
+                        if ($.trim(this.value)=="") {
+                            $("#td_" + this.name).addClass("errorencampo")
+                            $(this).addClass("errorencampo");
+                            $("#msgvalida_" + this.name).show();
+                            bCompleto=false;
                         }
-                            
-                    }
-                    
+                        else {
+                            $("#td_" + this.name).removeClass("errorencampo")
+                            $("#msgvalida_" + this.name).hide();
+                            $(this).removeClass("errorencampo");
+                        }
+                    });
+
                     if (!bCompleto){
-                        if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
                             $("#tdEstatus_" +formSuffix).html("Falta dato obligatorio, verifique");
-                        }
-                        else {
-                            alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
-                            $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
-                        }    
                         return false;
                      }
                      else {
@@ -539,7 +534,7 @@
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
 
-            sRenglon += '<td id="td_' +oCampo[0].nodeName + sSuffix + '" ';
+            sRenglon += '<td id="td_' +oCampo[0].nodeName + '" ';
             sRenglon += ' class="etiqueta_forma' 
             if (bVisible=='0')
                 sRenglon +=' invisible';
