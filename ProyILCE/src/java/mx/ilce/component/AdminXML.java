@@ -613,18 +613,6 @@ public class AdminXML {
         return str;
     }
 
-    /*
-    private String getCampoIncrement(List lstCmp){
-        String sld = "";
-        if ((lstCmp!=null)&&(lstCmp.isEmpty())){
-            Iterator it = lstCmp.iterator();
-            while (it.hasNext()){
-
-            }
-        }
-        return sld;
-    }*/
-
     /**
      * Entrega un XML en base a la Forma indicada y con la estructura de los 
      * datos, pero sin datos
@@ -878,56 +866,6 @@ public class AdminXML {
         return strSld;
     }
 
-
-    /**
-     * Metodo que permite crear la seccion de un XML a partir de la query que
-     * se utilizara para completar los datos, la data que se debe utilizar como
-     * entrada para la query y el nombre del registro que esta solicitando esta
-     * seccion de XML
-     * @param query     Query usada para completar los datos
-     * @param strData   Data de entrada que se usara en la query
-     * @param strRegistro   Nombre del registro desde donde se invoco el metodo
-     * @return
-     * @throws ExceptionHandler
-     */
-    /*
-    private StringBuffer getXmlByQueryAndData(String query, String[] strData, 
-            String strRegistro, String[][] arrVariables) throws ExceptionHandler {
-        StringBuffer str = new StringBuffer("");
-        try {
-            ConEntidad con = new ConEntidad();
-            DataTransfer dataTransfer = new DataTransfer();
-            dataTransfer.setQuery(query);
-            dataTransfer.setArrData(strData);
-            dataTransfer.setArrVariables(arrVariables);
-
-            HashCampo hsData = con.getDataByQuery(dataTransfer);
-            
-            List lstCmp = hsData.getListCampos();
-            HashMap hsDat = hsData.getListData();
-            if (!hsDat.isEmpty()){
-                for(int i=0;i<hsDat.size();i++){
-                    ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
-                    str.append(("\t\t\t\t<registro_"+ strRegistro+" "));
-                    str.append(("id='"+String.valueOf(i+1)+"'>\n"));
-                    for (int j=0; j<lstCmp.size();j++){
-                        Campo cmp = (Campo) arr.get(j) ;
-                        str.append(("\t\t\t\t\t<"+ cmp.getNombreDB()));
-                        str.append((" tipo_dato=\"" + castTypeJavaToXML(cmp.getTypeDataAPL()) + "\">"));
-                        str.append(("<![CDATA["));
-                        str.append(replaceAccent(castNULL(String.valueOf(cmp.getValor()).trim())));
-                        str.append(("]]>"));
-                        str.append(("</"+ cmp.getNombreDB() + ">\n"));
-                    }
-                    str.append(("\t\t\t\t</registro_"+ strRegistro+">\n"));
-                }
-            }
-        }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML de una QUERY y DATA");
-        }
-        return str;
-    }*/
-
     /**
      * Metodo que permite crear la seccion de un XML a partir de la forma que
      * se esta entregando en la data
@@ -1008,48 +946,6 @@ public class AdminXML {
         }
         return str;
     }
-
-    /**
-     * Metodo para obtener la data ordenada para ser utilizada en la query.
-     * Se asume que la query esta bien estructurada, es decir, se requiere
-     * que los parametros esten en forma secuencial (Ej: %1 %2 %3 ... ) para
-     * ubicar en forma correcta los datos
-     * @param query     Query donde se colocara la Data
-     * @param lst   Listado con la Data
-     * @return
-     * @throws ExceptionHandler
-     */
-    /*
-    private String[] getStringData (String query, ArrayList lst) throws ExceptionHandler{
-        String[] strData = null;
-        try {
-            String[] splitPorc = query.split("%");
-
-            if (splitPorc.length>1){
-                strData = new String[splitPorc.length-1];
-                for (int i=0; i<lst.size();i++){
-                    Campo cmp = (Campo) lst.get(i);
-                    String word1 = " "+cmp.getNombreDB()+"=";
-                    String word2 = " "+cmp.getNombreDB()+" =";
-                    if (cmp.getNombreDB()!=null){
-                        if (query.contains(word1)||query.contains(word2)){
-                            boolean seguir = true;
-                            for (int j=0;j<splitPorc.length&&seguir;j++){
-                                String str = splitPorc[j];
-                                if (str.contains(word1)||str.contains(word2)){
-                                    strData[j]=String.valueOf(cmp.getValor()).trim();
-                                    seguir=false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el Array de data de una query");
-        }
-        return strData;
-    }*/
 
     /**
      * Obtiene los datos de un campo, obtenidos desde la forma que se le entrega
@@ -1305,20 +1201,38 @@ public class AdminXML {
                 if (str.contains("á")){
                     str = str.replaceAll("á", "&aacute;");
                 }
+                if (str.contains("Á")){
+                    str = str.replaceAll("Á", "&Aacute;");
+                }
                 if(str.contains("é")){
                     str = str.replaceAll("é", "&eacute;");
+                }
+                if(str.contains("É")){
+                    str = str.replaceAll("É", "&Eacute;");
                 }
                 if(str.contains("í")){
                     str = str.replaceAll("í", "&iacute;");
                 }
+                if(str.contains("Í")){
+                    str = str.replaceAll("Í", "&Iacute;");
+                }
                 if(str.contains("ó")){
                     str = str.replaceAll("ó", "&oacute;");
+                }
+                if(str.contains("Ó")){
+                    str = str.replaceAll("Ó", "&Oacute;");
                 }
                 if(str.contains("ú")){
                     str = str.replaceAll("ú", "&uacute;");
                 }
+                if(str.contains("Ú")){
+                    str = str.replaceAll("Ú", "&Uacute;");
+                }
                 if(str.contains("ñ")){
                     str = str.replaceAll("ñ", "&ntilde;");
+                }
+                if(str.contains("Ñ")){
+                    str = str.replaceAll("Ñ", "&Ntilde;");
                 }
                 str = str.trim();
             }
