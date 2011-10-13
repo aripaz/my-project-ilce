@@ -262,7 +262,11 @@
                         $.each(oCampos, function(i, oCampo){
                             sTipoDato=$(document.getElementById(oCampos[i].name)).attr("tipo_dato");
                             sNombreCampo=oCampo.name.replace("_"+formSuffix,"");
-                            if ($.trim(oCampo.value)!="")
+                            if ($.trim(oCampo.value)!="" && 
+                                    sNombreCampo!="$ta" &&
+                                    sNombreCampo!="$ca" &&
+                                    sNombreCampo!="$cf" &&
+                                    sNombreCampo!="$pk" )
                                 if (sTipoDato=="string")
                                     sData+=sNombreCampo+" like '"+oCampo.value + "%'&";
                                 else if (sTipoDato=='date')
@@ -270,12 +274,14 @@
                                 else
                                     sData+=sNombreCampo+"="+oCampo.value + "&";
                         });
-
+                        
+                        
                         if (sData=="") {
                             alert("Es necesario especificar al menos un criterio de búsqueda, verifique");
                             $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
                         }    
                         else {
+                            sData=sData.substring(0,sData.length-1)
                             oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
                             oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
                             sBitacoraId=oMenuAccordion[1].id;
@@ -296,8 +302,9 @@
 
                             // Si el usuario le dió un nombre a la consulta
                             // Significa que la desea guardar
-                            sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
-
+                            //sData=escape(sData.substring(0,sData.length-1).replace("&"," AND "));
+                            sData=escape(sData);
+                            
                             if (document.getElementById("$b").value!="") {
                                 sBusqueda=document.getElementById("$b").value;
                                 postConfig = "$cf=93&$ta=insert&$pk=0"+
@@ -584,9 +591,9 @@
 
                 //sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
                 sRenglon+='id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" >';
-                if (bNoPermitirValorForaneoNulo!="1") {
+                if ($.fn.form.options.modo=="lookup" || bNoPermitirValorForaneoNulo!="1") {
                     sRenglon+="<option ";
-                    if ($.fn.form.options.modo=='insert')
+                    if ($.fn.form.options.modo!='update')
                         sRenglon+="selected='selected' ";
                     sRenglon +="></option>";
                 }
@@ -604,7 +611,7 @@
                                 
                 sRenglon +='</select>';
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
-                    sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
+                    sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName  + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
                 }
                 
                 sRenglon+='</td>|';
@@ -622,7 +629,7 @@
                     if (sTipoCampo=='money') {
                         sRenglon+='class="inputWidgeted';
                         sWidgetButton='<div class="widgetbutton" tipo="calculator_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
-                        sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + sSuffix + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
+                        sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
                     } else if (sTipoCampo=='datetime') {
                         sRenglon+='class="inputWidgeted';
                         sWidgetButton='<div class="widgetbutton" tipo="calendar_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
@@ -744,7 +751,7 @@
 
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' enctype='multipart/form-data' method='POST' ><table class='forma'>" + sForm + "</table>"+
+        sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' method='POST' ><table class='forma'>" + sForm + "</table>"+
               "<input type='hidden' id='$ta' name='$ta' value='" + $.fn.form.options.modo + "' />" +
               "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
               "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
