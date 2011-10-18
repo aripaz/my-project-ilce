@@ -135,9 +135,11 @@ public class srvSendMail extends HttpServlet {
 
                     if ((strMAILPK!=null)&&(!"".equals(strMAILPK)) &&
                         (strMAILBITAC!=null)&&(!"".equals(strMAILBITAC))){
-                        request.getSession().setAttribute("xmlTab",admXML.salidaXMLBitacora(strMAILPK,strMAILBITAC));
+                        request.getSession().setAttribute("xmlTab",
+                                admXML.salidaXMLBitacora(strMAILPK,strMAILBITAC));
                     }else{
-                        request.getSession().setAttribute("xmlTab",admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
+                        request.getSession().setAttribute("xmlTab",
+                                admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
                     }
                     if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                         LoginHandler lg = new LoginHandler();
@@ -162,25 +164,30 @@ public class srvSendMail extends HttpServlet {
                 try{
                     val.executeErrorHandler(eh,request, response);
                 }catch (Exception es){
-                    val.setTextMessage("Problemas en la execucion del Error de srvForma");
+                    val.setTextMessage("Problemas en la execución del Error de srvSendMail");
                     val.executeErrorException(es, request, response);
                 }
             }
         }catch(Exception e){
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                 LoginHandler lg = new LoginHandler();
-                lg.setTextExecution("Error al procesar el envio de Mail");
+                lg.setTextExecution("Error al procesar el envío de Mail");
                 request.getSession().setAttribute("loginHand",lg);
                 cleanMemory(request);
                 request.getRequestDispatcher(PagDispacher).forward(request, response);
             }else{
-                val.setTextMessage("Problemas en la execucion de srvForma");
+                val.setTextMessage("Problemas en la execución de srvSendMail");
                 val.executeErrorException(e, request, response);
             }
         } finally {
         }
     } 
 
+    /**
+     * Metodo para limpiar de memoria los datos asociados al mail. Nos asegura
+     * que ante una nueva invocacion no se tomen datos de un mail anterior.
+     * @param request
+     */
     private void cleanMemory(HttpServletRequest request){
         request.getSession().removeAttribute("from");
         request.getSession().removeAttribute("to");
@@ -195,6 +202,11 @@ public class srvSendMail extends HttpServlet {
         request.getSession().removeAttribute("MAILBITAC");
     }
 
+    /**
+     * Obtiene desde la Session los datos requeridos para enviar un mail
+     * @param request
+     * @return  HashMap     HashMap con los datos recuperados
+     */
     private HashMap getDataFromSession(HttpServletRequest request){
         HashMap hs = new HashMap();
 
@@ -223,7 +235,6 @@ public class srvSendMail extends HttpServlet {
         if (strCopyO!=null){
             hs.put("copyO", strCopyO);
         }
-        
         return hs;
     }
 

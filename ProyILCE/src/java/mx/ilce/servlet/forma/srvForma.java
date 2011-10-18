@@ -22,6 +22,7 @@ import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
+import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
  
 /**
@@ -44,6 +45,7 @@ public class srvForma extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        SpyHandler spy = new SpyHandler();
         Validation val = new Validation();
         try {
             if (!val.validateUser(request)){
@@ -53,6 +55,7 @@ public class srvForma extends HttpServlet {
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
                 HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
+                spy.setHsForm(hsForm);
                 forma.setFormData(hsForm);
                 ArrayList arrayForm = (ArrayList) hs.get("arrayFORM");  //Datos
                 forma.setFormName(arrayForm);
@@ -121,6 +124,7 @@ public class srvForma extends HttpServlet {
                         }
                         StringBuffer xmlForma = forma.getXmlEntidad();
                         request.getSession().setAttribute("xmlForma", xmlForma);
+                        spy.setXmlSld(xmlForma);
                     }
                     actualizarData(request);
 
@@ -139,6 +143,7 @@ public class srvForma extends HttpServlet {
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
+            spy.SpyData("svrForma");
         }
     }
 

@@ -448,21 +448,25 @@ public class CampoForma implements Serializable  {
      */
     @Override
     public String toString() {
-        return "CampoForma{" + "claveCampo=" + claveCampo
-                + " || claveForma=" + claveForma
-                + " || tabla=" + tabla
-                + " || campo=" + campo
-                + " || aliasCampo=" + aliasCampo
-                + " || obligatorio=" + obligatorio
-                + " || tipoControl=" + tipoControl
-                + " || evento=" + evento
-                + " || foraneo=" + foraneo
-                + " || filtroForaneo=" + filtroForaneo
-                + " || ayuda=" + ayuda
-                + " || datoSensible=" + datoSensible
-                + " || activo=" + activo
-                + " || tamano=" + tamano
-                + " || claveFormaForanea=" + claveFormaForanea
-                + " || typeData=" + typeData + '}';
+        String str = "";
+        str = "CampoForma{"
+                + ((claveCampo!=null)?"\n|| claveCampo=" + claveCampo:"")
+                + ((claveForma!=null)?"\n|| claveForma=" + claveForma:"")
+                + ((tabla!=null)?"\n|| tabla=" + tabla:"")
+                + ((campo!=null)?"\n|| campo=" + campo:"")
+                + ((aliasCampo!=null)?"\n|| aliasCampo=" + aliasCampo:"")
+                + ((obligatorio!=null)?"\n|| obligatorio=" + obligatorio:"")
+                + ((tipoControl!=null)?"\n|| tipoControl=" + tipoControl:"")
+                + ((evento!=null)?"\n|| evento=" + evento:"")
+                + ((foraneo!=null)?"\n|| foraneo=" + foraneo:"")
+                + ((filtroForaneo!=null)?"\n|| filtroForaneo=" + filtroForaneo:"")
+                + ((ayuda!=null)?"\n|| ayuda=" + ayuda:"")
+                + ((datoSensible!=null)?"\n|| datoSensible=" + datoSensible:"")
+                + ((activo!=null)?"\n|| activo=" + activo:"")
+                + ((tamano!=null)?"\n|| tamano=" + tamano:"")
+                + ((claveFormaForanea!=null)?"\n|| claveFormaForanea=" + claveFormaForanea:"")
+                + ((typeData!=null)?"\n|| typeData=" + typeData:"")
+                + "\n}";
+        return str;
     }
 }

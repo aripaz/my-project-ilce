@@ -45,7 +45,7 @@ public class AdminForm {
      * asociado al campo archivo, va el nuevo nombre y su ruta con que quedo en
      * el servidor.
      * @param request   Objeto de la Session que contiene los datos del formulario
-     * @return
+     * @return  HashMap     Contiene los datos de las variables encontradas
      * @throws ExceptionHandler
      */
     public HashMap getFormulario(HttpServletRequest request) throws ExceptionHandler{
@@ -74,7 +74,7 @@ public class AdminForm {
      * como otro dato mas, no generandose el hash con los datos de archivo ni
      * realizandose la copia en el servidor
      * @param request   Objeto de la Session que contiene los datos del formulario
-     * @return
+     * @return  HashMap     Resultado de los datos leidos del Formulario
      * @throws ExceptionHandler
      */
     private HashMap getFormularioSimple(HttpServletRequest request) throws ExceptionHandler{
@@ -113,7 +113,7 @@ public class AdminForm {
      * existen, se genera una copia en el servidor y se entrega en el Hash, el
      * nombre y ruta del archivo. Se usa para formularios del tipo multipart/form-data
      * @param request   Objeto de la Session que contiene los datos del formulario
-     * @return
+     * @return  HashMap     Resultado de los datos leidos del Formulario, incluye los archivos
      * @throws ExceptionHandler
      */
     private HashMap getFormularioMultiPart(HttpServletRequest request) throws ExceptionHandler{
@@ -163,7 +163,6 @@ public class AdminForm {
                             }
                             UtilDate ud = new UtilDate();
                             String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"");
-                            //String strDia = ud.getFecha(UtilDate.formato.AMD,"");
                             strDia = strDia.replaceAll(":","");
                             strDia = strDia.replaceAll(" ","_");
                             String dirName = FileServerPath + strDia + "." + fileName;
@@ -190,6 +189,10 @@ public class AdminForm {
         return hs;
     }
 
+    /**
+     * Metodo con los ContentType Aceptados y que deben rechazarce
+     * @return
+     */
     private HashMap getContentTypeAcepted(){
         HashMap hs = new HashMap();
         //IMAGENES
@@ -248,7 +251,6 @@ public class AdminForm {
         
         return hs;
     }
-
 
     /**
      * Entrega un Hash con el contenido de un formulario, en el Hash de
@@ -649,7 +651,15 @@ public class AdminForm {
         return strSld;
     }
 
-
+    /**
+     * Se encarga de limpiar la variable SIDX enviada desde la capa vista para
+     * poder determinar por cual campo se debe ordenar la query. Usada principalmente
+     * en el ordenamiento de las Grillas.
+     * @param strData       El contenido de la variable
+     * @param separador     El separador usado
+     * @param numPaso       Posicion para considerar en la eliminacion
+     * @return
+     */
     public String cleanSIDX(String strData, String separador, int numPaso){
         String strSld = strData;
 

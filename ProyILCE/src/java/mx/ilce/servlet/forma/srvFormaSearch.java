@@ -20,6 +20,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.controller.Forma;
 import mx.ilce.handler.ExceptionHandler;
+import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -41,17 +42,19 @@ public class srvFormaSearch extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        SpyHandler spy = new SpyHandler();
         Validation val = new Validation();
         try {
             if (!val.validateUser(request)){
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
-                Thread.sleep(100);
+                //Thread.sleep(100);
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
                 hs = admForm.getFormulario(request);
                 HashMap hsForm = (HashMap) hs.get("FORM");
                 hsForm = (HashMap) hs.get("FORM");
+                spy.setHsForm(hsForm);
 
                 String claveForma = (String) hsForm.get("$cf");
                 String claveAplic = (String) hsForm.get("$ca");
@@ -130,6 +133,7 @@ public class srvFormaSearch extends HttpServlet {
 
                         request.getSession().removeAttribute("xmlForma");
                         request.getSession().setAttribute("xmlForma", xmlForma);
+                        spy.setXmlSld(xmlForma);
                     }
                     request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
                 }
@@ -146,6 +150,7 @@ public class srvFormaSearch extends HttpServlet {
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
+            spy.SpyData("srvFormaSearch");
         }
     } 
 

@@ -30,7 +30,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtencion del user
-     * @return
+     * @return  User    Objeto User
      */
     public User getUser() {
         return user;
@@ -38,7 +38,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asignacion del user
-     * @param user
+     * @param user  Objeto User
      */
     public void setUser(User user) {
         this.user = user;
@@ -46,7 +46,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtiene el objeto bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -54,7 +54,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna el objeto bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -62,7 +62,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtiene el arreglo de variables
-     * @return
+     * @return  String[][]  Arreglo con variables
      */
     public String[][] getArrVariables() {
         return arrVariables;
@@ -70,7 +70,7 @@ public class Perfil extends Entidad{
 
     /**
      * Asigna el arreglo de variables
-     * @param arrVariables
+     * @param arrVariables  Arreglo con variables
      */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
@@ -78,7 +78,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtiene la clave del perfil
-     * @return
+     * @return  Integer     Clave del perfil
      */
     public Integer getClavePerfil() {
         return clavePerfil;
@@ -94,7 +94,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtiene el listado de aplicaciones del perfil
-     * @return
+     * @return  List    Listado de aplicaciones del Perfil
      */
     public List getLstAplicacion() {
         return lstAplicacion;
@@ -110,7 +110,7 @@ public class Perfil extends Entidad{
 
     /**
      * Obtiene el nombre del perfil
-     * @return
+     * @return  String  Nombre del perfil
      */
     public String getPerfil() {
         return perfil;
@@ -193,7 +193,8 @@ public class Perfil extends Entidad{
      * el texto con la causa
      * @param user      Texto de identificacion del usuario
      * @param password  Texto con la password del usuario
-     * @return
+     * @return  LoginHandler    Resultado de la operacion
+     * @throws ExceptionHandler
      */
     public LoginHandler login(String user, String password) throws ExceptionHandler{
         LoginHandler lg = new LoginHandler();
@@ -234,12 +235,13 @@ public class Perfil extends Entidad{
      * conexion contenidos en el Bean User. En caso de existir problemas se
      * obtiene el texto con la causa
      * @param usuario   Objeto User con los datos del usuario
-     * @return
+     * @return  LoginHandler    Resultado de la operacion
+     * @throws ExceptionHandler
      */
     public LoginHandler login(User usuario) throws ExceptionHandler {
         LoginHandler lg = new LoginHandler();
         try{
-            String user = usuario.getLogin();
+            String userData = usuario.getLogin();
             String password = usuario.getPassword();
             ConSession con = new ConSession();
             Bitacora bitacoraI = this.getBitacora();
@@ -247,7 +249,7 @@ public class Perfil extends Entidad{
             con.setBitacora(bitacoraI);
 
             con.getBitacora().setEnable(enableBit);
-            User usr = con.getUser(user, password, this.getArrVariables());
+            User usr = con.getUser(userData, password, this.getArrVariables());
             if (usr.isLogged()){
                 bitacoraI.setEnable(false);
                 usr.setBitacora(bitacoraI);
@@ -276,8 +278,9 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Se registra un nuevo usuario
-     * @return
+     * Metodo utilizado para el registro de un nuevo usuario
+     * @return  ExecutionHandler    Resultado de la operacion
+     * @throws ExceptionHandler
      */
     public ExecutionHandler registrarUsuario() throws ExceptionHandler{
         ExecutionHandler sld = new ExecutionHandler();
@@ -298,6 +301,8 @@ public class Perfil extends Entidad{
 
     /**
      * Metodo utilizado para la recuperacion de la password del usuario
+     * @return  ExecutionHandler    Resultado de la operacion
+     * @throws ExceptionHandler
      */
     public ExecutionHandler enviarPasswordPerdido() throws ExceptionHandler {
         ExecutionHandler sld = new ExecutionHandler();
@@ -336,7 +341,7 @@ public class Perfil extends Entidad{
                 admBit.logout();
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Logout");
         }finally{
         }
     }
@@ -349,6 +354,11 @@ public class Perfil extends Entidad{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Obtiene el Listado de areas de la aplicacion
+     * @return  List    Listado con las areas
+     * @throws ExceptionHandler
+     */
     public List getListArea() throws ExceptionHandler{
         List lst = null;
         try{
@@ -382,6 +392,11 @@ public class Perfil extends Entidad{
         return lst;
     }
 
+    /**
+     * Metodo que indica si un mail ya esta registrado o no
+     * @return  Boolean     Resultado de la validacion
+     * @throws ExceptionHandler
+     */
     public boolean existUser() throws ExceptionHandler{
         boolean sld = false;
         try {

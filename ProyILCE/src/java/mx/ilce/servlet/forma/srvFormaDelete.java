@@ -18,6 +18,7 @@ import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
+import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -37,6 +38,7 @@ public class srvFormaDelete extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        SpyHandler spy = new SpyHandler();
         Validation val = new Validation();
         try {
             if (!val.validateUser(request)){
@@ -48,6 +50,7 @@ public class srvFormaDelete extends HttpServlet {
 
                 HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
                 HashMap hsFormQuery = new HashMap();
+                spy.setHsForm(hsForm);
 
                 String claveForma = (String) hsForm.get("$cf");
                 String claveAplic = (String) hsForm.get("$ca");
@@ -106,6 +109,7 @@ public class srvFormaDelete extends HttpServlet {
                     //request.getSession().setAttribute("xmlTab", admXML.salidaXML(String.valueOf(xml)));
                     request.getSession().setAttribute("xmlTab", admXML.salidaXMLBitacora(String.valueOf(xml),
                                                                 String.valueOf(forma.getBitacora().getIdBitacora())));
+                    spy.setXmlSld(new StringBuffer((String) request.getSession().getAttribute("xmlTab")));
                     request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
             }
@@ -121,6 +125,7 @@ public class srvFormaDelete extends HttpServlet {
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
+            spy.SpyData("svrFormaDelete");
         }
     }
 

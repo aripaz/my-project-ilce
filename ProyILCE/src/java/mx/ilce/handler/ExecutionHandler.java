@@ -30,7 +30,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Obtiene el Object ingresado al Objeto
-     * @return
+     * @return  Object  Objeto ingresado
      */
     public Object getObjectData() {
         return objectData;
@@ -38,7 +38,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el Object a ingresar al Objeto
-     * @param objectData     Entrada del tipo Object
+     * @param objectData     Objeto ingresado
      */
     public void setObjectData(Object objectData) {
         this.objectData = objectData;
@@ -46,7 +46,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Obtiene el ListaData ingresado al Objeto
-     * @return
+     * @return  List    Listado del objeto
      */
     public List getListData() {
         return listData;
@@ -54,7 +54,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el ListData a ingresar al Objeto
-     * @param listData  Entrada con el listado a ingresar
+     * @param listData  Listado del objeto
      */
     public void setListData(List listData) {
         this.listData = listData;
@@ -62,7 +62,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Indica si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
-     * @return
+     * @return  Boolean     Valor TRUE O FALSE de la validacion
      */
     public boolean isExecutionOK() {
         return executionOK;
@@ -70,7 +70,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
-     * @param executionOK   Entrada con TRUE o FALSE
+     * @param executionOK   Valor TRUE O FALSE de la validacion
      */
     public void setExecutionOK(boolean executionOK) {
         this.executionOK = executionOK;
@@ -78,7 +78,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Obtiene el ID de la execucion
-     * @return
+     * @return  BigDecimal  ID de la ejecucion
      */
     public BigDecimal getIdExecution() {
         return idExecution;
@@ -86,7 +86,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el ID de la ejecucion
-     * @param idExecution   Entrada con el ID de la Ejecucion
+     * @param idExecution   ID de la Ejecucion
      */
     public void setIdExecution(BigDecimal idExecution) {
         this.idExecution = idExecution;
@@ -94,7 +94,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Obtiene el texto de respuesta de la ejecucion
-     * @return
+     * @return  String  Texto de la ejecucion
      */
     public String getTextExecution() {
         return textExecution;
@@ -102,7 +102,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el texto de respuesta de la ejecucion
-     * @param textExecution     Texto de la respuesta
+     * @param textExecution     Texto de la ejecucion
      */
     public void setTextExecution(String textExecution) {
         this.textExecution = textExecution;
@@ -110,7 +110,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Obtiene el titulo dado a la ejecucion
-     * @return
+     * @return  String      Titulo de la ejecucion
      */
     public String getTitleExecution() {
         return titleExecution;
@@ -118,7 +118,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Asigna el titulo dado a la ejecucion
-     * @param titleExecution    Titulo de la respuesta
+     * @param titleExecution    Titulo de la ejecucion
      */
     public void setTitleExecution(String titleExecution) {
         this.titleExecution = titleExecution;
@@ -129,9 +129,10 @@ public class ExecutionHandler implements Serializable{
      */
     @Override
     public String toString() {
-        return "ExecutionHandler{" + "idExecution=" + idExecution + "titleExecution=" + titleExecution + "textExecution=" + textExecution + "executionOK=" + executionOK + '}';
-    }
-
-
-    
+        return "ExecutionHandler{" 
+                + "idExecution=" + idExecution + " || "
+                + "titleExecution=" + titleExecution + " || "
+                + "textExecution=" + textExecution + " || "
+                + "executionOK=" + executionOK + '}';
+    }    
 }

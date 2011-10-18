@@ -1,9 +1,7 @@
 package mx.ilce.mail;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import mx.ilce.bean.Campo;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bean.HashCampo;
@@ -21,22 +19,44 @@ public class SendMailNotif {
     private Bitacora bitacora;
     private DataMail dataMail;
 
+    /**
+     * Obtiene el objeto DataMail, que contiene los datos del mail
+     * @return  DataMail    Objeto con los datos del mail
+     */
     public DataMail getDataMail() {
         return dataMail;
     }
 
+    /**
+     * Asigna el objeto DataMail, que contiene los datos del mail
+     * @param dataMail  Objeto con los datos del mail
+     */
     public void setDataMail(DataMail dataMail) {
         this.dataMail = dataMail;
     }
 
+    /**
+     * Obtiene el objeto Bitacora
+     * @return  Bitacora    Objeto Bitacora
+     */
     public Bitacora getBitacora() {
         return bitacora;
     }
 
+    /**
+     * Asigna el objeto Bitacora
+     * @param bitacora  Objeto Bitacora
+     */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
     }
 
+    /**
+     *  Metodo para envio de mail asociado a un evento y el estatus de la
+     * actividad a la que viene asociado.
+     * @return  Boolean     Valor de validacion del resultado de la operacion
+     * @throws ExceptionHandler
+     */
     public boolean admSendMail() throws ExceptionHandler{
         boolean sld = false;
 
@@ -176,6 +196,14 @@ public class SendMailNotif {
         return sld;
     }
 
+    /**
+     * Obtiene los nombres contenidos en el HashMap. Este requiere que venga
+     * en un orden especifico, el orden se lo da la query con que se obtuvo los
+     * datos. La salida entrega los nombres tras recorrer el HashMap. Usado para
+     * obtener los nombres de los destinatarios de mail.
+     * @param hsMap         HashMap con los datos de los nombres
+     * @return  String[]    Arreglo con el listado de los nombres
+     */
     private String[] getDataUser(HashMap hsMap){
         String[] strData = new String[2];
 
@@ -203,6 +231,12 @@ public class SendMailNotif {
         return strData;
     }
 
+    /**
+     * Obtiene un Texto que incluye los datos leidos en el HashMap. Usado para
+     * obtener los mail de los destinatarios en un solo texto.
+     * @param hsMap     Datos a recorrer
+     * @return  String  Texto conteniendo los datos leidos
+     */
     private String getDataDest(HashMap hsMap){
         String strData = "";
 

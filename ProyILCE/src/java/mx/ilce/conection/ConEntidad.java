@@ -40,8 +40,8 @@ public class ConEntidad {
 
     /**
      * Obtiene el IDQUERY desde el properties de queries
-     * @param key   clave que se esta buscando
-     * @return
+     * @param key           Clave que se esta buscando
+     * @return  Integer     ID de la query asociada a la clave entregada
      * @throws ExceptionHandler
      */
     public Integer getIdQuery(String key) throws ExceptionHandler{
@@ -59,15 +59,18 @@ public class ConEntidad {
     }
 
     /**
-     * Se ejecuta la insercion de los datos configurados en el objeto
-     * (CampoForma y Query)
+     * Se ejecuta la insercion de los datos configurados en el objeto. El resultado
+     * se deja en el objeto HashCampo del Controller.
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: contiene los datos para la operacion.
+     * (-) Query: contiene la query que se ejecutara.
+     * @param dataTransfer  Objeto para transferencia de datos entre capas
      * @throws ExceptionHandler
      */
     public void ingresaEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
         try{
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
-            //HashCampo hs = con.executeInsert(this.campoForma,this.query);
             HashCampo hs = con.executeInsert(dataTransfer);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -77,8 +80,12 @@ public class ConEntidad {
     }
 
     /**
-     * Se ejecuta la edicion de los datos configurados en el objeto
-     * (CampoForma y Query)
+     * Se ejecuta la edicion de los datos configurados en el objeto. El resultado
+     * se deja en el objeto HashCampo del Controller.
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: contiene los datos para la operacion.
+     * (-) Query: contiene la query que se ejecutara.
+     * @param dataTransfer  Objeto para transferencia de datos entre capas
      * @throws ExceptionHandler
      */
     public void editarEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
@@ -86,7 +93,6 @@ public class ConEntidad {
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            //HashCampo hs = con.executeUpdate(this.campoForma,this.query);
             HashCampo hs = con.executeUpdate(dataTransfer);
             this.hashCampo = hs;
         }catch(Exception ex){
@@ -96,8 +102,12 @@ public class ConEntidad {
     }
 
     /**
-     * Se ejecuta la eliminacion de los datos configurados en el objeto
-     * (CampoForma y Query)
+     * Se ejecuta la eliminacion de los datos configurados en el objeto. El resultado
+     * se deja en el objeto HashCampo del Controller.
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: contiene los datos para la operacion.
+     * (-) Query: contiene la query que se ejecutara.
+     * @param dataTransfer  Objeto para transferencia de datos entre capas
      * @throws ExceptionHandler
      */
     public void eliminaEntidad(DataTransfer dataTransfer) throws ExceptionHandler{
@@ -105,7 +115,6 @@ public class ConEntidad {
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            //HashCampo hs = con.executeDelete(this.campoForma,this.query);
             HashCampo hs = con.executeDelete(dataTransfer);
             
             this.hashCampo = hs;
@@ -115,11 +124,17 @@ public class ConEntidad {
         }
     }
 
+    /**
+     * Metodo implementado pensando en la posibilidad de ingresar una data desde
+     * un formulario y los permisos asociados a los nuevos datos. NO PROBADA
+     * @param dataTransfer  Objeto para transferencia de datos entre capas
+     * @throws ExceptionHandler
+     */
     public void ingresarDataPermisos(DataTransfer dataTransfer) throws ExceptionHandler{
         try {
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
-            //HashCampo hs = con.executeDeleteInsert(this.campoForma,this.queryDel,this.query);
+
             HashCampo hs = con.executeDeleteInsert(dataTransfer);
 
             this.hashCampo = hs;
@@ -130,29 +145,18 @@ public class ConEntidad {
     }
 
     /**
-     * NO IMPLEMENTADO
-     */
-    public void obtieneEntidad(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * NO IMPLEMENTADO
-     */
-    public List obtieneMenu(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
      * Obtiene la configuracion de la formas a partir del ID de la misma  y los
-     * campos que se estan buscando
-     * @param strData   Debe contener dos parametros, el ID de la Forma y un
-     * listado de String con los nombres de los campos que se quieren obtener.
+     * campos que se estan buscando.
+     * El objeto de DataTransfer contiene los siguientes datos:
+     * (-) strData: Debe contener dos parametros, el ID de la Forma y un
+     * listado de String con los nombres de los campos que se quieren obtener. 
      * Con esto se evita traer la forma completa.
-     * @return
+     * (-) arrVariable: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion
+     * @param dataTransfer  Objeto para transferencia de datos entre capas
+     * @return  List        Listado con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public List getListFormaByIdAndCampos(String[] strData, String[][] arrVariables) throws ExceptionHandler{
     public List getListFormaByIdAndCampos(DataTransfer dataTransfer) throws ExceptionHandler{
         List lstSld=null;
         try{
@@ -160,7 +164,6 @@ public class ConEntidad {
             connQ.setBitacora(this.getBitacora());
             Integer idQuery = getIdQuery(AdminFile.FORMACAMPOS);
             dataTransfer.setIdQuery(idQuery);
-            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMACAMPOS), strData, arrVariables);
             HashCampo hsCmp = connQ.getData(dataTransfer);
             
             if (!hsCmp.getListData().isEmpty()){
@@ -171,8 +174,6 @@ public class ConEntidad {
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
                                 "Problemas para obtener el listado de Formas por ID y Campos");
-        }finally{
-
         }
         return lstSld;
     }
@@ -180,11 +181,18 @@ public class ConEntidad {
     /**
      * Obtiene la configuracion de una forma a partir del ID de la misma,
      * entregando un Listado de Bean del tipo CampoForma
-     * @param strData   Debe contener el ID de la forma a buscar
-     * @return
+     * El objeto de DataTransfer contiene los siguientes datos: 
+     * (-) strData: Arreglo con el ID de la forma a buscar.
+     * (-) strWhere: Condiciones adicionales para agregar a la query.
+     * (-) arrData: Arreglo de data con los parametros de entrada que se
+     * utilizara en la query.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son
+     * obligatorias, pero pueden estar definidas en el User o el ambiente
+     * de la aplicacion.
+     * @param   dataTransfer    Objeto para transferencia de datos entre capas
+     * @return  List            Listado con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public List getListFormaById(String[] strData, String[][] arrVariables) throws ExceptionHandler{
     public List getListFormaById(DataTransfer dataTransfer) throws ExceptionHandler{
         List lstSld=null;
         try{
@@ -193,8 +201,6 @@ public class ConEntidad {
 
             Integer idQuery = getIdQuery(AdminFile.FORMA);
             dataTransfer.setIdQuery(idQuery);
-            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.FORMA), strData, arrVariables);
-            //HashCampo hsCmp = connQ.getData(dataTransfer);
             HashCampo hsCmp = connQ.getDataWithWhereAndData(dataTransfer);
 
             if (!hsCmp.getListData().isEmpty()){
@@ -205,28 +211,28 @@ public class ConEntidad {
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
                                 "Problemas para obtener el listado de Formas por ID");
-        }finally{
-
         }
         return lstSld;
     }
 
     /**
      * Obtiene la data generada a partir de la Query entregada y los parametros
-     * de entrada que deben utilizarce con la Query
-     * @param strQuery  Query que se desea ejecutar
-     * @param strData   Datos de entrada para la query
-     * @return
+     * de entrada que deben utilizarce con la Query.
+     * El objeto de DataTransfer contiene los siguientes datos:
+     * (-) strQuery: Query que se desea ejecutar.
+     * (-) strData: Arreglo con los datos de entrada para la query. 
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param   dataTransfer    Objeto para transferencia de datos entre capas
+     * @return  HashCampo       Objeto con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataByQuery(String strQuery, String[] strData, String[][] arrVariables) throws ExceptionHandler{
     public HashCampo getDataByQuery(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery con = new ConQuery();
             con.setBitacora(this.getBitacora());
 
-            //hsCmp = con.getDataByQuery(strQuery, strData, arrVariables);
             hsCmp = con.getDataByQuery(dataTransfer);
             
         }catch(Exception ex){
@@ -239,7 +245,7 @@ public class ConEntidad {
     /**
      * Entrega el campo PK de una Tabla
      * @param tabla     Nombre de la tabla donde se buscara el PK
-     * @return
+     * @return  String  Nombre del campo PK
      * @throws ExceptionHandler
      */
     public String getCampoPK(String tabla) throws ExceptionHandler{
@@ -259,26 +265,26 @@ public class ConEntidad {
      /**
      * Entrega un objeto con la data y los campos que resultan de ejecutar la
      * query del ID entregado, junto con los parametros respectivos
-     * @param IdQuery   ID de la query que se quiere ejecutar
-     * @param strData   Arreglo con la data de entrada que se debe usar en la
-     * Query
-     * @return
+     * El objeto de DataTransfer contiene los siguientes datos:
+     * (-) IdQuery: ID de la query que se quiere ejecutar.
+     * (-) strData: Arreglo con los parametros de entrada.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son
+     * obligatorias, pero pueden estar definidas en el User o el ambiente
+     * de la aplicacion.
+     * @param   dataTransfer    Objeto para transferencia de datos entre capas
+     * @return  HashCampo       Objeto con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
     public HashCampo getDataByIdQuery(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
-            //hsCmp = connQ.getData(IdQuery, strData, arrVariables);
             hsCmp = connQ.getData(dataTransfer);
 
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
                                 "Problemas para obtener datos por el ID QUERY");
-        }finally{
-
         }
         return hsCmp;
     }
@@ -286,63 +292,64 @@ public class ConEntidad {
      /**
      * Entrega un objeto con la data y los campos que resultan de ejecutar la
      * query del ID entregado, junto con los parametros respectivos
-     * @param IdQuery   ID de la query que se quiere ejecutar
-     * @param strData   Condicionador a aplicar a la query
-     * Query
-     * @return
+     * El objeto de DataTransfer contiene los siguientes datos:
+     * (-) IdQuery: ID de la query que se quiere ejecutar.
+     * (-) strData: Arreglo con los parametros de entrada.
+     * (-) strWhere: Condiciones adicionales para agregar a la query.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son
+     * obligatorias, pero pueden estar definidas en el User o el ambiente
+     * de la aplicacion.
+     * @param   dataTransfer    Objeto para transferencia de datos entre capas
+     * @return  HashCampo       Objeto con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataByIdQueryAndWhere(Integer IdQuery, String strData, String[][] arrVariables ) throws ExceptionHandler{
     public HashCampo getDataByIdQueryAndWhere(DataTransfer dataTransfer) throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
-            //hsCmp = connQ.getDataWithWhere(IdQuery, strData, arrVariables);
             hsCmp = connQ.getDataWithWhere(dataTransfer);
 
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
                                 "Problemas para obtener datos por el ID QUERY y WHERE");
-        }finally{
-
         }
         return hsCmp;
     }
 
     /**
      * Entrega un objeto con la data y los campos que resultan de ejecutar la
-     * query del ID entregado, junto con los parametros respectivos
-     * @param IdQuery   ID de la query que se quiere ejecutar
-     * @param strWhere  Condicionador a aplicar a la query
-     * @param strData   Arreglo con la data de entrada que se debe usar en la
-     * query
-     * @return
+     * query del ID entregado, junto con los parametros respectivos.
+     * El objeto de DataTransfer contiene los siguientes datos: 
+     * (-) IdQuery: ID de la query que se quiere ejecutar. 
+     * (-) strData: Arreglo con los parametros de entrada. 
+     * (-) strWhere: Condiciones adicionales para agregar a la query. 
+     * (-) arrVariables: Arreglo con variables que no necesariamente son
+     * obligatorias, pero pueden estar definidas en el User o el ambiente
+     * de la aplicacion.
+     * @param   dataTransfer    Objeto para transferencia de datos entre capas
+     * @return  HashCampo       Objeto con el resultado obtenido
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataByIdQueryAndWhereAndData(Integer IdQuery, String strWhere, String[] strData, String[][] arrVariables )
     public HashCampo getDataByIdQueryAndWhereAndData(DataTransfer dataTransfer)
             throws ExceptionHandler{
         HashCampo hsCmp = new HashCampo();
         try{
             ConQuery connQ = new ConQuery();
             connQ.setBitacora(this.getBitacora());
-            //hsCmp = connQ.getDataWithWhereAndData(IdQuery,strWhere,strData, arrVariables);
             hsCmp = connQ.getDataWithWhereAndData(dataTransfer);
 
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
                                 "Problemas para obtener datos por el ID QUERY, WHERE y DATA");
-        }finally{
-
         }
         return hsCmp;
     }
 
 
     /**
-     * Obtiene al query de borrado
-     * @return
+     * Obtiene la query de borrado
+     * @return  String  Query de borrado
      */
     public String getQueryDel() {
         return queryDel;
@@ -358,7 +365,7 @@ public class ConEntidad {
 
     /**
      * Obtiene la query contenida en el objeto
-     * @return
+     * @return  String  Query de borrado
      */
     public String getQuery() {
         return query;
@@ -374,7 +381,7 @@ public class ConEntidad {
 
     /**
      * Obtiene el objeto de tipo HashCampo
-     * @return
+     * @return  HashCampo   Objeto solicitado
      */
     public HashCampo getHashCampo() {
         return hashCampo;
@@ -390,7 +397,7 @@ public class ConEntidad {
 
     /**
      * Obtiene el campoForma
-     * @return
+     * @return  CampoForma  Objeto solicitado
      */
     public CampoForma getCampoForma() {
         return campoForma;
@@ -406,7 +413,7 @@ public class ConEntidad {
 
     /**
      * Obtiene el objeto bitacora
-     * @return
+     * @return  Bitacora    Objeto solicitado
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -414,10 +421,23 @@ public class ConEntidad {
 
     /**
      * Asigna el objeto bitacora
-     * @param bitacora
+     * @param bitacora  Objeto a asignar
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
     }
 
+    /**
+     * NO IMPLEMENTADO
+     */
+    public void obtieneEntidad(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * NO IMPLEMENTADO
+     */
+    public List obtieneMenu(){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

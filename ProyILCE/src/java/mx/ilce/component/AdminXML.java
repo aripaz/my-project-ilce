@@ -44,7 +44,7 @@ public class AdminXML {
     /**
      * Obtiene el valor al Validador que indica si se debe incluir la hora con
      * los campos de tipo fecha
-     * @return
+     * @return  Boolean     Valor validador
      */
     public boolean isIncludeHour() {
         return includeHour;
@@ -53,7 +53,7 @@ public class AdminXML {
     /**
      * Asigna un valor al Validador que indica si se debe incluir la hora con
      * los campos de tipo fecha
-     * @param includeHour
+     * @param includeHour   Valor Validador
      */
     public void setIncludeHour(boolean includeHour) {
         this.includeHour = includeHour;
@@ -61,7 +61,7 @@ public class AdminXML {
 
     /**
      * Obtiene el objeto Bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -69,7 +69,7 @@ public class AdminXML {
 
     /**
      * Asigna el Objeto Bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -77,7 +77,7 @@ public class AdminXML {
 
     /**
      * Obtiene el HashMap que contiene la data captura desde un formulario
-     * @return
+     * @return  HashMap     HashMap con datos del formulario
      */
     public HashMap getHsForm() {
         return hsForm;
@@ -85,7 +85,7 @@ public class AdminXML {
 
     /**
      * Asigna el HashMap que contiene la data captura desde un formulario
-     * @param hsForm
+     * @param hsForm    HashMap con datos del formulario
      */
     public void setHsForm(HashMap hsForm) {
         this.hsForm = hsForm;
@@ -93,7 +93,7 @@ public class AdminXML {
 
     /**
      * Obtiene los permisos de la forma
-     * @return
+     * @return      HashCampo   Hash con los permisos
      */
     public HashCampo getHashPermisoForma() {
         return hashPermisoForma;
@@ -101,7 +101,7 @@ public class AdminXML {
 
     /**
      * Asigna los permisos de la Forma
-     * @param hashPermisoForma
+     * @param hashPermisoForma  Hash con los permisos
      */
     public void setHashPermisoForma(HashCampo hashPermisoForma) {
         this.hashPermisoForma = hashPermisoForma;
@@ -110,7 +110,7 @@ public class AdminXML {
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
      * listado del foraneo
-     * @return
+     * @return      Boolean     Valor validador
      */
     public boolean isIncludeForaneo() {
         return includeForaneo;
@@ -119,7 +119,7 @@ public class AdminXML {
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se debe incluir o no el
      * listado del foraneo
-     * @param includeForaneo
+     * @param includeForaneo    Valor validador
      */
     public void setIncludeForaneo(boolean includeForaneo) {
         this.includeForaneo = includeForaneo;
@@ -128,7 +128,7 @@ public class AdminXML {
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe ignorar o no
      * los datos de tipo Increement
-     * @return
+     * @return  Boolean     Estado a aplicar a la variable
      */
     public boolean isDeleteIncrement() {
         return deleteIncrement;
@@ -149,7 +149,7 @@ public class AdminXML {
      * obtenidos desde la Base de Datos
      * @param user  Bean con los datos del usuario que se va a buscar, debe
      * contener la clave de empleado del usuario
-     * @return
+     * @return  StringBuffer    XML con datos de Session
      * @throws ExceptionHandler
      */
     public StringBuffer getSessionXML(User user, String[][] arrVariables) throws ExceptionHandler{
@@ -171,7 +171,7 @@ public class AdminXML {
      * Obtiene el menu en formato XML que le corresponde al usuario conectado
      * segun su perfil
      * @param user  Objeto User con los datos del usuariuo conectado
-     * @return
+     * @return  StringBuffer    XML con configuracion del Menu
      * @throws ExceptionHandler
      */
     public StringBuffer getMenuXML(User user, String[][] arrVariables) throws ExceptionHandler{
@@ -197,7 +197,7 @@ public class AdminXML {
     /**
      * Entrega los tab en formato XML que le corresponden segun el perfil entregado
      * @param perfil    Objeto Perfil con los datos del perfil del usuariuo conectado
-     * @return
+     * @return      StringBuffer    XML con los TAB
      * @throws ExceptionHandler
      */
     public StringBuffer getTabXML(Perfil perfil, String[][] arrVariables) throws ExceptionHandler{
@@ -229,7 +229,7 @@ public class AdminXML {
      * campo de la columna
      * @param page   Número de pagina que se desea mostrar del total de datos
      * @param regByPage Numero de registros por pagina que se deben mostrar
-     * @return
+     * @return  StringBuffer    XML con los datos para la Grilla
      * @throws ExceptionHandler
      */
     public StringBuffer getGridByData(HashCampo hsData, List lstCampos, int page, int regByPage)
@@ -339,7 +339,7 @@ public class AdminXML {
      * @param lstCampos Contiene el listado de campos de la forma utilizada, se
      * utiliza para completar los datos equivalentes que le corresponden a cada
      * campo de la columna
-     * @return
+     * @return  StringBuffer    XML con las columnas que posee la Grilla
      * @throws ExceptionHandler
      */
     public StringBuffer getGridColumByData(HashCampo hsData, List lstCampos)
@@ -414,7 +414,7 @@ public class AdminXML {
      * @param hsData    Data entregada
      * @param lstCampos Listado de campos de la Forma
      * @param idForma   ID de la Forma entregada
-     * @return
+     * @return  StringBuffer    XML con los datos de la Forma
      * @throws ExceptionHandler
      */
     public StringBuffer getFormaByData(HashCampo hsData, List lstCampos, 
@@ -619,7 +619,7 @@ public class AdminXML {
      * @param hsData    Data para la generacion del XML
      * @param lstCampos     Listado de Campos a considerar desde la Data
      * @param idForma   ID de la Forma utilizada
-     * @return
+     * @return  StringBuffer    XML de la Forma, pero sin data
      * @throws ExceptionHandler
      */
     public StringBuffer getFormaWithoutData(HashCampo hsData, List lstCampos, 
@@ -805,7 +805,7 @@ public class AdminXML {
     /**
      * Trae la seccion de XML asociada al Evento de una Forma
      * @param claveForma    Clave de la forma a buscar
-     * @return
+     * @return  StringBuffer    Seccion de XML con los datos de Evento
      * @throws ExceptionHandler
      */
     private StringBuffer getEventoForma(Integer claveForma) throws ExceptionHandler{
@@ -871,7 +871,8 @@ public class AdminXML {
      * se esta entregando en la data
      * @param strData   Data de entrada que se usara en la query
      * @param strRegistro   Nombre del registro desde donde se invoco el metodo
-     * @return
+     * @return  StringBuffer    Seccion de XML asociado a la forma, usado en la
+     * construccion de los Datos foraneos
      * @throws ExceptionHandler
      */
     private StringBuffer getXmlByIdForma(String[] strData, String strRegistro, String[][] arrVariables)
@@ -951,7 +952,7 @@ public class AdminXML {
      * Obtiene los datos de un campo, obtenidos desde la forma que se le entrega
      * @param lstData   Listado con la configuracion de la forma
      * @param nombreCampo   Campo que se esta buscando desde la forma
-     * @return
+     * @return  CampoForma  Datos del CampoForma
      * @throws ExceptionHandler
      */
     private CampoForma getCampoForma(List lstData, String nombreCampo ) throws ExceptionHandler{
@@ -978,7 +979,7 @@ public class AdminXML {
      * Obtiene un Documento XML, a partir del nombre solicitado. Se asume que
      * los archivos XML estan en la ruta resource/xml/[nombre archivo]
      * @param fileName  Nombre del archivo
-     * @return
+     * @return  Document    Documento obtenido tras leer un archivo fisico XML
      * @throws ExceptionHandler
      */
     private Document getDocumentXML(String fileName) throws ExceptionHandler{
@@ -1018,13 +1019,12 @@ public class AdminXML {
      * @param e     Nodo de inicio de la lectura de datos
      * @param level     Nivel en que se encuentra la lectura
      * @param hsCmp     Conjunto de datos que seran analizados
-     * @return
+     * @return  StringBuffer    Seccion de XML obtenido
      * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp) throws ExceptionHandler{
         StringBuffer str = new StringBuffer("");
         try {
-            //ArrayList lst = (ArrayList) hsCmp.getListCampos();
             Campo cmp = null;
             String strPadre = "";
             boolean endRow = false;
@@ -1085,12 +1085,12 @@ public class AdminXML {
     /**
      * Recorre un archivo XML y va reemplazando los datos del XML por el que le
      * corresponde segun el resultado de la query entregada en el objeto hsCmp.
-     * Se utiliza cuando son mas de un registro
+     * Se utiliza cuando son mas de un registro, su llamado es recursivo.
      * @param e     Nodo de inicio de la lectura de datos
      * @param level     Nivel en que se encuentra la lectura
      * @param hsCmp     Conjunto de datos que seran analizados
      * @param register  Numero del registor en que se vera la lectura
-     * @return
+     * @return  StringBuffer    Seccion de XML Obtenido
      * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp, int register)
@@ -1157,7 +1157,7 @@ public class AdminXML {
     /**
      * Metodo para entregar las respuestas en un formato de XML
      * @param data  Data de la respuesta
-     * @return
+     * @return  String  XML con la respuesta
      */
     public String salidaXML(String data){
         StringBuilder str = new StringBuilder();
@@ -1174,7 +1174,7 @@ public class AdminXML {
      * en un formato XML
      * @param data  Data de la respuesta
      * @param idBitacora    ID de la bitacora
-     * @return
+     * @return  String  XML con la respuesta
      */
     public String salidaXMLBitacora(String data, String idBitacora){
         StringBuilder str = new StringBuilder();
@@ -1190,7 +1190,7 @@ public class AdminXML {
     /**
      * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
      * @param data  String de datos donde se buscaran los caracteres especiales
-     * @return
+     * @return  String  String con los acentos reemplazados
      * @throws ExceptionHandler
      */
     private String replaceAccent(String data) throws ExceptionHandler{
@@ -1246,7 +1246,7 @@ public class AdminXML {
      * Metodo para reemplazar los acentos que viene en configuracion HTML por
      * el texto correspondiente
      * @param data  String que sera recorrido para la revison de loa acentos
-     * @return
+     * @return  String  String con los acentos reemplazados
      * @throws ExceptionHandler
      */
     private String replaceHtml(String data) throws ExceptionHandler{
@@ -1257,20 +1257,38 @@ public class AdminXML {
                 if (str.contains("&aacute;")){
                     str = str.replaceAll("&aacute;","á");
                 }
+                if (str.contains("&Aacute;")){
+                    str = str.replaceAll("&Aacute;","Á");
+                }
                 if(str.contains("&eacute;")){
                     str = str.replaceAll("&eacute;","é" );
+                }
+                if(str.contains("&Eacute;")){
+                    str = str.replaceAll("&Eacute;","É" );
                 }
                 if(str.contains("&iacute;")){
                     str = str.replaceAll("&iacute;","í");
                 }
+                if(str.contains("&Iacute;")){
+                    str = str.replaceAll("&Iacute;","Í");
+                }
                 if(str.contains("&oacute;")){
                     str = str.replaceAll("&oacute;","ó");
+                }
+                if(str.contains("&Oacute;")){
+                    str = str.replaceAll("&Oacute;","Ó");
                 }
                 if(str.contains("&uacute;")){
                     str = str.replaceAll("&uacute;","ú");
                 }
+                if(str.contains("&Uacute;")){
+                    str = str.replaceAll("&Uacute;","Ú");
+                }
                 if(str.contains("&ntilde;")){
                     str = str.replaceAll("&ntilde;","ñ");
+                }
+                if(str.contains("&Ntilde;")){
+                    str = str.replaceAll("&Ntilde;","Ñ");
                 }
                 str = str.trim();
             }
@@ -1284,7 +1302,7 @@ public class AdminXML {
      * Transforma el texto del tipo en Java a el tipo que le corresponde en
      * el XML
      * @param strData   String que sera analizado
-     * @return
+     * @return  String  String con la conversion del tipo de dato
      */
     private String castTypeJavaToXML(String strData){
         String strSld = "";
@@ -1301,14 +1319,13 @@ public class AdminXML {
         }else if ("java.sql.Date".equals(strData)){
             strSld = "datetime";
         }
-
         return strSld;
     }
 
      /**
      * Al entregarse un texto con la palabra NULL, entrega un ""
      * @param strData   Texto a analizar
-     * @return
+     * @return  String  String con el resultado del analisis
      */
     private String castNULL(String strData){
         String sld = "";

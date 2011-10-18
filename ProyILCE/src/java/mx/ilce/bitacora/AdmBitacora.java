@@ -192,16 +192,19 @@ public class AdmBitacora {
                 prop.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de properties");
+            throw new ExceptionHandler(u,AdminFile.class,
+                    "Problemas para leer el archivo de properties");
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de properties");
+            throw new ExceptionHandler(e,AdminFile.class,
+                    "Problemas para leer el archivo de properties");
 	}finally{
             try {
                 if (is != null){
                     is.close();
                 }
             }catch (Exception e){
-                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de properties");
+                throw new ExceptionHandler(e,AdminFile.class,
+                        "Problemas para cerrar el archivo de properties");
             }
         }
 	return prop;
@@ -222,7 +225,8 @@ public class AdmBitacora {
                 sld = prop.getProperty(key);
             }
 	}catch(Exception e){
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener la llave desde el properties");
+            throw new ExceptionHandler(e,AdminFile.class,
+                    "Problemas para obtener la llave desde el properties");
 	}
         return sld;
     }
@@ -233,7 +237,7 @@ public class AdmBitacora {
      * @throws SQLException
      */
     private void getConexion() throws SQLException, ExceptionHandler{
-        StringBuffer strConexion = new StringBuffer();
+        StringBuilder strConexion = new StringBuilder();
         try {
             if (this.getProp()!=null){
                 String server = getKey(this.getProp(),"SERVER");
@@ -256,11 +260,14 @@ public class AdmBitacora {
                 }
             }
         }catch (SQLException sqlex){
-            throw new ExceptionHandler(sqlex,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(sqlex,this.getClass(),
+                    "Problemas para abrir conexión a la Base de Datos");
         } catch (ClassNotFoundException ex) {
-            throw new ExceptionHandler(ex,this.getClass(),"No se encontro los Driver de Conexion");
+            throw new ExceptionHandler(ex,this.getClass(),
+                    "No se encontro los Driver de conexión");
         }catch (Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para abrir conexión a la Base de Datos");
         }
     }
 
@@ -332,13 +339,15 @@ public class AdmBitacora {
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar INSERT");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                    "Problemas para ejecutar INSERT");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar INSERT");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                    "Problemas para ejecutar INSERT");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -351,7 +360,8 @@ public class AdmBitacora {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                        "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return increment;
@@ -406,13 +416,15 @@ public class AdmBitacora {
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar UPDATE");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                    "Problemas para ejecutar UPDATE");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar UPDATE");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                    "Problemas para ejecutar UPDATE");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -422,7 +434,8 @@ public class AdmBitacora {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                        "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return increment;
@@ -477,13 +490,15 @@ public class AdmBitacora {
                 }
             }
         }catch(SQLException e){
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                    "Problemas para ejecutar DELETE");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
-            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar DELETE");
-            eh.setStrQuery(strQuery);
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                    "Problemas para ejecutar DELETE");
+            eh.setStrQuery(this.getStrQuery());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -493,7 +508,8 @@ public class AdmBitacora {
                 }
                 this.conn.close();
             }catch(SQLException es){
-                throw new ExceptionHandler(es,this.getClass(),"Problemas para cerrar Conexion a Base de datos");
+                throw new ExceptionHandler(es,this.getClass(),
+                        "Problemas para cerrar conexión a Base de Datos");
             }
         }
         return increment;
@@ -505,11 +521,11 @@ public class AdmBitacora {
      * @throws ExceptionHandler
      */
     private void inicializar() throws ExceptionHandler{
-        Properties propDB = this.leerPropertie();
+        Properties propDB = AdmBitacora.leerPropertie();
         this.setProp(propDB);
 
-        setLogDB(getKey(propDB, this.LOGDB));
-        setLogDBProy(getKey(propDB, this.LOGDBPROY));
+        setLogDB(getKey(propDB, AdmBitacora.LOGDB));
+        setLogDBProy(getKey(propDB, AdmBitacora.LOGDBPROY));
     }
 
     /**
@@ -518,9 +534,10 @@ public class AdmBitacora {
      */
     public boolean login() throws ExceptionHandler{
         boolean sld = false;
+        StringBuffer textData=new StringBuffer();
         if (this.getBitacora()!=null){
             try {
-                StringBuffer strData = new StringBuffer();
+                StringBuilder strData = new StringBuilder();
                 StringBuffer strCampos = new StringBuffer("(");
                 StringBuffer strValues = new StringBuffer("(");
                 String strTabla = this.getLogDB();
@@ -530,26 +547,38 @@ public class AdmBitacora {
 
                 if (this.getBitacora().getClaveEmpleado()!=null){
                     strCampos.append("clave_empleado,");
-                    strValues.append(this.getBitacora().getClaveEmpleado());
-                    strValues.append(",");
+                    strValues.append(this.getBitacora().getClaveEmpleado())
+                             .append(",");
+                     textData.append("\tCLAVE_EMPLEADO: ")
+                             .append(this.getBitacora().getClaveEmpleado())
+                             .append("\n");
                 }
                 if (this.getBitacora().getIp()!=null){
                     strCampos.append("ip,");
-                    strValues.append("'");
-                    strValues.append(this.getBitacora().getIp());
-                    strValues.append("',");
+                    strValues.append("'")
+                             .append(this.getBitacora().getIp())
+                             .append("',");
+                     textData.append("\tIP: ")
+                             .append(this.getBitacora().getIp())
+                             .append("\n");
                 }
                 if (this.getBitacora().getNavegador()!=null){
                     strCampos.append("navegador,");
-                    strValues.append("'");
-                    strValues.append(this.getBitacora().getNavegador().substring(0,50));
-                    strValues.append("',");
+                    strValues.append("'")
+                             .append(this.getBitacora().getNavegador().substring(0,50))
+                             .append("',");
+                     textData.append("\tNAVEGADOR: ")
+                             .append(this.getBitacora().getNavegador().substring(0,50))
+                             .append("\n");
                 }
                 if (this.getBitacora().getError()!=null){
                     strCampos.append("error");
-                    strValues.append("'");
-                    strValues.append(this.getBitacora().getError());
-                    strValues.append("'");
+                    strValues.append("'")
+                             .append(("LOGIN: " + this.getBitacora().getError()))
+                             .append("'");
+                     textData.append("\tERROR: ")
+                             .append(("LOGIN: " + this.getBitacora().getError()))
+                             .append("\n");
                 }
                 String lastChar = strCampos.substring(strCampos.length()-1);
                 if (",".equals(lastChar)){
@@ -558,29 +587,33 @@ public class AdmBitacora {
                 }
                 strCampos.append(")");
                 strValues.append(")");
-                strData.append("insert into ");
-                strData.append(strTabla);
-                strData.append(" ");
-                strData.append(strCampos);
-                strData.append(" values ");
-                strData.append(strValues);
+
+                strData.append("insert into ")
+                       .append(strTabla)
+                       .append(" ")
+                       .append(strCampos)
+                       .append(" values ")
+                       .append(strValues);
 
                 this.setStrQuery(strData.toString());
-                Integer intSld = this.executeInsert();
+                Integer integerSld = this.executeInsert();
 
-                if (intSld>0){
+                if (integerSld>0){
                     sld = true;
                 }
             } finally {
                 try{
                     LogHandler log = new LogHandler();
                     log.setBoolSel(false);
-                    StringBuffer textData=new StringBuffer();
+                    
                     log.setStrQuery(this.getStrQuery());
-                    log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                                new StringBuffer("login"),textData,"BITACOR");
+                    log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                                new StringBuffer("login"),
+                                textData,
+                                "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir la Bitacora de Login");
+                    throw new ExceptionHandler(ex,this.getClass(),
+                            "Problemas al escribir en la Bitacora de Login");
                 }
             }
         }
@@ -593,6 +626,7 @@ public class AdmBitacora {
      */
     public boolean logout() throws ExceptionHandler{
         boolean sld = true;
+        StringBuffer textData=new StringBuffer();
         try {
             StringBuilder strData = new StringBuilder();
             StringBuffer strCampos = new StringBuffer("(");
@@ -604,26 +638,38 @@ public class AdmBitacora {
 
             if (this.getBitacora().getClaveEmpleado()!=null){
                 strCampos.append("clave_empleado,");
-                strValues.append(this.getBitacora().getClaveEmpleado());
-                strValues.append(",");
+                strValues.append(this.getBitacora().getClaveEmpleado())
+                         .append(",");
+                 textData.append("\tCLAVE_EMPLEADO: ")
+                         .append(this.getBitacora().getClaveEmpleado())
+                         .append("\n");
             }
             if (this.getBitacora().getIp()!=null){
                 strCampos.append("ip,");
-                strValues.append("'");
-                strValues.append(this.getBitacora().getIp());
-                strValues.append("',");
+                strValues.append("'")
+                         .append(this.getBitacora().getIp())
+                         .append("',");
+                 textData.append("\tIP: ")
+                         .append(this.getBitacora().getIp())
+                         .append("\n");
             }
             if (this.getBitacora().getNavegador()!=null){
                 strCampos.append("navegador,");
-                strValues.append("'");
-                strValues.append(this.getBitacora().getNavegador());
-                strValues.append("',");
+                strValues.append("'")
+                         .append(this.getBitacora().getNavegador())
+                         .append("',");
+                 textData.append("\tNAVEGADOR: ")
+                         .append(this.getBitacora().getNavegador())
+                         .append("\n");
             }
             if (this.getBitacora().getError()!=null){
                 strCampos.append("error");
-                strValues.append("'");
-                strValues.append(this.getBitacora().getBitacora());
-                strValues.append("'");
+                strValues.append("'")
+                         .append(("LOGOUT: " + this.getBitacora().getError()))
+                         .append("'");
+                 textData.append("\tERROR: ")
+                         .append(("LOGOUT: " + this.getBitacora().getError()))
+                         .append("\n");
             }
             String lastChar = strCampos.substring(strCampos.length()-1);
             if (",".equals(lastChar)){
@@ -633,29 +679,31 @@ public class AdmBitacora {
             strCampos.append(")");
             strValues.append(")");
 
-            strData.append("insert into ");
-            strData.append(strTabla);
-            strData.append(" ");
-            strData.append(strCampos);
-            strData.append(" values ");
-            strData.append(strValues);
+            strData.append("insert into ")
+                   .append(strTabla)
+                   .append(" ")
+                   .append(strCampos)
+                   .append(" values ")
+                   .append(strValues);
 
             this.setStrQuery(strData.toString());
-            Integer intSld = this.executeInsert();
+            Integer integerSld = this.executeInsert();
 
-            if (intSld>0){
+            if (integerSld>0){
                 sld = true;
             }
         } finally {
             try{
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
                 log.setStrQuery(this.getStrQuery());
-                log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                            new StringBuffer("logout"),textData,"BITACOR");
+                log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                            new StringBuffer("logout"),
+                            textData,
+                            "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir la Bitacora de Logout");
+                throw new ExceptionHandler(ex,this.getClass(),
+                        "Problemas al escribir en la Bitacora de Logout");
             }
         }
         return sld;
@@ -667,60 +715,78 @@ public class AdmBitacora {
      */
     public boolean addBitacora()throws ExceptionHandler{
         boolean sld = false;
+        StringBuffer textData=new StringBuffer();
         if ( this.getBitacora()!=null){
             try {
-                StringBuffer strData = new StringBuffer();
+                StringBuilder strData = new StringBuilder();
                 StringBuffer strCampos = new StringBuffer("(");
                 StringBuffer strValues = new StringBuffer("(");
                 String strTabla = this.getLogDBProy();
-                Integer claveConsulta = Integer.valueOf(AdmBitacora.getKey(this.getProp(), AdmBitacora.CONSULTAR));
+                Integer claveConsulta = Integer.valueOf(getKey(this.getProp(),
+                                                        AdmBitacora.CONSULTAR));
 
                 strCampos.append("fecha_bitacora,");
                 strValues.append("getdate(),");
 
                 if (this.getBitacora().getBitacora()!=null){
                     strCampos.append("bitacora,");
-                    strValues.append("'");
-                    strValues.append(replaceChar(this.getBitacora().getBitacora()));
-                    strValues.append("',");
+                    strValues.append("'")
+                             .append(replaceChar(this.getBitacora().getBitacora()))
+                             .append("',");
+                     textData.append("\tDESCRIPCION: ")
+                             .append(this.getBitacora().getBitacora())
+                             .append("\n");
                 }
-
-                if (this.getBitacora().getClaveTipoEvento()!=claveConsulta){
-                    if (this.getBitacora().getConsulta()!=null){
-                        strCampos.append("consulta,");
-                        strValues.append("'");
-                        strValues.append(replaceChar(this.getBitacora().getConsulta()));
-                        strValues.append("',");
-                    }
-                }
-
                 if (this.getBitacora().getClaveAplicacion()!=null){
                     strCampos.append("clave_aplicacion,");
-                    strValues.append(this.getBitacora().getClaveAplicacion());
-                    strValues.append(",");
+                    strValues.append(this.getBitacora().getClaveAplicacion())
+                             .append(",");
+                     textData.append("\tCLAVE_APLICACION: ")
+                             .append(this.getBitacora().getClaveAplicacion())
+                             .append("\n");
                 }
-
                 if (this.getBitacora().getClaveRegistro()!=null){
                     strCampos.append("clave_registro,");
-                    strValues.append(this.getBitacora().getClaveRegistro());
-                    strValues.append(",");
+                    strValues.append(this.getBitacora().getClaveRegistro())
+                             .append(",");
+                     textData.append("\tCLAVE_REGISTRO: ")
+                             .append(this.getBitacora().getClaveRegistro())
+                             .append("\n");
                 }
-
                 if (this.getBitacora().getClaveEmpleado()!=null){
                     strCampos.append("clave_empleado,");
-                    strValues.append(this.getBitacora().getClaveEmpleado());
-                    strValues.append(",");
+                    strValues.append(this.getBitacora().getClaveEmpleado())
+                             .append(",");
+                     textData.append("\tCLAVE_EMPLEADO: ")
+                             .append(this.getBitacora().getClaveEmpleado())
+                             .append("\n");
                 }
-
                 if (this.getBitacora().getClaveForma()!=null){
                     strCampos.append("clave_forma,");
-                    strValues.append(this.getBitacora().getClaveForma());
-                    strValues.append(",");
+                    strValues.append(this.getBitacora().getClaveForma())
+                             .append(",");
+                     textData.append("\tCLAVE_FORMA: ")
+                             .append(this.getBitacora().getClaveForma())
+                             .append("\n");
                 }
-
                 if (this.getBitacora().getClaveTipoEvento()!=null){
-                    strCampos.append("clave_tipo_evento");
-                    strValues.append(this.getBitacora().getClaveTipoEvento());
+                    strCampos.append("clave_tipo_evento,");
+                    strValues.append(this.getBitacora().getClaveTipoEvento())
+                             .append(",");
+                     textData.append("\tCLAVE_TIPO_EVENTO: ")
+                             .append(this.getBitacora().getClaveTipoEvento())
+                             .append("\n");
+                }
+                if (this.getBitacora().getClaveTipoEvento()!=claveConsulta){
+                    if (this.getBitacora().getConsulta()!=null){
+                        strCampos.append("consulta");
+                        strValues.append("'")
+                                 .append(replaceChar(this.getBitacora().getConsulta()))
+                                 .append("'");
+                         textData.append("\tCONSULTA:\n\t")
+                                 .append(this.getBitacora().getConsulta())
+                                 .append("\n");
+                    }
                 }
 
                 String lastChar = strCampos.substring(strCampos.length()-1);
@@ -740,22 +806,24 @@ public class AdmBitacora {
                 strData.append(strValues);
 
                 this.setStrQuery(strData.toString());
-                Integer intSld = this.executeInsert();
+                Integer integerSld = this.executeInsert();
 
-                if (intSld>0){
+                if (integerSld>0){
                     sld = true;
-                    this.setIntSld(intSld);
+                    this.setIntSld(integerSld);
                 }
             } finally {
                 try{
                     LogHandler log = new LogHandler();
                     log.setBoolSel(false);
-                    StringBuffer textData=new StringBuffer();
                     log.setStrQuery(this.getStrQuery());
-                    log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                                new StringBuffer("addBitacora"),textData,"BITACOR");
+                    log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                                new StringBuffer("addBitacora"),
+                                textData,
+                                "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir en la Bitacora");
+                    throw new ExceptionHandler(ex,this.getClass(),
+                            "Problemas al escribir en la Bitacora de Aplicación");
                 }
             }
         }
@@ -768,56 +836,83 @@ public class AdmBitacora {
      */
     private boolean updateBitacora() throws ExceptionHandler{
         boolean sld = true;
+        StringBuffer textData=new StringBuffer();
         try {
-            StringBuffer strData = new StringBuffer("");
+            StringBuilder strData = new StringBuilder("");
             StringBuffer strCampos = new StringBuffer("");
             String strTabla = this.getLogDBProy();
 
             if (this.getBitacora().getFechaBitacora()!=null){
-                strCampos.append(" fecha_bitacora = '");
-                strCampos.append(this.getBitacora().getFechaBitacora());
-                strCampos.append("',");
+                strCampos.append(" fecha_bitacora = '")
+                         .append(this.getBitacora().getFechaBitacora())
+                         .append("',");
+                 textData.append("\tFECHA BITACORA: ")
+                         .append(this.getBitacora().getFechaBitacora())
+                         .append("\n");
             }
             if (this.getBitacora().getBitacora()!=null){
-                strCampos.append(" bitacora = '");
-                strCampos.append(replaceChar(this.getBitacora().getBitacora()));
-                strCampos.append("',");
+                strCampos.append(" bitacora = '")
+                         .append(replaceChar(this.getBitacora().getBitacora()))
+                         .append("',");
+                 textData.append("\tBITACORA: ")
+                         .append(replaceChar(this.getBitacora().getBitacora()))
+                         .append("\n");
             }
             if (this.getBitacora().getConsulta()!=null){
-                strCampos.append(" consulta = '");
-                strCampos.append(replaceChar(this.getBitacora().getConsulta()));
-                strCampos.append("',");
+                strCampos.append(" consulta = '")
+                         .append(replaceChar(this.getBitacora().getConsulta()))
+                         .append("',");
+                 textData.append("\tCONSULTA: ")
+                         .append(replaceChar(this.getBitacora().getConsulta()))
+                         .append("\n");
             }
             if (this.getBitacora().getClaveAplicacion()!=null){
-                strCampos.append(" clave_aplicacion = ");
-                strCampos.append(this.getBitacora().getClaveAplicacion());
-                strCampos.append(",");
+                strCampos.append(" clave_aplicacion = ")
+                         .append(this.getBitacora().getClaveAplicacion())
+                         .append(",");
+                 textData.append("\tCLAVE APLICACION: ")
+                         .append(this.getBitacora().getClaveAplicacion())
+                         .append("\n");
             }
             if (this.getBitacora().getClaveForma()!=null){
-                strCampos.append(" clave_forma = ");
-                strCampos.append(this.getBitacora().getClaveForma());
-                strCampos.append(",");
+                strCampos.append(" clave_forma = ")
+                         .append(this.getBitacora().getClaveForma())
+                         .append(",");
+                 textData.append("\tCLAVE FORMA: ")
+                         .append(this.getBitacora().getClaveForma())
+                         .append("\n");
             }
             if (this.getBitacora().getClaveRegistro()!=null){
-                strCampos.append(" clave_registro = ");
-                strCampos.append(this.getBitacora().getClaveRegistro());
-                strCampos.append(",");
+                strCampos.append(" clave_registro = ")
+                         .append(this.getBitacora().getClaveRegistro())
+                         .append(",");
+                 textData.append("\tCLAVE REGISTRO: ")
+                         .append(this.getBitacora().getClaveRegistro())
+                         .append("\n");
             }
             if (this.getBitacora().getClaveEmpleado()!=null){
-                strCampos.append(" clave_empleado = ");
-                strCampos.append(this.getBitacora().getClaveEmpleado());
-                strCampos.append(",");
+                strCampos.append(" clave_empleado = ")
+                         .append(this.getBitacora().getClaveEmpleado())
+                         .append(",");
+                 textData.append("\tCLAVE EMPLEADO: ")
+                         .append(this.getBitacora().getClaveEmpleado())
+                         .append("\n");
             }
             if (this.getBitacora().getClaveForma()!=null){
-                strCampos.append(" clave_forma = ");
-                strCampos.append(this.getBitacora().getClaveForma());
-                strCampos.append(",");
+                strCampos.append(" clave_forma = ")
+                         .append(this.getBitacora().getClaveForma())
+                         .append(",");
+                 textData.append("\tCLAVE FORMA: ")
+                         .append(this.getBitacora().getClaveForma())
+                         .append("\n");
             }
             if (this.getBitacora().getClaveTipoEvento()!=null){
-                strCampos.append(" clave_tipo_evento = ");
-                strCampos.append(this.getBitacora().getClaveTipoEvento());
+                strCampos.append(" clave_tipo_evento = ")
+                         .append(this.getBitacora().getClaveTipoEvento());
+                 textData.append("\tCLAVE TIPO EVENTO: ")
+                         .append(this.getBitacora().getClaveTipoEvento())
+                         .append("\n");
             }
-
 
             String lastChar = strCampos.substring(strCampos.length()-1);
             if (",".equals(lastChar)){
@@ -832,21 +927,24 @@ public class AdmBitacora {
             strData.append(this.getBitacora().getClaveBitacoraProyecto());
 
             this.setStrQuery(strData.toString());
-            Integer intSld = this.executeUpdate();
+            Integer integerSld = this.executeUpdate();
 
-            if (intSld>0){
+            if (integerSld>0){
                 sld = true;
             }
         } finally {
             try{
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
+                
                 log.setStrQuery(this.getStrQuery());
-                log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                            new StringBuffer("updateBitacora"),textData,"BITACOR");
+                log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                            new StringBuffer("updateBitacora"),
+                            textData,
+                            "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al actualizar en la Bitacora");
+                throw new ExceptionHandler(ex,this.getClass(),
+                        "Problemas al actualizar en la Bitacora de Aplicación");
             }
         }
         return sld;
@@ -858,31 +956,39 @@ public class AdmBitacora {
      */
     private boolean deleteBitacora()throws ExceptionHandler{
         boolean sld = true;
+        StringBuffer textData=new StringBuffer();
         try {
-            StringBuffer strData = new StringBuffer();
+            StringBuilder strData = new StringBuilder();
             String strTabla = this.getLogDBProy();
 
-            strData.append("delete from ");
-            strData.append(strTabla);
-            strData.append(" where clave_bitacora_proyecto = ");
-            strData.append(this.getBitacora().getClaveBitacoraProyecto());
+            strData.append("delete from ")
+                   .append(strTabla)
+                   .append(" where clave_bitacora_proyecto = ")
+                   .append(this.getBitacora().getClaveBitacoraProyecto());
+
+            textData.append("\tCLAVE BORRADA: ")
+                    .append(this.getBitacora().getClaveBitacoraProyecto())
+                    .append("\n");
 
             this.setStrQuery(strData.toString());
-            Integer intSld = this.executeInsert();
+            Integer integerSld = this.executeInsert();
 
-            if (intSld>0){
+            if (integerSld>0){
                 sld = true;
             }
         } finally {
             try{
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
+                
                 log.setStrQuery(this.getStrQuery());
-                log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                            new StringBuffer("deleteBitacora"),textData,"BITACOR");
+                log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                            new StringBuffer("deleteBitacora"),
+                            textData,
+                            "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas al borrar en la Bitacora");
+                throw new ExceptionHandler(ex,this.getClass(),
+                        "Problemas al borrar en la Bitacora de Aplicacion");
             }
         }
         return sld;
@@ -910,30 +1016,46 @@ public class AdmBitacora {
      */
     public Integer addVariablesBitacora(Integer strClaveBitacoraProy)throws ExceptionHandler{
         Integer sld = 0;
+        StringBuffer textData=new StringBuffer();
         if ( this.getBitacora()!=null){
             try {
                 if (this.getLstVariables()!=null){
                     Iterator it = this.getLstVariables().iterator();
+                    int i = 1;
                     while (it.hasNext()){
                         String[] strVar = (String[]) it.next();
-                        StringBuffer strQuery = new StringBuffer();
-                        strQuery.append("insert into Bitacora_variable (");
-                        strQuery.append("clave_bitacora_proyecto,");
-                        strQuery.append("nombre_variable,");
-                        strQuery.append("alias_variable,");
-                        strQuery.append("valor_variable,");
-                        strQuery.append("tipo_variable) values (");
-                        strQuery.append(strClaveBitacoraProy).append(",'");
-                        strQuery.append(strVar[0]).append("','");
-                        strQuery.append(strVar[1]).append("','");
-                        strQuery.append(strVar[2]).append("','");
-                        strQuery.append(strVar[3]).append("')");
-                        this.setStrQuery(strQuery.toString());
-                        Integer intSld = 0;
+                        StringBuilder query = new StringBuilder();
+                        query.append("insert into Bitacora_variable (")
+                             .append("clave_bitacora_proyecto,")
+                             .append("nombre_variable,")
+                             .append("alias_variable,")
+                             .append("valor_variable,")
+                             .append("tipo_variable) values (")
+                             .append(strClaveBitacoraProy).append(",'")
+                             .append(strVar[0]).append("','")
+                             .append(strVar[1]).append("','")
+                             .append(strVar[2]).append("','")
+                             .append(strVar[3]).append("')");
+
+                        textData.append(("\tDATA[" + i++ + "]:"))
+                                .append(" Clave=")
+                                .append(strClaveBitacoraProy)
+                                .append(" Nombre=")
+                                .append(strVar[0])
+                                .append(" Alias=")
+                                .append(strVar[1])
+                                .append(" Valor=")
+                                .append(strVar[2])
+                                .append(" Tipo=")
+                                .append(strVar[3])
+                                .append("\n");
+
+                        this.setStrQuery(query.toString());
+                        Integer integerSld = 0;
                         try{
-                            intSld = executeInsert();
+                            integerSld = executeInsert();
                         }catch(Exception e){}
-                        if (intSld>0){
+                        if (integerSld>0){
                             sld++;
                         }
                     }
@@ -942,12 +1064,15 @@ public class AdmBitacora {
                 try{
                     LogHandler log = new LogHandler();
                     log.setBoolSel(false);
-                    StringBuffer textData=new StringBuffer();
+                    
                     log.setStrQuery(this.getStrQuery());
-                    log.logData(getKey(this.getProp(), this.LOGBITACORA),
-                                new StringBuffer("addVariablesBitacora"),textData,"BITACOR");
+                    log.logData(getKey(this.getProp(), AdmBitacora.LOGBITACORA),
+                                new StringBuffer("addVariablesBitacora"),
+                                textData,
+                                "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),"Problemas al excribir las variables de la Bitacora");
+                    throw new ExceptionHandler(ex,this.getClass(),
+                            "Problemas al escribir las variables de la Bitacora de Aplicación");
                 }
             }
         }

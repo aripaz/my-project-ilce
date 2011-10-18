@@ -1,5 +1,6 @@
 package mx.ilce.util;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class UtilDate{
         this.dia = now.get(java.util.Calendar.DAY_OF_MONTH);
         this.mes = now.get(java.util.Calendar.MONTH)+1;
         this.anio = now.get(java.util.Calendar.YEAR);
-        this.hour = now.get(java.util.Calendar.HOUR);
+        this.hour = now.get(java.util.Calendar.HOUR_OF_DAY);
         this.min = now.get(java.util.Calendar.MINUTE);
         this.sec = now.get(java.util.Calendar.SECOND);
     }
@@ -48,6 +49,17 @@ public class UtilDate{
         this.hour = 0;
         this.min = 0;
         this.sec = 0;
+    }
+
+    public UtilDate(Date date){
+        java.util.Calendar now = java.util.Calendar.getInstance();
+        now.setTime(date);
+        this.dia = now.get(java.util.Calendar.DAY_OF_MONTH);
+        this.mes = now.get(java.util.Calendar.MONTH)+1;
+        this.anio = now.get(java.util.Calendar.YEAR);
+        this.hour = now.get(java.util.Calendar.HOUR_OF_DAY);
+        this.min = now.get(java.util.Calendar.MINUTE);
+        this.sec = now.get(java.util.Calendar.SECOND);
     }
 
     /**
@@ -77,7 +89,7 @@ public class UtilDate{
         this.dia = now.get(java.util.Calendar.DAY_OF_MONTH);
         this.mes = now.get(java.util.Calendar.MONTH)+1;
         this.anio = now.get(java.util.Calendar.YEAR);
-        this.hour = now.get(java.util.Calendar.HOUR);
+        this.hour = now.get(java.util.Calendar.HOUR_OF_DAY);
         this.min = now.get(java.util.Calendar.MINUTE);
         this.sec = now.get(java.util.Calendar.SECOND);
     }
@@ -247,6 +259,36 @@ public class UtilDate{
     public String getFechaHMS(String separador){
         String sld = getFechaHMS();
         sld = sld.replace("/", separador);
+        return sld;
+    }
+
+    /**
+     * Entrega la fecha existente en la clase, en formato DD/MM/AAAA hh:mm:ss,
+     * reemplazando el caracter / por separadorFecha y el caracter : por el
+     * separadorHora
+     * @param separadorFecha Caracter separador que debe poseer la fecha en vez de /
+     * @param separadorHora Caracter separador que debe poseer la hora en vez de :
+     * @return
+     */
+    public String getFechaHMS(String separadorFecha, String separadorHora){
+        String sld = getFechaHMS();
+        sld = sld.replace("/", separadorFecha);
+        sld = sld.replace(":", separadorHora);
+        return sld;
+    }
+
+    /**
+     * Entrega la fecha existente en la clase, en formato solicitado,
+     * reemplazando el caracter / por separadorFecha y el caracter : por el
+     * separadorHora
+     * @param separadorFecha Caracter separador que debe poseer la fecha en vez de /
+     * @param separadorHora Caracter separador que debe poseer la hora en vez de :
+     * @return
+     */
+    public String getFechaHMS(formato frm, String separadorFecha, String separadorHora){
+        String sld = getFechaHMS(frm);
+        sld = sld.replace("/", separadorFecha);
+        sld = sld.replace(":", separadorHora);
         return sld;
     }
 

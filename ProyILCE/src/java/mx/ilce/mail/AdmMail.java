@@ -34,7 +34,7 @@ public class AdmMail {
 
     /**
      * Obtiene el objeto Bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -42,7 +42,7 @@ public class AdmMail {
 
     /**
      * Asigna el objeto Bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -50,7 +50,7 @@ public class AdmMail {
 
     /**
      * Obtiene el objeto DataMail
-     * @return
+     * @return  DataMail    Objeto DataMail
      */
     public DataMail getDataMail() {
         return dataMail;
@@ -58,7 +58,7 @@ public class AdmMail {
 
     /**
      * Asigna el objeto DataMail
-     * @param dataMail
+     * @param dataMail  Objeto DataMail
      */
     public void setDataMail(DataMail dataMail) {
         this.dataMail = dataMail;
@@ -66,7 +66,7 @@ public class AdmMail {
 
     /**
      * Obtiene el arreglo con los datos de entrada
-     * @return
+     * @return  String[]    Arreglo con datos
      */
     public String[] getStrData() {
         return strData;
@@ -74,7 +74,7 @@ public class AdmMail {
 
     /**
      * Asigna el arreglo con los datos de entrada
-     * @param strData
+     * @param strData   Arreglo con datos
      */
     public void setStrData(String[] strData) {
         this.strData = strData;
@@ -82,7 +82,7 @@ public class AdmMail {
 
     /**
      * Obtiene los datos de tipo Properties
-     * @return
+     * @return  Properties  Objeto Properties
      */
     public Properties getProp() {
         return prop;
@@ -90,7 +90,7 @@ public class AdmMail {
 
     /**
      * Asigna los datos de tipo Properties
-     * @param prop
+     * @param prop  Objeto Properties
      */
     public void setProp(Properties prop) {
         this.prop = prop;
@@ -125,11 +125,14 @@ public class AdmMail {
                 }
             }
         }catch (SQLException sqlex){
-            throw new ExceptionHandler(sqlex,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(sqlex,this.getClass(),
+                    "Problemas para abrir conexión a la Base de Datos");
         } catch (ClassNotFoundException ex) {
-            throw new ExceptionHandler(ex,this.getClass(),"No se encontro los Driver de Conexion");
+            throw new ExceptionHandler(ex,this.getClass(),
+                    "No se encontro los Driver de conexión");
         }catch (Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para abrir conexión a Base de Datos");
         }
     }
 
@@ -138,7 +141,7 @@ public class AdmMail {
      * properties
      * @param prop      Listado de properties obtenido desde el archivo de configuracion
      * @param strKey    Palabra usada como Key para la busqueda dentro del propertie
-     * @return
+     * @return String   Valor de la Key solicitada
      */
     private static String getKey(Properties prop, String key) throws ExceptionHandler{
         String sld = "";
@@ -148,7 +151,8 @@ public class AdmMail {
                 sld = prop.getProperty(key);
             }
 	}catch(Exception e){
-            throw new ExceptionHandler(e,AdmMail.class,"Problemas para obtener la llave desde el properties");
+            throw new ExceptionHandler(e,AdmMail.class,
+                    "Problemas para obtener la llave desde el properties");
 	}
         return sld;
     }
@@ -156,7 +160,7 @@ public class AdmMail {
     /**
      * Obtiene los receptores de mail asociados al evento y la forma
      * @param dataMail
-     * @return
+     * @return  HashMap     Hash con los receptores de mail
      * @throws ExceptionHandler
      */
     public HashMap getReceptorMail(DataMail dataMail) throws ExceptionHandler{

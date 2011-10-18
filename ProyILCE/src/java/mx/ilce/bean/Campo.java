@@ -307,17 +307,22 @@ public class Campo implements Serializable {
      */
     @Override
     public String toString() {
-        return "Campo{" + "nombre=" + nombre 
-                + " || nombreDB=" + nombreDB
-                + " || valor=" + valor
-                + " || codigo=" + codigo
-                + " || alias=" + alias
-                + " || typeDataDB=" + typeDataDB
-                + " || typeDataAPL=" + typeDataAPL
-                + " || typeControl=" + typeControl
-                + " || event=" + event
-                + " || help=" + help
-                + " || tamano=" + tamano
-                + " || isIncrement=" + isIncrement + '}';
+        String str = "";
+        str = "Campo{\n"
+                + ((nombre!=null)?"|| nombre=" + nombre:"")
+                + ((nombreDB!=null)?" || nombreDB=" + nombreDB:"")
+                + ((alias!=null)?" || alias=" + alias:"")
+                + ((valor!=null)?" || valor=" + valor:"")
+                + ((codigo!=null)?" || codigo=" + codigo:"")
+                + ((typeDataDB!=null)?" || typeDataDB=" + typeDataDB:"")
+                + ((typeDataAPL!=null)?" || typeDataAPL=" + typeDataAPL:"")
+                + ((typeControl!=null)?" || typeControl=" + typeControl:"")
+                + ((event!=null)?" || event=" + event:"")
+                + ((help!=null)?" || help=" + help:"")
+                + ((tamano!=null)?" || tamano=" + tamano:"")
+                + ((hourMinSec!=null)?" || hourMinSec=" + hourMinSec:"")
+                + " || isIncrement=" + isIncrement
+                + "}\n";
+        return str;
     }
 }

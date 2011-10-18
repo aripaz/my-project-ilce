@@ -23,12 +23,11 @@ import mx.ilce.handler.ExceptionHandler;
 public class ConSession {
 
     private Properties prop = null;
-    private AdminFile adm = new AdminFile();
     private Bitacora bitacora;
 
     /**
      * Obtiene el objeto bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -36,7 +35,7 @@ public class ConSession {
 
     /**
      * Asigna el objeto bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -58,7 +57,7 @@ public class ConSession {
      /**
      * Obtiene el IDQUERY desde el properties de queries
      * @param key   Clave que se esta buscando
-     * @return
+     * @return  Integer     ID de la query
      * @throws ExceptionHandler
      */
     public Integer getIdQuery(String key) throws ExceptionHandler{
@@ -81,7 +80,7 @@ public class ConSession {
      * error en la password
      * @param user  Nombre dado en el sistema al usuario para su identificacion
      * @param password  Password asociada al usuario para identificarlo
-     * @return
+     * @return  User    Objeto User con los datos del usuario
      * @throws ExceptionHandler
      */
     public User getUser(String user, String password, String[][] arrVariables) throws ExceptionHandler{
@@ -105,7 +104,6 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
             HashCampo hsCmp = connQ.getData(dataTransfer);
 
             if (hsCmp.getListData().isEmpty()){
@@ -117,7 +115,7 @@ public class ConSession {
                 dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
                 dataTransfer.setArrData(datUser);
                 dataTransfer.setArrVariables(arrVariables);
-                //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
+
                 HashCampo hsCmpUsr = connQ.getData(dataTransfer);
                 if (hsCmpUsr.getListData().isEmpty()){
                     usr.setMessage("Usuario no existe en los registros");
@@ -143,8 +141,6 @@ public class ConSession {
         }catch(Exception ex){
             usr.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
-        }finally{
-            
         }
         return usr;
     }
@@ -155,7 +151,7 @@ public class ConSession {
      * segunda validacion para ver si al menos existe el usuario y solo hubo
      * error en la password
      * @param usuario   Bean que contiene los datos del usuario
-     * @return
+     * @return  User    Objeto User con los datos del usuario
      * @throws ExceptionHandler
      */
     public User getUser(User usuario, String[][] arrVariables) throws ExceptionHandler{
@@ -180,7 +176,6 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.LOGIN), strData, arrVariables);
             HashCampo hsCmp = connQ.getData(dataTransfer);
             if (hsCmp.getListData().isEmpty()){
                 usr.setIsLogged(false);
@@ -192,7 +187,6 @@ public class ConSession {
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(arrVariables);
                 
-                //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
                 HashCampo hsCmpUsr = connQ.getData(dataTransfer);
 
                 if (hsCmpUsr.getListData().isEmpty()){
@@ -219,12 +213,16 @@ public class ConSession {
         }catch(Exception ex){
             usr.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
-        }finally{
-
         }
         return usr;
     }
 
+    /**
+     * Metodo implementado para la obtencion de los datos del usuario por su mail
+     * @param dataTrans
+     * @return  User    Objeto User con los datos del usuario
+     * @throws ExceptionHandler
+     */
     public User getUserByMail(DataTransfer dataTrans) throws ExceptionHandler{
         User usuario = (User) dataTrans.getDataObject();
         String[][] arrVariables = dataTrans.getArrVariables();
@@ -262,8 +260,6 @@ public class ConSession {
         }catch(Exception ex){
             usr.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
-        }finally{
-
         }
         return usr;
     }
@@ -274,7 +270,7 @@ public class ConSession {
      * perfil, entrega el listado de aplicaciones que le corresponden segun su
      * perfil
      * @param user  Bean que contiene los datos del usuario
-     * @return
+     * @return  Perfil  Objeto Perfil con los datos del perfil solicitado
      * @throws ExceptionHandler
      */
     public Perfil getPerfil(User user, String[][] arrVariables) throws ExceptionHandler{
@@ -290,7 +286,6 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //HashCampo hsCmp = connQ.getData(getIdQuery(AdminFile.PERFIL), strData, arrVariables);
             HashCampo hsCmp = connQ.getData(dataTransfer);
 
             if (!hsCmp.getListData().isEmpty()){
@@ -302,8 +297,6 @@ public class ConSession {
             }
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
-        }finally{
-
         }
         return perfil;
     }
@@ -313,7 +306,7 @@ public class ConSession {
      * segun Perfil. Desde el perfil se toma el campo lstAplicacion para
      * obtener todos los tab segun los datos aplicacion y forma.
      * @param perfil    Bean que contiene los datos del perfil
-     * @return
+     * @return  HashCampo   Objeto Hash con los datos de los TAB de la forma
      * @throws ExceptionHandler
      */
     public HashCampo getTabForma(Perfil perfil, String[][] arrVariables) throws ExceptionHandler{
@@ -328,7 +321,7 @@ public class ConSession {
                 connQ.setBitacora(this.getBitacora());
 
                 HashCampo hsCmpAux = null;
-                //Integer lenList = hsCmp.getLengthData();
+
                 while (it.hasNext()){
                     Aplicacion apl = (Aplicacion) it.next();
                     strData[0]= String.valueOf(apl.getClaveAplicacion());
@@ -341,7 +334,6 @@ public class ConSession {
                     dataTransfer.setArrData(strData);
                     dataTransfer.setArrVariables(arrVariables);
 
-                    //hsCmpAux = connQ.getData(getIdQuery(AdminFile.TABFORMA), strData, arrVariables);
                     hsCmpAux = connQ.getData(dataTransfer);
                     if ((hsCmp.getLengthCampo()==0)&&(hsCmpAux!=null)) {
                         hsCmp.setListCampos(hsCmpAux.getListCampos());
@@ -351,8 +343,6 @@ public class ConSession {
             }
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
-        }finally{
-
         }
         return hsCmp;
     }
@@ -363,7 +353,7 @@ public class ConSession {
      * Bean User.En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
-     * @return
+     * @return  HashCampo   Objeto Hash con los datos para el XML de Usuario
       * @throws ExceptionHandler
       */
     public HashCampo getUserXML(User usuario, String[][] arrVariables) throws ExceptionHandler{
@@ -380,14 +370,11 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //hsCmp = connQ.getData(getIdQuery(AdminFile.XMLSESSION), strData, arrVariables);
             hsCmp = connQ.getData(dataTransfer);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del User");
-        }finally{
-
         }
         return hsCmp;
     }
@@ -398,7 +385,7 @@ public class ConSession {
      * Bean User. En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
-     * @return
+     * @return  HashCampo   Objeto Hash con los datos del XML del Menu
      * @throws ExceptionHandler
      */
     public HashCampo getMenuXML(User usuario, String[][] arrVariables) throws ExceptionHandler{
@@ -415,14 +402,11 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //hsCmp = connQ.getData(getIdQuery(AdminFile.XMLMENU), strData, arrVariables);
             hsCmp = connQ.getData(dataTransfer);
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del MENU");
-        }finally{
-
         }
         return hsCmp;
     }
@@ -433,7 +417,7 @@ public class ConSession {
      * @param IdQuery   ID de la query que se quiere ejecutar
      * @param strData   Arreglo con la data de entrada que se debe usar en la
      * Query   
-     * @return
+     * @return  HashCampo   Objeto Hash con los datos obtenidos desde la query
      * @throws ExceptionHandler
      */
     public HashCampo getDataByIdQuery(Integer IdQuery, String[] strData, String[][] arrVariables ) throws ExceptionHandler{
@@ -447,19 +431,18 @@ public class ConSession {
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(arrVariables);
 
-            //hsCmp = connQ.getData(IdQuery, strData, arrVariables);
             hsCmp = connQ.getData(dataTransfer);
-            
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");
-        }finally{
-
         }
         return hsCmp;
     }
 
     /**
-     * Metodo para la insercion del usuario
+     * Metodo implementado para la insercion del usuario
+     * @param user
+     * @return  User    Objeto User con los datos del nuevo Usuario
+     * @throws ExceptionHandler
      */
     public User insertUser(User user) throws ExceptionHandler{
         User usr = new User();
@@ -484,7 +467,6 @@ public class ConSession {
             dataTransfer.setIdQuery(getIdQuery(AdminFile.USER));
             dataTransfer.setArrData(strData);
 
-            //HashCampo hsCmpUsr = connQ.getData(getIdQuery(AdminFile.USER), datUser, arrVariables );
             HashCampo hsCmpUsr = connQ.getData(dataTransfer);
 
             if (!hsCmpUsr.getListData().isEmpty()){
@@ -531,8 +513,6 @@ public class ConSession {
         }catch(Exception ex){
             usr.setIsLogged(false);
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
-        }finally{
-
         }
         return usr;
     }
