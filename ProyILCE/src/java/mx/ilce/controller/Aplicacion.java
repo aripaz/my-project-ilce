@@ -41,10 +41,18 @@ public class Aplicacion extends Entidad {
     private String orderBY;
 
 
+    /**
+     * Entrega el texto "Order By" que se usara en la query
+     * @return  String  Texto del "Order By"
+     */
     public String getOrderBY() {
         return orderBY;
     }
 
+    /**
+     * Asigna el texto "Order BY" que se usara en la query
+     * @param orderBY   Texto del "Order By"
+     */
     public void setOrderBY(String orderBY) {
         this.orderBY = orderBY;
     }
@@ -71,7 +79,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el objeto Bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -79,7 +87,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el objeto Bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -87,7 +95,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el arreglo de variables
-     * @return
+     * @return  String[][]  Matriz con variables
      */
     public String[][] getArrVariables() {
         return arrVariables;
@@ -95,7 +103,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el arreglo de variables
-     * @param arrVariables
+     * @param arrVariables  Matriz con variables
      */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
@@ -103,7 +111,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene la clave del empleado
-     * @return
+     * @return  Integer     Clave del empleado
      */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
@@ -111,7 +119,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna la clave del empleado
-     * @param claveEmpleado
+     * @param claveEmpleado     Clave del empleado
      */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
@@ -119,7 +127,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @return
+     * @return  boolean     Estado de la validacion
      */
     public boolean isCleanIncrement() {
         return cleanIncrement;
@@ -135,7 +143,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el Array de data ingresado al objeto
-     * @return
+     * @return  String[]    data de entrada
      */
     public String[] getArrayData() {
         return arrayData;
@@ -151,7 +159,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el numero de pagina que se debe visualizar en la aplicacion
-     * @return
+     * @return  Integer     Numero de la pagina
      */
     public Integer getNumPage() {
         return numPage;
@@ -170,7 +178,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el numero de filas que se deben desplegar
-     * @return
+     * @return      Integer     Numero de filas
      */
     public Integer getNumRows() {
         return numRows;
@@ -189,7 +197,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el texto adicional que se incluira en la query
-     * @return
+     * @return  String  Texto con el "where" para ser usado en la query
      */
     public String getStrWhereQuery() {
         return strWhereQuery;
@@ -197,7 +205,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el texto adicional que se incluira en la query
-     * @param strWhereQuery     Estructura de query adicional
+     * @param strWhereQuery     Texto con el "where" para ser usado en la query
      */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = strWhereQuery;
@@ -205,7 +213,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene la clave de la forma
-     * @return
+     * @return  Integer     Clave de la forma
      */
     public Integer getClaveForma() {
         return claveForma;
@@ -221,7 +229,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el display de la forma (HEADER o BODY) que se debe utilizar
-     * @return
+     * @return  String  Valor del Display a utilizar
      */
     public String getDisplay() {
         return display;
@@ -229,7 +237,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna el display de la forma (HEADER o BODY) que se debe utilizar
-     * @param display   Display a utilizar
+     * @param display   Valor del Display a utilizar
      */
     public void setDisplay(String display) {
         this.display = display;
@@ -237,7 +245,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el tipo de accion que se esta efectuando con la Forma
-     * @return
+     * @return  String  Tipo de accion declarada
      */
     public String getTipoAccion() {
         return tipoAccion;
@@ -253,7 +261,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el Alias del MenuMostrarEntidad
-     * @return
+     * @return  String  Alias utilizado
      */
     public String getAliasMenuMostrarEntidad() {
         return aliasMenuMostrarEntidad;
@@ -269,7 +277,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el Alias del MenuNuevaEntidad
-     * @return
+     * @return  String  Alias utilizado
      */
     public String getAliasMenuNuevaEntidad() {
         return aliasMenuNuevaEntidad;
@@ -285,7 +293,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene el nombre de la aplicacion
-     * @return
+     * @return  String  Nombre de la aplicacion
      */
     public String getAplicacion() {
         return aplicacion;
@@ -301,7 +309,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene la clave de la aplicacion
-     * @return
+     * @return  Integer     Clave de la aplicacion
      */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
@@ -317,7 +325,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene la clave de la Forma principal
-     * @return
+     * @return  Integer CLave de la forma principal
      */
     public Integer getClaveFormaPrincipal() {
         return claveFormaPrincipal;
@@ -333,7 +341,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene la descripcion
-     * @return
+     * @return  String  Descripcion asignada
      */
     public String getDescripcion() {
         return descripcion;
@@ -430,13 +438,12 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene, mediante el ID introducido, una forma desde el listado de formas,
-     * que se asociaron cuando se obtuvo el prfil del Usuario.  El resultado es
+     * que se asociaron cuando se obtuvo el perfil del Usuario. El resultado es
      * un listado con los campos de la forma.
-     * @param key   ID de la forma a solicitar
-     * @return
+     * @param key       ID de la forma a solicitar
+     * @return  List    Listado con los campos de la Forma
      */
     public List getForma(Integer key){
-        //List hs = (List) this.hsForma.get(key);
         List hs = null;
         if (this.hsForma.containsKey(key)){
             hs = (List) this.hsForma.get(key);
@@ -451,7 +458,7 @@ public class Aplicacion extends Entidad {
     /**
      * Asigna el XML obtenido con referencia a los datos introducidos al
      * controlador
-     * @return
+     * @return      Aplicacion  Objeto con los datos de entrega
      * @throws ExceptionHandler
      */
     public Aplicacion mostrarForma() throws ExceptionHandler{
@@ -476,7 +483,7 @@ public class Aplicacion extends Entidad {
     /**
      * Obtiene las columnas de una grilla XML a partir de los datos asignados a
      * los campos ClaveForma, TipoAccion, ArrayData, strWhereQuery y Forma
-     * @return
+     * @return  StringBuffer    Texto con el Header del Grid
      * @throws ExceptionHandler
      */
     private StringBuffer getHeaderGrid() throws ExceptionHandler{
@@ -498,7 +505,6 @@ public class Aplicacion extends Entidad {
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(this.getArrVariables());
 
-                //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),strData, this.getArrVariables());
                 HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -518,7 +524,7 @@ public class Aplicacion extends Entidad {
                         dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                         dataTransfer.setStrWhere(strData[0]);
                         dataTransfer.setArrVariables(this.getArrVariables());
-                        //hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0], this.getArrVariables());
+
                         hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
 
                     }else if ((this.getStrWhereQuery()==null)&&(this.getArrayData()!=null)){
@@ -528,7 +534,7 @@ public class Aplicacion extends Entidad {
                         dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                         dataTransfer.setArrData(this.getArrayData());
                         dataTransfer.setArrVariables(this.getArrVariables());
-                        //hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), this.getArrayData(), this.getArrVariables());
+
                         hsCmp = con.getDataByIdQuery(dataTransfer);
 
                     }else if ((this.getStrWhereQuery()!=null)&&(this.getArrayData()!=null)){
@@ -541,7 +547,7 @@ public class Aplicacion extends Entidad {
                         dataTransfer.setStrWhere(strData[0]);
                         dataTransfer.setArrData(this.getArrayData());
                         dataTransfer.setArrVariables(this.getArrVariables());
-                        //hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strData[0],this.getArrayData(), this.getArrVariables());
+
                         hsCmp = con.getDataByIdQueryAndWhereAndData(dataTransfer);
                         
                     }else{
@@ -552,7 +558,7 @@ public class Aplicacion extends Entidad {
                         dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                         dataTransfer.setArrData(strData);
                         dataTransfer.setArrVariables(this.getArrVariables());
-                        //hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),strData, this.getArrVariables());
+
                         hsCmp = con.getDataByIdQuery(dataTransfer);
                     }
                 }
@@ -569,7 +575,6 @@ public class Aplicacion extends Entidad {
                     dataTransfer.setArrData(strData);
                     dataTransfer.setArrVariables(this.getArrVariables());
 
-                    //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData, this.getArrVariables());
                     hsCmpPerm = con.getDataByIdQuery(dataTransfer);
                     
                     adm.setHashPermisoForma(hsCmpPerm);
@@ -586,7 +591,7 @@ public class Aplicacion extends Entidad {
     /**
      * Obtiene una grilla XML a partir de los datos asignados: ClaveForma,
      * TipoAccion, strWhereQuery, NumPage y NumRows
-     * @return
+     * @return  StringBuffer    Texto con el Header y data de la forma
      * @throws ExceptionHandler
      */
     private StringBuffer getHeaderAndBodyGrid() throws ExceptionHandler{
@@ -607,7 +612,7 @@ public class Aplicacion extends Entidad {
                 dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                //HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),strData, this.getArrVariables());
+
                 HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -627,7 +632,6 @@ public class Aplicacion extends Entidad {
                         dataTransfer.setOrderBY(this.getOrderBY());
                     }
                     //obtenemos los datos
-                    //hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()), strData[0], this.getArrVariables());
                     hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
                 }
                 if (this.getClaveEmpleado()!=null){
@@ -642,7 +646,7 @@ public class Aplicacion extends Entidad {
                     dataTransfer.setIdQuery(con.getIdQuery(AdminFile.PERMISOS));
                     dataTransfer.setArrData(strData);
                     dataTransfer.setArrVariables(this.getArrVariables());
-                    //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData, this.getArrVariables());
+
                     hsCmpPerm = con.getDataByIdQuery(dataTransfer);
                     adm.setHashPermisoForma(hsCmpPerm);
                 }
@@ -653,7 +657,8 @@ public class Aplicacion extends Entidad {
             List lstF = (List) this.getForma(this.getClaveForma());
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header y Body Grid");
+            throw new ExceptionHandler(ex,this.getClass(),
+                    "Problemas para obtener Header y Body Grid");
         }
         return strSld;
     }
@@ -665,7 +670,7 @@ public class Aplicacion extends Entidad {
      * basicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener
-     * @return
+     * @return              ArrayList   Contiene los datos de una forma nueva
      * @throws ExceptionHandler
      */
     public ArrayList getNewFormaById(String[] arrayData) throws ExceptionHandler {
@@ -678,7 +683,7 @@ public class Aplicacion extends Entidad {
             dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
             dataTransfer.setArrData(arrayData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            //HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData, this.getArrVariables());
+
             HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
 
             Campo cmp = hsCmp.getCampoByName("consulta");
@@ -694,7 +699,7 @@ public class Aplicacion extends Entidad {
                 dataTransfer.setQuery(cmpAux.getValor());
                 dataTransfer.setArrData(arrayData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                //HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(), arrayData, this.getArrVariables());
+
                 HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
 
                 List lstCmp = (List) hsCmpList.getListCampos();
@@ -711,7 +716,8 @@ public class Aplicacion extends Entidad {
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener la Forma, mediante el ID de la query");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener la Forma, mediante el ID de la query");
         }
         return lst;
     }

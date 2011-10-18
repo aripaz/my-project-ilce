@@ -83,6 +83,7 @@ public class Text{
         str = str.replaceAll(oldData, newData);
     }
 
+    @Override
     public String toString(){
         return str;
     }

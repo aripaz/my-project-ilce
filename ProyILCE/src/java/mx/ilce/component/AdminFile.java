@@ -7,14 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bitacora.Bitacora;
@@ -80,13 +77,14 @@ public class AdminFile {
      */
     public static String FILESERVER = "FILESERVER";
 
-
-
     /**
      * Ruta del server para depositar los archivos de Log
      */
     public static String LOGFILESERVER = "LOGFILESERVER";
 
+    /**
+     * Query con los permisos
+     */
     public static String PERMISOS = "PERMISOS";
 
 
@@ -98,67 +96,122 @@ public class AdminFile {
     private Integer idRegister;
     private Bitacora bitacora;
 
+    /**
+     * Obtiene el objeto Bitacora
+     * @return  Bitacora    Objeto Bitacora
+     */
     public Bitacora getBitacora() {
         return bitacora;
     }
 
+    /**
+     * Asigna el objeto Bitacora
+     * @param bitacora  Objeto Bitacora
+     */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
     }
 
+    /**
+     * Obtiene el ID del registro
+     * @return  Integer     ID del registro
+     */
     public Integer getIdRegister() {
         return idRegister;
     }
 
+    /**
+     * Asigna el ID del registro
+     * @param idRegister    ID del registro
+     */
     public void setIdRegister(Integer idRegister) {
         this.idRegister = idRegister;
     }
 
+    /**
+     * Obtiene el ID de la forma
+     * @return  Integer     ID de la Forma
+     */
     private Integer getIdForma() {
         return idForma;
     }
 
+    /**
+     * Asigna el ID de la forma
+     * @param idForma   ID de la forma
+     */
     public void setIdForma(Integer idForma) {
         this.idForma = idForma;
     }
 
+    /**
+     * Obtiene el nombre del archivo
+     * @return  String  Nombre del Archivo
+     */
     public String getNameFile() {
         return nameFile;
     }
 
+    /**
+     * Asigna el nombre del Archivo
+     * @param nameFile  Nombre del Archivo
+     */
     private void setNameFile(String nameFile) {
         this.nameFile = nameFile;
     }
 
+    /**
+     * Obtiene la ruta del archivo
+     * @return  String  Ruta del Archivo
+     */
     private String getRutaFile() {
         return rutaFile;
     }
 
+    /**
+     * Asigna la ruta del Archivo
+     * @param rutaFile  Ruta del archivo
+     */
     public void setRutaFile(String rutaFile) {
         this.rutaFile = rutaFile;
     }
 
+    /**
+     * Obtiene el ID del User
+     * @return  Integer     ID del User
+     */
     private Integer getIdUser() {
         return idUser;
     }
 
+    /**
+     * Asigna el ID del User
+     * @param idUser    ID del User
+     */
     public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
+    /**
+     * Obtiene la ruta de destino del archivo
+     * @return  String  Ruta de destino
+     */
     private String getRutaDest() {
         return rutaDest;
     }
 
+    /**
+     * Asigna la ruta de destino de archivo
+     * @param rutaDest  Ruta de destino
+     */
     private void setRutaDest(String rutaDest) {
         this.rutaDest = rutaDest;
     }
 
     /**
      * Lee la configuracion de la base de datos a utilizar presente en el
-     * archivo ProyILCE.properties, ubicado en el directorio WEB-INF de la
-     * aplicacion
-     * @return
+     * archivo ProyILCE.properties
+     * @return  Properties  Properties obtenidas del archivo
      * @throws Exception
      */
     public static Properties leerConfig() throws ExceptionHandler{
@@ -182,16 +235,19 @@ public class AdminFile {
                 prop.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de configuracion");
+            throw new ExceptionHandler(u,AdminFile.class,
+                    "Problemas para leer el archivo de configuracion");
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de configuracion");
+            throw new ExceptionHandler(e,AdminFile.class,
+                    "Problemas para leer el archivo de configuracion");
         }finally{
             try{
                 if (is != null){
                     is.close();
                 }
             }catch (Exception e){
-                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de configuracion");
+                throw new ExceptionHandler(e,AdminFile.class,
+                        "Problemas para cerrar el archivo de configuracion");
             }
         }
 	return prop;
@@ -199,7 +255,7 @@ public class AdminFile {
 
     /**
      * Lee el archivo de properties que contiene los ID de query configurados
-     * @return
+     * @return  Properties  Properties con los ID de queries obtenidos
      * @throws Exception
      */
     public static Properties leerIdQuery() throws ExceptionHandler{
@@ -244,7 +300,7 @@ public class AdminFile {
      * properties
      * @param prop      Listado de properties obtenido desde el archivo de configuracion
      * @param strKey    Palabra usada como Key para la busqueda dentro del propertie
-     * @return
+     * @return  String  Valor de la Key en el listado de Properties
      */
     public static String getKey(Properties prop, String key) throws ExceptionHandler{
         String sld = "";
@@ -264,7 +320,7 @@ public class AdminFile {
      * configuracion.
      * @param prop  Listado de properties obtenido desde el archivo de configuracion
      * @param key   Palabra usada como Key para la busqueda dentro del propertie
-     * @return
+     * @return  Integer     ID de la query en el listado de Properties
      */
     public static Integer getIdQuery(Properties prop, String key) throws ExceptionHandler{
         Integer sld = Integer.valueOf(0);
@@ -286,7 +342,7 @@ public class AdminFile {
      * que la ruta que se entrega corresponda con el de la configuracion, destinada
      * a los archivos enviados por el usuario
      * @param hsFile    HashMap con los datos del archivo
-     * @return
+     * @return  boolean     Resultado de la operacion de borrado del archivo temporal
      */
     public static boolean deleFileFromServer(HashMap hsFile) throws ExceptionHandler{
         boolean isOK = false;
@@ -315,6 +371,12 @@ public class AdminFile {
         return isOK;
     }
 
+    /**
+     * Metodo para invocar la copia del archivo subido al directorio Temporal
+     * hasta el repositorio de archivos
+     * @return  Boolean     Resultado de la operacion de copia
+     * @throws ExceptionHandler
+     */
     public boolean putFile() throws ExceptionHandler{
         boolean sld = false;
 
@@ -343,6 +405,12 @@ public class AdminFile {
         return sld;
     }
 
+    /**
+     * Metodo que efectua la copia de un archivo desde una ruta de Origen a
+     * una de Destino
+     * @return  Boolean     Resultado de la operacion de copia
+     * @throws IOException
+     */
     private boolean copiarArchivo() throws IOException{
         boolean sld = false;
         FileInputStream in = null;
@@ -383,6 +451,12 @@ public class AdminFile {
         return sld;
     }
 
+    /**
+     * Metodo que registra en la base de datos, el ingreso de un archivo en el
+     * repositorio
+     * @return  Integer     ID del registro del archivo
+     * @throws ExceptionHandler
+     */
     public Integer registerFile() throws ExceptionHandler{
         Integer sld = null;
             String nameF = this.getNameFile();

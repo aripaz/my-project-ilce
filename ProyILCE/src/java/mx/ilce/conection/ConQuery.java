@@ -23,7 +23,7 @@ import mx.ilce.handler.LogHandler;
 import mx.ilce.util.UtilDate;
 
 /**
- *  Clase para la implementacion de los metodos que se conectan a la Base de
+ * Clase para la implementacion de los metodos que se conectan a la Base de
  * Datos y manejan la construccion de las estructuras para contener los datos
  * de las queries que se desean ejecutar
  * @author ccatrilef
@@ -37,7 +37,7 @@ class ConQuery {
     /**
      * Obtiene un String con la hora, minuto y segundo de un dia. Se utiliza
      * como variable local
-     * @return
+     * @return  String  Texto con la hora, minuto y segundo
      */
     private String getHourMinSec() {
         return ((hourMinSec==null)?"":hourMinSec);
@@ -46,7 +46,7 @@ class ConQuery {
     /**
      * Asigna un String con la hora, minuto y segundo de un dia. Se utiliza
      * como variable local
-     * @param hourMinSec
+     * @param hourMinSec    Texto con la hora, minuto y segundo
      */
     private void setHourMinSec(String hourMinSec) {
         this.hourMinSec = hourMinSec;
@@ -54,7 +54,7 @@ class ConQuery {
 
     /**
      * Obtiene el objeto bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -62,7 +62,7 @@ class ConQuery {
 
     /**
      * Asigna el objeto bitacora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -70,7 +70,7 @@ class ConQuery {
 
     /**
      * Obtiene si el log debe incluir la query con datos o no
-     * @return
+     * @return  Boolean     Valor validacion
      */
     public boolean isEnableDataLog() {
         return enableDataLog;
@@ -78,26 +78,10 @@ class ConQuery {
 
     /**
      * Asigna si el log debe inlcuir la query con datos o no
-     * @param enableDataLog
+     * @param enableDataLog     Valor validacion
      */
     public void setEnableDataLog(boolean enableDataLog) {
         this.enableDataLog = enableDataLog;
-    }
-
-    /**
-     * Obtiene el objeto de conexion
-     * @return
-     */
-    public Connection getConn() {
-        return conn;
-    }
-
-    /**
-     * Asigna el objeto de conexion
-     * @param conn
-     */
-    public void setConn(Connection conn) {
-        this.conn = conn;
     }
 
     /**
@@ -135,26 +119,30 @@ class ConQuery {
                 System.out.println("NO HAY CONEXION");
             }
         }catch (SQLException sqlex){
-            throw new ExceptionHandler(sqlex,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(sqlex,this.getClass(),
+                    "Problemas para abrir conexion a la Base de Datos");
         } catch (ClassNotFoundException ex) {
-            throw new ExceptionHandler(ex,this.getClass(),"No se encontro los Driver de Conexion");
+            throw new ExceptionHandler(ex,this.getClass(),
+                    "No se encontro los Driver de conexión");
         }catch (Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para abrir Conexion a Base de datos");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para abrir conexión a la Base de Datos");
         }
     }
 
     /**
      * Metodo que ejecuta una query de insercion, tras efectuarla, se obtiene el
      * ID o clave de los datos insertados, el cual es retornado en el atributo
-     * Object del HashCampo. En caso que no se ejecute la operacion el numero
+     * Object del HashCampo. En caso que no se ejecute la operacion el número
      * retornado es -1, en caso que sea una tabla sin ID o clave, el valor
      * retornado es 0.
-     * Recibe como parametro un objeto CampoForma con los datos para la ejecucion
-     * y un String  con la Query a ejecutar
-     * @return
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: con los datos para la ejecucion.
+     * (-) Query: con la query a ejecutar.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo executeInsert(CampoForma campoForma, String strQuery) throws ExceptionHandler{
     public HashCampo executeInsert(DataTransfer dataTransfer) throws ExceptionHandler{
 
         CampoForma campoForma = dataTransfer.getCampoForma();
@@ -212,27 +200,30 @@ class ConQuery {
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
                                                 "Problemas para ejecutar INSERT");
             eh.setStrQuery(strQuery);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
                                                 "Problemas para ejecutar INSERT");
             eh.setStrQuery(strQuery);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
+                StringBuffer textData=new StringBuffer();
+                textData.append(dataTransfer.toString());
+
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
-                textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("executeInsert"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("executeInsert"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                           "Problemas al excribir el LOG");
+                                           "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (rs!=null){
@@ -244,7 +235,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                           "Problemas para cerrar Conexion a Base de datos");
+                                           "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
@@ -252,7 +243,7 @@ class ConQuery {
 
     /**
      * Metodo para validar que se esta ejecutando una instruccion insert, en la
-     * tabla que corresponde, con la query entregada
+     * tabla que corresponde, con la query entregada.
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
      * @return
@@ -270,13 +261,14 @@ class ConQuery {
     /**
      * Metodo que efectua una query de actualizacion de datos, tras su ejecucion 
      * entrega un numero 1, que efectuo correctamente la operacion, cero en caso 
-     * contrario. El valor es retornado en el atributo Object del HashCampo
-     * @param campoForma    Variable con datos para validacion
-     * @param arrData       Query a ejecutar
-     * @return
+     * contrario. El valor es retornado en el atributo Object del HashCampo.
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: con los datos para realizar el update.
+     * (-) String: con la query a ejecutar.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo executeUpdate(CampoForma campoForma, String strQuery) throws ExceptionHandler{
     public HashCampo executeUpdate(DataTransfer dataTransfer) throws ExceptionHandler{
         CampoForma campoForma = dataTransfer.getCampoForma();
         String strQuery = dataTransfer.getQueryUpdate();
@@ -314,27 +306,30 @@ class ConQuery {
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
                                                 "Problemas para ejecutar UPDATE");
             eh.setStrQuery(strQuery);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
                                                 "Problemas para ejecutar UPDATE");
             eh.setStrQuery(strQuery);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
+                StringBuffer textData=new StringBuffer();
+                textData.append(dataTransfer.toString());
+
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
-                textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("executeUpdate"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("executeUpdate"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (st!=null){
@@ -343,7 +338,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
@@ -368,14 +363,15 @@ class ConQuery {
 
     /**
      * Metodo que efectua una query de eliminacion de datos, tras su ejecucion
-     * entrega un numero: uno(1) efectuo correctamente la operacion, cero(0) en caso
+     * entrega un numero: (1) efectuo correctamente la operacion, (0) en caso
      * contrario. El valor es retornado en el atributo Object del HashCampo.
-     * Como entrada se recibe: un objeto CampoForma que contiene los datos para
-     * identificar la tabla; un String con la query que se ejecutara
-     * @return
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) CampoForma: contiene los datos para identificar la tabla.
+     * (-) String: contiene la query que se ejecutara.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo executeDelete(CampoForma campoForma, String strQuery) throws ExceptionHandler{
     public HashCampo executeDelete(DataTransfer dataTransfer) throws ExceptionHandler{
         CampoForma campoForma = dataTransfer.getCampoForma();
         String strQuery = dataTransfer.getQueryDelete();
@@ -413,27 +409,30 @@ class ConQuery {
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
                                                 "Problemas para ejecutar DELETE");
             eh.setStrQuery(strQuery);
-            eh.setSeeStringData(true);
+            eh.setStringData(dataTransfer.toString());
+            eh.setSeeStringData(true);            
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
                                                 "Problemas para ejecutar DELETE");
             eh.setStrQuery(strQuery);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
+                StringBuffer textData=new StringBuffer();
+                textData.append(dataTransfer.toString());
+
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
-                textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(strQuery);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("executeDelete"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("executeDelete"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (st!=null){
@@ -442,7 +441,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
@@ -450,13 +449,10 @@ class ConQuery {
 
     /**
      * Metodo para efectuar un delete e insert conjunto. NO PROBADO
-     * @param campoForma
-     * @param qryDelete
-     * @param qryInsert
-     * @return
-     * @throws ExceptionHandler
-     */
-    //public HashCampo executeDeleteInsert(CampoForma campoForma, String qryDelete, String qryInsert) throws ExceptionHandler{
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
+      * @throws ExceptionHandler
+      */
     public HashCampo executeDeleteInsert(DataTransfer dataTransfer) throws ExceptionHandler{
         CampoForma campoForma = dataTransfer.getCampoForma();
         String qryDelete = dataTransfer.getQueryDelete();
@@ -537,27 +533,30 @@ class ConQuery {
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
                                                 "Problemas para ejecutar DELETE");
             eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
-            eh.setSeeStringData(true);
+            eh.setStringData(dataTransfer.toString());
+            eh.setSeeStringData(true);            
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
                                                 "Problemas para ejecutar DELETE");
             eh.setStrQuery("\nQUERY DELETE:\n"+qryDelete+"\nQUERY INSERT:\n"+qryInsert);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
+                StringBuffer textData=new StringBuffer();
+                textData.append(dataTransfer.toString());
+
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
-                StringBuffer textData=new StringBuffer();
-                textData.append(("CAMPOFORMA: "+campoForma.toString())).append("\n");
                 log.setStrQuery(("\nQUERY DELETE: "+qryDelete+"\nQUERY INSERT:"+qryInsert));
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("executeDeleteInsert"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("executeDeleteInsert"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (st!=null){
@@ -566,7 +565,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexion a la Base de Datos");
             }
         }
         return hsCmp;
@@ -596,15 +595,15 @@ class ConQuery {
      * agregarse en el arreglo respectivo.
      * Los parametros de entrada deben venir en el orden que se indica en la
      * Query.
-     * @param idQuery   Codigo de la query a utilizar
-     * @param arrData   Arreglo con los parametros de entrada
-     * @param arrVariables   Arreglo con variables que no necesariamente son obligatorias,
-     * pero pueden estar definidas en
-     * @return HashCampo.  Contiene el listado de registros obtenidos y los campos
-     * que posee la query, con sus tipos de datos
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) idQuery: Codigo de la query a utilizar.
+     * (-) arrData: Arreglo con los parametros de entrada.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo getData(Integer idQuery, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
     public HashCampo getData(DataTransfer dataTransfer) throws ExceptionHandler{
         Integer idQuery = dataTransfer.getIdQuery();
         String[] arrData = dataTransfer.getArrData();
@@ -695,14 +694,16 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion de datos con ID QUERY y DATA enviada");
+                                                "Problemas para obtención de datos con IDQUERY y DATA enviada");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion de datos con ID QUERY y DATA enviada");
+                                                "Problemas para obtención de datos con IDQUERY y DATA enviada");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
@@ -712,16 +713,16 @@ class ConQuery {
                 textData.append(("IDQUERY: "+idQuery)).append("\n");
                 if (this.isEnableDataLog()){
                     log.setStrQuery(query);
-                    textData.append(("ENTRADA: "+arrayToString(arrData)));
+                    textData.append(dataTransfer.toString());
                 }else{
                     log.setStrQuery(queryLog);
                 }
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getData"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getData"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
             if (rs!=null){
@@ -733,25 +734,27 @@ class ConQuery {
             this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
     }
 
     /**
-     * Obtiene la data, aplicando a la query un parametro de entrada, el cual
-     * consiste en un string con un "WHERE" o un "AND" dependiendo de la query
-     * la cual condicionara la respuesta de la query.
-     * El idQuery entregado permite seleccionar la query respectiva.
-     * @param idQuery   Codigo de la query a utilizar
-     * @param arrData   Arreglo con los parametros de entrada que se utilizara
-     * en la query
-     * @return HashCampo.  Contiene el listado de registros obtenidos y los campos
-     * que posee la query, con sus tipos de datos
-     * @throws ExceptionHandler
-     */
-    //public HashCampo getDataWithWhere(Integer idQuery, String whereData, String[][] arrVariables) throws ExceptionHandler{
+     * Obtiene la data, aplicando a la query entregada un parametro de entrada,
+     * el cual consiste en un string con un "WHERE" o un "AND" dependiendo de la
+     * query, este texto adicional condicionara la respuesta de la query.
+     * El idQuery entregado permite seleccionar la query respectiva. 
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) idQuery: Codigo de la query a utilizar.
+     * (-) arrData: Arreglo con los parametros de entrada que se utilizara en la query.
+     * (-) strWhere: Condiciones adicionales para agregar a la query.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
+      * @throws ExceptionHandler
+      */
     public HashCampo getDataWithWhere(DataTransfer dataTransfer) throws ExceptionHandler{
         Integer idQuery = dataTransfer.getIdQuery();
         String whereData = dataTransfer.getStrWhere();
@@ -835,29 +838,31 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion de datos con WHERE enviado");
+                                                "Problemas para obtención de datos con WHERE enviado");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion de datos con WHERE enviado");
+                                                "Problemas para obtención de datos con WHERE enviado");
             eh.setStrQuery(query);
-            eh.setSeeStringData(true);
+            eh.setStringData(dataTransfer.toString());
+            eh.setSeeStringData(true);            
             throw eh;
         }finally{
             try{
-                LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
-                textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("WHERE: "+whereData));
+                textData.append(dataTransfer.toString());
+
+                LogHandler log = new LogHandler();
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getDataWithWhere"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getDataWithWhere"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
             if (rs!=null){
@@ -869,7 +874,7 @@ class ConQuery {
             this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
@@ -877,18 +882,19 @@ class ConQuery {
 
     /**
      * Obtiene la data, aplicando a la query un parametro de entrada, el cual
-     * consiste en 1)Un string con un "WHERE" o un "AND" dependiendo de la query
-     * la cual condicionara la respuesta de la query, 2) Un arreglo con la data
-     * de entreda para la query. El idQuery entregado permite seleccionar la query
-     * respectiva.
-     * @param idQuery       ID de la query query a ejecutar
-     * @param whereData     Condiciones adicionales a agregar a la query
-     * @param arrData       Arreglo de data con los parametros de entrada que se
-     * utilizara en la query
-     * @return
+     * consiste en: (1) Un string con un "WHERE" o un "AND" dependiendo de la query,
+     * que condicionara su respuesta, (2) Un arreglo con la data de entrada para
+     * la query. El idQuery entregado permite seleccionar la query respectiva. 
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) idQuery: ID de la query a ejecutar. 
+     * (-) strWhere: Condiciones adicionales para agregar a la query.
+     * (-) arrData: Arreglo de data con los parametros de entrada que se utilizara en la query.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataWithWhereAndData(Integer idQuery, String whereData, String[] arrData, String[][] arrVariables)
     public HashCampo getDataWithWhereAndData(DataTransfer dataTransfer) throws ExceptionHandler{
         Integer idQuery = dataTransfer.getIdQuery();
         String whereData = dataTransfer.getStrWhere();
@@ -979,30 +985,31 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion de datos con WHERE y DATA enviada");
+                                                "Problemas para obtención de datos con WHERE y DATA enviada");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion de datos con WHERE y DATA enviada");
+                                                "Problemas para obtención de datos con WHERE y DATA enviada");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
-                LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
-                textData.append(("IDQUERY: "+idQuery)).append("\n");
-                textData.append(("ENTRADA: "+arrayToString(arrData))).append("\n");
-                textData.append(("WHERE: "+whereData.toString()));
+                textData.append(dataTransfer.toString());
+
+                LogHandler log = new LogHandler();
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getDataWithWhereAndData"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getDataWithWhereAndData"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
             if (rs!=null){
@@ -1014,7 +1021,7 @@ class ConQuery {
             this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexion a la Base de Datos");
             }
         }
         return hsCmp;
@@ -1043,28 +1050,22 @@ class ConQuery {
                 if (strWhere.trim().length()>6){
                     //EMPIEZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
                     //EMPIEZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                            //strQuery = strQuery + " " + strWhere;
                             strQuery = " " + strWhere;
                     }else{
-                            //strQuery = strQuery + " AND " + strWhere;
                             strQuery = " AND " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //EMPIEZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        //strQuery = strQuery + " " + strWhere;
                         strQuery = " " + strWhere;
                     }else{
-                        //strQuery = strQuery + " AND " + strWhere;
                         strQuery = " AND " + strWhere;
                     }
                 }else{
-                        //strQuery = strQuery + " AND " + strWhere;
                         strQuery = " AND " + strWhere;
                 }
             }else{
@@ -1072,33 +1073,26 @@ class ConQuery {
                 if (strWhere.trim().length()>6){
                     //COMIENZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        //strQuery = strQuery + " " + strWhere;
                         strQuery = " " + strWhere;
                     //COMIENZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        //strQuery = strQuery + " WHERE " + strWhere;
                         strQuery = " WHERE " + strWhere;
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //COMIENZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        //strQuery =  strQuery + " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                     }else{
-                        //strQuery = strQuery + " WHERE " + strWhere;
                         strQuery = " WHERE " + strWhere;
                     }
                 }else{
-                    //strQuery = strQuery + " " + strWhere;
                     strQuery = " " + strWhere;
                 }
             }
         }else{
-             //strQuery = query;
              strQuery = "";
         }
         strSld = query + strQuery;
@@ -1108,12 +1102,14 @@ class ConQuery {
      /**
      * Obtiene la data aplicando la query seleccionada mediante el idQuery.
      * Esta query no posee parametros de entrada.
-     * @param idQuery       Codigo de la query a utilizar
-     * @return HashCampo    Contiene el listado de registros obtenidos y los
-     * campos que posee la query, con sus tipos de datos
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) idQuery: Codigo de la query a utilizar.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo getData(Integer idQuery, String[][] arrVariables) throws ExceptionHandler{
     private HashCampo getDataSimple(DataTransfer dataTransfer) throws ExceptionHandler {
         Integer idQuery = dataTransfer.getIdQuery();
         String[][] arrVariables = dataTransfer.getArrVariables();
@@ -1190,28 +1186,31 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion de datos por ID de Query");
+                                                "Problemas para obtención de datos por ID de Query");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion de datos por ID de Query");
+                                                "Problemas para obtención de datos por ID de Query");
             eh.setStrQuery(query);
-            eh.setSeeStringData(true);
+            eh.setStringData(dataTransfer.toString());
+            eh.setSeeStringData(true);            
             throw eh;
         }finally{
             try{
-                LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
-                textData.append(("IDQUERY: "+idQuery)).append("\n");
+                textData.append(dataTransfer.toString());
+
+                LogHandler log = new LogHandler();
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getData"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getData"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (rs!=null){
@@ -1223,7 +1222,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexion a la Base de Datos");
             }
         }
         return hsCmp;
@@ -1232,7 +1231,7 @@ class ConQuery {
     /**
      * Obtiene el nombre del campo PK de una tabla
      * @param tabla     Nombre de la tabla que se desea analizar
-     * @return
+     * @return  String  Nombre del campo PK
      */
     public String getCampoPK(String tabla) throws ExceptionHandler{
         String str ="";
@@ -1252,27 +1251,28 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion el campo PK de una tabla");
+                                                "Problemas para obtención del campo PK de una tabla");
             eh.setStringData("TABLA:"+tabla);
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion el campo PK de una tabla");
+                                                "Problemas para obtención del campo PK de una tabla");
             eh.setStringData("TABLA: "+tabla);
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
-                LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
                 textData.append(("TABLA: "+tabla));
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getCampoPK"),textData);
+
+                LogHandler log = new LogHandler();
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getCampoPK"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (rs!=null){
@@ -1284,7 +1284,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return str;
@@ -1297,7 +1297,7 @@ class ConQuery {
      * es decir, que provengan del catalogo de queries de la base de datos y no
      * de una operacion externa.
      * @param query     Query que debe ser validada
-     * @return
+     * @return  Boolean     valor de la validacion
      */
     private boolean allowedQuery(String query){
         boolean sld = true;
@@ -1320,12 +1320,15 @@ class ConQuery {
      * Obtiene la data aplicando la Query y Data entregada. Solo se permiten
      * queries de seleccion de datos, si se envia alguna que posea instrucciones
      * de modificacion o similar, se bloquea la operacion sin ejecutarla.
-     * @param query     Query que se debe ejecutar en la base de Datos
-     * @param arrData   Parametros con que se debe completar la query
-     * @return
+     * El objeto DataTransfer contiene los siguientes datos:
+     * (-) query: Query que se debe ejecutar en la base de Datos.
+     * (-) arrData: Parametros con que se debe completar la query.
+     * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
+     * pero pueden estar definidas en el User o el ambiente de la aplicacion.
+     * @param  dataTransfer     Objeto para transferencia de datos entre capas
+     * @return HashCampo        Objeto que contiene el resultado
      * @throws ExceptionHandler
      */
-    //public HashCampo getDataByQuery(String query, String[] arrData, String[][] arrVariables) throws ExceptionHandler{
     public HashCampo getDataByQuery(DataTransfer dataTransfer) throws ExceptionHandler{
         String query = dataTransfer.getQuery();
         String[] arrData = dataTransfer.getArrData();
@@ -1383,7 +1386,8 @@ class ConQuery {
                                                   itCmp.getTypeDataDB(),
                                                   castTypeDataDBtoAPL(itCmp.getTypeDataDB()),
                                                   getValueCampo(itCmp.getTypeDataDB(),
-                                                  rs, itCmp.getCodigo()));
+                                                  rs,
+                                                  itCmp.getCodigo()));
                             cmp.setHourMinSec(this.getHourMinSec());
                             this.setHourMinSec("");
                             cmp.setIsIncrement(itCmp.getIsIncrement());
@@ -1409,28 +1413,31 @@ class ConQuery {
             }
         }catch(SQLException e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtencion de datos mediante query");
+                                                "Problemas para obtención de datos mediante Query");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
-                                                "Problemas para obtencion de datos mediante query");
+                                                "Problemas para obtención de datos mediante Query");
             eh.setStrQuery(query);
+            eh.setStringData(dataTransfer.toString());
             eh.setSeeStringData(true);
             throw eh;
         }finally{
             try{
-                LogHandler log = new LogHandler();
                 StringBuffer textData=new StringBuffer();
-                textData.append(("ENTRADA: "+ arrayToString(arrData)));
+                textData.append(dataTransfer.toString());
+
+                LogHandler log = new LogHandler();
                 log.setStrQuery(query);
-                log.logData(AdminFile.getKey(AdminFile.leerConfig(),
-                                             AdminFile.LOGFILESERVER),
-                            new StringBuffer("getDataByQuery"),textData);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getDataByQuery"),
+                            textData);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
-                                    "Problemas al excribir el LOG");
+                                    "Problemas al escribir en el Archivo de Log");
             }
             try{
                 if (rs!=null){
@@ -1442,7 +1449,7 @@ class ConQuery {
                 this.conn.close();
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
         }
         return hsCmp;
@@ -1452,7 +1459,7 @@ class ConQuery {
      * Busca una query desde la base de datos, pasandole el ID que posee
      * en la tabla
      * @param idQuery   ID de la Query a buscar
-     * @return
+     * @return  String  Texto con la query solicitada
      * @throws ExceptionHandler
      */
     private String getQueryById(Integer idQuery) throws ExceptionHandler{
@@ -1461,19 +1468,24 @@ class ConQuery {
         ResultSet rs = null;
         StringBuilder query = new StringBuilder();
         try{
-            if (this.conn == null){
-                getConexion();
-            }
-            query.append("select consulta from consulta_forma ");
-            query.append(" where clave_consulta = ").append(idQuery.toString());
-            st = this.conn.createStatement();
-            rs = st.executeQuery(query.toString());
-            if (rs.next()){
-                strSld =  rs.getString(1);
+            String strQuery = getQueryMain(idQuery);
+            if (strQuery.equals("")){
+                if (this.conn == null){
+                    getConexion();
+                }
+                query.append("select consulta from consulta_forma ");
+                query.append(" where clave_consulta = ").append(idQuery.toString());
+                st = this.conn.createStatement();
+                rs = st.executeQuery(query.toString());
+                if (rs.next()){
+                    strSld =  rs.getString(1);
+                }
+            }else{
+                strSld = strQuery;
             }
         }catch(Exception e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtener QUERY por su ID");
+                                                "Problemas para obtener Query por su ID");
             eh.setStrQuery(query.toString());
             eh.setStringData("ID QUERY: "+idQuery);
             eh.setSeeStringData(true);
@@ -1488,7 +1500,7 @@ class ConQuery {
                 }
             }catch(SQLException es){
                 throw new ExceptionHandler(es,this.getClass(),
-                                    "Problemas para cerrar Conexion a Base de datos");
+                                    "Problemas para cerrar conexión a la Base de Datos");
             }
             //Conn no se debe cerrar ya que es llamada privada
         }
@@ -1502,7 +1514,7 @@ class ConQuery {
      * @param rs        ResulSet donde esta el objeto a analizar
      * @param codigo    Codigo (posicion) dentro del resulset donde esta el dato
      * a analizar
-     * @return
+     * @return  String  Valor del campo
      * @throws ExceptionHandler
      */
     private String getValueCampo(String strType, ResultSet rs, Integer codigo)
@@ -1521,9 +1533,7 @@ class ConQuery {
                 }else if(strType.toUpperCase().equals("DATETIME") ){
                     Date date = rs.getDate(codigo.intValue());
                     if (date!=null){
-                        UtilDate utDate = new UtilDate(date.getDate(), 
-                                                       date.getMonth()+1,
-                                                       date.getYear()+1900);
+                        UtilDate utDate = new UtilDate(date);
                         sld = utDate.getFecha("/");
                         this.setHourMinSec(rs.getString(codigo.intValue()));
                     }else{
@@ -1539,7 +1549,7 @@ class ConQuery {
             }
         }catch(SQLException es){
             throw new ExceptionHandler(es,this.getClass(),
-                                "Problemas para conversion de tipo de datos desde la Base");
+                                "Problemas para conversión de tipo de datos desde la Base de Datos");
         }
         return sld;
     }
@@ -1548,9 +1558,10 @@ class ConQuery {
      * Segun el tipo entregado que se tiene en la base de datos
      * se entrega un string con el tipo que le debe corresponder en Java
      * @param strType   Texto con el tipo de dato a analizar
-     * @return
+     * @return  String  Texto con la conversion del tipo de dato
      */
-    private String castTypeDataDBtoAPL(String strType){
+    private String castTypeDataDBtoAPL(String strType)
+    {
         String sld = new String();
         if (strType!=null){
             if (strType.toUpperCase().equals("CHAR")){
@@ -1577,35 +1588,163 @@ class ConQuery {
     }
 
     /**
-     * Convierte un arreglo de String a un String
-     * @param strData   Arreglo que se llevara a String
-     * @return
+     * Entrega las queries principales de obtencion de datos. Se busca obtener una
+     * pequeña mejora en el performance de la aplicacion quitando estos llamados a
+     * la base de datos, dado el abuso de las llamadas a queries que se realizan,
+     * y dado que estas no pueden estar sufriendo modificaciones constantes como
+     * las otras queries definidas por la Capa Vista
+     * @param idQuery
+     * @return  String  Texto con la conversion de los datos
      */
-    private String arrayToString(String[] strData){
-        StringBuilder sld= new StringBuilder();
-        if (strData!=null){
-            for (int i=0;i<strData.length;i++){
-                sld.append("nro ").append(i+1).append(": ").append(strData[i]).append("\n");
-            }
+    private String getQueryMain(Integer idQuery){
+        String sld = "";
+        switch (idQuery){
+            case 4://LOGIN
+                sld = "select clave_empleado as claveEmpleado "
+                        + ", nombre, apellido_paterno as apellidoPaterno "
+                        + ", apellido_materno as apellidoMaterno, email "
+                        + ", clave_perfil as clavePerfil "
+                        + ", clave_area as claveArea "
+                        + ", foto as urlAvatar, foto as foto "
+                        + "from empleado "
+                        + "where email = '%1' and password = '%2'";
+                //System.out.print("\nLOGIN");
+                break;
+            case 5://USER
+                sld = "select clave_empleado as claveEmpleado, nombre "
+                        + ", apellido_paterno as apellidoPaterno "
+                        + ", apellido_materno as apellidoMaterno "
+                        + ", email, clave_perfil as clavePerfil "
+                        + ", clave_area as claveArea , password "
+                        + "from empleado where email = '%1'";
+                //System.out.print("\nUSER");
+                break;
+            case 6://XMLSESSION
+                sld = "select clave_empleado, nombre, apellido_paterno "
+                        + ", apellido_materno, email, clave_perfil, foto "
+                        + "from empleado where clave_empleado=%1";
+                //System.out.print("\nXMLSESSION");
+                break;
+            case 7://XMLMENU
+                sld = "select distinct a.aplicacion, pa.clave_perfil "
+                        + ", a.clave_aplicacion, pa.activo, p.clave_forma "
+                        + ", fo.forma, a.alias_menu_nueva_entidad "
+                        + ", a.alias_menu_mostrar_entidad "
+                        + ",(select case when count(*)>0 then 1 else 0 end "
+                        + " from permiso_forma pf "
+                        + " where pf.clave_perfil = pa.clave_perfil "
+                        + " and pf.clave_forma = p.clave_forma "
+                        + " and pf.clave_permiso = 1) as mostrar "
+                        + ",(select case when count(*)>0 then 1 else 0 end "
+                        + " from permiso_forma pf "
+                        + " where pf.clave_perfil = pa.clave_perfil "
+                        + " and pf.clave_forma = p.clave_forma "
+                        + " and pf.clave_permiso = 2) as insertar "
+                        + ",(select case when count(*)>0 then 1 else 0 end "
+                        + " from permiso_forma pf "
+                        + " where pf.clave_perfil = pa.clave_perfil "
+                        + " and pf.clave_forma = p.clave_forma "
+                        + " and pf.clave_permiso = 3) as actualizar "
+                        + ",(select case when count(*)>0 then 1 else 0 end "
+                        + " from permiso_forma pf "
+                        + " where pf.clave_perfil = pa.clave_perfil "
+                        + " and pf.clave_forma = p.clave_forma "
+                        + " and pf.clave_permiso = 4) as eliminar "
+                        + ",(select case when count(*)>0 then 1 else 0 end "
+                        + " from permiso_forma pf "
+                        + " where pf.clave_perfil = pa.clave_perfil "
+                        + " and pf.clave_forma = p.clave_forma "
+                        + " and pf.clave_permiso = 5) as mostrar_informacion_sensible "
+                        + " from perfil_aplicacion pa, aplicacion a "
+                        + " , permiso_forma p , forma fo "
+                        + " where a.clave_aplicacion=pa.clave_aplicacion "
+                        + " and a.clave_forma_principal = p.clave_forma "
+                        + " and a.clave_aplicacion = fo.clave_aplicacion "
+                        + " and p.clave_forma = fo.clave_forma "
+                        + " and pa.clave_perfil=%1";
+                //System.out.print("\nXMLMENU");
+                break;
+            case 8://PERFIL
+                sld = "select distinct pe.clave_perfil, pe.perfil "
+                        + ", ap.clave_aplicacion, ap.aplicacion, fo.clave_forma "
+                        + ", ap.clave_forma_principal, ap.descripcion "
+                        + ", ap.alias_menu_nueva_entidad, ap.alias_menu_mostrar_entidad "
+                        + " from empleado em, perfil pe, aplicacion ap "
+                        + ", permiso_forma per , forma fo "
+                        + " where em.clave_empleado = %1 "
+                        + " and   em.clave_perfil = pe.clave_perfil "
+                        + " and   ap.clave_aplicacion = fo.clave_aplicacion "
+                        + " and   per.clave_forma = fo.clave_forma";
+                //System.out.print("\nPERFIL");
+                break;
+            case 9://TABFORMA
+                sld = "select alias_tab, orden_tab, clave_aplicacion "
+                        + ", clave_forma, clave_forma_padre "
+                        + " from forma "
+                        + " where clave_aplicacion=%1 "
+                        + " and clave_forma=%2 "
+                        + " union "
+                        + " select alias_tab, orden_tab, clave_aplicacion "
+                        + ", clave_forma, clave_forma_padre "
+                        + " from forma "
+                        + " where clave_aplicacion=%3 "
+                        + " and clave_forma_padre=%4 "
+                        + " order by orden_tab";
+                //System.out.print("\nTABFORMA");
+                break;
+            case 11://FORMACAMPOS
+                sld = "select cf.clave_campo, cf.clave_forma, f.tabla "
+                        + ", cf.campo, cf.alias_campo, cf.obligatorio "
+                        + ", cf.tipo_control, cf.evento, cf.clave_forma_foranea "
+                        + ", cf.filtro_foraneo, cf.ayuda, cf.dato_sensible "
+                        + ", cf.activo, cf.tamano, cf.edita_forma_foranea "
+                        + ", cf.visible, cf.valor_predeterminado, cf.justificar_cambio "
+                        + ", f.alias_tab, cf.usado_para_agrupar "
+                        + ", cf.no_permitir_valor_foraneo_nulo "
+                        + " from campo_forma cf, forma f "
+                        + " where cf.clave_forma = f.clave_forma "
+                        + " and cf.clave_forma = $pk "
+                        + " and cf.campo in (%2)";
+                //System.out.print("\nFORMACAMPOS");
+                break;
+            case 12://FORMA
+                sld = "select cf.clave_campo, cf.clave_forma, f.tabla, cf.campo "
+                        + ", cf.alias_campo,  cf.obligatorio, cf.tipo_control "
+                        + ", cf.evento, cf.clave_forma_foranea, cf.filtro_foraneo "
+                        + ", cf.ayuda, cf.dato_sensible, cf.activo, cf.tamano "
+                        + ", cf.edita_forma_foranea , cf.visible, f.forma "
+                        + ", cf.valor_predeterminado, cf.justificar_cambio "
+                        + ", f.alias_tab, cf.usado_para_agrupar "
+                        + ", cf.no_permitir_valor_foraneo_nulo "
+                        + " from campo_forma cf, forma f "
+                        + " where f.clave_forma = cf.clave_forma "
+                        + " and f.clave_forma = %1";
+                //System.out.print("\nFORMA");
+                break;
+            case 14://FORMAQUERY
+                sld = "select * from consulta_forma "
+                        + " where clave_forma = %1 "
+                        + " and tipo_accion = '%2'"
+                        + " and clave_perfil = %clave_perfil";
+                //System.out.print("\nFORMAQUERY");
+                break;
+            case 69://PERMISOS
+                sld = "select pf.clave_permiso , per.permiso, pf.clave_forma "
+                        + " from  permiso per, permiso_forma pf, empleado em "
+                        + ", perfil_aplicacion pa "
+                        + " where per.clave_permiso = pf.clave_permiso "
+                        + " and   pf.clave_perfil = em.clave_perfil "
+                        + " and   em.clave_perfil = pa.clave_perfil "
+                        + " and   em.clave_empleado = %1 "
+                        + " and   pf.clave_forma = %2 "
+                        + " group by pf.clave_permiso , per.permiso, pf.clave_forma";
+                //System.out.print("\nPERMISOS");
+                break;
+            default:
+                sld = "";
+                //System.out.print("\nID:"+idQuery);
+                break;
         }
-        return sld.toString();
-    }
-
-    /**
-     * Convierte una matriz bidimensional de String a String
-     * @param strData   Matriz bidimensional que se llevara a String
-     * @return
-     */
-    private String arrayToString(String[][] strData){
-        StringBuilder sld= new StringBuilder();
-        if (strData!=null){
-            for (int i=0;i<strData.length;i++){
-                for (int j=0;j<strData[i].length;j++){
-                    sld.append("[").append(i).append(",").append(j).append("]:");
-                    sld.append(strData[i][j]).append("\n");
-                }
-            }
-        }
-        return sld.toString();
+        return sld;
     }
 }

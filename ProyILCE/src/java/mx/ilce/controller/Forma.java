@@ -49,36 +49,60 @@ public class Forma extends Entidad{
     private Bitacora bitacora;
     private boolean includeHour=false;
     private String orderBY;
-
     private DataMail dataMail;
 
+
+    /**
+     * Entrega un objeto DataMail
+     * @return  DataMail    Objeto DataMail
+     */
     public DataMail getDataMail() {
         return dataMail;
     }
 
+    /**
+     * Asigna un objeto DataMail
+     * @param dataMail
+     */
     public void setDataMail(DataMail dataMail) {
         this.dataMail = dataMail;
     }
-    
+
+    /**
+     * Entrega un texto con el Order By Asignado
+     * @return  String  Texto con el Order by
+     */
     public String getOrderBY() {
         return orderBY;
     }
 
+    /**
+     * Asignaa un texto con el Order By
+     * @param orderBY   Texto con el Order by
+     */
     public void setOrderBY(String orderBY) {
         this.orderBY = orderBY;
     }
 
+    /**
+     * Entrega la validacion de si se debe incluir las horas en la fecha
+     * @return      Boolean
+     */
     public boolean isIncludeHour() {
         return includeHour;
     }
 
+    /**
+     * Asigna la validacion para ver si se debe incluir las horas en la fecha
+     * @param includeHour   Boolean
+     */
     public void setIncludeHour(boolean includeHour) {
         this.includeHour = includeHour;
     }
 
     /**
      * Obtiene el arreglo de variables
-     * @return
+     * @return  String[][]  Arreglo con las variables
      */
     public String[][] getArrVariables() {
         return arrVariables;
@@ -86,7 +110,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el arreglo de variables
-     * @param arrVariables
+     * @param arrVariables  Arreglo con las variables
      */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
@@ -94,7 +118,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene la clave del empleado
-     * @return
+     * @return  Integer Clave del empleado
      */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
@@ -102,7 +126,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave del empleado
-     * @param claveEmpleado
+     * @param claveEmpleado Clave del empleado
      */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
@@ -111,7 +135,7 @@ public class Forma extends Entidad{
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
      * listado del foraneo
-     * @return
+     * @return  Boolean
      */
     public boolean isIncludeForaneo() {
         return includeForaneo;
@@ -120,7 +144,7 @@ public class Forma extends Entidad{
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se debe incluir o no el
      * listado del foraneo
-     * @param includeForaneo
+     * @param includeForaneo    Boolean
      */
     public void setIncludeForaneo(boolean includeForaneo) {
         this.includeForaneo = includeForaneo;
@@ -128,7 +152,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el FormData
-     * @return
+     * @return  HashMap     Con la data de la forma
      */
     public HashMap getFormData() {
         return formData;
@@ -144,7 +168,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el FormName
-     * @return
+     * @return  ArrayList   Nombre de la forma
      */
     public ArrayList getFormName() {
         return formName;
@@ -160,7 +184,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el ArrayData
-     * @return
+     * @return  String[]    Array con la data
      */
     public String[] getArrayData() {
         return arrayData;
@@ -176,7 +200,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el texto adicional que se incluira en la query
-     * @return
+     * @return  String  Texto con el WHERE para una Query
      */
     public String getStrWhereQuery() {
         return (strWhereQuery==null)?"":strWhereQuery;
@@ -184,7 +208,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el texto adicional que se incluira en la query
-     * @param strWhereQuery     Estructura adicional para un query
+     * @param strWhereQuery     Texto con el WHERE para una query
      */
     public void setStrWhereQuery(String strWhereQuery) {
         this.strWhereQuery = (strWhereQuery==null)?"":strWhereQuery;
@@ -192,7 +216,7 @@ public class Forma extends Entidad{
 
     /**
      * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @return
+     * @return  Boolean     Entrada TRUE o FALSE sobre estado del increment
      */
     public boolean isCleanIncrement() {
         return cleanIncrement;
@@ -208,7 +232,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el nombre del campo PK de la forma
-     * @return
+     * @return  String  Nombre del campo PK
      */
     public String getCampoPK() {
         return campoPK;
@@ -224,7 +248,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el tipo de accion que se esta efectuando con la Forma
-     * @return
+     * @return  String  Texto con la accion a efectuar
      */
     public String getTipoAccion() {
         return ((tipoAccion==null)?"":tipoAccion);
@@ -243,7 +267,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el codigo PK ingresado
-     * @return
+     * @return  String      Codigo PK de la Forma
      */
     public String getPk() {
         return pk;
@@ -262,7 +286,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el Alias del TAB
-     * @return
+     * @return  String      Alias del TAB
      */
     public String getAliasTab() {
         return aliasTab;
@@ -278,7 +302,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene la clave de la aplicacion
-     * @return
+     * @return  Integer     Clave de la Aplicacion
      */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
@@ -286,7 +310,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la aplicacion
-     * @param claveAplicacion   Codigo con la clave de la Aplicacion
+     * @param claveAplicacion   Clave de la Aplicacion
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -294,7 +318,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene la clave de la forma
-     * @return
+     * @return  Integer     Clave de la forma
      */
     public Integer getClaveForma() {
         return claveForma;
@@ -302,7 +326,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la forma
-     * @param claveForma    Codigo con la clave de la Forma
+     * @param claveForma    Clave de la Forma
      */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
@@ -310,7 +334,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene la clave de la forma padre
-     * @return
+     * @return      Integer     Clave de la forma Padre
      */
     public Integer getClaveFormaPadre() {
         return claveFormaPadre;
@@ -318,7 +342,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la clave de la forma padre
-     * @param claveFormaPadre   Codigo con la clave de la Forma Padre
+     * @param claveFormaPadre   Clave de la Forma Padre
      */
     public void setClaveFormaPadre(Integer claveFormaPadre) {
         this.claveFormaPadre = claveFormaPadre;
@@ -326,7 +350,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el orden del Tab
-     * @return
+     * @return  Integer     Codigo con el orden
      */
     public Integer getOrdenTab() {
         return ordenTab;
@@ -342,7 +366,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el hash con la configuracion de la forma
-     * @return
+     * @return  HashMap     Hash con la configuracion
      */
     public HashMap getHsForma() {
         return hsForma;
@@ -372,7 +396,7 @@ public class Forma extends Entidad{
      * que se asociaron cuando se obtuvo el perfil del Usuario. El resultado es
      * un listado con los campos de la forma.
      * @param key   ID de la forma a solicitar
-     * @return
+     * @return  List    Listado con la forma
      */
     public List getForma(Integer key){
         List hs = null;
@@ -388,7 +412,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el objeto Bitacora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -396,7 +420,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el objeto Bitacora
-     * @param bitacora
+     * @param bitacora      Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
@@ -416,8 +440,8 @@ public class Forma extends Entidad{
      * Metodo alternativo implementado para borrar los permisos anteriores
      * e ingresar los nuevos permisos al mismo tiempo.
      * NO PROBADA
-     * @param data
-     * @return
+     * @param data  Data de entrada
+     * @return  ExecutionHandler    Resultado de la ejecucion
      * @throws ExceptionHandler
      */
     public ExecutionHandler ingresarDataPermisos(Object data) throws ExceptionHandler{
@@ -445,7 +469,7 @@ public class Forma extends Entidad{
             dataTransfer.setQuery(query);
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
             HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuilder strQuery = new StringBuilder();
@@ -561,7 +585,7 @@ public class Forma extends Entidad{
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param data  Forma que se ingresara
-     * @return
+     * @return  ExecutionHandler    Resultado de la ejecucion
      */
     public ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler{
         ExecutionHandler ex = null;
@@ -589,7 +613,6 @@ public class Forma extends Entidad{
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(this.getArrVariables());
 
-            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
             HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuffer strQuery = new StringBuffer();
@@ -660,9 +683,7 @@ public class Forma extends Entidad{
 
             dataTransfer = new DataTransfer();
             dataTransfer.setQueryInsert(strQuery.toString());
-            //conE.setQuery(strQuery.toString());
             dataTransfer.setCampoForma(cmpF);
-            //conE.setCampoForma(cmpF);
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
             conE.ingresaEntidad(dataTransfer);
@@ -703,7 +724,8 @@ public class Forma extends Entidad{
                             new StringBuffer("editarEntidad"),textData);
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el INSERT de la Forma");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para Ingresar el INSERT de la Forma");
         }
         return ex;
     }
@@ -713,7 +735,7 @@ public class Forma extends Entidad{
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param data  Forma que se editara
-     * @return
+     * @return  ExecutionHandler    Resultado de la ejecucion
      */
     public ExecutionHandler editarEntidad(Object data) throws ExceptionHandler{
         ExecutionHandler ex = null;
@@ -742,7 +764,7 @@ public class Forma extends Entidad{
             dataTransfer.setQuery(query);
             dataTransfer.setArrData(strData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
             HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
             StringBuffer strQuery = new StringBuffer();
@@ -822,9 +844,7 @@ public class Forma extends Entidad{
             strQuery.append("");
 
             dataTransfer = new DataTransfer();
-            //conE.setQuery(strQuery.toString());
             dataTransfer.setQueryUpdate(strQuery.toString());
-            //conE.setCampoForma(cmpF);
             dataTransfer.setCampoForma(cmpF);
             conE.getBitacora().setEnable(true);
             conE.getBitacora().setLstVariables(listVariables);
@@ -874,7 +894,7 @@ public class Forma extends Entidad{
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param idForma   ID de la Forma que se eliminara
-     * @return
+     * @return  ExecutionHandler    Resultado de la ejecucion
      */
     public ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler {
         ExecutionHandler ex = null;
@@ -909,7 +929,7 @@ public class Forma extends Entidad{
                 dataTransfer.setQuery(query);
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                //HashCampo hsCmp = conE.getDataByQuery(query, strData, this.getArrVariables());
+
                 HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
 
                 StringBuilder strQuery = new StringBuilder();
@@ -963,9 +983,7 @@ public class Forma extends Entidad{
                 strQuery.append("");
 
                 dataTransfer = new DataTransfer();
-                //conE.setQuery(strQuery.toString());
                 dataTransfer.setQueryDelete(strQuery.toString());
-                //conE.setCampoForma(cmpF);
                 dataTransfer.setCampoForma(cmpF);
                 conE.getBitacora().setEnable(true);
                 conE.getBitacora().setLstVariables(listVariables);
@@ -999,7 +1017,7 @@ public class Forma extends Entidad{
 
     /**
      * Genera el XML de la forma y lo asigna al campo XmlEntidad
-     * @return
+     * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
     public Forma mostrarForma() throws ExceptionHandler {
@@ -1088,8 +1106,6 @@ public class Forma extends Entidad{
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
             throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el XML la Forma a mostrar");
-        }finally{
-            //colocar instrucciones que siempre se deben hacer
         }
         return this;
     }
@@ -1103,7 +1119,7 @@ public class Forma extends Entidad{
 
     /**
      * Metodo para ingresar una busqueda sencilla desde un formulario
-     * @return
+     * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
     public Forma ingresarBusquedaSencilla() throws ExceptionHandler {
@@ -1127,7 +1143,6 @@ public class Forma extends Entidad{
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(this.getArrVariables());
 
-                //HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData, this.getArrVariables());
                 HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -1143,7 +1158,7 @@ public class Forma extends Entidad{
                     dataTransfer.setIdQuery(Integer.valueOf(cmpAux.getValor()));
                     dataTransfer.setStrWhere(strWhere);
                     dataTransfer.setArrVariables(this.getArrVariables());
-                    //HashCampo hsCmp = con.getDataByIdQueryAndWhere(Integer.valueOf(cmpAux.getValor()),strWhere, this.getArrVariables());
+
                     HashCampo hsCmp = con.getDataByIdQueryAndWhere(dataTransfer);
                     if (!this.hsForma.isEmpty()){
                         AdminXML admXML = new AdminXML();
@@ -1180,16 +1195,15 @@ public class Forma extends Entidad{
             }
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el XML la Forma en una busqueda");
-        }finally{
-            //colocar instrucciones que siempre se deben hacer
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener el XML la Forma en una busqueda");
         }
         return this;
     }
 
     /**
      * Metodo para ingresar una busqueda avanzada desde un formulario
-     * @return
+     * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
     public Forma ingresarBusquedaAvanzada() throws ExceptionHandler{
@@ -1214,7 +1228,7 @@ public class Forma extends Entidad{
                 dataTransfer.setIdQuery(idQuery);
                 dataTransfer.setArrData(strData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                //HashCampo hsCmpQ = con.getDataByIdQuery(idQuery, strData,this.getArrVariables());
+
                 HashCampo hsCmpQ = con.getDataByIdQuery(dataTransfer);
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -1232,7 +1246,7 @@ public class Forma extends Entidad{
                     dataTransfer.setStrWhere(strWhere);
                     dataTransfer.setArrData(strData);
                     dataTransfer.setArrVariables(this.getArrVariables());
-                    //HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(Integer.valueOf(cmpAux.getValor()),strWhere, strData, this.getArrVariables());
+
                     HashCampo hsCmp = con.getDataByIdQueryAndWhereAndData(dataTransfer);
 
                     if (!this.hsForma.isEmpty()){
@@ -1250,7 +1264,7 @@ public class Forma extends Entidad{
                             dataTransfer.setIdQuery(con.getIdQuery(AdminFile.PERMISOS));
                             dataTransfer.setArrData(strData);
                             dataTransfer.setArrVariables(this.getArrVariables());
-                            //hsCmpPerm = con.getDataByIdQuery(con.getIdQuery(AdminFile.PERMISOS),strData,this.getArrVariables());
+
                             hsCmpPerm = con.getDataByIdQuery(dataTransfer);
                             
                             admXML.setHashPermisoForma(hsCmpPerm);
@@ -1295,28 +1309,10 @@ public class Forma extends Entidad{
             }
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el XML la Forma en una busqueda");
-        }finally{
-            //colocar instrucciones que siempre se deben hacer
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener el XML la Forma en una busqueda");
         }
         return this;
-    }
-
-    /**
-     * Metodo para obtener en un Array de String, los datos contendios en la forma
-     * @return
-     */
-    private String[] getArrayOfData(){
-        String[] data = null;
-
-        String[] arrData = this.getArrayData();
-        if (arrData!=null){
-            HashMap hm = this.getFormData();
-            for (int i=0;i<arrData.length;i++){
-                hm.get(String.valueOf(i));
-            }
-        }
-        return data;
     }
 
     /**
@@ -1363,13 +1359,13 @@ public class Forma extends Entidad{
                     dataTransfer.setArrVariables(this.getArrVariables());
                     dataTransfer.setStrWhere(this.getStrWhereQuery());
 
-                    //List lstE = con.getListFormaById(strData,this.getArrVariables());
                     List lstE = con.getListFormaById(dataTransfer);
                     addForma(idForma, lstE);
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener las formas de un listado de Aplicaciones");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener las formas de un listado de Aplicaciones");
         }
     }
 
@@ -1379,7 +1375,7 @@ public class Forma extends Entidad{
      * @param idAplication  ID de la aplicacion donde se va a buscar la forma
      * @param lstAplications    Listado de aplicaciones, estas aplicaciones se
      * deben obtener a travez del Perfil
-     * @return
+     * @return  Integer     ID de la Forma
      * @throws ExceptionHandler
      */
     private Integer getIdFormaByIdAplic(Integer idAplication, List lstAplications)
@@ -1396,7 +1392,8 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el ID de una forma de una Aplicacion");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener el ID de una forma de una Aplicacion");
         }
         return idForma;
     }
@@ -1405,7 +1402,7 @@ public class Forma extends Entidad{
      * Obtiene un List con la configuracion de la forma entregada. El List esta
      * formado por Bean del tipo CampoForma
      * @param arrayData     Arreglo de datos con la configuracion de la forma
-     * @return
+     * @return  List    Listado con los datos de la Forma
      * @throws ExceptionHandler
      */
     public List getListFormaById(String[] arrayData) throws ExceptionHandler{
@@ -1419,11 +1416,11 @@ public class Forma extends Entidad{
             DataTransfer dataTransfer = new DataTransfer();
             dataTransfer.setArrData(arrayData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            //lst = con.getListFormaById(arrayData,this.getArrVariables());
             lst = con.getListFormaById(dataTransfer);
 
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el List con la configuracion de la Forma");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener el List con la configuracion de la Forma");
         }
         return lst;
     }
@@ -1435,7 +1432,7 @@ public class Forma extends Entidad{
      * basicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener
-     * @return
+     * @return  ArrayList   Arreglo con los datos de la Forma
      * @throws ExceptionHandler
      */
     public ArrayList getNewFormaById(String[] arrayData) throws ExceptionHandler {
@@ -1449,7 +1446,7 @@ public class Forma extends Entidad{
             dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
             dataTransfer.setArrData(arrayData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            //HashCampo hsCmp = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),arrayData,this.getArrVariables());
+            
             HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
 
             Campo cmp = hsCmp.getCampoByName("consulta");
@@ -1466,7 +1463,7 @@ public class Forma extends Entidad{
                 dataTransfer.setQuery(cmpAux.getValor());
                 dataTransfer.setArrData(arrayData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                //HashCampo hsCmpList = con.getDataByQuery(cmpAux.getValor(),arrayData, this.getArrVariables());
+                
                 HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
 
                 List lstCmp = (List) hsCmpList.getListCampos();
@@ -1483,7 +1480,8 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener la Forma, mediante el ID de la query");
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener la Forma, mediante el ID de la query");
         }
         return lst;
     }
@@ -1492,7 +1490,7 @@ public class Forma extends Entidad{
      * Metodo para convertir un texto de una query para que los caracteres sean
      * aceptado por la base de datos
      * @param data      Texto a revisar
-     * @return
+     * @return  StringBuffer    Texto transformado
      * @throws ExceptionHandler
      */
     private StringBuffer castAcent(String data) throws ExceptionHandler {
@@ -1544,7 +1542,8 @@ public class Forma extends Entidad{
                 str=data;
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para reemplazar los acentos de: "+data);
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para reemplazar los acentos de: "+data);
         }
         return new StringBuffer(str);
     }

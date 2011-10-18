@@ -255,4 +255,88 @@ public class DataTransfer {
         this.orderBY = orderBY;
     }
 
+    /**
+     * Convierte un arreglo de String a un String
+     * @param strData   Arreglo que se llevara a String
+     * @return  String  Texto con la conversion de los datos
+     */
+    private String arrayToString(String[] strData){
+        StringBuilder sld= new StringBuilder();
+        if (strData!=null){
+            for (int i=0;i<strData.length;i++){
+                sld.append("\n\t\tNro ").append(i+1).append(": ").append(strData[i]);
+            }
+        }
+        return sld.toString();
+    }
+
+    /**
+     * Convierte un arreglo de String a un String
+     * @param strData   Arreglo que se llevara a String
+     * @return  String  Texto con la conversion de los datos
+     */
+    private String arrayDoubleToString(String[][] strData){
+        StringBuilder sld= new StringBuilder();
+        if (strData!=null){
+            for (int i=0;i<strData.length;i++){
+                sld.append("\n\t\tNro ").append(i+1).append(":\n\t\t");
+                for (int j=0;j<strData[i].length;j++){
+                    sld.append("dato[").append(j).append("]:").append(strData[i][j]).append(" || ");
+                }
+            }
+        }
+        return sld.toString();
+    }    
+
+    /**
+     * Metodo para convertir a String el contenido del Objeto. Los datos que no
+     * esten con valor NULL son ignorados
+     * @return  String  Texto con los datos del objeto
+     */
+    @Override
+    public String toString() {
+        String str = "";
+        str = "DataTransfer{"
+                + ((idQuery!=null)?"\n\tIdQuery=" + idQuery:"")
+                + ((query!=null)?"\n\tQuery=" + query:"")
+                + ((queryInsert!=null)?"\n\tQueryInsert=" + queryInsert:"")
+                + ((queryDelete!=null)?"\n\tQueryDelete=" + queryDelete:"")
+                + ((queryUpdate!=null)?"\n\tQueryUpdate=" + queryUpdate:"")
+                + ((strWhere!=null)?"\n\tStrWhere=" + strWhere:"")
+                + ((tabla!=null)?"\n\tTabla=" + tabla:"")
+                + ((orderBY!=null)?"\n\tOrderBY=" + orderBY:"")
+                + ((dataObject!=null)?"\n\tDataObject=" + dataObject:"")
+                + ((rutaFile!=null)?"\n\tRutaFile=" + rutaFile:"")
+                + ((campo!=null)?"\n\tCampo=" + campo.toString():"")
+                + ((campoForma!=null)?"\n\tCampoForma=" + campoForma.toString():"")
+                + ((arrData!=null)?"\n\tArrData=" + arrayToString(arrData):"")
+                + ((arrVariables!=null)?"\n\tArrVariables=" + arrayDoubleToString(arrVariables):"")
+                + "\n}";
+        return str;
+    }
+
+    /**
+     * Metodo similar al toString(), para convertir a String el contenido del Objeto.
+     * Los datos que no esten con valor NULL y los objetos Campo y CampoForma
+     * son ignorados
+     * @return  String  Texto con los datos del objeto
+     */
+    public String toStringSimple() {
+        String str = "";
+        str = "DataTransfer{"
+                + ((idQuery!=null)?"\n\tIdQuery=" + idQuery:"")
+                + ((query!=null)?"\n\tQuery=" + query:"")
+                + ((queryInsert!=null)?"\n\tQueryInsert=" + queryInsert:"")
+                + ((queryDelete!=null)?"\n\tQueryDelete=" + queryDelete:"")
+                + ((queryUpdate!=null)?"\n\tQueryUpdate=" + queryUpdate:"")
+                + ((strWhere!=null)?"\n\tStrWhere=" + strWhere:"")
+                + ((tabla!=null)?"\n\tTabla=" + tabla:"")
+                + ((orderBY!=null)?"\n\tOrderBY=" + orderBY:"")
+                + ((dataObject!=null)?"\n\tDataObject=" + dataObject:"")
+                + ((rutaFile!=null)?"\n\tRutaFile=" + rutaFile:"")
+                + ((arrData!=null)?"\n\tArrData=" + arrayToString(arrData):"")
+                + ((arrVariables!=null)?"\n\tArrVariables=" + arrayDoubleToString(arrVariables):"")
+                + "\n}";
+        return str;
+    }
 }

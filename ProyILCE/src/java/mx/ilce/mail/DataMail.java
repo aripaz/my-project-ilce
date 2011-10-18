@@ -35,33 +35,57 @@ public class DataMail implements Serializable{
     private String strCopy;
     private String strCopyO;
 
+    /**
+     * Obtiene el listado de los receptores de copia
+     * @return  String  Texto con los receptores
+     */
     public String getStrCopy() {
         return strCopy;
     }
 
+    /**
+     * Asigna a los receptores de copia
+     * @param strCopy   Texto con los receptores
+     */
     public void setStrCopy(String strCopy) {
         this.strCopy = strCopy;
     }
 
+    /**
+     * Obtiene el listado con los receptores de copia oculta
+     * @return  String  Texto con los receptores
+     */
     public String getStrCopyO() {
         return strCopyO;
     }
 
+    /**
+     * Asigna el listado con los receptores de copia oculta
+     * @param strCopyO  Texto con los receptores
+     */
     public void setStrCopyO(String strCopyO) {
         this.strCopyO = strCopyO;
     }
 
+    /**
+     * Obtiene el listado con los destinatarios del mail
+     * @return  String  Texto con los destinatarios
+     */
     public String getStrTo() {
         return strTo;
     }
 
+    /**
+     * Asigna el listado con los destinatarios del mail
+     * @param strTo     Texto con los destinatarios
+     */
     public void setStrTo(String strTo) {
         this.strTo = strTo;
     }
     
     /**
      * Obtiene la clave de la forma
-     * @return
+     * @return  Integer     Clave de la forma
      */
     public Integer getClaveForma() {
         return claveForma;
@@ -69,7 +93,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna la clave de la forma
-     * @param claveForma
+     * @param claveForma    Clave de la forma
      */
     public void setClaveForma(Integer claveForma) {
         this.claveForma = claveForma;
@@ -77,7 +101,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el password
-     * @return
+     * @return  String  Texto con el password
      */
     public String getPassword() {
         return password;
@@ -85,7 +109,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el password
-     * @param password
+     * @param password  Texto con el password
      */
     public void setPassword(String password) {
         this.password = password;
@@ -93,7 +117,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Mail
-     * @return
+     * @return  String  Mail asignado
      */
     public String getMail() {
         return mail;
@@ -101,7 +125,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Mail
-     * @param mail
+     * @param mail  Mail asignado
      */
     public void setMail(String mail) {
         this.mail = mail;
@@ -109,7 +133,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el tipo de query
-     * @return
+     * @return  String  Tipo query
      */
     public String getTipoQuery() {
         return tipoQuery;
@@ -117,7 +141,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el tipo de query
-     * @param tipoQuery
+     * @param tipoQuery String  Tipo query
      */
     public void setTipoQuery(String tipoQuery) {
         this.tipoQuery = tipoQuery;
@@ -125,7 +149,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el listado de mail para copia oculta
-     * @return
+     * @return  List    Listado de mail
      */
     public List getListO() {
         return ListO;
@@ -133,7 +157,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el listado de mail para copia oculta
-     * @param ListO
+     * @param ListO Listado de mail
      */
     public void setListO(List ListO) {
         this.ListO = ListO;
@@ -141,7 +165,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el listado de mail para copia
-     * @return
+     * @return  List    Listado de mail
      */
     public List getListCopy() {
         return listCopy;
@@ -149,7 +173,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el listado de mail para copia
-     * @param listCopy
+     * @param listCopy  Listado de mail
      */
     public void setListCopy(List listCopy) {
         this.listCopy = listCopy;
@@ -157,7 +181,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el listado de mail que lo estan enviando
-     * @return
+     * @return  List    Listado de mail
      */
     public List getListaFrom() {
         return listaFrom;
@@ -165,7 +189,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el listado de mail que lo estan enviando
-     * @param listaFrom
+     * @param listaFrom     Listado de mail
      */
     public void setListaFrom(List listaFrom) {
         this.listaFrom = listaFrom;
@@ -173,7 +197,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el listado de mail de los receptores
-     * @return
+     * @return  List    Listado de mail
      */
     public List getListaTo() {
         return listaTo;
@@ -181,7 +205,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el listado de mail de los receptores
-     * @param listaTo
+     * @param listaTo   Listado de mail
      */
     public void setListaTo(List listaTo) {
         this.listaTo = listaTo;
@@ -189,7 +213,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Apellido Materno
-     * @return
+     * @return  String Apellido Materno
      */
     public String getAppMaterno() {
         return appMaterno;
@@ -197,7 +221,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Apellido Materno
-     * @param appMaterno
+     * @param appMaterno    Apellido Materno
      */
     public void setAppMaterno(String appMaterno) {
         this.appMaterno = appMaterno;
@@ -205,7 +229,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Apellido Paterno
-     * @return
+     * @return  String  Apellido Paterno
      */
     public String getAppPaterno() {
         return appPaterno;
@@ -213,7 +237,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Apellido Paterno
-     * @param appPaterno
+     * @param appPaterno    Apellido Paterno
      */
     public void setAppPaterno(String appPaterno) {
         this.appPaterno = appPaterno;
@@ -221,7 +245,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el ID del Mail
-     * @return
+     * @return  Integer     ID del mail
      */
     public Integer getIdMail() {
         return idMail;
@@ -229,7 +253,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el ID del Mail
-     * @param idMail
+     * @param idMail    ID del mail
      */
     public void setIdMail(Integer idMail) {
         this.idMail = idMail;
@@ -237,7 +261,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el ID de la Query
-     * @return
+     * @return  Integer     ID de la query
      */
     public Integer getIdQuery() {
         return idQuery;
@@ -245,7 +269,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el ID de la Query
-     * @param idQuery
+     * @param idQuery   ID de la query
      */
     public void setIdQuery(Integer idQuery) {
         this.idQuery = idQuery;
@@ -253,7 +277,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el ID del tipo de Mail
-     * @return
+     * @return  Integer     ID tipo mail
      */
     public Integer getIdTipoMail() {
         return idTipoMail;
@@ -261,7 +285,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el ID del tipo de Mail
-     * @param idTipoMail
+     * @param idTipoMail    ID tipo mail
      */
     public void setIdTipoMail(Integer idTipoMail) {
         this.idTipoMail = idTipoMail;
@@ -269,7 +293,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Nombre
-     * @return
+     * @return  String  Nombre
      */
     public String getNombre() {
         return nombre;
@@ -277,7 +301,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Nombre
-     * @param nombre
+     * @param nombre    Nombre
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -285,7 +309,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Orden
-     * @return
+     * @return  Integer     Orden de posicion
      */
     public Integer getOrden() {
         return orden;
@@ -293,7 +317,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Orden
-     * @param orden
+     * @param orden     Orden de posicion
      */
     public void setOrden(Integer orden) {
         this.orden = orden;
@@ -301,7 +325,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene la query
-     * @return
+     * @return  String  Texto de la query
      */
     public String getQuery() {
         return query;
@@ -309,7 +333,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna la query
-     * @param query
+     * @param query     Texto de la query
      */
     public void setQuery(String query) {
         this.query = query;
@@ -317,7 +341,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Subject
-     * @return
+     * @return  String  Texto del Subject
      */
     public String getSubJect() {
         return subJect;
@@ -325,7 +349,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Subject
-     * @param subJect
+     * @param subJect   Texto del Subject
      */
     public void setSubJect(String subJect) {
         this.subJect = subJect;
@@ -333,7 +357,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Texto
-     * @return
+     * @return  String  Texto del mail
      */
     public String getTexto() {
         return texto;
@@ -341,7 +365,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Texto
-     * @param texto
+     * @param texto Texto del mail
      */
     public void setTexto(String texto) {
         this.texto = texto;
@@ -349,7 +373,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Texto Impersonal
-     * @return
+     * @return  String  Texto impersonal del mail
      */
     public String getTextoImpersonal() {
         return textoImpersonal;
@@ -357,7 +381,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Texto Impersonal
-     * @param textoImpersonal
+     * @param textoImpersonal   Texto impersonal del mail
      */
     public void setTextoImpersonal(String textoImpersonal) {
         this.textoImpersonal = textoImpersonal;
@@ -365,7 +389,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Tipo
-     * @return
+     * @return  String  Tipo
      */
     public String getTipo() {
         return tipo;
@@ -373,7 +397,7 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Tipo
-     * @param tipo
+     * @param tipo  Iipo
      */
     public void setTipo(String tipo) {
         this.tipo = tipo;
@@ -381,7 +405,7 @@ public class DataMail implements Serializable{
 
     /**
      * Obtiene el Tipo de mail
-     * @return
+     * @return  String  Tipo de mail
      */
     public String getTipoMail() {
         return tipoMail;
@@ -389,11 +413,9 @@ public class DataMail implements Serializable{
 
     /**
      * Asigna el Tipo de mail
-     * @param tipoMail
+     * @param tipoMail  Tipo de mail
      */
     public void setTipoMail(String tipoMail) {
         this.tipoMail = tipoMail;
     }
-
-
 }

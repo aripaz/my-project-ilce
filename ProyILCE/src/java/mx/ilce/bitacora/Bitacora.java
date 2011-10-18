@@ -41,6 +41,9 @@ public final class Bitacora implements Serializable {
         this.idBitacora = idBitacora;
     }
 
+    public Bitacora() {
+    }
+
     /**
      * Constructor a partir de los datos del request
      * @param request

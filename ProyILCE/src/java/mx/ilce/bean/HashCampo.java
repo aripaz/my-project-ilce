@@ -309,23 +309,34 @@ public class HashCampo implements Serializable  {
         return lst1.equals(lst2);
     }
 
+    private String ArrayListToString(ArrayList arr){
+        StringBuffer str = new StringBuffer();
+        if (arr!=null){
+            Iterator it = arr.iterator();
+            while (it.hasNext()){
+                Campo cmp = (Campo) it.next();
+                str.append(cmp.toString());
+            }
+        }
+        return str.toString();
+    }
+
     /**
      * Metodo que lleva a un string el contenido del objeto
      * @return
      */
     @Override
     public String toString() {
-        return "HashCampo{" + "lengthCampo=" + lengthCampo
-                + " || lengthData=" + lengthData
-                + " || listData=" + listData.toString()
-                + " || listCampos=" + listCampos.toString()
-                + " || listCampoByCod=" + listCampoByCod.toString()
-                + " || listCampoByName=" + listCampoByName.toString()
-                + " || listAlias=" + listAlias.toString()
-                + " || objData=" + objData 
-                + " || pkData=" + pkData + '}';
+        return "HashCampo{"
+                + ((lengthCampo!=null)?"\n|| lengthCampo=" + lengthCampo:"")
+                + ((lengthData!=null)?"\n|| lengthData=" + lengthData:"")
+                + ((objData!=null)?"\n|| objData=" + objData:"")
+                + ((pkData!=null)?"\n|| pkData=" + pkData:"")
+                + ((listData!=null)?"\n|| listData=" + listData.toString():"")
+                + ((listCampoByCod!=null)?"\n|| listCampoByCod=" + listCampoByCod.toString():"")
+                + ((listCampoByName!=null)?"\n|| listCampoByName=" + listCampoByName.toString():"")
+                + ((listAlias!=null)?"\n|| listAlias=" + listAlias:"")
+                + ((listCampos!=null)?"\n|| listCampos=" + listCampos.toString():"")
+                + "\n}";
     }
-
-
-
 }

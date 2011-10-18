@@ -19,7 +19,17 @@ import mx.ilce.handler.ExceptionHandler;
 class UtilMail {
 
     private static File WORKING_DIRECTORY;
-    
+
+    /**
+     *  Obtiene un Objeto Address[] que contiene los mail recuperados de un
+     * texto, en el cual estan separados por un caracter entregado como dato
+     * de entrada. Se requiere este objeto pues es el que maneja el Controller
+     * Java para envio de mail.
+     * @param entrada       Texto con los mail
+     * @param separador     Separador de los mail en el texto
+     * @return Address[]    Objeto con los mail
+     * @throws ExceptionHandler
+     */
     public Address[] getAddressFromText(String entrada, String separador) throws ExceptionHandler{
         String destino = entrada;
         String[] destinos = null;
@@ -38,12 +48,12 @@ class UtilMail {
                 }
                 addressDest = new InternetAddress[j];
                 for (int i=0; i<j; i++){
-
-                        addressDest[i] = new InternetAddress(paso[i]);
+                    addressDest[i] = new InternetAddress(paso[i]);
                 }
             }
         } catch (AddressException e) {
-            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Problemas para obtener direcciones de mail");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener direcciones de mail");
             eh.setStringData(entrada);
             eh.setSeeStringData(true);
             throw eh;
@@ -51,6 +61,12 @@ class UtilMail {
         return addressDest;
     }
 
+    /**
+     * Metodo para leer la configuracion de los datos del mail en el archivo
+     * de properties mail.properties
+     * @return Properties   Objeto Properties con los datos leidos
+     * @throws ExceptionHandler
+     */
     public static Properties leerConfig()throws ExceptionHandler{
         Properties props = new Properties();
 	InputStream is = null;
@@ -72,16 +88,19 @@ class UtilMail {
                 props.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,UtilMail.class,"Problemas para leer el archivo de configuracion de Mail");
+            throw new ExceptionHandler(u,UtilMail.class,
+                    "Problemas para leer el archivo de configuración de Mail");
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,UtilMail.class,"Problemas para leer el archivo de configuracion de Mail");
+            throw new ExceptionHandler(e,UtilMail.class,
+                    "Problemas para leer el archivo de configuración de Mail");
         }finally{
             try{
                 if (is != null){
                     is.close();
                 }
             }catch (Exception e){
-                throw new ExceptionHandler(e,UtilMail.class,"Problemas para leer el archivo de configuracion de Mail");
+                throw new ExceptionHandler(e,UtilMail.class,
+                        "Problemas para leer el archivo de configuración de Mail");
             }
         }
         return props;

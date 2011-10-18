@@ -19,49 +19,6 @@ public class ListHash {
 
     private HashMap lista;
 
-    /**
-     * Inserta un dato a una lista Hash
-     * @param dato  Dato a insertar
-     * @param clave Clave que poseera en el Hash
-     * @return
-     */
-    private boolean insertListHash(Object dato, BigDecimal clave){
-        boolean bln=true;
-        this.lista.put(clave, dato);
-        return bln;
-    }
-
-    /**
-     * Elimina un dato de una lista Hash, ubicandolo por su clave
-     * @param clave Clave del objeto a eliminar
-     * @return
-     */
-    private boolean deleteListHash(BigDecimal clave){
-        this.lista.remove(clave);
-        return true;
-    }
-
-    /**
-     * Actualiza el contenido de un listado Hash, reemplazando el objeto ubicado
-     * en la clave entregada por el nuevo objeto entregado
-     * @param dato      Objeto que sera ingresado
-     * @param clave     Clave del objeto a reemplazar
-     * @return
-     */
-    private boolean updateListHash(Object dato, BigDecimal clave){
-        boolean bln=true;
-        return bln;
-    }
-
-    /**
-     * Obtiene un objeto desde el listado hash, mediante una clave
-     * @param clave     Clave del objeto a buscar
-     * @return
-     */
-    private Object getObjectHash(BigDecimal clave){
-        return this.lista.get(clave);
-    }
-
      /**
      * Tenemos un metodo donde en una clase "nameClass", se introducen los
      * datos del objeto "hsCmp", colocandolos en los campos que correspondan,
@@ -70,7 +27,7 @@ public class ListHash {
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
-     * @return
+     * @return  Object  Objeto convertido a la clase que le corresponde
      * @throws ExceptionHandler
      */
     public Object getBean(Class nameClass, HashCampo hsCmp)throws ExceptionHandler{
@@ -143,7 +100,8 @@ public class ListHash {
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
-     * @return
+     * @return  ArrayList   Listado con los objetos convertidos a la clase que
+     * le corresponde
      * @throws ExceptionHandler
      */
     public ArrayList getListBean(Class nameClass, HashCampo hsCmp) throws ExceptionHandler{
@@ -219,7 +177,7 @@ public class ListHash {
      * Convierte un tipo String(obj) en el tipo entregado (type)
      * @param type  Tipo al cual debe ser convertirse un dato
      * @param obj   String que contiene el valor que debe ser convertido
-     * @return
+     * @return  Object  Objeto convertido a la clase que le corresponde
      * @throws ExceptionHandler
      */
     private Object getTypeValueCampo(Class type, String obj) throws ExceptionHandler{

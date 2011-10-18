@@ -17,6 +17,7 @@ import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
+import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
 
 /**
@@ -36,6 +37,7 @@ public class srvGrid extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        SpyHandler spy = new SpyHandler();
         HashMap hsForm = null;
         Validation val = new Validation();
         try {
@@ -46,6 +48,7 @@ public class srvGrid extends HttpServlet {
                 HashMap hs = admForm.getFormulario(request);
 
                 hsForm = (HashMap) hs.get("FORM");  //Datos
+                spy.setHsForm(hsForm);
 
                 String claveForma = (String) hsForm.get("$cf");
                 String claveAplic = (String) hsForm.get("$ca");
@@ -133,6 +136,7 @@ public class srvGrid extends HttpServlet {
                             eh.setSeeStringData(true);
                             xmlForma = eh.getXmlError();
                         }
+                        spy.setXmlSld(xmlForma);
                         request.getSession().setAttribute("xmlGrid", xmlForma);
                     }
                     request.getRequestDispatcher("/resource/jsp/xmlGrid.jsp").forward(request, response);
@@ -150,6 +154,7 @@ public class srvGrid extends HttpServlet {
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
+            spy.SpyData("srvGrid");
         }
     } 
 
