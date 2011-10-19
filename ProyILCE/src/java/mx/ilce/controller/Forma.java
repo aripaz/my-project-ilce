@@ -12,6 +12,7 @@ import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
+import mx.ilce.component.ListHash;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.conection.ConSession;
 import mx.ilce.handler.ExceptionHandler;
@@ -34,6 +35,7 @@ public class Forma extends Entidad{
     private Integer claveAplicacion;
     private Integer claveForma;
     private Integer claveFormaPadre;
+    private Integer clavePerfil;
     private HashMap hsForma;
     private String pk;
     private String tipoAccion;
@@ -51,6 +53,13 @@ public class Forma extends Entidad{
     private String orderBY;
     private DataMail dataMail;
 
+    public Integer getClavePerfil() {
+        return clavePerfil;
+    }
+
+    public void setClavePerfil(Integer clavePerfil) {
+        this.clavePerfil = clavePerfil;
+    }
 
     /**
      * Entrega un objeto DataMail
@@ -1078,10 +1087,42 @@ public class Forma extends Entidad{
                         }else{
                             admXML.setDeleteIncrement(false);
                         }
+                        try{
+                            ConEntidad conE = new ConEntidad();
+                            DataTransfer dataTransfer = new DataTransfer();
+
+                            String query = "select clave_campo, clave_forma, clave_perfil, campo, alias_campo "
+                                    + ",obligatorio, tipo_control, evento, clave_forma_foranea, filtro_foraneo "
+                                    + ",edita_forma_foranea, no_permitir_valor_foraneo_nulo, ayuda, dato_sensible"
+                                    + ",activo, tamano, visible, valor_predeterminado, justificar_cambio"
+                                    + ", usado_para_agrupar from campo_forma "
+                                    + " where clave_forma = " + this.getClaveForma();
+                            if (this.getClavePerfil()!=null){
+                                query = query + " and clave_perfil = " + this.getClavePerfil();
+                            }
+                            dataTransfer.setQuery(query);
+                            conE.setBitacora(this.getBitacora());
+                            HashCampo hsCampo = conE.getDataByQuery(dataTransfer);
+                            ListHash lstHash = new ListHash();
+                            ArrayList arrLst = lstHash.getListBean(CampoForma.class, hsCampo);
+                            if ((arrLst!=null)&&(!arrLst.isEmpty())){
+                                lstF = arrLst;
+                            }
+                        }catch(Exception e){}
+                        
                         if (hsCmp.getLengthData()==0){
+                            System.out.println("getFormaWithoutData");
+                            System.out.println("PK="+this.getPk());
+                            System.out.println("hsCmp="+hsCmp.getListCampos().size());
+                            System.out.println("lstF="+lstF.size());
+                            
                             xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),
                                     this.getTipoAccion(), this.getArrVariables());
                         }else{
+                            System.out.println("getFormaByData");
+                            System.out.println("PK="+this.getPk());
+                            System.out.println("hsCmp="+hsCmp.getListCampos().size());
+                            System.out.println("lstF="+lstF.size());
                             xmlForma = admXML.getFormaByData(hsCmp,lstF,this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }
