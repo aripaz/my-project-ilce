@@ -266,7 +266,13 @@ public class Campo {
                 .append("</").append(nombre).append(">");
                 break;
             case 4: //"datosEntidadYForaneosConDiccionario"
-                StringBuffer xmlForaneo= new StringBuffer("<foraneo agrega_registro='" + this.editaFormaForanea!=null?"true":"false" + "' clave_forma='"+ this.claveFormaForanea + "'>");
+                StringBuffer xmlForaneo= new StringBuffer("<foraneo agrega_registro='");
+                if (this.editaFormaForanea!=1)
+                    xmlForaneo.append("true");
+                else
+                    xmlForaneo.append("false");
+                
+                xmlForaneo.append("' clave_forma='"+ this.claveFormaForanea + "'>");
 
                 if (this.getFormaForanea()!=null) {
                    for (int m=0;m<this.getFormaForanea().getCampos().size();m++) {
@@ -275,7 +281,9 @@ public class Campo {
                    } 
                    xmlForaneo.append("</foraneo>");
                 }
-                
+                else 
+                    xmlForaneo.delete(0,xmlForaneo.length());
+                        
                 xml
                 .append("<").append(nombre).append(" ").append(" tipo_dato='").append(tipoDato).append("'>")
                         .append("<![CDATA[").append(valor).append("]]>")
