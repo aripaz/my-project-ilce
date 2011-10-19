@@ -699,9 +699,10 @@ public class Forma extends Entidad{
 
             SendMailNotif sen = new SendMailNotif();
             sen.setBitacora(conE.getBitacora());
+            /*
             if (sen.admSendMail()){
                 this.setDataMail(sen.getDataMail());
-            }
+            }*/
 
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
@@ -861,9 +862,11 @@ public class Forma extends Entidad{
 
             SendMailNotif sen = new SendMailNotif();
             sen.setBitacora(conE.getBitacora());
+            /*
             if (sen.admSendMail()){
                 this.setDataMail(sen.getDataMail());
             }
+            */
             conE.getBitacora().setEnable(false);
             conE.getBitacora().setLstVariables(null);
 
