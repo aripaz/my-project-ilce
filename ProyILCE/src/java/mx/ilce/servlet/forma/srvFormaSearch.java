@@ -51,7 +51,6 @@ public class srvFormaSearch extends HttpServlet {
                 //Thread.sleep(100);
                 AdminForm admForm = new AdminForm();
                 HashMap hs = admForm.getFormulario(request);
-                hs = admForm.getFormulario(request);
                 HashMap hsForm = (HashMap) hs.get("FORM");
                 hsForm = (HashMap) hs.get("FORM");
                 spy.setHsForm(hsForm);

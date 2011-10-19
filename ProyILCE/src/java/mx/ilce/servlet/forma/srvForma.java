@@ -95,6 +95,7 @@ public class srvForma extends HttpServlet {
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
                         forma.setArrVariables(arrVariables);
+                        forma.setClavePerfil(user.getClavePerfil());
                         
                         if ((strWhere!=null)&&(!"".equals(strWhere))){
                             String[] strData = getArrayData(hsForm);
@@ -126,7 +127,7 @@ public class srvForma extends HttpServlet {
                         request.getSession().setAttribute("xmlForma", xmlForma);
                         spy.setXmlSld(xmlForma);
                     }
-                    actualizarData(request);
+                    //actualizarData(request);
 
                     request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
                 }
