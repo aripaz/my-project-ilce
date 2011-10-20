@@ -213,12 +213,8 @@ public class Campo {
     }
  
     
-    public StringBuffer toXML(int tipoXml, Object valor) {
-        StringBuffer xml= new StringBuffer();
-        
-        switch(tipoXml) {
-            case 1: //diccionario
-              xml
+    public StringBuffer toXMLDiccionario(Object valor) {
+        return new StringBuffer()
                 .append("<alias>").append(alias).append("</alias>")
                 .append("<obligatorio>").append(obligatorio).append("</obligatorio>")
                 .append("<tipo_control>").append(tipoControl).append("</tipo_control>")
@@ -235,16 +231,18 @@ public class Campo {
                 .append("<valor_predeterminado>").append(valorPredeterminado).append("</valor_predeterminado>")
                 .append("<justificar_cambio>").append(justificarCambio ).append("</justificar_cambio>")
                 .append("<usado_para_agrupar>").append(usadoParaAgrupar).append("</usado_para_agrupar>");
-                break;
-            case 2: //datosEntidad    
-                 xml
+    }
+    
+    public StringBuffer toXMLDatosDeEntidad(Object valor) {
+            return new StringBuffer()
                 .append("<").append(nombre).append(" ").append(" tipo_dato='").append(tipoDato).append("'>")
                         .append("<![CDATA[").append(valor).append("]]>")
                 .append("</").append(nombre).append(">");
-                break;             
-            case 3: //"datosEntidadConDiccionario"
-                
-                 xml
+           
+    }
+    
+     public StringBuffer toXMLDatosDeEntidadConDiccionario(Object valor) {
+            return new StringBuffer()
                 .append("<").append(nombre).append(" ").append(" tipo_dato='").append(tipoDato).append("'>")
                         .append("<![CDATA[").append(valor).append("]]>")
                 .append("<alias>").append(alias).append("</alias>")
@@ -264,50 +262,51 @@ public class Campo {
                 .append("<justificar_cambio>").append(justificarCambio ).append("</justificar_cambio>")
                 .append("<usado_para_agrupar>").append(usadoParaAgrupar).append("</usado_para_agrupar>")
                 .append("</").append(nombre).append(">");
-                break;
-            case 4: //"datosEntidadYForaneosConDiccionario"
-                StringBuffer xmlForaneo= new StringBuffer("<foraneo agrega_registro='");
-                if (this.editaFormaForanea!=1)
-                    xmlForaneo.append("true");
-                else
-                    xmlForaneo.append("false");
-                
-                xmlForaneo.append("' clave_forma='"+ this.claveFormaForanea + "'>");
+    }
+     
+    public StringBuffer toXMLDatosDeEntidadConDiccionarioYForaneos(Object valor) {
+        StringBuffer xml = new StringBuffer();
+        StringBuffer xmlForaneo= new StringBuffer("<foraneo agrega_registro='");
+        
+        if (this.editaFormaForanea!=1)
+            xmlForaneo.append("true");
+        else
+            xmlForaneo.append("false");
 
-                if (this.getFormaForanea()!=null) {
-                   for (int m=0;m<this.getFormaForanea().getCampos().size();m++) {
-                       Campo campoForaneo=this.getFormaForanea().getCampos().get(m);    
-                       xmlForaneo.append(campoForaneo.toXML(2, valor));
-                   } 
-                   xmlForaneo.append("</foraneo>");
-                }
-                else 
-                    xmlForaneo.delete(0,xmlForaneo.length());
-                        
-                xml
-                .append("<").append(nombre).append(" ").append(" tipo_dato='").append(tipoDato).append("'>")
-                        .append("<![CDATA[").append(valor).append("]]>")
-                .append("<alias>").append(alias).append("</alias>")
-                .append("<obligatorio>").append(obligatorio).append("</obligatorio>")
-                .append("<tipo_control>").append(tipoControl).append("</tipo_control>")
-                .append("<evento>").append(evento).append("</evento>")
-                .append("<clave_forma_foranea>").append(claveFormaForanea).append("</clave_forma_foranea>")
-                .append("<filtro_foraneo>").append(filtroForaneo).append("</filtro_foraneo>")
-                .append("<edita_forma_foranea>").append(editaFormaForanea).append("</edita_forma_foranea>")
-                .append("<no_permitir_valor_foraneo_nulo>").append(noPermitirValorForaneoNulo).append("</no_permitir_valor_foraneo_nulo>")
-                .append("<ayuda>").append(ayuda).append("</ayuda>")
-                .append("<dato_sensible>").append(datoSensible).append("</dato_sensible>")
-                .append("<activo>").append(activo).append("</activo>")
-                .append("<tamano>").append(tamano).append("</tamano>")
-                .append("<visible>").append(visible).append("</visible>")
-                .append("<valor_predeterminado>").append(valorPredeterminado).append("</valor_predeterminado>")
-                .append("<justificar_cambio>").append(justificarCambio ).append("</justificar_cambio>")
-                .append("<usado_para_agrupar>").append(usadoParaAgrupar).append("</usado_para_agrupar>")
-                .append(xmlForaneo)
-                .append("</").append(nombre).append(">");
-                break;                
-                
+        xmlForaneo.append("' clave_forma='").append(this.claveFormaForanea).append("'>");
+
+        if (this.getFormaForanea()!=null) {
+           for (int m=0;m<this.getFormaForanea().getCampos().size();m++) {
+               Campo campoForaneo=this.getFormaForanea().getCampos().get(m);    
+               xmlForaneo.append(campoForaneo.toXMLDatosDeEntidad(valor));
+           } 
+           xmlForaneo.append("</foraneo>");
         }
+        else 
+            xmlForaneo.delete(0,xmlForaneo.length());
+
+        xml
+        .append("<").append(nombre).append(" ").append(" tipo_dato='").append(tipoDato).append("'>")
+                .append("<![CDATA[").append(valor).append("]]>")
+        .append("<alias>").append(alias).append("</alias>")
+        .append("<obligatorio>").append(obligatorio).append("</obligatorio>")
+        .append("<tipo_control>").append(tipoControl).append("</tipo_control>")
+        .append("<evento>").append(evento).append("</evento>")
+        .append("<clave_forma_foranea>").append(claveFormaForanea).append("</clave_forma_foranea>")
+        .append("<filtro_foraneo>").append(filtroForaneo).append("</filtro_foraneo>")
+        .append("<edita_forma_foranea>").append(editaFormaForanea).append("</edita_forma_foranea>")
+        .append("<no_permitir_valor_foraneo_nulo>").append(noPermitirValorForaneoNulo).append("</no_permitir_valor_foraneo_nulo>")
+        .append("<ayuda>").append(ayuda).append("</ayuda>")
+        .append("<dato_sensible>").append(datoSensible).append("</dato_sensible>")
+        .append("<activo>").append(activo).append("</activo>")
+        .append("<tamano>").append(tamano).append("</tamano>")
+        .append("<visible>").append(visible).append("</visible>")
+        .append("<valor_predeterminado>").append(valorPredeterminado).append("</valor_predeterminado>")
+        .append("<justificar_cambio>").append(justificarCambio ).append("</justificar_cambio>")
+        .append("<usado_para_agrupar>").append(usadoParaAgrupar).append("</usado_para_agrupar>")
+        .append(xmlForaneo)
+        .append("</").append(nombre).append(">");               
+                
         return xml;
     }
 
