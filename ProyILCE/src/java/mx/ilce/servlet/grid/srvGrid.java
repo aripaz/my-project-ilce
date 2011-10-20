@@ -102,6 +102,7 @@ public class srvGrid extends HttpServlet {
                                 apl.setStrWhereQuery(strWhere);
                                 apl.setArrayData(strData);
                                 apl.setArrVariables(arrVariables);
+                                apl.setClavePerfil(user.getClavePerfil());
                                 String numPage = (String) hsForm.get("page");
                                 String numRows = (String) hsForm.get("rows");
                                 apl.setNumPage(numPage);

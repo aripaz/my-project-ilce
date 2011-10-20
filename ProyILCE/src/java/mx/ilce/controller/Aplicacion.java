@@ -10,6 +10,7 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
+import mx.ilce.component.ListHash;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
@@ -22,6 +23,7 @@ public class Aplicacion extends Entidad {
 
     private Integer claveEmpleado;
     private Integer claveAplicacion;
+    private Integer clavePerfil;
     private String aplicacion;
     private Integer claveFormaPrincipal;
     private String descripcion;
@@ -40,6 +42,13 @@ public class Aplicacion extends Entidad {
     private Bitacora bitacora;
     private String orderBY;
 
+    public Integer getClavePerfil() {
+        return clavePerfil;
+    }
+
+    public void setClavePerfil(Integer clavePerfil) {
+        this.clavePerfil = clavePerfil;
+    }
 
     /**
      * Entrega el texto "Order By" que se usara en la query
@@ -655,6 +664,29 @@ public class Aplicacion extends Entidad {
                 adm.setDeleteIncrement(cleanIncrement);
             }
             List lstF = (List) this.getForma(this.getClaveForma());
+            try{
+                ConEntidad conE = new ConEntidad();
+                DataTransfer dataTransfer = new DataTransfer();
+
+                String query = "select clave_campo, clave_forma, clave_perfil, campo, alias_campo "
+                        + ",obligatorio, tipo_control, evento, clave_forma_foranea, filtro_foraneo "
+                        + ",edita_forma_foranea, no_permitir_valor_foraneo_nulo, ayuda, dato_sensible"
+                        + ",activo, tamano, visible, valor_predeterminado, justificar_cambio"
+                        + ", usado_para_agrupar from campo_forma "
+                        + " where clave_forma = " + this.getClaveForma();
+                if (this.getClavePerfil()!=null){
+                    query = query + " and clave_perfil = " + this.getClavePerfil();
+                }
+                dataTransfer.setQuery(query);
+                conE.setBitacora(this.getBitacora());
+                HashCampo hsCampo = conE.getDataByQuery(dataTransfer);
+                ListHash lstHash = new ListHash();
+                ArrayList arrLst = lstHash.getListBean(CampoForma.class, hsCampo);
+                if ((arrLst!=null)&&(!arrLst.isEmpty())){
+                    lstF = arrLst;
+                }
+            }catch(Exception e){}
+
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),
