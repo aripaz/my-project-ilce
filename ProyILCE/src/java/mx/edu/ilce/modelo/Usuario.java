@@ -6,12 +6,13 @@
 package mx.edu.ilce.modelo;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  *
  * @author danielm
  */
-public final class Usuario {
+public final class Usuario implements Serializable {
     private int clave;
     private String nombre;
     private String apellidoPaterno;
@@ -141,6 +142,33 @@ public final class Usuario {
 
     public void setClave(int clave) {
         this.clave = clave;
+        
+        Conexion oDb = new Conexion();
+        
+        try {
+            ResultSet oRs= oDb.getRs("select * from empleado where clave_empleado="+ this.clave);
+            if (oRs.next()) {
+                this.nombre=oRs.getString("nombre");
+                this.apellidoPaterno=oRs.getString("apellido_paterno");
+                this.apellidoMaterno=oRs.getString("apellido_materno");
+                this.claveArea=oRs.getInt("clave_area");
+                this.clavePerfil=oRs.getInt("clave_perfil");
+                this.email=oRs.getString("email");
+                this.foto=oRs.getString("foto");
+                this.activo=oRs.getInt("activo");
+                this.setAplicaciones(oDb);
+                this.reglasDeReemplazo.add("%clave_empleado="+Integer.toString(this.clave));
+                this.reglasDeReemplazo.add("%clave_area="+Integer.toString(this.claveArea));
+                this.reglasDeReemplazo.add("%clave_perfil="+Integer.toString(this.clavePerfil));
+            }
+            else
+                System.out.print("Usuario no encontrado");
+           oRs.close(); 
+        } catch (Exception e) {
+            System.out.print(oDb.getError());
+        } finally {
+            oDb.cierraConexion();
+        }
     }
 
     public int getClaveArea() {
@@ -202,52 +230,22 @@ public final class Usuario {
         for (Aplicacion a : this.getAplicaciones()) {
             int nApp=a.getClaveAplicacion();
             for (Forma f : a.getFormas()) {
-                if (f.getClaveForma()==clave_forma) {
+                if (f.getClaveForma()!=clave_forma) {
                     found=true;
-
                     this.consulta = new  Consulta (clave_forma, accion, pk, w, this.reglasDeReemplazo);  
                     this.consulta.setClaveAplicacion(nApp);
                     break;
                 }
             }
-            if(found) break;
+            if (found) break;
         }
         
         if(!found)
             this.consulta.setError("El perfil no está autorizado para acceder a la forma");
     }
     
-    public Usuario(int clave) {
-        this.clave = clave;
-        
-        Conexion oDb = new Conexion();
-        
-        try {
-            ResultSet oRs= oDb.getRs("select * from empleado where clave_empleado="+ this.clave);
-            if (oRs.next()) {
-                this.nombre=oRs.getString("nombre");
-                this.apellidoPaterno=oRs.getString("apellido_paterno");
-                this.apellidoMaterno=oRs.getString("apellido_materno");
-                this.claveArea=oRs.getInt("clave_area");
-                this.clavePerfil=oRs.getInt("clave_perfil");
-                this.email=oRs.getString("email");
-                this.foto=oRs.getString("foto");
-                this.activo=oRs.getInt("activo");
-                this.setAplicaciones(oDb);
-                this.reglasDeReemplazo.add("%clave_empleado="+Integer.toString(this.clave));
-                this.reglasDeReemplazo.add("%clave_area="+Integer.toString(this.claveArea));
-                this.reglasDeReemplazo.add("%clave_perfil="+Integer.toString(this.clavePerfil));
-            }
-            else
-                System.out.print("Usuario no encontrado");
-           oRs.close(); 
-        } catch (Exception e) {
-            System.out.print(oDb.getError());
-        } finally {
-            oDb.cierraConexion();
-        }
-        
-        
+    public Usuario() {
+
     }
     
     
