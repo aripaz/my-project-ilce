@@ -92,7 +92,7 @@
                         <div id='notification_1_103_0' class='notification'></div>
                         <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Pendientes que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
                         <div class="blank_space">&nbsp;</div>
-                        <div id='notification_1_103_0' class='notification'>(No hay listados registrados)</div>
+                        <div id='favoritos' class='notification'>(No hay listados registrados)</div>
                 </div>
                 <div class="column2 ui-sortable">
                     <div class="portlet">

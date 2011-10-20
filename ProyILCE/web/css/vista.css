@@ -324,3 +324,7 @@ a.session_menu {
     background: url("images/ui-bg_flat_15_cd0a0a_40x100.png") repeat scroll 50% 50% #EEEEEE;
     opacity: 0.8;
 }
+
+#divLostPw {
+    display: none;
+}
