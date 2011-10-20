@@ -311,7 +311,7 @@
                                 "&clave_aplicacion=" + $.fn.form.options.app +
                                 "&clave_forma="+$.fn.form.options.forma+
                                 "&clave_empleado="+ $("#_ce_").val() +
-                                "&filtro="+sBusqueda +
+                                "&filtro="+escape(sBusqueda) +
                                 "&consulta=" +sData;
                                 $.post("srvFormaInsert",postConfig);
                                     
