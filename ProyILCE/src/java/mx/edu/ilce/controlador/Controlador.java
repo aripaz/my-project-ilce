@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,7 @@ String sNextAction="";
         response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
         request.getSession().setAttribute("mensaje",null);
-        Usuario usuario=null;
+        Usuario usuario=new Usuario();
         
             try {
                 String cmd = request.getParameter("$cmd");
@@ -52,8 +53,9 @@ String sNextAction="";
                         sNextAction = m.getError();
                         if (sNextAction.equals("")) {
                             if (nUsuario != 0) {
-                                usuario = new Usuario(nUsuario);
-                                request.getSession().setAttribute("usuario", usuario);
+                               usuario.setClave(nUsuario);
+                               
+                               request.getSession().setAttribute("usuario", usuario);
                                 request.getRequestDispatcher("/vista_.jsp").forward(request, response);
                             } else {
                                 request.getSession().setAttribute("mensaje", "Usuario y/o password incorrecto, verifique");
