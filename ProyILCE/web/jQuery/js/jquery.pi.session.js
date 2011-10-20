@@ -6,7 +6,7 @@
     $.fn.sessionmenu = function(opc){
 
         $.fn.sessionmenu.settings = {
-            xmlUrl : "/ProyILCE/resource/jsp/xmlSession.jsp",
+            xmlUrl : "/ProyILCE/resource/jsp/xmlSession.jsp", // /ProyILCE/srvControl?$cmd=sesion
             empleado:"",
             nombre:"",
             apellido_paterno:"",

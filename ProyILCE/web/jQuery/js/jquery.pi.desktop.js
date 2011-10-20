@@ -6,7 +6,7 @@
     $.fn.desktop = function(opc){
 
         $.fn.desktop.settings = {
-            xmlUrl : "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("c.clave_empleado=" +$("#_ce_").val()+ " AND c.parametro like 'escritorio.%'")
+            xmlUrl : "srvFormaSearch?$cf=1&$ta=select&$w=" + escape("c.clave_empleado=" +$("#_ce_").val()+ " AND c.parametro like 'escritorio.%'")  //"srvControl?$cmd=form&$cf=1&$ta=select&$w=" + escape("c.clave_empleado=" +$("#_ce_").val()+ " AND c.parametro like 'escritorio.%'")
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos

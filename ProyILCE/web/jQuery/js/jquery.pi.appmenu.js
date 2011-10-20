@@ -6,10 +6,9 @@
     $.fn.appmenu = function(opc){
 
         $.fn.appmenu.settings = {
-            xmlUrl : "", //"/ProyILCE/xml_tests/widget.accordion.xml",
+            xmlUrl : "/ProyILCE/resource/jsp/xmlMenu.jsp", //"/ProyILCE/srvControl?$cmd=appmenu" "/ProyILCE/resource/jsp/xmlMenu.jsp"  //"$cf=1&$ta=XML acordeon", //"/ProyILCE/xml_tests/widget.accordion.xml",
             usuario:"",
             ts:""
-
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -477,7 +476,7 @@
                         }); 
                     
                 });
-                if (bGetAccordion==1 && $("#accordion_"+sDivSuffix)[0].classList.length<=1) 
+                if (bGetAccordion==1 && $("#accordion_"+sDivSuffix).attr("role")!='tablist') 
                     $("#accordion_"+sDivSuffix).accordion({
                         active: false,
                         /*fillSpace:true, */

@@ -5,7 +5,7 @@
 ( function($) {
     $.fn.appgrid = function(opc){
         $.fn.appgrid.settings = {
-            xmlUrl : "srvGrid", // "xml_tests/widget.grid.xml"
+            xmlUrl : "srvGrid" , // "srvControl", "srvGrid" "xml_tests/widget.grid.xml"
             wsParameters:"",
             titulo:"",
             leyendas:[],
@@ -66,7 +66,7 @@
     $.fn.appgrid.getGridDefinition = function(){
         $.ajax(
         {
-            url: $.fn.appgrid.options.xmlUrl + "?$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
+            url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -118,7 +118,7 @@
                 var oGrid=$("#grid" + suffix).jqGrid(
                 {//datatype: "xmlstring",
                     //datastr: sXML,
-                    url:$.fn.appgrid.options.xmlUrl + "?$cf="+ nEntidad + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
+                    url:$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
                     datatype: sDataType,
                     colNames:$.fn.appgrid.options.colNames,
                     colModel:$.fn.appgrid.options.colModel,
@@ -416,7 +416,7 @@
 
                             //Inserta el html para agragar el grid en el escritorio
 
-                            $('#isotope').append("<div class='queued_grids'" +
+                            $('#favoritos').append("<div class='queued_grids'" +
                                 " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
                                 " app='" + nApp + "' " +
                                 " form='" + nForma + "' " +
