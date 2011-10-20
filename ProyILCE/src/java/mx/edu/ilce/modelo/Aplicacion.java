@@ -16,7 +16,6 @@ public class Aplicacion {
     private String aliasMenuNuevaEntidad;
     private String aliasMenuMuestraEntidad;
     private int claveFormaPrincipal;
-    
     private ArrayList<Forma> formas = new  ArrayList<Forma>();
 
     public String getAliasMenuMuestraEntidad() {

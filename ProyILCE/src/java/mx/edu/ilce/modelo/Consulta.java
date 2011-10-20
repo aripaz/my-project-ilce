@@ -64,7 +64,7 @@ public final class Consulta {
     ResultSet oRs;
     ResultSet rsFieldDictionary;
     int nCols;
-    
+    String qryCampos="";
     try {    
             oRs = oDb.getRs(this.sql);
             if (!oDb.getError().equals("")) {
@@ -74,7 +74,9 @@ public final class Consulta {
 
             for (int i = 0; i < oRs.getMetaData().getColumnCount(); i++) {
                 fdCampo = new Campo(oRs.getMetaData().getColumnName(i+1), oRs.getMetaData().getColumnTypeName(i+1), oRs.getMetaData().isAutoIncrement(i+1));
-                rsFieldDictionary = oDb.getRs("SELECT * FROM campo_forma WHERE clave_forma=" + getClaveForma() + " AND campo='" + fdCampo.getNombre() + "'");
+                qryCampos=aplicaReglasDeReemplazo("SELECT * FROM campo_forma WHERE clave_forma=" + getClaveForma() + " AND campo='" + fdCampo.getNombre() + "' AND clave_perfil=%clave_perfil");
+                
+                rsFieldDictionary = oDb.getRs(qryCampos);
                     if (rsFieldDictionary.next()) {
                     fdCampo.setAlias(rsFieldDictionary.getString("alias_campo"));
                     fdCampo.setObligatorio(rsFieldDictionary.getByte("obligatorio"));
@@ -167,15 +169,9 @@ public final class Consulta {
             this.sql=this.sql.replaceAll("%pk",  String.valueOf(getPk()));
             
             /*Otras reglas de reemplazo*/
-            String parameter="";
-            String value="";
-            for (int i=0;i<reglasDeReemplazo.size();i++){
-                parameter=reglasDeReemplazo.get(i).split("=")[0];
-                value=reglasDeReemplazo.get(i).split("=")[1];
-                this.sql=this.sql.replaceAll(parameter, value);
-            }
-            
-            return this.sql;
+            this.sql=aplicaReglasDeReemplazo(this.sql);
+
+           return this.sql;
             
         } catch (Exception e) {
             this.error = e.toString();
@@ -267,7 +263,19 @@ public final class Consulta {
     public void setReglasDeReemplazo(ArrayList<String> reglasDeReemplazo) {
         this.reglasDeReemplazo = reglasDeReemplazo;
     }
-
+    
+    public String aplicaReglasDeReemplazo(String s) {
+            /*Otras reglas de reemplazo*/
+            String parameter="";
+            String value="";
+            for (int i=0;i<reglasDeReemplazo.size();i++){
+                parameter=reglasDeReemplazo.get(i).split("=")[0];
+                value=reglasDeReemplazo.get(i).split("=")[1];
+                s=s.replaceAll(parameter, value);
+            }
+            return s;
+    }
+    
     public Consulta() {
         
     }
