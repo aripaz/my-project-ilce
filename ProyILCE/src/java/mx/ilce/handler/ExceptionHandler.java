@@ -252,7 +252,7 @@ public final class ExceptionHandler extends Throwable {
         str.append("<tipo>");
         str.append(this.getTypeError());
         str.append("</tipo>").append("\n");
-        if (this.seeStringData()){
+        //if (this.seeStringData()){
             if ((this.strQuery!=null) && (!"".equals(this.strQuery))) {
                 str.append("<query>");
                 str.append(this.getStrQuery());
@@ -263,7 +263,7 @@ public final class ExceptionHandler extends Throwable {
                 str.append(this.getStringData());
                 str.append("</dataAdicional>").append("\n");
             }
-        }
+        //}
         str.append("</error>");
         this.setXmlError(str);
     }
