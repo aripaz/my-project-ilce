@@ -11,7 +11,7 @@
             forma:"",
             pk:"",
             pk_name:"",
-            xmlUrl : "srvForma", //"xml_tests/forma.app.xml",
+            xmlUrl : "srvForma" , // "srvControl" "xml_tests/forma.app.xml",
             filtroForaneo: "",
             columnas: 2,
             modo:"",
