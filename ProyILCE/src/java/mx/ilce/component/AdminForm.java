@@ -402,7 +402,7 @@ public class AdminForm {
         str = str.replaceAll("\\%28", "(");
         str = str.replaceAll("\\%29", ")");
         str = str.replaceAll("\\%2A", "*");
-        str = str.replaceAll("\\%2B", "+");
+        //str = str.replaceAll("\\%2B", "+");
         str = str.replaceAll("\\%2C", ",");
         str = str.replaceAll("\\%2D", "-");
         str = str.replaceAll("\\%2E", ".");
