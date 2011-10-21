@@ -94,6 +94,7 @@ public class srvFormaSearch extends HttpServlet {
                         forma.setClaveForma(Integer.valueOf(claveForma));
                         forma.setTipoAccion(tipoAccion);
                         forma.setArrVariables(arrVariables);
+                        forma.setClavePerfil(usr.getClavePerfil());
                         String[] strData = getArrayData(hsForm);
                         if (pk!=null){
                             String[] strDataAdic = new String[strData.length+1];

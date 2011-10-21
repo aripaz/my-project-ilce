@@ -590,6 +590,12 @@ public class Aplicacion extends Entidad {
                 }
             }
             List lstF = (List) this.getForma(this.getClaveForma());
+            try{
+                Forma fmrForma = new Forma();
+                fmrForma.setBitacora(this.getBitacora());
+                lstF = fmrForma.getFormaByIdFormaIdPerfil(this.getClaveForma(),this.getClavePerfil(),lstF);
+            }catch(Exception e){}
+            
             strSld = adm.getGridColumByData(hsCmp,lstF);
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header Grid");
@@ -665,26 +671,9 @@ public class Aplicacion extends Entidad {
             }
             List lstF = (List) this.getForma(this.getClaveForma());
             try{
-                ConEntidad conE = new ConEntidad();
-                DataTransfer dataTransfer = new DataTransfer();
-
-                String query = "select clave_campo, clave_forma, clave_perfil, campo, alias_campo "
-                        + ",obligatorio, tipo_control, evento, clave_forma_foranea, filtro_foraneo "
-                        + ",edita_forma_foranea, no_permitir_valor_foraneo_nulo, ayuda, dato_sensible"
-                        + ",activo, tamano, visible, valor_predeterminado, justificar_cambio"
-                        + ", usado_para_agrupar from campo_forma "
-                        + " where clave_forma = " + this.getClaveForma();
-                if (this.getClavePerfil()!=null){
-                    query = query + " and clave_perfil = " + this.getClavePerfil();
-                }
-                dataTransfer.setQuery(query);
-                conE.setBitacora(this.getBitacora());
-                HashCampo hsCampo = conE.getDataByQuery(dataTransfer);
-                ListHash lstHash = new ListHash();
-                ArrayList arrLst = lstHash.getListBean(CampoForma.class, hsCampo);
-                if ((arrLst!=null)&&(!arrLst.isEmpty())){
-                    lstF = arrLst;
-                }
+                Forma fmrForma = new Forma();
+                fmrForma.setBitacora(this.getBitacora());
+                lstF = fmrForma.getFormaByIdFormaIdPerfil(this.getClaveForma(),this.getClavePerfil(),lstF);
             }catch(Exception e){}
 
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());

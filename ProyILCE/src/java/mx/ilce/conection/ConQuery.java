@@ -21,6 +21,7 @@ import mx.ilce.component.AdminFile;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LogHandler;
 import mx.ilce.util.UtilDate;
+import mx.ilce.util.UtilValue;
 
 /**
  * Clase para la implementacion de los metodos que se conectan a la Base de
@@ -157,6 +158,7 @@ class ConQuery {
                 getConexion();
                 st = this.conn.createStatement();
                 this.conn.setAutoCommit(true);
+                strQuery = UtilValue.castAcent(strQuery);
                 int res = st.executeUpdate(strQuery, Statement.RETURN_GENERATED_KEYS);
                 rs = st.getGeneratedKeys();
                 if (res!=0){
@@ -280,6 +282,7 @@ class ConQuery {
             if (validateUpdate(campoForma.getTabla(), strQuery)){
                 getConexion();
                 st = this.conn.createStatement();
+                strQuery = UtilValue.castAcent(strQuery);
                 increment = st.executeUpdate(strQuery);
                 Bitacora bitacoraU = this.getBitacora();
                 if ((bitacoraU!=null)&&(bitacoraU.isEnable()))
@@ -383,6 +386,7 @@ class ConQuery {
             if (validateDelete(campoForma.getTabla(), strQuery)){
                 getConexion();
                 st = this.conn.createStatement();
+                strQuery = UtilValue.castAcent(strQuery);
                 increment = st.executeUpdate(strQuery);
                 Bitacora bitacoraD = this.getBitacora();
                 if ((bitacoraD!=null)&&(bitacoraD.isEnable()))
@@ -640,6 +644,7 @@ class ConQuery {
                         query = query.replaceAll("%"+i, strData);
                     }
                 }
+                query = UtilValue.castAcent(query);
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -715,6 +720,7 @@ class ConQuery {
                     log.setStrQuery(query);
                     textData.append(dataTransfer.toString());
                 }else{
+                    queryLog = UtilValue.castAcent(queryLog);
                     log.setStrQuery(queryLog);
                 }
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
@@ -788,7 +794,7 @@ class ConQuery {
                 if ((dataTransfer.getOrderBY()!=null)&&(!"".equals(dataTransfer.getOrderBY()) )){
                     query = "SELECT * FROM (" + query + ") AS TORDER ORDER BY " + dataTransfer.getOrderBY();
                 }
-
+                query = UtilValue.castAcent(query);
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -911,7 +917,7 @@ class ConQuery {
             query = getQueryById(idQuery);
             if ((!"".equals(query)) && (whereData != null)){
                 ps =this.conn.createStatement();
-
+                query = addWhereToQuery(query,whereData);
                 if (arrVariables!=null){
                     for (int i=0; i<arrVariables.length;i++){
                         String strVar = arrVariables[i][0];
@@ -934,8 +940,7 @@ class ConQuery {
                         }
                     }
                 }
-                query = addWhereToQuery(query,whereData);
-                //query = query.toLowerCase();
+                query = UtilValue.castAcent(query);
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1039,6 +1044,12 @@ class ConQuery {
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
         String strSld = "";
+        String strCopy = strWhere;
+        String strConcat = "";
+        boolean replaceAnd = false;
+        boolean replaceWhere = false;
+        
+
         if (query!=null){
             strQuery = strQuery.toUpperCase();
             strQuery = strQuery.replace("WHERE", "WHERE ");
@@ -1051,22 +1062,29 @@ class ConQuery {
                     //EMPIEZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
+                        strConcat = " ";
+                        replaceWhere = true;
                     //EMPIEZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
                             strQuery = " " + strWhere;
+                            strConcat = " ";
                     }else{
                             strQuery = " AND " + strWhere;
+                            strConcat = " AND ";
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //EMPIEZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
                         strQuery = " " + strWhere;
+                        strConcat = " ";
                     }else{
                         strQuery = " AND " + strWhere;
+                        strConcat = " AND ";
                     }
                 }else{
                         strQuery = " AND " + strWhere;
+                        strConcat = " AND ";
                 }
             }else{
                 //evaluaremos el WHERE Y el AND
@@ -1074,29 +1092,56 @@ class ConQuery {
                     //COMIENZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
                         strQuery = " " + strWhere;
+                        strConcat = " ";
                     //COMIENZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strConcat = " ";
+                        replaceAnd = true;
                     }else{
                         strQuery = " WHERE " + strWhere;
+                        strConcat = " WHERE ";
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //COMIENZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
                         strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
+                        strConcat = " ";
+                        replaceAnd = true;
                     }else{
                         strQuery = " WHERE " + strWhere;
+                        strConcat = " WHERE ";
                     }
                 }else{
                     strQuery = " " + strWhere;
+                    strConcat = " ";
                 }
             }
         }else{
              strQuery = "";
+             strConcat = "";
         }
         strSld = query + strQuery;
-        return strSld;
+
+        String sld = "";
+        if (replaceAnd){
+            String paso = strCopy.toUpperCase();
+            int pos = paso.indexOf("AND");
+            String strMitad = paso.substring(pos+3);
+            sld = query + " WHERE " +  strMitad;
+        }else if (replaceWhere){
+            String paso = strCopy.toUpperCase();
+            int pos = paso.indexOf("WHERE");
+            String strMitad = paso.substring(pos+3);
+            sld = query + " AND " +  strMitad;
+        }else{
+            sld = query + strConcat + strCopy;
+        }
+        //System.out.println(sld + "\n----\n");
+
+        //return strSld;
+        return sld;
     }
 
      /**
@@ -1137,6 +1182,7 @@ class ConQuery {
                     }
                 }
                 st = this.conn.createStatement();
+                query = UtilValue.castAcent(query);
                 rs = st.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1341,6 +1387,7 @@ class ConQuery {
         try{
             getConexion();
             if (allowedQuery(query)){
+                query = UtilValue.castAcent(query);
                 if ((!"".equals(query)) && (arrData != null)){
                     st = this.conn.createStatement();
                     if (arrVariables!=null){
@@ -1362,6 +1409,7 @@ class ConQuery {
                             query = query.replaceAll("%"+i, strData);
                         }
                     }
+                    query = UtilValue.castAcent(query);
                     rs = st.executeQuery(query);
                     ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1480,6 +1528,7 @@ class ConQuery {
                 if (rs.next()){
                     strSld =  rs.getString(1);
                 }
+                strSld = UtilValue.castAcent(strSld);
             }else{
                 strSld = strQuery;
             }

@@ -86,6 +86,7 @@ public class srvFormaDelete extends HttpServlet {
                     forma.setClaveForma(Integer.valueOf(claveForma));
                     forma.setTipoAccion(tipoAccion);
                     forma.setStrWhereQuery(strWhere);
+                    forma.setClavePerfil(usr.getClavePerfil());
 
                     ExecutionHandler ex = new ExecutionHandler();
                     List lstData = new ArrayList();

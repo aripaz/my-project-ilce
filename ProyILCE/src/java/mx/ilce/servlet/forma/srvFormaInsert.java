@@ -147,6 +147,7 @@ public class srvFormaInsert extends HttpServlet {
                     if (obligatorioOk){
                         lstData.add(hsFormQuery);
                         lstData.add(forma);
+                        forma.setClavePerfil(user.getClavePerfil());
                         if ("0".equals(forma.getPk())){     // Es un nuevo elemento
                             bitacora.setBitacora("Agregar dato.");
                             forma.setBitacora(bitacora);
