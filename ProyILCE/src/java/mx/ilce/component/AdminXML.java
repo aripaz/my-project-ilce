@@ -565,37 +565,40 @@ public class AdminXML {
                                             + "</tamano>\n"));
                                 }
                                 if (cmpAux.getVisible()!=null){
-                                            strCampos.append(("\t\t<visible>"
+                                    strCampos.append(("\t\t<visible>"
                                             + castNULL(String.valueOf(cmpAux.getVisible()).trim())
                                             + "</visible>\n"));
                                 }
                                 if (cmpAux.getValorPredeterminado()!=null){
-                                            strCampos.append(("\t\t<valor_predeterminado>"
+                                    strCampos.append(("\t\t<valor_predeterminado>"
                                             + castNULL(String.valueOf(cmpAux.getValorPredeterminado()).trim())
                                             + "</valor_predeterminado>\n"));
                                 }
                                 if (cmpAux.getJustificarCambio()!=null){
-                                            strCampos.append(("\t\t<justificar_cambio>"
+                                    strCampos.append(("\t\t<justificar_cambio>"
                                             + castNULL(String.valueOf(cmpAux.getJustificarCambio()).trim())
                                             + "</justificar_cambio>\n"));
                                 }
                                 if (cmpAux.getUsadoParaAgrupar()!=null){
-                                            strCampos.append(("\t\t<usado_para_agrupar>"
+                                    strCampos.append(("\t\t<usado_para_agrupar>"
                                             + castNULL(String.valueOf(cmpAux.getUsadoParaAgrupar()).trim())
                                             + "</usado_para_agrupar>\n"));
                                 }
                                 if (cmpAux.getNoPermitirValorForaneoNulo()!=null){
-                                            strCampos.append(("\t\t<no_permitir_valor_foraneo_nulo>"
+                                    strCampos.append(("\t\t<no_permitir_valor_foraneo_nulo>"
                                             + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
                                             + "</no_permitir_valor_foraneo_nulo>\n"));
                                 }
+                                //if ((cmpAux.getAliasTab()!=null)&&(addForma)){
                                 if ((cmpAux.getAliasTab()!=null)&&(addForma)){
-                                    strForma.append(("\t<alias_tab>"
+                                    strForma.append(("\t<alias_tab><![CDATA["
                                             + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
-                                            + "</alias_tab>\n"));
-                                    strForma.append(getEventoForma(idForma));
-                                    addForma=false;
+                                            + "]]></alias_tab>\n"));
                                 }
+                                if (addForma){
+                                    strForma.append(getEventoForma(idForma));
+                                }
+                                addForma=false;
                             }
                         }
                         strCampos.append(("\t</"+cmp.getNombreDB()+">\n"));
@@ -778,13 +781,16 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
                                             + "</no_permitir_valor_foraneo_nulo>\n"));
                                 }
+
                                 if ((cmpAux.getAliasTab()!=null)&&(addForma)){
                                     strForma.append(("\t<alias_tab>"
                                             + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
                                             + "</alias_tab>\n"));
-                                    strForma.append(getEventoForma(idForma));
-                                    addForma=false;
                                 }
+                                if (addForma){
+                                    strForma.append(getEventoForma(idForma));
+                                }
+                                addForma=false;
                             }
                         }
                         strCampos.append(("\t</"+cmp.getNombreDB()+">\n"));
