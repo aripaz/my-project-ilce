@@ -91,6 +91,7 @@ public class AdminForm {
                     String value = strData[0];
                     value = castCodeEncoded(value);
                     value = castCodeNoUtf8(value);
+                    value = castCodeUrl(value);
                     hsForm.put(strEnum, value);
                     arrayFORM.add(strEnum);
                 }
@@ -148,6 +149,7 @@ public class AdminForm {
                     }
                     value = castCodeEncoded(value);
                     value = castCodeNoUtf8(value);
+                    value = castCodeUrl(value);
                     hsForm.put(name, value);
                     arrayFORM.add(name);
                 }else if (part.isFile()) {
@@ -300,9 +302,12 @@ public class AdminForm {
                     int pos = pair.indexOf('=');
                     if (pos == -1) {
                         throw new IllegalArgumentException();
-                    }
+                    } 
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
                     value = pair.substring(pos+1,pair.length());
+                    value = castCodeEncoded(value);
+                    value = castCodeNoUtf8(value);
+                    value = castCodeUrl(value);
                     try{
                         value = java.net.URLDecoder.decode(value,"UTF-8");
                     }catch(IllegalArgumentException e){
@@ -318,8 +323,6 @@ public class AdminForm {
                             }
                         }
                     }
-                    value = castCodeEncoded(value);
-                    value = castCodeNoUtf8(value);
                     hsForm.put(key, value);
                     arrayFORM.add(key);
                     existData=true;
@@ -470,16 +473,61 @@ public class AdminForm {
             if (str.contains("Ã‘")){
                 str = str.replaceAll("Ã‘", "Ñ");
             }
-            if (str.contains("Ã\ufffd")){
-                str = str.replaceAll("Ã\ufffd", "Á");
-            }
         }else{
             str = data;
         }
         return str;
     }
 
-
+    private String castCodeUrl(String strData){
+        String str = "";
+        if (strData!=null){
+            str = strData;
+            if (str.contains("%E1")){
+                str = str.replaceAll("%E1","á");
+            }
+            if (str.contains("%E9")){
+                str = str.replaceAll("%E9","é");
+            }
+            if (str.contains("%ED")){
+                str = str.replaceAll("%ED","í");
+            }
+            if (str.contains("%F3")){
+                str = str.replaceAll("%F3","ó");
+            }
+            if (str.contains("%FA")){
+                str = str.replaceAll("%FA","ú");
+            }
+            if (str.contains("%C1")){
+                str = str.replaceAll("%C1","Á");
+            }
+            if (str.contains("%C9")){
+                str = str.replaceAll("%C9","É");
+            }
+            if (str.contains("%CD")){
+                str = str.replaceAll("%CD","Í");
+            }
+            if (str.contains("%D3")){
+                str = str.replaceAll("%D3","Ó");
+            }
+            if (str.contains("%DA")){
+                str = str.replaceAll("%DA","Ú");
+            }
+            if (str.contains("%D1")){
+                str = str.replaceAll("%D1","Ñ");
+            }
+            if (str.contains("%F1")){
+                str = str.replaceAll("%F1","ñ");
+            }
+            if (str.contains("%FC")){
+                str = str.replaceAll("%FC","ü");
+            }
+            if (str.contains("%DC")){
+                str = str.replaceAll("%DC","Ü");
+            }
+        }
+        return str;
+    }
 
     /**
      * Lee el archivo variables.properties, para obtener las variables que serviran
