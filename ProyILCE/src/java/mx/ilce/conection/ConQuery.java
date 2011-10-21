@@ -1648,7 +1648,7 @@ class ConQuery {
     private String getQueryMain(Integer idQuery){
         String sld = "";
         switch (idQuery){
-            case 4://LOGIN
+            case -1://LOGIN
                 sld = "select clave_empleado as claveEmpleado "
                         + ", nombre, apellido_paterno as apellidoPaterno "
                         + ", apellido_materno as apellidoMaterno, email "
@@ -1659,7 +1659,7 @@ class ConQuery {
                         + "where email = '%1' and password = '%2'";
                 //System.out.print("\nLOGIN");
                 break;
-            case 5://USER
+            case -2://USER
                 sld = "select clave_empleado as claveEmpleado, nombre "
                         + ", apellido_paterno as apellidoPaterno "
                         + ", apellido_materno as apellidoMaterno "
@@ -1668,13 +1668,41 @@ class ConQuery {
                         + "from empleado where email = '%1'";
                 //System.out.print("\nUSER");
                 break;
-            case 6://XMLSESSION
+            case -3://PERFIL
+                sld = "select distinct pe.clave_perfil, pe.perfil "
+                        + ", ap.clave_aplicacion, ap.aplicacion, fo.clave_forma "
+                        + ", ap.clave_forma_principal, ap.descripcion "
+                        + ", ap.alias_menu_nueva_entidad, ap.alias_menu_mostrar_entidad "
+                        + " from empleado em, perfil pe, aplicacion ap "
+                        + ", permiso_forma per , forma fo "
+                        + " where em.clave_empleado = %1 "
+                        + " and   em.clave_perfil = pe.clave_perfil "
+                        + " and   ap.clave_aplicacion = fo.clave_aplicacion "
+                        + " and   per.clave_forma = fo.clave_forma";
+                //System.out.print("\nPERFIL");
+                break;
+            case -4://TABFORMA
+                sld = "select alias_tab, orden_tab, clave_aplicacion "
+                        + ", clave_forma, clave_forma_padre "
+                        + " from forma "
+                        + " where clave_aplicacion=%1 "
+                        + " and clave_forma=%2 "
+                        + " union "
+                        + " select alias_tab, orden_tab, clave_aplicacion "
+                        + ", clave_forma, clave_forma_padre "
+                        + " from forma "
+                        + " where clave_aplicacion=%3 "
+                        + " and clave_forma_padre=%4 "
+                        + " order by orden_tab";
+                //System.out.print("\nTABFORMA");
+                break;
+            case -5://XMLSESSION
                 sld = "select clave_empleado, nombre, apellido_paterno "
                         + ", apellido_materno, email, clave_perfil, foto "
                         + "from empleado where clave_empleado=%1";
                 //System.out.print("\nXMLSESSION");
                 break;
-            case 7://XMLMENU
+            case -6://XMLMENU
                 sld = "select distinct a.aplicacion, pa.clave_perfil "
                         + ", a.clave_aplicacion, pa.activo, p.clave_forma "
                         + ", fo.forma, a.alias_menu_nueva_entidad "
@@ -1713,35 +1741,7 @@ class ConQuery {
                         + " and pa.clave_perfil=%1";
                 //System.out.print("\nXMLMENU");
                 break;
-            case 8://PERFIL
-                sld = "select distinct pe.clave_perfil, pe.perfil "
-                        + ", ap.clave_aplicacion, ap.aplicacion, fo.clave_forma "
-                        + ", ap.clave_forma_principal, ap.descripcion "
-                        + ", ap.alias_menu_nueva_entidad, ap.alias_menu_mostrar_entidad "
-                        + " from empleado em, perfil pe, aplicacion ap "
-                        + ", permiso_forma per , forma fo "
-                        + " where em.clave_empleado = %1 "
-                        + " and   em.clave_perfil = pe.clave_perfil "
-                        + " and   ap.clave_aplicacion = fo.clave_aplicacion "
-                        + " and   per.clave_forma = fo.clave_forma";
-                //System.out.print("\nPERFIL");
-                break;
-            case 9://TABFORMA
-                sld = "select alias_tab, orden_tab, clave_aplicacion "
-                        + ", clave_forma, clave_forma_padre "
-                        + " from forma "
-                        + " where clave_aplicacion=%1 "
-                        + " and clave_forma=%2 "
-                        + " union "
-                        + " select alias_tab, orden_tab, clave_aplicacion "
-                        + ", clave_forma, clave_forma_padre "
-                        + " from forma "
-                        + " where clave_aplicacion=%3 "
-                        + " and clave_forma_padre=%4 "
-                        + " order by orden_tab";
-                //System.out.print("\nTABFORMA");
-                break;
-            case 11://FORMACAMPOS
+            case -7://FORMACAMPOS
                 sld = "select cf.clave_campo, cf.clave_forma, f.tabla "
                         + ", cf.campo, cf.alias_campo, cf.obligatorio "
                         + ", cf.tipo_control, cf.evento, cf.clave_forma_foranea "
@@ -1756,7 +1756,7 @@ class ConQuery {
                         + " and cf.campo in (%2)";
                 //System.out.print("\nFORMACAMPOS");
                 break;
-            case 12://FORMA
+            case -8://FORMA
                 sld = "select cf.clave_campo, cf.clave_forma, f.tabla, cf.campo "
                         + ", cf.alias_campo,  cf.obligatorio, cf.tipo_control "
                         + ", cf.evento, cf.clave_forma_foranea, cf.filtro_foraneo "
@@ -1770,14 +1770,14 @@ class ConQuery {
                         + " and f.clave_forma = %1";
                 //System.out.print("\nFORMA");
                 break;
-            case 14://FORMAQUERY
+            case -9://FORMAQUERY
                 sld = "select * from consulta_forma "
                         + " where clave_forma = %1 "
                         + " and tipo_accion = '%2'"
                         + " and clave_perfil = %clave_perfil";
                 //System.out.print("\nFORMAQUERY");
                 break;
-            case 69://PERMISOS
+            case -10://PERMISOS
                 sld = "select pf.clave_permiso , per.permiso, pf.clave_forma "
                         + " from  permiso per, permiso_forma pf, empleado em "
                         + ", perfil_aplicacion pa "
@@ -1788,6 +1788,11 @@ class ConQuery {
                         + " and   pf.clave_forma = %2 "
                         + " group by pf.clave_permiso , per.permiso, pf.clave_forma";
                 //System.out.print("\nPERMISOS");
+                break;
+            case -11: //EVENTO
+                sld = "SELECT alias_tab, evento, instrucciones, forma "
+                        + " FROM forma "
+                        + " where clave_forma = %1";
                 break;
             default:
                 sld = "";

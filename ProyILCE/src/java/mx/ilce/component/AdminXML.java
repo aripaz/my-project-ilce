@@ -450,7 +450,8 @@ public class AdminXML {
             }
             StringBuffer strForma = new StringBuffer();
             strForma.append("<configuracion_forma>\n");
-            boolean addForma = true;
+            strForma.append(getEventoForma(idForma));
+            strForma.append("</configuracion_forma>\n");
             StringBuffer strCampos = new StringBuffer();
             for(int i=0;i<hsDat.size();i++){
                 ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
@@ -589,16 +590,6 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
                                             + "</no_permitir_valor_foraneo_nulo>\n"));
                                 }
-                                //if ((cmpAux.getAliasTab()!=null)&&(addForma)){
-                                if ((cmpAux.getAliasTab()!=null)&&(addForma)){
-                                    strForma.append(("\t<alias_tab><![CDATA["
-                                            + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
-                                            + "]]></alias_tab>\n"));
-                                }
-                                if (addForma){
-                                    strForma.append(getEventoForma(idForma));
-                                }
-                                addForma=false;
                             }
                         }
                         strCampos.append(("\t</"+cmp.getNombreDB()+">\n"));
@@ -606,7 +597,6 @@ public class AdminXML {
                 }
                 strCampos.append("</registro>\n");
             }
-            strForma.append("</configuracion_forma>\n");
             str.append(strForma);
             str.append(strCampos);
             str.append("</qry>");
@@ -657,7 +647,8 @@ public class AdminXML {
             }
             StringBuffer strForma = new StringBuffer();
             strForma.append("<configuracion_forma>\n");
-            boolean addForma = true;
+            strForma.append(getEventoForma(idForma));
+            strForma.append("</configuracion_forma>\n");
             StringBuffer strCampos = new StringBuffer();
             for(int i=0;i<1;i++){
                 strCampos.append(("<registro id='"+String.valueOf(i)+"'>\n"));
@@ -781,16 +772,6 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getNoPermitirValorForaneoNulo()).trim())
                                             + "</no_permitir_valor_foraneo_nulo>\n"));
                                 }
-
-                                if ((cmpAux.getAliasTab()!=null)&&(addForma)){
-                                    strForma.append(("\t<alias_tab>"
-                                            + castNULL(String.valueOf(cmpAux.getAliasTab()).trim())
-                                            + "</alias_tab>\n"));
-                                }
-                                if (addForma){
-                                    strForma.append(getEventoForma(idForma));
-                                }
-                                addForma=false;
                             }
                         }
                         strCampos.append(("\t</"+cmp.getNombreDB()+">\n"));
@@ -798,7 +779,6 @@ public class AdminXML {
                 }
                 strCampos.append("</registro>\n");
             }
-            strForma.append("</configuracion_forma>\n");
             str.append(strForma);
             str.append(strCampos);
             str.append("</qry>");
@@ -830,6 +810,9 @@ public class AdminXML {
             List lst = (List) hsMp.get(0);
             String strTipoEvento = "";
             String strEvento = "";
+            String strForma = "";
+            String strAliasTab = "";
+            String strInstruccion = "";
             for (int i=0;i<lst.size();i++){
                 Campo cmp = (Campo) lst.get(i);
                 if ("tipo_evento".equals(cmp.getNombreDB())){
@@ -838,36 +821,32 @@ public class AdminXML {
                 if ("evento".equals(cmp.getNombreDB())){
                     strEvento = cmp.getValor();
                 }
-            }
-            strSld.append("\t<evento tipo=\"");
-            strSld.append(strTipoEvento);
-            strSld.append("\">");
-            strSld.append("<![CDATA[");
-            strSld.append(strEvento);
-            strSld.append("]]>");
-            strSld.append("</evento>\n");
-        }
-        dataTransfer = new DataTransfer();
-        dataTransfer.setIdQuery(Integer.valueOf(AdminFile.getKey(AdminFile.leerIdQuery(),AdminFile.FORMA)));
-        dataTransfer.setArrData(arrData);
-        hsCmp = conE.getDataByIdQuery(dataTransfer);
-        hsMp = hsCmp.getListData();
-        if (!hsMp.isEmpty()){
-            List lst = (List) hsMp.get(0);
-            String strForma = "";
-            boolean bool = true;
-            for (int i=0;i<lst.size()&&bool;i++){
-                Campo cmp = (Campo) lst.get(i);
+                if ("alias_tab".equals(cmp.getNombreDB())){
+                    strAliasTab = cmp.getValor();
+                }
+                if ("instrucciones".equals(cmp.getNombreDB())){
+                    strInstruccion = cmp.getValor();
+                }
                 if ("forma".equals(cmp.getNombreDB())){
                     strForma = cmp.getValor();
-                    bool=false;
                 }
             }
-            strSld.append("\t<forma>");
+            strSld.append("\t<alias_tab><![CDATA[");
+            strSld.append(castNULL(strAliasTab));
+            strSld.append("]]></alias_tab>\n");
+            strSld.append("\t<evento tipo=\"");
+            strSld.append(castNULL(strTipoEvento));
+            strSld.append("\">");
             strSld.append("<![CDATA[");
-            strSld.append(strForma);
+            strSld.append(castNULL(strEvento));
             strSld.append("]]>");
-            strSld.append("</forma>\n");
+            strSld.append("</evento>\n");
+            strSld.append("\t<instrucciones><![CDATA[");
+            strSld.append(castNULL(strInstruccion));
+            strSld.append("]]></instrucciones>\n");
+            strSld.append("\t<forma><![CDATA[");
+            strSld.append(castNULL(strForma));
+            strSld.append("]]></forma>\n");
         }
         return strSld;
     }
@@ -1335,9 +1314,10 @@ public class AdminXML {
      */
     private String castNULL(String strData){
         String sld = "";
-
-        if(!"NULL".equals(strData.toUpperCase()))
-            sld = strData;
+        if (strData!=null){
+            if(!"NULL".equals(strData.toUpperCase()))
+                sld = strData;
+        }
         return sld;
     }
 
