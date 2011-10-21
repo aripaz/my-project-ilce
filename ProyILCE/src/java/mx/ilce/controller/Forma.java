@@ -917,15 +917,12 @@ public class Forma extends Entidad{
             String pkInsert = forma.getPk();
             Integer claveFormaInsert = forma.getClaveForma();
 
-            List lstForma = forma.getForma(claveFormaInsert);
             List listVariables = new ArrayList();
 
-            if (lstForma==null){
-                String[] arrayDataI = new String[2];
-                arrayDataI[0]=String.valueOf(claveFormaInsert);
-                arrayDataI[1]="insert";
-                lstForma = forma.getNewFormaById(arrayDataI);
-            }
+            String[] arrayDataI = new String[2];
+            arrayDataI[0]=String.valueOf(claveFormaInsert);
+            arrayDataI[1]="insert";
+            List lstForma = forma.getFormaForDeleteById(arrayDataI);
             if (lstForma!=null){
                 CampoForma cmpF = (CampoForma) lstForma.get(0);
                 String tabla = cmpF.getTabla();
@@ -950,13 +947,15 @@ public class Forma extends Entidad{
 
                 //recorremos los campos de la forma y contrastamos contra el de la tabla
                 //para ubicar el campo clave de la tabla
-                for (int i=0;i<lstForma.size();i++){
+                boolean seguir = true;
+                for (int i=0;i<lstForma.size()&&seguir;i++){
                     CampoForma cmpFL = (CampoForma) lstForma.get(i);
                     Campo cmpHS = hsCmp.getCampoByNameDB(cmpFL.getCampo());
                     if (cmpHS!=null){
                         // si es autoIncremental, no se necesita enviar
                         if (cmpHS.getIsIncrement()){
                             strCampoPK = cmpFL.getCampo();
+                            seguir = false;
                         }
                     }
                 }
@@ -1530,7 +1529,7 @@ public class Forma extends Entidad{
         return lst;
     }
 
-    /**
+/**
      * Metodo para convertir un texto de una query para que los caracteres sean
      * aceptado por la base de datos
      * @param data      Texto a revisar
@@ -1591,4 +1590,60 @@ public class Forma extends Entidad{
         }
         return new StringBuffer(str);
     }
+
+    /**
+     * Metodo para traer los datos basicos de una forma para poder eliminar un dato.
+     * @param arrayData
+     * @return
+     * @throws ExceptionHandler
+     */
+    public ArrayList getFormaForDeleteById(String[] arrayData) throws ExceptionHandler {
+        ArrayList lst = new ArrayList();
+        try{
+            ConEntidad con = new ConEntidad();
+            con.setBitacora(this.getBitacora());
+            con.getBitacora().setEnable(false);
+
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
+            dataTransfer.setArrData(arrayData);
+            dataTransfer.setArrVariables(this.getArrVariables());
+
+            HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
+
+            Campo cmp = hsCmp.getCampoByName("consulta");
+            HashMap dq = hsCmp.getListData();
+            if (!dq.isEmpty()){
+                ArrayList arr = (ArrayList)dq.get(0);
+                Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
+                String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
+                String[] strSPlit2 = strSplit[1].split(" ");
+                String tabla = strSPlit2[0];
+
+                con.getBitacora().setEnable(false);
+                dataTransfer = new DataTransfer();
+                dataTransfer.setQuery(cmpAux.getValor());
+                dataTransfer.setArrData(arrayData);
+                dataTransfer.setArrVariables(this.getArrVariables());
+
+                HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
+
+                List lstCmp = (List) hsCmpList.getListCampos();
+                for (int i=0;i<lstCmp.size();i++){
+                    Campo cmpArr = (Campo) lstCmp.get(i);
+                    CampoForma cmpF = new CampoForma();
+                    cmpF.setTipoControl("text");
+                    cmpF.setCampo(cmpArr.getNombreDB());
+                    cmpF.setTabla(tabla);
+                    cmpF.setTypeData(cmpArr.getTypeDataAPL());
+                    lst.add(cmpF);
+                }
+            }
+        }catch(Exception e){
+            throw new ExceptionHandler(e,this.getClass(),
+                    "Problemas para obtener la Forma, mediante el ID de la query");
+        }
+        return lst;
+    }
+
 }
