@@ -22,6 +22,15 @@ public class HashCampo implements Serializable  {
     private HashMap listAlias;
     private Object objData;
     private String pkData;
+    private String strQuery;
+
+    public String getStrQuery() {
+        return strQuery;
+    }
+
+    public void setStrQuery(String strQuery) {
+        this.strQuery = strQuery;
+    }
 
     /**
      * Obtiene el dato PK desde el objeto

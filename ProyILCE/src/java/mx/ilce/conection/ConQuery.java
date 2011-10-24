@@ -216,6 +216,7 @@ class ConQuery {
             try{
                 StringBuffer textData=new StringBuffer();
                 textData.append(dataTransfer.toString());
+                hsCmp.setStrQuery(strQuery);
 
                 LogHandler log = new LogHandler();
                 log.setBoolSel(false);
@@ -330,6 +331,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("executeUpdate"),
                             textData);
+                hsCmp.setStrQuery(strQuery);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -434,6 +436,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("executeDelete"),
                             textData);
+                hsCmp.setStrQuery(strQuery);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -719,9 +722,11 @@ class ConQuery {
                 if (this.isEnableDataLog()){
                     log.setStrQuery(query);
                     textData.append(dataTransfer.toString());
+                    hsCmp.setStrQuery(query);
                 }else{
                     queryLog = UtilValue.castAcent(queryLog);
                     log.setStrQuery(queryLog);
+                    hsCmp.setStrQuery(query);
                 }
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),
@@ -866,6 +871,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhere"),
                             textData);
+                hsCmp.setStrQuery(query);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -1012,6 +1018,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataWithWhereAndData"),
                             textData);
+                hsCmp.setStrQuery(query);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -1254,6 +1261,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("getData"),
                             textData);
+                hsCmp.setStrQuery(query);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -1483,6 +1491,7 @@ class ConQuery {
                 log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
                             new StringBuffer("getDataByQuery"),
                             textData);
+                hsCmp.setStrQuery(query);
             }catch(Exception ex){
                 throw new ExceptionHandler(ex,this.getClass(),
                                     "Problemas al escribir en el Archivo de Log");
@@ -1750,6 +1759,7 @@ class ConQuery {
                         + ", cf.visible, cf.valor_predeterminado, cf.justificar_cambio "
                         + ", f.alias_tab, cf.usado_para_agrupar "
                         + ", cf.no_permitir_valor_foraneo_nulo "
+                        + ", cf.carga_dato_foraneos_retrasada "
                         + " from campo_forma cf, forma f "
                         + " where cf.clave_forma = f.clave_forma "
                         + " and cf.clave_forma = $pk "
@@ -1765,6 +1775,7 @@ class ConQuery {
                         + ", cf.valor_predeterminado, cf.justificar_cambio "
                         + ", f.alias_tab, cf.usado_para_agrupar "
                         + ", cf.no_permitir_valor_foraneo_nulo "
+                        + ", cf.carga_dato_foraneos_retrasada "
                         + " from campo_forma cf, forma f "
                         + " where f.clave_forma = cf.clave_forma "
                         + " and f.clave_forma = %1";
@@ -1793,6 +1804,11 @@ class ConQuery {
                 sld = "SELECT alias_tab, evento, instrucciones, forma "
                         + " FROM forma "
                         + " where clave_forma = %1";
+                break;
+            case -12: //FORMASFORANEAS
+                sld = "SELECT clave_aplicacion, clave_forma, forma "
+                        + "FROM forma "
+                        + "WHERE clave_forma_padre= %1";
                 break;
             default:
                 sld = "";
