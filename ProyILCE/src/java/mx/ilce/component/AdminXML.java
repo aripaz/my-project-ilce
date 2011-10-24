@@ -179,15 +179,17 @@ public class AdminXML {
         try{
             ConSession con = new ConSession();
             con.setBitacora(this.getBitacora());
-            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             HashCampo hsCmp = con.getMenuXML(user, arrVariables);
 
             Document document = getDocumentXML("widget.accordion.xml");
-            str.append("<qry>");
+            str.append("<qry \nsource=\"")
+               .append(hsCmp.getStrQuery())
+               .append("\">\n");
             for (int i=0;i<hsCmp.getLengthData();i++){
                 str.append(listNode(document,0,hsCmp,i));
             }
-            str.append("</qry>");
+            str.append("\n</qry>");
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML de Menu");
         }
@@ -426,7 +428,9 @@ public class AdminXML {
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
 
-            str.append("<qry>\n");
+            str.append("<qry \nsource=\"")
+               .append(hsData.getStrQuery())
+               .append("\">\n");
             if (this.getHashPermisoForma()!=null){
                 HashCampo hsPerm = this.getHashPermisoForma();
                 HashMap hsDatPerm = hsPerm.getListData();
@@ -533,15 +537,9 @@ public class AdminXML {
                                                 strData[1]=datoForaneo;
                                             }
                                         }
-
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB()
                                                                         , arrVariables);
-                                        if (!"".equals(strForaneo.toString())){
-                                            strCampos.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                            strCampos.append((" source=\"\">\n"));
-                                            strCampos.append(strForaneo);
-                                            strCampos.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
-                                        }
+                                        strCampos.append(strForaneo);
                                     }
                                     strCampos.append("\t\t</foraneo>\n");
                                 }
@@ -597,8 +595,12 @@ public class AdminXML {
                 }
                 strCampos.append("</registro>\n");
             }
+            //verificar $ff
+            StringBuffer strFormForan = getFormasForaneas(idForma,arrVariables);
+
             str.append(strForma);
             str.append(strCampos);
+            str.append(strFormForan);
             str.append("</qry>");
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML de la Forma con datos");
@@ -623,7 +625,9 @@ public class AdminXML {
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
 
-            str.append("<qry>\n");
+            str.append("<qry \nsource=\"")
+               .append(hsData.getStrQuery())
+               .append("\">\n");
             if (this.getHashPermisoForma()!=null){
                 HashCampo hsPerm = this.getHashPermisoForma();
                 HashMap hsDatPerm = hsPerm.getListData();
@@ -682,6 +686,12 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
                                             + "]]></obligatorio>\n"));
                                 }
+                                //carga_retrasada_foraneo
+                                if (cmpAux.getCargaDatoForaneosRetrasada()!=null){
+                                    strCampos.append(("\t\t<carga_dato_foraneos_retrasada>"
+                                            + castNULL(String.valueOf(cmpAux.getCargaDatoForaneosRetrasada()))
+                                            + "</carga_dato_foraneos_retrasada>\n"));
+                                }
                                 if (cmpAux.getTipoControl()!=null){
                                     strCampos.append(("\t\t<tipo_control><![CDATA["
                                             + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())
@@ -718,12 +728,7 @@ public class AdminXML {
                                             }
                                         }
                                         StringBuffer strForaneo = getXmlByIdForma(strData, cmp.getNombreDB(), arrVariables);
-                                        if (!"".equals(strForaneo.toString())){
-                                            strCampos.append(("\t\t\t<qry_"+cmp.getNombreDB()));
-                                            strCampos.append((" source=\"\">\n"));
-                                            strCampos.append(strForaneo);
-                                            strCampos.append(("\t\t\t</qry_"+cmp.getNombreDB()+">\n"));
-                                        }
+                                        strCampos.append(strForaneo);
                                     }
                                     strCampos.append("\t\t</foraneo>\n");
                                 }
@@ -779,13 +784,103 @@ public class AdminXML {
                 }
                 strCampos.append("</registro>\n");
             }
+            StringBuffer strFormForan = getFormasForaneas(idForma,arrVariables);
+
             str.append(strForma);
             str.append(strCampos);
+            str.append(strFormForan);
             str.append("</qry>");
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML de la Forma sin datos");
         }
         return str;
+    }
+
+    /**
+     * Obtiene las formas foraneas con una estructura tipo html. Se revisa el arreglo de variables
+     * para revisar si existe la instruccion que gatille su inclusion en el XML. El texto tiene
+     * una estructura del tipo HTML.
+     * @param claveForma    Clave de la forma analizada
+     * @param arrVariables  Arreglo con las variables capturadas
+     * @return
+     * @throws ExceptionHandler
+     */
+    private StringBuffer getFormasForaneas(Integer claveForma, String[][] arrVariables) throws ExceptionHandler{
+        StringBuffer strSld = new StringBuffer("");
+        StringBuffer strLI = new StringBuffer("");
+        StringBuffer strDIV = new StringBuffer("");
+
+        if (arrVariables!=null){
+            boolean seguir = true;
+            boolean getFormForan = false;
+            for (int i=0;i<arrVariables.length&&seguir;i++){
+                if (arrVariables[i][0].equals("$ff")){
+                    seguir = false;
+                    if ("true".equals(arrVariables[i][1])){
+                        getFormForan = true;
+                    }
+                }
+            }
+            if (getFormForan){
+                if (claveForma!=null){
+                    ConEntidad con = new ConEntidad();
+                    con.setBitacora(this.getBitacora());
+
+                    String[] arrData = new String[1];
+                    arrData[0] = claveForma.toString();
+
+                    DataTransfer dataTransfer= new DataTransfer();
+                    dataTransfer.setIdQuery(Integer.valueOf(AdminFile.getKey(AdminFile.leerIdQuery(),AdminFile.FORMASFORANEAS)));
+                    dataTransfer.setArrData(arrData);
+
+                    HashCampo hsCampo = con.getDataByIdQuery(dataTransfer);
+
+                    if (!hsCampo.getListData().isEmpty()){
+                        strSld.append("<formas_foraneas>\n");
+                        for (int i=0;i<hsCampo.getListData().size();i++){
+                            List lstData = (ArrayList) hsCampo.getListData().get(Integer.valueOf(i));
+                            String strClaveAplic = "";
+                            String strClaveForma = "";
+                            String strForma = "";
+                            for (int j=0; j<lstData.size();j++){
+                                Campo cmp = (Campo) lstData.get(j);
+                                if (cmp.getNombreDB().equals("clave_aplicacion")){
+                                    strClaveAplic = cmp.getValor();
+                                }
+                                if (cmp.getNombreDB().equals("clave_forma")){
+                                    strClaveForma = cmp.getValor();
+                                }
+                                if (cmp.getNombreDB().equals("forma")){
+                                    strForma = cmp.getValor();
+                                }
+                            }
+                            strLI.append("\t<li><a href='#formTab_")
+                                 .append(strClaveAplic).append("_")
+                                 .append(strClaveForma).append("'>")
+                                 .append(strForma)
+                                 .append("</a></li>\n");
+                            strDIV.append("\t<div id='formTab_")
+                                  .append(strClaveAplic).append("_")
+                                  .append(strClaveForma).append("'>\n")
+                                  .append("\t\t<div id='formGrid_")
+                                  .append(strClaveAplic).append("_")
+                                  .append(strClaveForma).append("' \n")
+                                  .append("\t\t app=\"").append(strClaveAplic).append("\" \n")
+                                  .append("\t\t forma=\"").append(strClaveForma).append("\" \n")
+                                  .append("\t\t titulo=\"").append(strForma).append("\" \n")
+                                  .append("\t\t align='center' class='queued_grids'>\n")
+                                  .append("\t\t\t<br/><br/>Cargando información...<br/><br/>\n")
+                                  .append("\t\t\t<img src='img/loading.gif'/>\n")
+                                  .append("\t\t</div>\n\t</div>\n");
+                        }
+                        strSld.append(strLI);
+                        strSld.append(strDIV);
+                        strSld.append("</formas_foraneas>\n");
+                    }
+                }
+            }
+        }
+        return strSld;
     }
 
     /**
@@ -862,7 +957,7 @@ public class AdminXML {
      */
     private StringBuffer getXmlByIdForma(String[] strData, String strRegistro, String[][] arrVariables)
             throws ExceptionHandler{
-        StringBuffer str = new StringBuffer();
+        StringBuffer str = new StringBuffer("");
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
@@ -896,7 +991,6 @@ public class AdminXML {
                         dataTransfer.setArrVariables(arrVariables);
 
                         hsData = con.getDataByIdQuery(dataTransfer);
-
                     }else{
                         con.getBitacora().setEnable(false);
                         dataTransfer = new DataTransfer();
@@ -911,6 +1005,10 @@ public class AdminXML {
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
             if (!hsDat.isEmpty()){
+                str.append(("\t\t\t<qry_"+strRegistro));
+                str.append(" source=\"")
+                   .append(hsCmpQ.getStrQuery())
+                   .append("\">\n");
                 for(int i=0;i<hsDat.size();i++){
                     ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                     str.append(("\t\t\t\t<registro_"+ strRegistro+" "));
@@ -926,6 +1024,7 @@ public class AdminXML {
                     }
                     str.append(("\t\t\t\t</registro_"+ strRegistro+">\n"));
                 }
+                str.append(("\t\t\t</qry_"+strRegistro+">\n"));
             }
         }catch(Exception ex){
             throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML por el ID de la forma");
@@ -1146,7 +1245,7 @@ public class AdminXML {
      */
     public String salidaXML(String data){
         StringBuilder str = new StringBuilder();
-        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
         str.append("<qry>\n");
         str.append("<pk>").append(data).append("</pk>\n");
         str.append("</qry>");
@@ -1163,7 +1262,7 @@ public class AdminXML {
      */
     public String salidaXMLBitacora(String data, String idBitacora){
         StringBuilder str = new StringBuilder();
-        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+        str.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
         str.append("<qry>\n");
         str.append("<pk>").append(data).append("</pk>\n");
         str.append("<clave_bitacora>").append(idBitacora).append("</clave_bitacora>\n");

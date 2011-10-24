@@ -67,6 +67,8 @@ public class AdminFile {
      */
     public static String EVENTO = "EVENTO";
 
+    public static String FORMASFORANEAS="FORMASFORANEAS";
+
     /**
      * Numero con el tamaño maximo de un archivo en Bytes
      */

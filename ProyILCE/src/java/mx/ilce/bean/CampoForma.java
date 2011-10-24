@@ -37,7 +37,16 @@ public class CampoForma implements Serializable  {
     private String aliasTab;
     private Integer usadoParaAgrupar;//BIT
     private Integer noPermitirValorForaneoNulo;//BIT
+    private Integer cargaDatoForaneosRetrasada; //BIT
 
+    public Integer getCargaDatoForaneosRetrasada() {
+        return cargaDatoForaneosRetrasada;
+    }
+
+    public void setCargaDatoForaneosRetrasada(Integer cargaDatoForaneosRetrasada) {
+        this.cargaDatoForaneosRetrasada = cargaDatoForaneosRetrasada;
+    }
+    
     /**
      * Obtiene el valor del Validador de si debe permitir foraneo o no
      * @return
