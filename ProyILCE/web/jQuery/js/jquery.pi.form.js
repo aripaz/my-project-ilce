@@ -249,7 +249,12 @@
                             beforeSubmit:  validateForm,  // pre-submit callback 
                             success:       processXml,  // post-submit callback 
                             dataType:  ($.browser.msie) ? "text" : "xml",
-                            url: "srvFormaInsert"       // override for form's 'action' attribute 
+                            url: "srvFormaInsert",       // override for form's 'action' attribute 
+                            error:function(xhr,err){
+                                $("#grid_"+gridSuffix+"_toppager_right").children(0).html("Error al guardar registro");
+                                $("#dlgModal_"+ formSuffix).remove();
+                                alert("Error al guardar registro: "+xhr.readyState+"\nstatus: "+xhr.status + "\responseText:"+ xhr.responseText);          
+                            }
                             //type:      type        // 'get' or 'post', override for form's 'method' attribute 
                             //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
                             //clearForm: true        // clear all form fields after successful submit 
@@ -426,11 +431,18 @@
                    var bCompleto=true;
                     
                    $(jqForm[0]).find('.obligatorio').each(function() {
-                        if ($.trim(this.value)=="") {
+                       
+                        if ($.trim(this.value)=="" && $(this).attr("type")!="checkbox") {
                             $("#td_" + this.name).addClass("errorencampo")
                             $(this).addClass("errorencampo");
                             $("#msgvalida_" + this.name).show();
                             bCompleto=false;
+                        }
+                        else if ($(this).attr("type")=="checkbox" && !this.checked)  {
+                            $("#td_" + this.name).addClass("errorencampo")
+                            $(this).addClass("errorencampo");
+                            $("#msgvalida_" + this.name).show();
+                            bCompleto=false;                            
                         }
                         else {
                             $("#td_" + this.name).removeClass("errorencampo")
@@ -464,6 +476,19 @@
                     else {
                         xmlResult = data;
                     }
+                    
+                    var error = $(xmlResult).find("error");
+                    
+                    if (error.length>0) {
+                        if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
+                             $.fn.appgrid.options.error+="Hay un error en la consulta para guardar el registro (" + 
+                                 error.find("general").text() + ". " +  
+                                 error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
+                                $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla ";
+                                $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.appgrid.options.error);
+                            return true;    
+                            }
+                   }      
                     
                     var nApp=$("#formTab_" + formSuffix).attr("app")
                     var nForma=$("#formTab_" + formSuffix).attr("forma");
