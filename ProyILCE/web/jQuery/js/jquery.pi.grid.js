@@ -534,16 +534,15 @@
         
         if (error.length>0) {
             if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
-                 $.fn.appgrid.options.error+="Hay un problema con la consulta (" + 
+                 $.fn.appgrid.options.error+="Hay un error en la consulta (" + 
                      error.find("general").text() + ". " +  
                      error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
                     $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
                 return true;    
                 }
-            }
-
-            
-        var oColumnas=$(xml).find("column_definition");
+      }      
+       
+       var oColumnas=$(xml).find("column_definition");
         $.fn.appgrid.options.sortname=oColumnas.children()[0];
 
         var sPermiso="";
