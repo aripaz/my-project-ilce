@@ -114,8 +114,14 @@ $.fn.ajaxSubmit = function(options) {
 		return this;
 	}
 
-	var q = $.param(a);
-
+        //Esta linea se comentó el 25 de octubre, 2011 y es la linea original del widget
+	//var q = $.param(a);
+        //Se cambia por las siguientes lineas                         oCampos =oForm.serializeArray();         
+        var q="";
+        for (i=0;i<a.length;i++) {
+            q+=a[i].name+"="+escape(a[i].value)+"&";
+        }
+        
 	if (options.type.toUpperCase() == 'GET') {
 		options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
 		options.data = null;  // data is null for 'get'

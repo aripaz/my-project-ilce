@@ -481,11 +481,11 @@
                     
                     if (error.length>0) {
                         if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
-                             $.fn.appgrid.options.error+="Hay un error en la consulta para guardar el registro (" + 
+                            $.fn.form.options.error+="Ocurrió un problema al guardar el registro (" + 
                                  error.find("general").text() + ". " +  
                                  error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
-                                $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla ";
-                                $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.appgrid.options.error);
+                                $.fn.form.options.app +"_" +  $.fn.form.options.entidad +"' class='editLink'>aqui</a> para editarla ";
+                                $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.form.options.error);
                             return true;    
                             }
                    }      
