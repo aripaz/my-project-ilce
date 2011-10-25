@@ -31,7 +31,8 @@
             datestamp: sDateTime(new Date()),
             originatingObject:"",
             callFormWithRelationships:false,
-            updateTreeAfterPost:false
+            updateTreeAfterPost:false,
+            error:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -81,15 +82,22 @@
                 else {
                     xml = data;
                 }
+                
                 $.fn.appgrid.handleGridDefinition(xml);
 
-                if ($.fn.appgrid.options.colModel==null) {  
-                    sTipoError="Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema";
+                if ($.fn.appgrid.options.error!="") {       
                     obj.html("<div class='ui-widget'>"+
                     "<div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
                     "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
-                    sTipoError+"</p>"+
-                    "</div></div>");     
+                    $.fn.appgrid.options.error+"</p>"+
+                    "</div></div>");
+                    
+                    /* Captura el click del link */
+                    $(".editLink").click(function(){
+                        nApp=this.id.split("_")[1];
+                        nForma=this.id.split("_")[2];
+                    })
+
                     return true;
                 }
 
@@ -169,7 +177,7 @@
                                 pk:0,
                                 filtroForaneo:"",
                                 height:400,
-                                width:550,
+                                width:650,
                                 originatingObject:oGrid.id,
                                 updateControl:""
                             });
@@ -222,7 +230,7 @@
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
-                                width:550,
+                                width:650,
                                 originatingObject:oGrid.id,
                                 showRelationships:$(this).attr("callFormWithRelationships"),
                                 updateControl:sUpdateControl
@@ -266,7 +274,7 @@
                                     pk:nPK,
                                     filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                     height:"500",
-                                    width:"500",
+                                    width:"650",
                                     originatingObject: $(this).id,
                                     showRelationships:$(this).attr("callFormWithRelationships"),
                                     updateControl:sUpdateControl
@@ -520,11 +528,32 @@
 
     $.fn.appgrid.handleGridDefinition = function(xml){
         var iCol=0;
+        
+        //Manejo de errores
+        var error=$(xml).find("error");
+        
+        if (error.length>0) {
+            if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
+                 $.fn.appgrid.options.error+="Hay un problema con la consulta (" + 
+                     error.find("general").text() + ". " +  
+                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
+                    $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
+                return true;    
+                }
+            }
+
+            
         var oColumnas=$(xml).find("column_definition");
         $.fn.appgrid.options.sortname=oColumnas.children()[0];
 
         var sPermiso="";
         var oPermisos=$(xml).find("clave_permiso");
+        
+        if (oPermisos.length==0) {
+            $.fn.appgrid.options.error="<p>Permisos insuficientes para consultar este catálogo, consulte con el administrador del sistema</p>";
+            return;
+        }
+                 
         oPermisos.each( function() {
             sPermiso+=$(this).text()+",";
         })
@@ -558,7 +587,7 @@
             iCol++;
         });
 
-        $("#pager"+ suffix).attr("security", sPermiso) ;
+        $("#pager"+ suffix).attr("security", sPermiso);
     }
 
     $.fn.appgrid.openKardex = function(nApp, nEntidad,sDateStamp, id) {

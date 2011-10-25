@@ -249,6 +249,12 @@ httpRequest.open('GET',s, false);
 httpRequest.send(null);
 
 var x = httpRequest.responseXML.getElementsByTagName('registro');
+var error=httpRequest.responseXML.getElementsByTagName('error');
+
+if (error.length>0) {
+    alert("Ha perdido la conexión, intente otra vez");
+    return
+}
 
 //Llena una lista a partir de un archivo XML
 //Obtiene el nombre del select y lo transforma en objeto
