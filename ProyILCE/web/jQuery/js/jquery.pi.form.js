@@ -22,7 +22,8 @@
             updateControl:"",
             updateForeignForm:"",
             originatingObject:"",
-            showRelationships:"false"
+            showRelationships:"false",
+            events:[]
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -142,7 +143,8 @@
     $.fn.form.setFormObjects = function(){  
    
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
-   
+        var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
+            
         $.ajax(
         {   
             url: $.fn.form.options.xmlUrl + "?$cf=" + $.fn.form.options.forma + "&$pk=" + $.fn.form.options.pk + "&$ta=" + $.fn.form.options.modo +"&1=clave_aplicacion=" + $.fn.form.options.pk + "&" + $.fn.form.options.filtroForaneo,
@@ -161,7 +163,6 @@
                     xml = data;
                 }
             
-                var gridSuffix=$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.datestamp;
                 /*Verifica el estatus de error*/
                 var oError=$(xml).find("error");
                 if (oError.length>0) {
@@ -211,7 +212,16 @@
             
                 //Se genera el HTML de la forma general
                 $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
-            
+                
+                //Aplica el codigo proveniente del XML y que aplica en la forma
+                evento=$(xml).find('configuracion_forma').find('evento').text();
+                if (evento!="")
+                  $.globalEval(evento);
+              
+                //Ahora carga los eventos relacionados con los campos
+                for (i=1; i<$.fn.form.options.events.length; i++)
+                    $.globalEval($.fn.form.options.events[i]);
+                
                 //Establece atributo de seguridad
                 $("#formTab_" + formSuffix).attr("security",sPermiso);
                 
@@ -410,7 +420,7 @@
                 oForm.find('.widgetbutton').fieldtoolbar({
                     app:$.fn.form.options.app
                 });
-                
+
                 
                 function validateForm(formData, jqForm, options) { 
                    var bCompleto=true;
@@ -510,6 +520,11 @@
                     }); 
                 }
                 
+            },
+            error:function(xhr,err){
+                $("#grid_"+gridSuffix+"_toppager_right").children(0).html("Error al recuperar la forma");
+                $("#dlgModal_"+ formSuffix).remove();
+                alert("Error al recuperar forma: "+xhr.readyState+"\nstatus: "+xhr.status + "\responseText:"+ xhr.responseText);          
             }
         });
     }
@@ -527,11 +542,15 @@
             sValorPredeterminado="";
             oCampo=$(this);
             sTipoCampo= oCampo.attr("tipo_dato").toLowerCase();
+            
+            if (oCampo.find('evento').text()!="")
+                $.fn.form.options.events[tabIndex-1]=oCampo.find('evento').text();
+            
             bAutoIncrement=(oCampo.attr("autoincrement")!=undefined)?true:false;
             if (bAutoIncrement)
                 $.fn.form.options.pk_name=oCampo[0].nodeName;
             //Genera etiqueta
-            sAlias= oCampo.find('alias_campo').text();
+            sAlias=oCampo.find('alias_campo').text();
             bDatoSensible=oCampo.find('dato_sensible').text();
             bActivo=oCampo.find('activo').text();
             sValorPredeterminado=oCampo.find('valor_predeterminado').text();
@@ -567,7 +586,7 @@
             var nFormaForanea=$(this).find('foraneo').attr("clave_forma");
             var nEditaForaneos=$(this).find('foraneo').attr("agrega_registro");
             if (nFormaForanea!=undefined) {
-                sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ' + oCampo.find('evento').text() + ' ';
+                sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
                 if (bActivo!="1") 
                     sRenglon+=' disabled="disabled" ';
@@ -619,7 +638,7 @@
             else {
                 if (oCampo.find('tipo_control').text()=="textarea" || sTipoCampo=="text") {
                     sRenglon+='<td class="etiqueta_forma">' +
-                    '<textarea tabindex="' + tabIndex + '" ';
+                    '<textarea tabindex="' + tabIndex + '" rows="10" ';
                 
                     if (bActivo!="1") 
                         sRenglon+=' disabled="disabled" ';
@@ -644,9 +663,7 @@
                         sRenglon+='"';
 
                     //sRenglon += ' id="' + oCampo[0].nodeName + sSuffix + '" name="' +  oCampo[0].nodeName + sSuffix + '" ' +
-                    sRenglon += ' id="' + oCampo[0].nodeName + '" name="' +  oCampo[0].nodeName + '" ' +
-                    oCampo.find('evento').text() +
-                    '>';
+                    sRenglon += ' id="' + oCampo[0].nodeName + '" name="' +  oCampo[0].nodeName + '" >';
                     
                     if ($.fn.form.options.modo=='insert')
                         sRenglon+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
@@ -676,7 +693,7 @@
                     else 
                         sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':'';
 
-                    sRenglon+=oCampo.find('evento').text() + ' /></div></td>|';
+                    sRenglon+=' /></div></td>|';
                 }
                 else {
                     sRenglon += '<td class="etiqueta_forma">' + 
@@ -717,7 +734,7 @@
                     else 
                         sRenglon+=oCampo[0].childNodes[0].data;
                     
-                    sRenglon+='" ' + oCampo.find('evento').text();
+                    sRenglon+='" ';
 
                     //Validación para inputs estandar de acuerdo al tipo de datos del campo
                     if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {
@@ -737,6 +754,8 @@
         sRenglon=sRenglon.substring(0,sRenglon.length-1);
         var aRows=sRenglon.split('|');
         var nCols= $.fn.form.options.columnas;
+        if (aRows.length>18)
+            nCols=2;
         var nRows = Math.round(aRows.length/nCols);
         var sForm="";
         var i;
