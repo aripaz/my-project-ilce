@@ -388,18 +388,18 @@ public class AdminFile {
         if (ruta!=null){
             Properties prop = leerConfig();
             String rutaBibl = getKey(prop, "BIBLIOTECA");
+            String Proyecto = getKey(prop, "PROYECTO");
             String[] data = rutaBibl.split("/");
-            String str1 = data[data.length-1];
-            String str2 = data[data.length-2];
 
             URL url = AdminFile.class.getResource("AdminFile.class");
-            
             String[] urlDir = url.getPath().split("/");
+
             boolean seguir = true;
             int pos=0;
             for (int i=0;i<urlDir.length&&seguir;i++){
-                if (urlDir[i].equals("ProyILCE")){
+                if (urlDir[i].equals(Proyecto)){
                    pos = urlDir.length - i;
+                   seguir= false;
                 }
             }
             File fWork = null;
@@ -411,13 +411,12 @@ public class AdminFile {
                     }
                 } catch (URISyntaxException ex) {}
             }
-            File srcDir = new File(fWork.getPath() + fWork.separator + str2);
-            if (!srcDir.exists()) {
-                srcDir.mkdir();
-            }
-            srcDir = new File(fWork.getPath() + fWork.separator + str2 + fWork.separator + str1 );
-            if (!srcDir.exists()) {
-                srcDir.mkdir();
+            File srcDir = new File(fWork.getPath());
+            for (int i=1;i<data.length;i++){
+                srcDir = new File(srcDir.getPath() + fWork.separator + data[i]);
+                if (!srcDir.exists()) {
+                    srcDir.mkdir();
+                }
             }
             rutaBibl = srcDir.getPath() + srcDir.separator;
 
@@ -429,7 +428,7 @@ public class AdminFile {
                 setRutaDest(rutaBibl);  
                 try {
                     if (copiarArchivo()){
-                        String nameSld = getKey(prop, "RUTAWEB");
+                        String nameSld = getKey(prop, "BIBLIOTECA");
                         nameSld = nameSld + getIdUser() + "/" + this.getNameFile();
                         this.setNameFile(nameSld);
                         sld = true;
