@@ -143,6 +143,7 @@ public class UtilValue {
             str=data;
         }
         str = replaceHtml(str);
+        str = str.replaceAll("\\%2B", "+");
         return str;
     }
 }
