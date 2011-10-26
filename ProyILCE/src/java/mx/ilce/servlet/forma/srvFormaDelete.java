@@ -27,6 +27,8 @@ import mx.ilce.util.Validation;
  */
 public class srvFormaDelete extends HttpServlet {
    
+    private String[][] arrVariables = null;
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -45,8 +47,8 @@ public class srvFormaDelete extends HttpServlet {
                 val.executeErrorValidationUser(this.getClass(), request, response);
             }else{
                 //Obtenemos los datos del formulario
-                AdminForm admF = new AdminForm();
-                HashMap hs = admF.getFormulario(request);
+                AdminForm admForm = new AdminForm();
+                HashMap hs = admForm.getFormulario(request);
 
                 HashMap hsForm = (HashMap) hs.get("FORM");  //Datos
                 HashMap hsFormQuery = new HashMap();
@@ -61,6 +63,11 @@ public class srvFormaDelete extends HttpServlet {
 
                 ArrayList arrVal = new ArrayList();
                 arrVal.add("$cf");
+
+                User user = (User) request.getSession().getAttribute("user");
+                arrVariables = admForm.getVariablesFromProperties(hsForm);
+                arrVariables = admForm.getVariableByObject(user, arrVariables);
+                arrVariables = admForm.cleanVariables(arrVariables);
 
                 if ((pk==null)&&(strWhere==null)){
                     arrVal.add("$pk");
@@ -87,6 +94,7 @@ public class srvFormaDelete extends HttpServlet {
                     forma.setTipoAccion(tipoAccion);
                     forma.setStrWhereQuery(strWhere);
                     forma.setClavePerfil(usr.getClavePerfil());
+                    forma.setArrVariables(arrVariables);
 
                     ExecutionHandler ex = new ExecutionHandler();
                     List lstData = new ArrayList();

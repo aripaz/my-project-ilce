@@ -1364,7 +1364,6 @@ public class Forma extends Entidad{
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
-            
             if ((lstAplications!=null)&&(!lstAplications.isEmpty())){
                 Iterator it = lstAplications.iterator();
                 while (it.hasNext()){

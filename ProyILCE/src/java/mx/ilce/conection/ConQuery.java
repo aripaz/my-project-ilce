@@ -1050,12 +1050,10 @@ class ConQuery {
      */
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
-        String strSld = "";
         String strCopy = strWhere;
         String strConcat = "";
         boolean replaceAnd = false;
-        boolean replaceWhere = false;
-        
+        boolean replaceWhere = false;       
 
         if (query!=null){
             strQuery = strQuery.toUpperCase();
@@ -1068,29 +1066,23 @@ class ConQuery {
                 if (strWhere.trim().length()>6){
                     //EMPIEZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("WHERE ", "AND ");
                         strConcat = " ";
                         replaceWhere = true;
                     //EMPIEZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                            strQuery = " " + strWhere;
-                            strConcat = " ";
+                        strConcat = " ";
                     }else{
-                            strQuery = " AND " + strWhere;
-                            strConcat = " AND ";
+                        strConcat = " AND ";
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //EMPIEZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery = " " + strWhere;
                         strConcat = " ";
                     }else{
-                        strQuery = " AND " + strWhere;
                         strConcat = " AND ";
                     }
                 }else{
-                        strQuery = " AND " + strWhere;
                         strConcat = " AND ";
                 }
             }else{
@@ -1098,56 +1090,53 @@ class ConQuery {
                 if (strWhere.trim().length()>6){
                     //COMIENZA CON WHERE
                     if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strQuery = " " + strWhere;
                         strConcat = " ";
                     //COMIENZA CON AND
                     }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                         strConcat = " ";
                         replaceAnd = true;
                     }else{
-                        strQuery = " WHERE " + strWhere;
                         strConcat = " WHERE ";
                     }
                 //evaluaremos solo el AND
                 }else if (strWhere.trim().length()>4){
                     //COMIENZA CON AND
                     if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strQuery =  " " + strWhere.toUpperCase().replaceFirst("AND "," WHERE ");
                         strConcat = " ";
                         replaceAnd = true;
                     }else{
-                        strQuery = " WHERE " + strWhere;
                         strConcat = " WHERE ";
                     }
                 }else{
-                    strQuery = " " + strWhere;
                     strConcat = " ";
                 }
             }
         }else{
-             strQuery = "";
-             strConcat = "";
+             strConcat = " ";
         }
-        strSld = query + strQuery;
-
         String sld = "";
+        String queryOrder = query;
+        String queryPos = "";
+        if (queryOrder.toUpperCase().contains("ORDER BY")){
+            int pos = queryOrder.toUpperCase().indexOf("ORDER BY");
+            queryOrder = query.substring(0,pos-1);
+            queryPos = " " + query.substring(pos,query.length());
+        }
         if (replaceAnd){
             String paso = strCopy.toUpperCase();
             int pos = paso.indexOf("AND");
             String strMitad = paso.substring(pos+3);
-            sld = query + " WHERE " +  strMitad;
+            sld = queryOrder + " WHERE " +  strMitad;
         }else if (replaceWhere){
             String paso = strCopy.toUpperCase();
             int pos = paso.indexOf("WHERE");
             String strMitad = paso.substring(pos+3);
-            sld = query + " AND " +  strMitad;
+            sld = queryOrder + " AND " +  strMitad;
         }else{
-            sld = query + strConcat + strCopy;
+            sld = queryOrder + strConcat + strCopy;
         }
-        //System.out.println(sld + "\n----\n");
+        sld = sld + queryPos;
 
-        //return strSld;
         return sld;
     }
 
@@ -1687,7 +1676,8 @@ class ConQuery {
                         + " where em.clave_empleado = %1 "
                         + " and   em.clave_perfil = pe.clave_perfil "
                         + " and   ap.clave_aplicacion = fo.clave_aplicacion "
-                        + " and   per.clave_forma = fo.clave_forma";
+                        + " and   per.clave_forma = fo.clave_forma "
+                        + " order by ap.clave_aplicacion , fo.clave_forma ";
                 //System.out.print("\nPERFIL");
                 break;
             case -4://TABFORMA
@@ -1778,7 +1768,8 @@ class ConQuery {
                         + ", cf.carga_dato_foraneos_retrasada "
                         + " from campo_forma cf, forma f "
                         + " where f.clave_forma = cf.clave_forma "
-                        + " and f.clave_forma = %1";
+                        + " and f.clave_forma = %1 "
+                        + " order by cf.clave_forma, cf.campo, cf.clave_campo";
                 //System.out.print("\nFORMA");
                 break;
             case -9://FORMAQUERY
