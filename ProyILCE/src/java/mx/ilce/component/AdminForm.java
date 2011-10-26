@@ -80,7 +80,7 @@ public class AdminForm {
     private HashMap getFormularioSimple(HttpServletRequest request) throws ExceptionHandler{
         HashMap hs = null;
         HashMap hsForm = null;
-        try{
+        try{ 
             Enumeration enumData = request.getParameterNames();
             ArrayList arrayFORM = new ArrayList();
             if (enumData != null){
@@ -305,9 +305,10 @@ public class AdminForm {
                     } 
                     key = java.net.URLDecoder.decode(pair.substring(0, pos),"UTF-8");
                     value = pair.substring(pos+1,pair.length());
-                    value = castCodeEncoded(value);
                     value = castCodeNoUtf8(value);
                     value = castCodeUrl(value);
+                    value = castCodeEncoded(value);
+                    value = value.replaceAll("\\+","\\%2B");
                     try{
                         value = java.net.URLDecoder.decode(value,"UTF-8");
                     }catch(IllegalArgumentException e){
@@ -519,8 +520,32 @@ public class AdminForm {
             if (str.contains("%F1")){
                 str = str.replaceAll("%F1","ñ");
             }
+            if (str.contains("%E4")){
+                str = str.replaceAll("%E4","ä");
+            }
+            if (str.contains("%EB")){
+                str = str.replaceAll("%EB","ë");
+            }
+            if (str.contains("%EF")){
+                str = str.replaceAll("%EF","ï");
+            }
+            if (str.contains("%F6")){
+                str = str.replaceAll("%F6","ö");
+            }
             if (str.contains("%FC")){
                 str = str.replaceAll("%FC","ü");
+            }
+            if (str.contains("%C4")){
+                str = str.replaceAll("%C4","Ä");
+            }
+            if (str.contains("%CB")){
+                str = str.replaceAll("%CB","Ë");
+            }
+            if (str.contains("%CF")){
+                str = str.replaceAll("%CF","Ï");
+            }
+            if (str.contains("%D6")){
+                str = str.replaceAll("%D6","Ö");
             }
             if (str.contains("%DC")){
                 str = str.replaceAll("%DC","Ü");

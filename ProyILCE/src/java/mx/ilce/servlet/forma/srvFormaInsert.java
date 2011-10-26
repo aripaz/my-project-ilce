@@ -139,7 +139,13 @@ public class srvFormaInsert extends HttpServlet {
                                 }
                             }
                             dato = val.replaceComillas(dato);
-                            hsFormQuery.put(cmp.getCampo(), dato);
+                            if (hsFormQuery.containsKey(cmp.getCampo())){
+                                if (hsFormQuery.get(cmp.getCampo())==null){
+                                    hsFormQuery.put(cmp.getCampo(), dato);
+                                }
+                            }else{
+                                hsFormQuery.put(cmp.getCampo(), dato);
+                            }
                         }
                     }
                     ExecutionHandler ex = new ExecutionHandler();

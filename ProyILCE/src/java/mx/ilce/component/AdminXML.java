@@ -183,9 +183,11 @@ public class AdminXML {
             HashCampo hsCmp = con.getMenuXML(user, arrVariables);
 
             Document document = getDocumentXML("widget.accordion.xml");
-            str.append("<qry \nsource=\"")
+            str.append("<qry>\n")
+               .append("\t<sql><![CDATA[")
                .append(hsCmp.getStrQuery())
-               .append("\">\n");
+               .append("]]>\n")
+               .append("\t</sql>\n");
             for (int i=0;i<hsCmp.getLengthData();i++){
                 str.append(listNode(document,0,hsCmp,i));
             }
@@ -428,9 +430,11 @@ public class AdminXML {
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
 
-            str.append("<qry \nsource=\"")
+            str.append("<qry>\n")
+               .append("\t<sql><![CDATA[")
                .append(hsData.getStrQuery())
-               .append("\">\n");
+               .append("]]>\n")
+               .append("\t</sql>\n");
             if (this.getHashPermisoForma()!=null){
                 HashCampo hsPerm = this.getHashPermisoForma();
                 HashMap hsDatPerm = hsPerm.getListData();
@@ -625,9 +629,11 @@ public class AdminXML {
             Campo cmp = new Campo();
             List lstCmp = hsData.getListCampos();
 
-            str.append("<qry \nsource=\"")
+            str.append("<qry>\n")
+               .append("\t<sql><![CDATA[")
                .append(hsData.getStrQuery())
-               .append("\">\n");
+               .append("]]>\n")
+               .append("\t</sql>\n");
             if (this.getHashPermisoForma()!=null){
                 HashCampo hsPerm = this.getHashPermisoForma();
                 HashMap hsDatPerm = hsPerm.getListData();
@@ -1005,10 +1011,11 @@ public class AdminXML {
             List lstCmp = hsData.getListCampos();
             HashMap hsDat = hsData.getListData();
             if (!hsDat.isEmpty()){
-                str.append(("\t\t\t<qry_"+strRegistro));
-                str.append(" source=\"")
+                str.append(("\t\t\t<qry_"+strRegistro)).append(">\n");
+                str.append("\t\t\t\t<sql><![CDATA[")
                    .append(hsCmpQ.getStrQuery())
-                   .append("\">\n");
+                   .append("]]>\n")
+                   .append("\t\t\t\t</sql>\n");
                 for(int i=0;i<hsDat.size();i++){
                     ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
                     str.append(("\t\t\t\t<registro_"+ strRegistro+" "));

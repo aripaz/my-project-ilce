@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bitacora.Bitacora;
@@ -386,6 +388,39 @@ public class AdminFile {
         if (ruta!=null){
             Properties prop = leerConfig();
             String rutaBibl = getKey(prop, "BIBLIOTECA");
+            String[] data = rutaBibl.split("/");
+            String str1 = data[data.length-1];
+            String str2 = data[data.length-2];
+
+            URL url = AdminFile.class.getResource("AdminFile.class");
+            
+            String[] urlDir = url.getPath().split("/");
+            boolean seguir = true;
+            int pos=0;
+            for (int i=0;i<urlDir.length&&seguir;i++){
+                if (urlDir[i].equals("ProyILCE")){
+                   pos = urlDir.length - i;
+                }
+            }
+            File fWork = null;
+            if(url.getProtocol().equals("file")) {
+                try {
+                    fWork = new File(url.toURI());
+                    for (int j=0;j<pos;j++){
+                        fWork = fWork.getParentFile();
+                    }
+                } catch (URISyntaxException ex) {}
+            }
+            File srcDir = new File(fWork.getPath() + fWork.separator + str2);
+            if (!srcDir.exists()) {
+                srcDir.mkdir();
+            }
+            srcDir = new File(fWork.getPath() + fWork.separator + str2 + fWork.separator + str1 );
+            if (!srcDir.exists()) {
+                srcDir.mkdir();
+            }
+            rutaBibl = srcDir.getPath() + srcDir.separator;
+
             String nameF = this.getRutaFile();
             nameF = nameF.replace(getKey(prop, FILESERVER),"");
             this.setNameFile(nameF);
