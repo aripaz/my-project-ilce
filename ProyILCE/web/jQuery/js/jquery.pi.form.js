@@ -778,21 +778,39 @@
         //Distribución en columnas
         sRenglon=sRenglon.substring(0,sRenglon.length-1);
         var aRows=sRenglon.split('|');
+        var aRowsWithTextAreas=[];
         var nCols= $.fn.form.options.columnas;
-        if (aRows.length>18)
+        if (aRows.length>18) {
             nCols=2;
+            //Vacía los textareas en otro arreglo
+            var indexOfRowWithTextAreas=0;
+            for (i=0; i<aRows.length;i++) {
+                if (aRows[i].indexOf("textarea")>-1) {
+                    aRowsWithTextAreas[indexOfRowWithTextAreas]=aRows[i];
+                    aRows.splice(i,1);
+                    indexOfRowWithTextAreas++;
+                }
+                    
+            }
+        }    
         var nRows = Math.round(aRows.length/nCols);
         var sForm="";
         var i;
         for (i=0; i<nRows; i++) {
             sForm+="<tr >";
+
             sForm+=aRows[i];
             if (aRows.length>nRows+i && nCols>1) {
-                sForm+="<td>&nbsp;</td>"+aRows[nRows+i] ;
+                    sForm+="<td>&nbsp;</td>"+aRows[nRows+i];
             }
             sForm+="</tr>";
         }
 
+        if (nCols>1) {
+           for (i=0; i<aRowsWithTextAreas.length; i++) {
+                sForm+="<tr >"+aRowsWithTextAreas[i].replace('class="etiqueta_forma_control"','class="etiqueta_forma_control" colspan="4"')+"</tr>";
+            }
+        }
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' method='POST' ><table class='forma'>" + sForm + "</table>"+
