@@ -11,6 +11,7 @@ table.forma { width: 100%; margin:0px;}
 form.forma { width: 100%; margin:5px;}
 h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
 td.etiqueta_forma {width: 24.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma_control {margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
 div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
 input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
 textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; float: left;  }
@@ -93,7 +94,7 @@ input.formButton { font-size: 12px !important; font-style: normal; font-family:V
 td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 
 .queued_grids {
-    float: right;
+    /*float: right; */
     width:98%;
 }
 
@@ -107,8 +108,8 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 }
 
 .gridContainer {
-    /*float: right;
-    width: 100%; */
+    /*float: right;*/
+    width: 100%; 
     margin-left:5px
 }
 
@@ -135,8 +136,8 @@ div.user_avatar>img {
 }
 
 .desktopGridContainer {
-    overflow:auto;
-    float: left;
+    /*overflow:auto;
+    float: left; */
     width: 95%;
 }
 
@@ -161,10 +162,6 @@ td.etiqueta_perfil {
 
 .ui-dialog-title {
     font-size: 12px;
-}
-
-.ui-tabs {
-    overflow: auto;
 }
 
 .active_filter {
@@ -327,4 +324,19 @@ a.session_menu {
 
 #divLostPw {
     display: none;
+}
+
+#tabUser {
+    float: left;
+    width: 80%;
+}
+
+.column {
+    float: right;
+    width: 18%;
+}
+
+.ui-tabs .ui-tabs-panel {
+    height: 100% !important;
+    overflow:visible;
 }

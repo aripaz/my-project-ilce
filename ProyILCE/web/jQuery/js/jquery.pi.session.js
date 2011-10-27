@@ -50,7 +50,7 @@
 
                 $("#lnkConfiguracion").click(function() {
 
-                    //Crea el control del tab
+                    //Crea el control del tab para la colección principal
                     var $tabs = $('#tabs').tabs({
                     tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
                     });
@@ -78,7 +78,7 @@
                 });
                 
                 //Inicializa el escritorio
-                $("#tabUser").desktop();
+                $("#tabInicio").desktop();
             },
             error:function(xhr,err){
                 alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);

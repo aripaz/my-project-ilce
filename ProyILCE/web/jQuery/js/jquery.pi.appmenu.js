@@ -44,121 +44,144 @@
                     xml = data;
                 }
                 
-                /* Insert el html en el elemento obj */
-                obj.append($.fn.appmenu.handleMenu(xml));
+                /* Inserta el html en el elemento apps */
+                $("#apps").html($.fn.appmenu.handleMenu(xml));
                 
-                $(".menu").button()
-                .click(function(e, data) {
-                    
-                    link_id="#"+this.id;
+                $("#menu_inicio")
+                    .button()
+                    .click(function() {
+                        alert("Por implementar");
+                    })
+                    .next() //menu_aplicaciones 
+                        .button()
+                        .click(function() {
+                            alert("Por implementar");
+                        })                        
+                        .next() // menu_splitter 
+                            .button( {
+                                    text: false,
+                                    icons: {
+                                            primary: "ui-icon-triangle-1-s"
+                                    }
+                            })
+                            .click( function() {
+                                    var menu = $(this).parent().next().show().position({
+                                            my: "left top",
+                                            at: "left bottom",
+                                            of: this 
+                                     });
+                                    //Cuando se hace click en cualquier parte del documento se
+                                    //oculta el menú
+                                    $(document).one("click", function() {
+                                            menu.hide();
+                                    });
+                                    return false;
+                            })
+                            .next() // menu_mapa
+                                .button()
+                                .click(function() {
+                                    alert("Por implementar");
+                                })       
+                                .next() // menu_contacto 
+                                    .button()
+                                    .click(function() {
+                                        alert("Por implementar");
+                                    }).parent()
+					.buttonset()
+                                        .next().
+                                            hide().
+                                            menu();
+                   
+                
+                 /*Captura el evento clic para los links*/
+                $(".menu").click(function(e, data) {
+                        link_id=this.name;
 
-                    //Verifica si existe
-                    var nAplicacion=this.id.split("_")[1];
-                    var nEntidad=this.id.split("_")[2];
-                    var sTitulo=$($(this).children()[0]).html();
+                        //Verifica si existe
+                        var nAplicacion=link_id.split("_")[1];
+                        var nEntidad=link_id.split("_")[2];
+                        var sTitulo=$(this).text();
 
-                    if ($("#tab"+this.id).length) {
-                        //Selecciona el tab correspondiente
-                        $tabs.tabs("select", "#tab"+this.id);
+                        if ($("#tab"+link_id).length) {
+                            //Selecciona el tab correspondiente
+                            $tabs.tabs("select", "#tab"+link_id);
 
-                        //Recupera el id del grid del tab       
-                        sGridIdSuffix=$($($($("#tab" + this.id).children()[0]).children()[2]).children()[0]).children()[0].id.replace("gbox_grid_","");
-                        $.fn.appmenu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
-   
-                    }
-                    else {
+                            //Recupera el id del grid del tab       
+                            sGridIdSuffix=$($($($("#tab" + link_id).children()[0]).children()[2]).children()[0]).children()[0].id.replace("gbox_grid_","");
+                            $.fn.appmenu.setGridFilter(sGridIdSuffix,nAplicacion,nEntidad,data);
 
-                        if (this.id.split("_")[0]=="newEntity") {
-                            $("body").form({
-                                app: nAplicacion,
-                                forma:nEntidad,
-                                modo:"insert",
-                                pk:0,
-                                titulo: sTitulo,
-                                columnas:1,
-                                height:400,
-                                width:500,
-                                originatingObject:obj.id
-                            });
                         }
                         else {
-                            $tabs.tabs( "add", "#tab"+this.id, $($(this).children()[0]).html());
-                            $tabs.tabs( "select", "#tab"+this.id);
-                            oTabPanel=$("#tab"+this.id);
-                            /* Aqui va a ir la barra de avisos */
-                            oTabPanel.html(""); 
-                            //Se inserta el div para el grid
-                            oTabPanel.html(
-                                "<div id='splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0' class='splitterContainer'>"+
-                                "   <div id='leftPane_"+ nAplicacion + "_" + nEntidad + "_0' class='leftPane'>"+           
-                                "       <div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
-                                "           <h3>&nbsp;Actividad reciente</h3>" +
-                                "           <div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                "           <h3>&nbsp;Mis filtros</h3>" +
-                                "           <div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                "       </div>"+
-                                "   </div>"+
-                                "   <div id='rigthPane_"+ nAplicacion + "_" + nEntidad + "_0' class='rigthPane'>"+
-                                "       <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
-                                "   </div>"+
-                                "</div>");
 
-                            $("#splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0").splitter({
-                                type: "v",
-                                outline: true,
-                                minLeft: 100, 
-                                sizeLeft: 200, 
-                                minRight: 500,
-                                resizeToWidth: true,
-                                cookie: "vsplitter",
-                                accessKey: 'I'
-                            });
-                                
-                            var sLeyendaNuevoRegistro=$("#showEntity_" + nAplicacion + "_" + nEntidad ).attr("nueva_entidad");
-                            var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
+                            if (link_id.split("_")[0]=="newEntity") {
+                                $("body").form({
+                                    app: nAplicacion,
+                                    forma:nEntidad,
+                                    modo:"insert",
+                                    pk:0,
+                                    titulo: sTitulo,
+                                    columnas:1,
+                                    height:400,
+                                    width:500,
+                                    originatingObject:obj.id
+                                });
+                            }
+                            else {
+                                $tabs.tabs( "add", "#tab"+link_id, sTitulo);
+                                $tabs.tabs( "select", "#tab"+link_id);
+                                oTabPanel=$("#tab"+link_id);
+                                // Aqui va a ir la barra de avisos 
+                                oTabPanel.html(""); 
+                                //Se inserta el div para el grid
+                                oTabPanel.html(
+                                    "<div id='splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0' class='splitterContainer'>"+
+                                    "   <div id='leftPane_"+ nAplicacion + "_" + nEntidad + "_0' class='leftPane'>"+           
+                                    "       <div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
+                                    "           <h3>&nbsp;Actividad reciente</h3>" +
+                                    "           <div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "           <h3>&nbsp;Mis filtros</h3>" +
+                                    "           <div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
+                                    "       </div>"+
+                                    "   </div>"+
+                                    "   <div id='rigthPane_"+ nAplicacion + "_" + nEntidad + "_0' class='rigthPane'>"+
+                                    "       <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
+                                    "   </div>"+
+                                    "</div>");
 
-                            $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
-                                app: nAplicacion,
-                                entidad: nEntidad,
-                                pk:0,
-                                editingApp:nAplicacion,
-                                wsParameters:data,
-                                titulo:sTitulo,
-                                height:"70%",
-                                leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
-                                openKardex:true,
-                                originatingObject:obj[0].id
-                            });
-                                
-                                        
-                            $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
-                        //$.fn.appmenu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
-                        }
-                    }                
-                }).parent()
-                .buttonset();
+                                $("#splitterContainer_"+ nAplicacion + "_" + nEntidad + "_0").splitter({
+                                    type: "v",
+                                    outline: true,
+                                    minLeft: 100, 
+                                    sizeLeft: 200, 
+                                    minRight: 500,
+                                    resizeToWidth: true,
+                                    cookie: "vsplitter",
+                                    accessKey: 'I'
+                                });
+
+                                var sLeyendaNuevoRegistro=$(this).attr("nueva_entidad");
+                                var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
+
+                                $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
+                                    app: nAplicacion,
+                                    entidad: nEntidad,
+                                    pk:0,
+                                    editingApp:nAplicacion,
+                                    wsParameters:data,
+                                    titulo:sTitulo,
+                                    height:"70%",
+                                    leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
+                                    openKardex:true,
+                                    originatingObject:obj[0].id
+                                });
+
+
+                                $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
+                            //$.fn.appmenu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
+                            }
+                        }    
+                    });
                 
-                
-                /*.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.appmenu();*/
-
                 //Crea el control tab aqui, puesto que desde este control se va a manipular
                 var $tabs = $('#tabs').tabs({
                     tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
@@ -418,9 +441,10 @@
             nInsertar = $(this).find("insertar").text();
             nMostrar = $(this).find("mostrar").text();
 
-            sHtml+="<a href='#' id='showEntity_" + nAplicacion + "_" + nEntidad +"' class='menu' nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>";
+            sHtml+="<li><a href='#' class='menu' name='showEntity_" + nAplicacion + "_" + nEntidad +"'  nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a></li>";
 
         })
+
         return sHtml;
     }
     

@@ -131,7 +131,8 @@
                     colNames:$.fn.appgrid.options.colNames,
                     colModel:$.fn.appgrid.options.colModel,
                     rowNum:50,
-                    autowidth: true,
+                    /*autowidth: true,*/
+                    width:$.fn.appgrid.options.width,
                     shrinkToFit: false,
                     height:$.fn.appgrid.options.height,
                     rowList:[50,100,200],
@@ -177,7 +178,7 @@
                                 pk:0,
                                 filtroForaneo:"",
                                 height:400,
-                                width:650,
+                                width:800,
                                 originatingObject:oGrid.id,
                                 updateControl:""
                             });
@@ -186,7 +187,9 @@
                     $(".progressbar").each( function(){
                         $(this).progressbar({value: $(this).attr("avance")});
                     });
-                        
+                    
+                     //oGrid.setGridWidth(oGrid.parent().width(),true);
+
                 }});
 
 
@@ -230,7 +233,7 @@
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
-                                width:650,
+                                width:800,
                                 originatingObject:oGrid.id,
                                 showRelationships:$(this).attr("callFormWithRelationships"),
                                 updateControl:sUpdateControl
@@ -274,7 +277,7 @@
                                     pk:nPK,
                                     filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                     height:"500",
-                                    width:"650",
+                                    width:"800",
                                     originatingObject: $(this).id,
                                     showRelationships:$(this).attr("callFormWithRelationships"),
                                     updateControl:sUpdateControl
@@ -313,7 +316,7 @@
                                         success:  function(data){
                                             oGrid.jqGrid('delRowData',nRow);
                                             //Actualiza árbol
-                                            if ($.fn.appgrid.options.updateTreeAfterPost=true) {
+                                            if ($.fn.appgrid.options.updateTreeAfterPost) {
                                                 sTvId=oGrid.attr("originatingObject");
                                                 $("#"+sTvId).treeMenu.getTreeDefinition($("#"+sTvId));
                                             }
@@ -334,7 +337,6 @@
                         cursor: "pointer"
                     });
                 }
-
 
                 oGrid.navGrid('#grid'+ suffix+'_toppager',{
                     edit:false,
@@ -420,27 +422,54 @@
                                 ",editingApp:" + oGrid.attr("editingApp") +
                                 ",inDesktop:true"
                                 );
-                            $.post("srvFormaInsert", postConfig);
+                            
+                            $.ajax(
+                                    {
+                                        url: "srvFormaInsert?"+postConfig,
+                                        dataType: ($.browser.msie) ? "text" : "xml",
+                                        success:  function(favorito){
+                                             if (typeof favorito == "string") {
+                                             xmlFav = new ActiveXObject("Microsoft.XMLDOM");
+                                             xmlFav.async = false;
+                                             xmlFav.validateOnParse="true";
+                                             xmlFav.loadXML(favorito);
+                                             if (xmlFav.parseError.errorCode>0) {
+                                                    alert("Error de compilación xml:" + xmlFav.parseError.errorCode +"\nParse reason:" + xmlFav.parseError.reason + "\nLinea:" + xmlFav.parseError.line);}
+                                            }
+                                             else {
+                                                xmlFav= favorito;}
+                                            
+                                            if ($(xmlFav).find("error").length>0) {
+                                                alert("Error al insertar grid en favoritos");
+                                                return;
+                                            }
+                                                
+                                            nClave=$(xmlFav).find("pk").text();
+                                            //Inserta el html para agragar el grid en el escritorio
+                                            $('#tabMisFavoritos').tabs( "add", "#tabMisFavoritos_"+nClave, oGrid.attr("titulo"));
 
-                            //Inserta el html para agragar el grid en el escritorio
+                                            $("#tabMisFavoritos_"+nClave).append("<div class='queued_grids'" +
+                                                " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
+                                                " app='" + nApp + "' " +
+                                                " form='" + nForma + "' " +
+                                                " wsParameters='" + oGrid.attr("wsParameters") + "' " +
+                                                " titulo='" + oGrid.attr("titulo") + "' " +
+                                                " leyendas='" +oGrid.attr("leyendas")+ "' "  +
+                                                " openKardex='" + oGrid.attr("openKardex") + "' " +
+                                                " inDesktop='true'" +
+                                                " class='queued_grids'," +
+                                                " insertInDesktopEnabled='0'></div>"+
+                                                "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
+                                            );
 
-                            $('#favoritos').append("<div class='queued_grids'" +
-                                " id='divDesktopGrid_" + nApp + "_" + nForma + "' " +
-                                " app='" + nApp + "' " +
-                                " form='" + nForma + "' " +
-                                " wsParameters='" + oGrid.attr("wsParameters") + "' " +
-                                " titulo='" + oGrid.attr("titulo") + "' " +
-                                " leyendas='" +oGrid.attr("leyendas")+ "' "  +
-                                " openKardex='" + oGrid.attr("openKardex") + "' " +
-                                " inDesktop='true'" +
-                                " class='queued_grids'," +
-                                " insertInDesktopEnabled='0'></div>"+
-                                "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
-                                );
-
-                            setTimeout("$('.queued_grids:first').gridqueue()",2000);
-                            alert("Se agregó el grid al escritorio");
-
+                                            setTimeout("$('.queued_grids:first').gridqueue()",2000);
+                                            alert("Se agregó el grid al escritorio");  
+                                        },
+                                        error:function(xhr,err){
+                                            alert("Error al eliminar registro");
+                                        }
+                            }); 
+                            
                         },
                         position: "last",
                         title:"",
@@ -467,7 +496,8 @@
                     if($(this).index()>0)
                         $(this).remove();
                 });
-
+                
+                $("#grid"+ suffix+"_toppager_left")[0].style.width="";
                 //Quita el paginador del la barra de herramientas superior
                 $("#grid"+ suffix+"_toppager_center").remove();
 

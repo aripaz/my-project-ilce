@@ -22,14 +22,34 @@
              //si este es el caso
              if ($(".queued_grids").length==0) {
                  $("#divwait").dialog( "close" )
-                 $("#divwait").dialog("destroy");
+                 //$("#divwait").dialog("destroy");
              }
         });
 
  };
 
 $.fn.gridqueue.getGridConfig= function(obj){
-      obj.appgrid({app: obj.attr("app"),
+
+//Si está adentro de un tab, establece el tab actual
+//Pasa el control al tab del grid para cálculo de ancho
+//Devuelve el control al tab anterior
+
+/*
+ *                $('#tabUser').tabs( "select", "#tabFavoritos");  
+                
+ **/
+    var restaura=false;
+    var parentId= obj.parent()[0].id;
+    var tabIndex = $("#tabs").tabs('option', 'selected');
+    
+    if (obj.parent().width()==0 && parentId.indexOf("tabMisFavoritos")>-1) {
+         restaura=true;
+         $("#tabs").tabs('select',0); 
+         $('#tabUser').tabs( "select", "#tabFavoritos");
+         $('#tabMisFavoritos').tabs( "select", "#tabMisFavoritos_"+nClave);
+    }
+    
+    obj.appgrid({app: obj.attr("app"),
           entidad: obj.attr("form"),
           wsParameters: obj.attr("wsParameters"),
           titulo:obj.attr("titulo"),
@@ -41,8 +61,15 @@ $.fn.gridqueue.getGridConfig= function(obj){
           showFilterLink:false,
           inQueue:true,
           insertInDesktopEnabled:0,
-          editingApp:"1"
+          editingApp:"1",
+          width:obj.parent().width()
      });
+     
+     if (restaura) {
+         $("#tabs").tabs('select',tabIndex); 
+         $('#tabUser').tabs( "select", "#tabPendientes");
+     }
+         
 
 }
 
