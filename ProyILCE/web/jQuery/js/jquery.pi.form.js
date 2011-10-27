@@ -611,7 +611,7 @@
             var nFormaForanea=$(this).find('foraneo').attr("clave_forma");
             var nEditaForaneos=$(this).find('foraneo').attr("agrega_registro");
             if (nFormaForanea!=undefined) {
-                sRenglon+='<td class="etiqueta_forma"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
+                sRenglon+='<td class="etiqueta_forma_control"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
                 if (bActivo!="1") 
                     sRenglon+=' disabled="disabled" ';
@@ -662,7 +662,7 @@
             }
             else {
                 if (oCampo.find('tipo_control').text()=="textarea" || sTipoCampo=="text") {
-                    sRenglon+='<td class="etiqueta_forma">' +
+                    sRenglon+='<td class="etiqueta_forma_control">' +
                     '<textarea tabindex="' + tabIndex + '" rows="10" ';
                 
                     if (bActivo!="1") 
@@ -698,7 +698,7 @@
                     sRenglon+='</textarea></td>|';
                 }
                 else if ($(this).find('tipo_control').text()=="checkbox" || sTipoCampo=="bit") {
-                    sRenglon += '<td class="etiqueta_forma">' +
+                    sRenglon += '<td class="etiqueta_forma_control">' +
                     '<div style="width:10px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
                     '" id="'+ oCampo[0].nodeName+ '" name="' + oCampo[0].nodeName + '" ';
 
@@ -721,7 +721,7 @@
                     sRenglon+=' /></div></td>|';
                 }
                 else {
-                    sRenglon += '<td class="etiqueta_forma">' + 
+                    sRenglon += '<td class="etiqueta_forma_control">' + 
                     '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '"' +
                     'tabindex="' + tabIndex + '" ';
 

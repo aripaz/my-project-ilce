@@ -33,6 +33,51 @@
             });
 
             $( ".column" ).disableSelection();
+            
+            $('#tabUser').tabs({
+            tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+            });
+
+            
+            $("#tabFavoritos").html("<div id='tabMisFavoritos'><ul><li><a href='#tabMisFavoritos1'>Mis favoritos</a></li></ul><div id='tabMisFavoritos1'></div></div>");
+
+            $('#tabMisFavoritos').tabs({
+            tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+            });
+            
+            $( "#tabMisFavoritos span.ui-icon-close" ).live( "click", function() {
+                    var index = $( "li", $("#tabMisFavoritos")).index( $( this ).parent() );
+                    var nPK=$("#tabMisFavoritos").children()[index+1].id.split("_")[1];
+                    $("#divwait")
+                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Eliminando grid favorito del usuario</p>")
+                    .attr('title','Eliminando favorito...') 
+                    .dialog({
+                            height: 140,
+                            modal: true,
+                            autoOpen: true,
+                            closeOnEscape:false
+                    });
+                    
+                    $.ajax(
+                    {
+                        url: "srvFormaDelete?$cf=1&$pk="+ nPK,
+                        dataType: "text",
+                        success:  function(data){
+                            $("#tabMisFavoritos").tabs( "remove", index );
+                            $("#divwait").dialog( "close" )
+                            $("#divwait").dialog("destroy");                            
+                        },
+                        error:function(xhr,err){
+                            alert("Error al eliminar registro");
+                            $("#divwait").dialog( "close" )
+                            $("#divwait").dialog("destroy");                            
+
+                        }
+                    });
+            });
+
+            $("#tabMisFavoritos").tabs( "remove", 0);
+            
              $.fn.desktop.ajax(obj);
 
 
@@ -80,6 +125,7 @@
             }
 
             if(sParametro==='escritorio.grid') {
+                nClave=$(this).find("clave_parametro").text().split("\n")[0]
                 sValor=$(this).find("valor").text().split("\n")[0];
                 nApp=sValor.split(",")[0].split(":")[1];
                 nForm=sValor.split(",")[1].split(":")[1];
@@ -88,7 +134,11 @@
                 leyendas=sValor.split(",")[4].split(":")[1].replace("/",",");
                 openKardex=sValor.split(",")[5].split(":")[1];
                 inDesktop=sValor.split(",")[6].split(":")[1];
-                obj.append("<div class='queued_grids'" + 
+                
+
+                $('#tabMisFavoritos').tabs( "add", "#tabMisFavoritos_"+nClave, titulo);
+
+                $("#tabMisFavoritos_"+nClave).append("<div class='queued_grids'" + 
                                      " id='divDesktopGrid_" + nApp + "_" + nForm + "' " +
                                      " app='" + nApp + "' " + 
                                      " form='" + nForm + "' " +
@@ -97,11 +147,9 @@
                                      " leyendas='" +leyendas+ "' "  + 
                                      " openKardex='" + openKardex + "' " + 
                                      " inDesktop='" + inDesktop + "' " +
-                                     " class='queued_grids'," +
-                                     " editingApp='1',"+
-                                     " insertInDesktopEnabled='0'></div>"+
-                                     "<div class='desktopGridContainer' ><br>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></div><br>"
-                                 );
+                                     " class='queued_grids' " +
+                                     " editingApp='1' "+
+                                     " insertInDesktopEnabled='0'></div>");
             }
 
         })

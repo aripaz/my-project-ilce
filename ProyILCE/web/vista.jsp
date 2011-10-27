@@ -68,7 +68,18 @@
         </div>
 
         <div class="menus_plataforma">
-            <div id="app_menu" style="float:left"> </div>
+            <div id="app_menu" style="float:left">
+                <div>
+                    <a href='#' id='menu_inicio' >Inicio</a>
+                    <a href='#' id='menu_aplicaciones' >Aplicaciones</a>
+                    <a href='#' id='menu_splitter' >&nbsp;</a>
+                    <a href='#' id='menu_mapa' >Mapa del sitio</a>
+                    <a href='#' id='menu_contacto' >Contacto</a>
+                </div>
+                <ul id="apps">
+                </ul>    
+            </div>
+            &nbsp;&nbsp;<input id='txtBusquedaGlobal' type='text' />
             <!-- 
             <ul>
                 <li><a href="#" id="lnkConfiguracionX">Configuraci&oacute;n</a></li>
@@ -81,50 +92,53 @@
         <div id="tabcontainer">
             <div id="tabs">
                 <ul>
-                    <li><a href="#tabUser">Escritorio</a></li>
+                    <li><a href="#tabInicio">Inicio</a></li>
                 </ul>
-                <div id="tabUser">
-
-                <div class="column1 ui-sortable">
-                        <div id='notification_1_101_0' class='notification'></div>
-                        <div id="grid_1_101_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Mis pendientes" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" ></div>
-                        <div class="blank_space">&nbsp;</div>
-                        <div id='notification_1_103_0' class='notification'></div>
-                        <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Pendientes que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
-                        <div class="blank_space">&nbsp;</div>
-                        <div id='favoritos' class='notification'>(No hay listados registrados)</div>
-                </div>
-                <div class="column2 ui-sortable">
-                    <div class="portlet">
-                        <div class="portlet-header">Avisos</div>
-                        <div class="portlet-content">
-                            <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
+                <div id="tabInicio">
+                    <div id="tabUser">    
+                        <ul>
+                            <li><a href="#tabPendientes">Pendientes</a></li>
+                            <li><a href="#tabFavoritos">Favoritos</a></li>
+                        </ul>
+                        <div id="tabPendientes">
+                            <div id="grid_1_101_0" class="queued_grids" app="1" form="101" wsParameters="" titulo="Mis pendientes" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" ></div>
+                            <div class="blank_space">&nbsp;</div>
+                            <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Pendientes que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
                         </div>
+                        <div id="tabFavoritos">
+                        </div>                    
                     </div>
-                    <div class="portlet">
-                        <div class="portlet-header">Recursos</div>
-                        <div class="portlet-content">
-                            <p>En esta sección encontrarás recursos de propósito general
-                            <ul>
-                                <li>Base de conocimiento
-                                    <ul>
-                                        <li><a href="#" onclick="alert('Por implementar');">Vistazo general a la plataforma</a></li>
-                                        <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de promoción</a></li>
-                                        <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de proyectos</a></li>
-                                    </ul>
-                                </li>
-                                <li>Foros</li>
+                    <div class="column ui-sortable">
+                        <div class="portlet">
+                            <div class="portlet-header">Avisos</div>
+                            <div class="portlet-content">
+                                <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
+                            </div>
+                        </div>
+                        <div class="portlet">
+                            <div class="portlet-header">Recursos</div>
+                            <div class="portlet-content">
+                                <p>En esta sección encontrarás recursos de propósito general
                                 <ul>
-                                    <li><a href="#" onclick="alert('Por implementar');">General</a></li>
-                                    <li><a href="#" onclick="alert('Por implementar');">Módulo de promoción</a></li>
-                                    <li><a href="#" onclick="alert('Por implementar');">Módulo de proyectos</a></li> 
-                                </ul> 
-                            </ul>
-                            </p>
+                                    <li>Base de conocimiento
+                                        <ul>
+                                            <li><a href="#" onclick="alert('Por implementar');">Vistazo general a la plataforma</a></li>
+                                            <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de promoción</a></li>
+                                            <li><a href="#" onclick="alert('Por implementar');">Manual del módulo de proyectos</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>Foros</li>
+                                    <ul>
+                                        <li><a href="#" onclick="alert('Por implementar');">General</a></li>
+                                        <li><a href="#" onclick="alert('Por implementar');">Módulo de promoción</a></li>
+                                        <li><a href="#" onclick="alert('Por implementar');">Módulo de proyectos</a></li> 
+                                    </ul> 
+                                </ul>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+</div>
                 </div>
-            </div>
         </div>
     </div>
     <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
