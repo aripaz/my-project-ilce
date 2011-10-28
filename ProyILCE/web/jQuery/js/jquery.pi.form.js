@@ -213,23 +213,6 @@
                 //Se genera el HTML de la forma general
                 $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
                 
-                //Programación de los eventos de validación de tipos
-                $(".integer").blur(function() {
-                    check_number(this);
-                 });
-                
-                $(".date .datetime").blur(function() {
-                    check_date(this);
-                 });
-                 
-                //Programación de los eventos de validación de tipos
-                $(".integer").blur(function() {
-                   if (!IsNaN(this.val())) {
-                        alert('Valor inválido, se debe indicar un número, verifique.');
-                        this.val("");
-                        return false;
-                   }
-                 });
                 //Aplica el codigo proveniente del XML y que aplica en la forma
                 evento=$(xml).find('configuracion_forma').find('evento').text();
                 if (evento!="")
@@ -759,9 +742,12 @@
 
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
-                    
-                    //Incorpora el tipo de dato como un seudoclase
-                    sRenglon += " " +sTipoCampo;
+
+                    if (sTipoCampo=="datetime")
+                        sRenglon +=' fecha';
+
+                    if (sTipoCampo=="money")
+                        sRenglon +=' money';
 
                     if (oCampo.find('tipo_control').text()=="file" && $.fn.form.options.modo!="lookup")
                         sRenglon +=' file" type="' + oCampo.find('tipo_control').text() + '" value="';
@@ -774,6 +760,14 @@
                         sRenglon+=oCampo[0].childNodes[0].data;
                     
                     sRenglon+='" ';
+
+                    //Validación para inputs estandar de acuerdo al tipo de datos del campo
+                    if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {
+                        sRenglon+=" onBlur='javascript:check_number(this)'";
+                    }
+                    else if (sTipoCampo=="date") {
+                        sRenglon+=" onBlur='javascript:check_date(this)' "
+                    }
 
                     sRenglon+= ' />' + sWidgetButton + ' </td>|';
                 }
