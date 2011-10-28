@@ -26,8 +26,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 /**
- *  Clase para la implementacion de los metodos que se encargaran de transformar
- * los datos en el contenido de un archivo XML, segun la configuracion o la
+ * Clase para la implementación de los métodos que se encargaran de transformar
+ * los datos en el contenido de un archivo XML, según la configuración o la
  * estructura de los datos
  * @author ccatrilef
  */
@@ -76,7 +76,7 @@ public class AdminXML {
     }
 
     /**
-     * Obtiene el HashMap que contiene la data captura desde un formulario
+     * Obtiene el HashMap que contiene la data capturada desde un formulario
      * @return  HashMap     HashMap con datos del formulario
      */
     public HashMap getHsForm() {
@@ -144,7 +144,7 @@ public class AdminXML {
     }
 
     /**
-     * Metodo que permite obtener la data del usuario en el formato del
+     * Método que permite obtener la data del usuario en el formato del
      * archivo XML definido para la Session y debe completarse con los datos
      * obtenidos desde la Base de Datos
      * @param user  Bean con los datos del usuario que se va a buscar, debe
@@ -169,9 +169,9 @@ public class AdminXML {
 
     /**
      * Obtiene el menu en formato XML que le corresponde al usuario conectado
-     * segun su perfil
+     * según su perfil
      * @param user  Objeto User con los datos del usuariuo conectado
-     * @return  StringBuffer    XML con configuracion del Menu
+     * @return  StringBuffer    XML con configuración del Menu
      * @throws ExceptionHandler
      */
     public StringBuffer getMenuXML(User user, String[][] arrVariables) throws ExceptionHandler{
@@ -199,8 +199,8 @@ public class AdminXML {
     }
 
     /**
-     * Entrega los tab en formato XML que le corresponden segun el perfil entregado
-     * @param perfil    Objeto Perfil con los datos del perfil del usuariuo conectado
+     * Método que entrega los tab en formato XML que le corresponden según el perfil entregado
+     * @param perfil    Objeto Perfil con los datos del perfil del usuario conectado
      * @return      StringBuffer    XML con los TAB
      * @throws ExceptionHandler
      */
@@ -224,15 +224,15 @@ public class AdminXML {
 
     /**
      * Obtiene una grilla XML a partir de los datos entregados, se debe indicar
-     * la pagina que se desea mostrar, junto con el maximo de registros que se
-     * deben mostrar por pagina
+     * la pagina que se desea mostrar, junto con el máximo de registros que se
+     * deben mostrar por página
      * @param hsData   Data obtenida desde una query previa, debe contener los
      * datos y los campos que le corresponden
      * @param lstCampos Contiene el listado de campos de la forma utilizada, se
      * utiliza para completar los datos equivalentes que le corresponden a cada
      * campo de la columna
-     * @param page   Número de pagina que se desea mostrar del total de datos
-     * @param regByPage Numero de registros por pagina que se deben mostrar
+     * @param page   Número de página que se desea mostrar del total de datos
+     * @param regByPage Número de registros por página que se deben mostrar
      * @return  StringBuffer    XML con los datos para la Grilla
      * @throws ExceptionHandler
      */
@@ -261,6 +261,15 @@ public class AdminXML {
             str.append(("<page>"+page+"</page>\n"));
             str.append(("<total>"+total+"</total>\n"));
             str.append(("<records>"+reg+"</records>\n"));
+
+            CampoForma cmpForma = (CampoForma) lstCampos.get(0);
+            Integer idForma = cmpForma.getClaveForma();
+            StringBuffer strForma = new StringBuffer();
+            strForma.append("<configuracion_grid>\n");
+            strForma.append(getEventoForma(idForma));
+            strForma.append("</configuracion_grid>\n");
+            str.append(strForma);
+
             str.append("<column_definition>\n");
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
@@ -357,6 +366,14 @@ public class AdminXML {
 
             int reg = hsDat.size();
             str.append("<rows>\n");
+
+            CampoForma cmpForma = (CampoForma) lstCampos.get(0);
+            Integer idForma = cmpForma.getClaveForma();
+            StringBuffer strForma = new StringBuffer();
+            strForma.append("<configuracion_grid>\n");
+            strForma.append(getEventoForma(idForma));
+            strForma.append("</configuracion_grid>\n");
+            str.append(strForma);
             str.append("<column_definition>\n");
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
@@ -413,8 +430,8 @@ public class AdminXML {
     }
 
     /**
-     * Entrega un XML en base a la Forma indicada y con los datos que se le
-     * entregan
+     * Método que entrega un XML en base a la Forma indicada y con los datos que
+     * se le entregan
      * @param hsData    Data entregada
      * @param lstCampos Listado de campos de la Forma
      * @param idForma   ID de la Forma entregada
@@ -613,9 +630,9 @@ public class AdminXML {
     }
 
     /**
-     * Entrega un XML en base a la Forma indicada y con la estructura de los 
+     * Metodo que entrega un XML en base a la Forma indicada y con la estructura de los
      * datos, pero sin datos
-     * @param hsData    Data para la generacion del XML
+     * @param hsData    Data para la generación del XML
      * @param lstCampos     Listado de Campos a considerar desde la Data
      * @param idForma   ID de la Forma utilizada
      * @return  StringBuffer    XML de la Forma, pero sin data
@@ -803,12 +820,12 @@ public class AdminXML {
     }
 
     /**
-     * Obtiene las formas foraneas con una estructura tipo html. Se revisa el arreglo de variables
-     * para revisar si existe la instruccion que gatille su inclusion en el XML. El texto tiene
-     * una estructura del tipo HTML.
+     * Obtiene las formas foraneas con una estructura tipo html. Se revisa el 
+     * arreglo de variables para revisar si existe la instrucción que gatille
+     * su inclusión en el XML. El texto tiene una estructura del tipo HTML.
      * @param claveForma    Clave de la forma analizada
      * @param arrVariables  Arreglo con las variables capturadas
-     * @return
+     * @return  StringBuffer    Texto con la configuración
      * @throws ExceptionHandler
      */
     private StringBuffer getFormasForaneas(Integer claveForma, String[][] arrVariables) throws ExceptionHandler{
@@ -890,9 +907,9 @@ public class AdminXML {
     }
 
     /**
-     * Trae la seccion de XML asociada al Evento de una Forma
+     * Método que trae la sección de XML asociada al Evento de una Forma
      * @param claveForma    Clave de la forma a buscar
-     * @return  StringBuffer    Seccion de XML con los datos de Evento
+     * @return  StringBuffer    Sección de XML con los datos de Evento
      * @throws ExceptionHandler
      */
     private StringBuffer getEventoForma(Integer claveForma) throws ExceptionHandler{
@@ -953,12 +970,12 @@ public class AdminXML {
     }
 
     /**
-     * Metodo que permite crear la seccion de un XML a partir de la forma que
+     * Método que permite crear la sección de un XML a partir de la forma que
      * se esta entregando en la data
      * @param strData   Data de entrada que se usara en la query
-     * @param strRegistro   Nombre del registro desde donde se invoco el metodo
-     * @return  StringBuffer    Seccion de XML asociado a la forma, usado en la
-     * construccion de los Datos foraneos
+     * @param strRegistro   Nombre del registro desde donde se invoco el método
+     * @return  StringBuffer    Sección de XML asociado a la forma, usado en la
+     * construcción de los Datos foraneos
      * @throws ExceptionHandler
      */
     private StringBuffer getXmlByIdForma(String[] strData, String strRegistro, String[][] arrVariables)
@@ -1041,7 +1058,7 @@ public class AdminXML {
 
     /**
      * Obtiene los datos de un campo, obtenidos desde la forma que se le entrega
-     * @param lstData   Listado con la configuracion de la forma
+     * @param lstData   Listado con la configuración de la forma
      * @param nombreCampo   Campo que se esta buscando desde la forma
      * @return  CampoForma  Datos del CampoForma
      * @throws ExceptionHandler
@@ -1104,13 +1121,13 @@ public class AdminXML {
     }
 
     /**
-     * Recorre un archivo XML y va reemplazando los datos del XML por el que le
-     * corresponde segun el resultado de la query entregada en el objeto hsCmp.
+     * Metodo que recorre un archivo XML y va reemplazando los datos del XML por el que le
+     * corresponde según el resultado de la query entregada en el objeto hsCmp.
      * Se utiliza cuando es un registro unico.
      * @param e     Nodo de inicio de la lectura de datos
      * @param level     Nivel en que se encuentra la lectura
      * @param hsCmp     Conjunto de datos que seran analizados
-     * @return  StringBuffer    Seccion de XML obtenido
+     * @return  StringBuffer    Sección de XML obtenido
      * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp) throws ExceptionHandler{
@@ -1174,14 +1191,14 @@ public class AdminXML {
     }
 
     /**
-     * Recorre un archivo XML y va reemplazando los datos del XML por el que le
-     * corresponde segun el resultado de la query entregada en el objeto hsCmp.
-     * Se utiliza cuando son mas de un registro, su llamado es recursivo.
+     * Método que recorre un archivo XML y va reemplazando los datos del XML por el que le
+     * corresponde según el resultado de la query entregada en el objeto hsCmp.
+     * Se utiliza cuando son más de un registro, su llamado es recursivo.
      * @param e     Nodo de inicio de la lectura de datos
      * @param level     Nivel en que se encuentra la lectura
      * @param hsCmp     Conjunto de datos que seran analizados
-     * @param register  Numero del registor en que se vera la lectura
-     * @return  StringBuffer    Seccion de XML Obtenido
+     * @param register  Número del registro en que se vera la lectura
+     * @return  StringBuffer    Sección de XML Obtenido
      * @throws ExceptionHandler
      */
     private StringBuffer listNode(Node e, int level, HashCampo hsCmp, int register)
@@ -1246,7 +1263,7 @@ public class AdminXML {
     }
 
     /**
-     * Metodo para entregar las respuestas en un formato de XML
+     * Método para entregar las respuestas en un formato de XML
      * @param data  Data de la respuesta
      * @return  String  XML con la respuesta
      */
@@ -1261,10 +1278,10 @@ public class AdminXML {
     }
 
     /**
-     * Metodo para entregar las respuestas de la operacion y la bitacora
+     * Método para entregar las respuestas de la operacion y la bitácora
      * en un formato XML
      * @param data  Data de la respuesta
-     * @param idBitacora    ID de la bitacora
+     * @param idBitacora    ID de la bitácora
      * @return  String  XML con la respuesta
      */
     public String salidaXMLBitacora(String data, String idBitacora){
@@ -1279,7 +1296,7 @@ public class AdminXML {
     }
 
     /**
-     * Reemplaza los caracteres con acento y ñ, por sus codificacion HTML respectiva
+     * Metodo que reemplaza los caracteres con acento y ñ, por su codificación HTML respectiva
      * @param data  String de datos donde se buscaran los caracteres especiales
      * @return  String  String con los acentos reemplazados
      * @throws ExceptionHandler
@@ -1334,9 +1351,9 @@ public class AdminXML {
     }
 
     /**
-     * Metodo para reemplazar los acentos que viene en configuracion HTML por
+     * Método para reemplazar los acentos que viene en configuracion HTML por
      * el texto correspondiente
-     * @param data  String que sera recorrido para la revison de loa acentos
+     * @param data  String que sera recorrido para la revisión de loa acentos
      * @return  String  String con los acentos reemplazados
      * @throws ExceptionHandler
      */
@@ -1390,10 +1407,10 @@ public class AdminXML {
     }
 
     /**
-     * Transforma el texto del tipo en Java a el tipo que le corresponde en
+     * Método que transforma el texto del tipo en Java a el tipo que le corresponde en
      * el XML
      * @param strData   String que sera analizado
-     * @return  String  String con la conversion del tipo de dato
+     * @return  String  String con la conversión del tipo de dato
      */
     private String castTypeJavaToXML(String strData){
         String strSld = "";
@@ -1414,7 +1431,7 @@ public class AdminXML {
     }
 
      /**
-     * Al entregarse un texto con la palabra NULL, entrega un ""
+     * Método que al recibbir un texto con la palabra NULL, o con valor null entrega un ""
      * @param strData   Texto a analizar
      * @return  String  String con el resultado del analisis
      */
