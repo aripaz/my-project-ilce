@@ -94,7 +94,7 @@ var i;
 /*-------*/
 
 function check_number(field,nRangoMenor,nRangoMayor) {
-var numberField = parseInt(field.value);
+var numberField = field.value;// parseInt(field.value);
 
   if (isNaN(numberField)&&field.value!=='') {
     alert('Valor inválido, se debe indicar un número, verifique.');

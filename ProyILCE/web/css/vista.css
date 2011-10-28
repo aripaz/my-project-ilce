@@ -10,14 +10,20 @@ form.forma {font-size: 1em !important; width: 100%; margin:5px; }
 table.forma { width: 100%; margin:0px;}
 form.forma { width: 100%; margin:5px;}
 h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
-td.etiqueta_forma {width: 24.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
-td.etiqueta_forma_control {margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma1 {width: 24.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma_control1 {width: 75.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+
+td.etiqueta_forma2 {width: 15%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma_control2 {width: 35%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+
 div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
 input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
 textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; float: left;  }
 select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
-input.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 88%}
-select.inputWidgeted { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 82%; float: left; font-size: 12px; height:18px !important}
+input.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 88%}
+select.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 94%; float: left; font-size: 12px; height:18px !important}
+input.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 88%}
+select.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 83%; float: left; font-size: 12px; height:18px !important}
 .foreign_toolbar { float:right }
 
 #header{height:32px; background-color: #BDD2FF}/* Header */
