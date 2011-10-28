@@ -21,7 +21,7 @@ input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, 
 textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; float: left;  }
 select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 100%; }
 input.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 88%}
-select.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 94%; float: left; font-size: 12px; height:18px !important}
+select.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 92%; float: left; font-size: 12px; height:18px !important}
 input.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 88%}
 select.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 83%; float: left; font-size: 12px; height:18px !important}
 .foreign_toolbar { float:right }
