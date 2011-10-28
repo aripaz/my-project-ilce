@@ -374,7 +374,7 @@
                 })
                 .navButtonAdd('#grid'+ suffix+'_toppager',{
                     caption:"",
-                    buttonicon:"ui-icon-document",
+                    buttonicon:"ui-icon-newwin",
                     onClickButton:  function() {
                         var nApp=this.id.split("_")[1];
                         var nForm=this.id.split("_")[2];
@@ -405,7 +405,8 @@
                         view:false
                     })
                     .navButtonAdd('#grid'+ suffix+'_toppager',{
-                        caption:"Insertar en escritorio",
+                        caption:"",
+                        buttonicon:"ui-icon-heart",
                         onClickButton:  function() {
                             nApp=this.id.split("_")[1];
                             nForma=this.id.split("_")[2];
@@ -472,7 +473,7 @@
                             
                         },
                         position: "last",
-                        title:"",
+                        title:"Insertar en favoritos    ",
                         cursor: "pointer"
                     });
 
@@ -570,7 +571,7 @@
                     $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
                 return true;    
                 }
-      }      
+       }      
        
        var oColumnas=$(xml).find("column_definition");
         $.fn.appgrid.options.sortname=oColumnas.children()[0];

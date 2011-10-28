@@ -306,7 +306,8 @@
                         if ($("#showEntity_" + nAplicacion + "_" + nForma).length>0)
                             $("#showEntity_" + nAplicacion + "_" + nForma).trigger("click",data);
                         else {
-                            aGridIdSuffix=$("#divForeignGrids_"+sDivSuffix).children()[0].id.split("_");
+                            //hace la búsqueda del grid de acuerdo a la posicion relativa del objeto actual
+                            aGridIdSuffix=$(this).parent().parent().parent().parent().parent().next().next().children()[0].children[0].id.split("_");
                             $.fn.appmenu.setGridFilter(aGridIdSuffix[2]+"_"+aGridIdSuffix[3]+"_"+aGridIdSuffix[4],nAplicacion,nForma,data);
                         }
                     });                    

@@ -65,7 +65,7 @@
         else {
             sTituloTab="Seleccione los criterios de b&uacute;queda";
             sButtonCaption='Buscar'
-            sBusqueda = "<tr><td class='etiqueta_forma' style='width:50%'>Guardar filtro como: </td><td class='etiqueta_forma'><input name='$b' id='$b' value='' class='singleInput' /></td></tr>";
+            sBusqueda = "<tr><td class='etiqueta_forma1' style='width:50%'>Guardar filtro como: </td><td class='etiqueta_forma1'><input name='$b' id='$b' value='' class='singleInput' /></td></tr>";
         }
 
         sUlTabs+="<ul><li><a href='#divFormGeneral_" + formSuffix +"'>"+ sTituloTab + "</a></li>";
@@ -213,6 +213,23 @@
                 //Se genera el HTML de la forma general
                 $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
                 
+                //Programación de los eventos de validación de tipos
+                $(".integer").blur(function() {
+                    check_number(this);
+                 });
+                
+                $(".date .datetime").blur(function() {
+                    check_date(this);
+                 });
+                 
+                //Programación de los eventos de validación de tipos
+                $(".integer").blur(function() {
+                   if (!IsNaN(this.val())) {
+                        alert('Valor inválido, se debe indicar un número, verifique.');
+                        this.val("");
+                        return false;
+                   }
+                 });
                 //Aplica el codigo proveniente del XML y que aplica en la forma
                 evento=$(xml).find('configuracion_forma').find('evento').text();
                 if (evento!="")
@@ -231,7 +248,7 @@
                 var oForm=$("#form_" + formSuffix);
 
                 //Se asigna evento a botón de guardar
-                $("#btnGuardar_"+ formSuffix).click(function() {
+                $("#btnGuardar_"+ formSuffix).button().click(function() {
                     nApp=this.id.split("_")[1];
                     nForma=this.id.split("_")[2];
                     nPK=this.id.split("_")[3];
@@ -586,7 +603,7 @@
             if (bDatoSensible=="1" && !bVDS) return true;
 
             sRenglon += '<td id="td_' +oCampo[0].nodeName + '" ';
-            sRenglon += ' class="etiqueta_forma' 
+            sRenglon += ' class="etiqueta_forma1' 
             if (bVisible=='0')
                 sRenglon +=' invisible';
                 
@@ -611,13 +628,13 @@
             var nFormaForanea=$(this).find('foraneo').attr("clave_forma");
             var nEditaForaneos=$(this).find('foraneo').attr("agrega_registro");
             if (nFormaForanea!=undefined) {
-                sRenglon+='<td class="etiqueta_forma_control"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
+                sRenglon+='<td class="etiqueta_forma_control1"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
                 if (bActivo!="1") 
                     sRenglon+=' disabled="disabled" ';
                  
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
-                    sRenglon+='class="inputWidgeted'
+                    sRenglon+='class="inputWidgeted1'
                 }
                 else {
                     sRenglon+='class="singleInput'
@@ -662,7 +679,7 @@
             }
             else {
                 if (oCampo.find('tipo_control').text()=="textarea" || sTipoCampo=="text") {
-                    sRenglon+='<td class="etiqueta_forma_control">' +
+                    sRenglon+='<td class="etiqueta_forma_control1">' +
                     '<textarea tabindex="' + tabIndex + '" rows="10" ';
                 
                     if (bActivo!="1") 
@@ -671,11 +688,11 @@
                     sWidgetButton="";
 
                     if (sTipoCampo=='money') {
-                        sRenglon+='class="inputWidgeted';
+                        sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calculator_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                         sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
                     } else if (sTipoCampo=='datetime') {
-                        sRenglon+='class="inputWidgeted';
+                        sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calendar_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                     }
                     else
@@ -698,7 +715,7 @@
                     sRenglon+='</textarea></td>|';
                 }
                 else if ($(this).find('tipo_control').text()=="checkbox" || sTipoCampo=="bit") {
-                    sRenglon += '<td class="etiqueta_forma_control">' +
+                    sRenglon += '<td class="etiqueta_forma_control1">' +
                     '<div style="width:10px; margin: 0px; padding: 0px"><input type="checkbox" value="1" tabindex="' + tabIndex +
                     '" id="'+ oCampo[0].nodeName+ '" name="' + oCampo[0].nodeName + '" ';
 
@@ -721,7 +738,7 @@
                     sRenglon+=' /></div></td>|';
                 }
                 else {
-                    sRenglon += '<td class="etiqueta_forma_control">' + 
+                    sRenglon += '<td class="etiqueta_forma_control1">' + 
                     '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '"' +
                     'tabindex="' + tabIndex + '" ';
 
@@ -731,10 +748,10 @@
                     sWidgetButton="";
 
                     if (sTipoCampo=='money') {
-                        sRenglon+='class="inputWidgeted';
+                        sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calculator_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                     } else if (sTipoCampo=='datetime') {
-                        sRenglon+='class="inputWidgeted';
+                        sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calendar_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                     }
                     else
@@ -742,12 +759,9 @@
 
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
-
-                    if (sTipoCampo=="datetime")
-                        sRenglon +=' fecha';
-
-                    if (sTipoCampo=="money")
-                        sRenglon +=' money';
+                    
+                    //Incorpora el tipo de dato como un seudoclase
+                    sRenglon += " " +sTipoCampo;
 
                     if (oCampo.find('tipo_control').text()=="file" && $.fn.form.options.modo!="lookup")
                         sRenglon +=' file" type="' + oCampo.find('tipo_control').text() + '" value="';
@@ -760,14 +774,6 @@
                         sRenglon+=oCampo[0].childNodes[0].data;
                     
                     sRenglon+='" ';
-
-                    //Validación para inputs estandar de acuerdo al tipo de datos del campo
-                    if (sTipoCampo=="integer" /*|| sTipoCampo=="money"*/) {
-                        sRenglon+=" onBlur='javascript:check_number(this)'";
-                    }
-                    else if (sTipoCampo=="date") {
-                        sRenglon+=" onBlur='javascript:check_date(this)' "
-                    }
 
                     sRenglon+= ' />' + sWidgetButton + ' </td>|';
                 }
@@ -799,16 +805,16 @@
         for (i=0; i<nRows; i++) {
             sForm+="<tr >";
 
-            sForm+=aRows[i];
+            sForm+=aRows[i].replace(/etiqueta_forma_control1/g,"etiqueta_forma_control"+nCols).replace(/etiqueta_forma1/g,"etiqueta_forma"+nCols).replace(/inputWidgeted1/g,"inputWidgeted"+nCols);
             if (aRows.length>nRows+i && nCols>1) {
-                    sForm+="<td>&nbsp;</td>"+aRows[nRows+i];
+                    sForm+="<td>&nbsp;</td>"+aRows[nRows+i].replace(/etiqueta_forma_control1/g,"etiqueta_forma_control"+nCols).replace(/etiqueta_forma1/g,"etiqueta_forma"+nCols).replace(/inputWidgeted1/g,"inputWidgeted"+nCols);
             }
             sForm+="</tr>";
         }
 
         if (nCols>1) {
            for (i=0; i<aRowsWithTextAreas.length; i++) {
-                sForm+="<tr >"+aRowsWithTextAreas[i].replace('class="etiqueta_forma_control"','class="etiqueta_forma_control" colspan="4"')+"</tr>";
+                sForm+="<tr >"+aRowsWithTextAreas[i].replace(/class="etiqueta_forma_control1"/g,'class="etiqueta_forma_control'+nCols+'" colspan="4"').replace(/etiqueta_forma1/g,"etiqueta_forma"+nCols).replace(/inputWidgeted1/g,"inputWidgeted"+nCols)+"</tr>";
             }
         }
         //Llena la primer pestaña con la forma de la entidad principal
