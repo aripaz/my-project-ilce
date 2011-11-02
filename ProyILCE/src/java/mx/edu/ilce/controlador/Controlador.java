@@ -56,7 +56,7 @@ String sNextAction="";
                                usuario.setClave(nUsuario);
                                
                                request.getSession().setAttribute("usuario", usuario);
-                                request.getRequestDispatcher("/vista_.jsp").forward(request, response);
+                               request.getRequestDispatcher("/vista_.jsp").forward(request, response);
                             } else {
                                 request.getSession().setAttribute("mensaje", "Usuario y/o password incorrecto, verifique");
                                 request.getRequestDispatcher("/login_.jsp").forward(request, response);
