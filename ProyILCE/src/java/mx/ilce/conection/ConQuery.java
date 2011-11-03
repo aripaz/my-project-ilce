@@ -1577,6 +1577,15 @@ class ConQuery {
                     sld = rs.getString(codigo.intValue());
                 }else if(strType.toUpperCase().equals("INT") ){
                     sld = String.valueOf(rs.getBigDecimal(codigo.intValue()));
+                }else if(strType.toUpperCase().equals("SMALLDATETIME") ){
+                    Date date = rs.getDate(codigo.intValue());
+                    if (date!=null){
+                        UtilDate utDate = new UtilDate(date);
+                        sld = utDate.getFecha("/");
+                        this.setHourMinSec("");
+                    }else{
+                        sld = "";
+                    }
                 }else if(strType.toUpperCase().equals("DATETIME") ){
                     Date date = rs.getDate(codigo.intValue());
                     if (date!=null){
@@ -1619,6 +1628,8 @@ class ConQuery {
                 sld = "java.lang.String";
             }else if(strType.toUpperCase().equals("INT") ){
                 sld = "java.lang.Integer";
+            }else if(strType.toUpperCase().equals("SMALLDATETIME") ){
+                sld = "java.sql.Date";
             }else if(strType.toUpperCase().equals("DATETIME") ){
                 sld = "java.sql.Date";
             }else if(strType.toUpperCase().equals("BIT") ){
