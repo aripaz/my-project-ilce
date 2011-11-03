@@ -26,6 +26,9 @@
         <!-- Cookie for splitter -->
         <script type="text/javascript"  src="jQuery/js/jquery.cookie.js" ></script>
         
+        <!--Datetime picker -->
+        <script src="jQuery/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+        
         <!-- Calculator -->
         <script type="text/javascript" src="jQuery/js/jquery.calculator.min.js" ></script>
         <script type="text/javascript" src="jQuery/js/jquery.calculator-es.js" ></script>
@@ -56,6 +59,7 @@
         <script src="jQuery/js/jquery.pi.appmenu.js" type="text/javascript"></script>
         <script src="jQuery/js/vista.js" type="text/javascript"></script>
         
+        
     </head>
     <body>
         <script type="text/javascript"
@@ -74,6 +78,7 @@
                     <a href='#' id='menu_aplicaciones' >Aplicaciones</a>
                     <a href='#' id='menu_splitter' >&nbsp;</a>
                     <a href='#' id='menu_mapa' >Mapa del sitio</a>
+                    <a href='#' id='menu_ayuda' >Ayuda</a>
                     <a href='#' id='menu_contacto' >Contacto</a>
                 </div>
                 <ul id="apps">
@@ -93,6 +98,10 @@
             <div id="tabs">
                 <ul>
                     <li><a href="#tabInicio">Inicio</a></li>
+                    <li><a href="#tabAplicaciones">Aplicaciones</a></li>
+                    <li><a href="#tabMapaDelSitio">Mapa del sitio</a></li>
+                    <li><a href="#tabAyuda">Ayuda</a></li>
+                    <li><a href="#tabContacto">Contacto</a></li>
                 </ul>
                 <div id="tabInicio">
                     <div id="tabUser">    
@@ -137,8 +146,18 @@
                                 </p>
                             </div>
                         </div>
-</div>
+                    </div>
                 </div>
+                <div id="tabAplicaciones">
+                </div>
+                <div id="tabMapaDelSitio">
+                </div>
+                <div id="tabAyuda">
+                </div>
+                <div id="tabContacto">
+                </div>
+                <div id="tabBusqueda">
+                </div>                 
         </div>
     </div>
     <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
