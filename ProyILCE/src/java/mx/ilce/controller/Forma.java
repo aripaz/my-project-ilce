@@ -1099,6 +1099,7 @@ public class Forma extends Entidad{
                             xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),
                                     this.getTipoAccion(), this.getArrVariables());
                         }else{
+                            admXML.setIncludeHour(true);
                             xmlForma = admXML.getFormaByData(hsCmp,lstF,this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }
@@ -1190,6 +1191,7 @@ public class Forma extends Entidad{
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF,this.getClaveForma(), 
                                     this.getTipoAccion(), this.getArrVariables());
                         }else{
+                            admXML.setIncludeHour(true);
                             xmlForma = admXML.getFormaByData(hsCmp, lstF,this.getClaveForma(), 
                                     this.getTipoAccion(), this.getArrVariables());
                         }
@@ -1308,7 +1310,8 @@ public class Forma extends Entidad{
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }else{
-                            admXML.setIncludeHour(this.isIncludeHour());
+                            //admXML.setIncludeHour(this.isIncludeHour());
+                            admXML.setIncludeHour(true);
                             xmlForma = admXML.getFormaByData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }
