@@ -82,15 +82,21 @@
                                 .click(function() {
                                     alert("Por implementar");
                                 })       
-                                .next() // menu_contacto 
+                                .next() // menu_ayuda 
                                     .button()
                                     .click(function() {
                                         alert("Por implementar");
-                                    }).parent()
-					.buttonset()
-                                        .next().
-                                            hide().
-                                            menu();
+                                    })
+                                    .next() // menu_contacto 
+                                    .button()
+                                    .click(function() {
+                                        alert("Por implementar");
+                                    })
+                                    .parent()
+				    .buttonset()
+                                    .next().
+                                        hide().
+                                        menu();
                    
                 
                  /*Captura el evento clic para los links*/

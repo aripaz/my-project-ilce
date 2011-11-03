@@ -415,6 +415,20 @@
                     dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
                     monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
                 });
+                
+                $(".fechayhora").datetimepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                    timeOnlyTitle: 'Seleccione hora',
+                    timeText: 'Hora seleccionada',
+                    hourText: 'Hora',
+                    minuteText: 'Minutos',
+                    secondText: 'Segundos',
+                    currentText: 'Ahora',
+                    closeText: 'Cerrar'
+                });
+                
 
                 $(".money").calculator({
                     useThemeRoller: true,
@@ -743,7 +757,9 @@
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
 
-                    if (sTipoCampo=="datetime")
+                    if (sTipoCampo=="datetime" && $(this).find('tipo_control').text()=="datetimepicker" )
+                        sRenglon +=' fechayhora';
+                    else if (sTipoCampo=="datetime")
                         sRenglon +=' fecha';
 
                     if (sTipoCampo=="money")

@@ -32,6 +32,7 @@
             originatingObject:"",
             callFormWithRelationships:false,
             updateTreeAfterPost:false,
+            logPhrase:"",
             error:""
         };
 
@@ -87,7 +88,7 @@
 
                 if ($.fn.appgrid.options.error!="") {       
                     obj.html("<div class='ui-widget'>"+
-                    "<div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
+                    "<br><br><br><br><br><br><br><br><br><br><br><div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
                     "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
                     $.fn.appgrid.options.error+"</p>"+
                     "</div></div>");
@@ -178,7 +179,7 @@
                                 pk:0,
                                 filtroForaneo:"",
                                 height:400,
-                                width:800,
+                                width:"80%",
                                 originatingObject:oGrid.id,
                                 updateControl:""
                             });
@@ -233,7 +234,7 @@
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                 height:400,
-                                width:800,
+                                width:"80%",
                                 originatingObject:oGrid.id,
                                 showRelationships:$(this).attr("callFormWithRelationships"),
                                 updateControl:sUpdateControl
@@ -277,7 +278,7 @@
                                     pk:nPK,
                                     filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
                                     height:"500",
-                                    width:"800",
+                                    width:"80%",
                                     originatingObject: $(this).id,
                                     showRelationships:$(this).attr("callFormWithRelationships"),
                                     updateControl:sUpdateControl
@@ -365,7 +366,7 @@
                     title:"Filtrar",
                     cursor: "pointer"
                 });
-
+                
                 oGrid.navGrid('#grid'+ suffix+'_toppager',{
                     edit:false,
                     add:false,
@@ -392,7 +393,7 @@
                     title:"Abrir kardex",
                     cursor: "pointer"
                 });
-
+                
                 //Remueve del dom el loader
                 $("#loader"+ suffix).remove();
                 if ($.fn.appgrid.options.insertInDesktopEnabled=="1")
@@ -473,7 +474,7 @@
                             
                         },
                         position: "last",
-                        title:"Insertar en favoritos    ",
+                        title:"Insertar en favoritos",
                         cursor: "pointer"
                     });
 
@@ -527,7 +528,7 @@
 
                 //Remueve el botón de kardex si no está especificado en el constructor
                 if (oGrid.attr("openKardex")!="true")
-                    $(".ui-icon-document", $("#grid"+ suffix+"_toppager_left")).remove()
+                    $(".ui-icon-newwin", $("#grid"+ suffix+"_toppager_left")).remove()
 
                 //Verifica si el grid está en una cola
                 if ($.fn.appgrid.options.inQueue)
@@ -572,6 +573,19 @@
                 return true;    
                 }
        }      
+       
+       //Titulo del grid
+       $.fn.appgrid.options.titulo=$(xml).find("configuracion_grid").find("forma").text();
+       
+       //Titulo de forma de alta y de edición
+       if ($(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[0]=="el")
+           nuevo="Nuevo ";
+       else
+           nuevo="Nueva ";
+       
+       $.fn.appgrid.options.leyendas[0]=nuevo+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
+       $.fn.appgrid.options.leyendas[1]="Edición de "+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
+       $.fn.appgrid.options.logPhrase=$(xml).find("configuracion_grid").find("alias_tab").text();
        
        var oColumnas=$(xml).find("column_definition");
         $.fn.appgrid.options.sortname=oColumnas.children()[0];
@@ -652,7 +666,14 @@
                 "       </div>"+                
                 "   </div>"+
                 "   <div id='rigthPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp+"' class='rigthPane'>"+
-                "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridKardexContainer'></div>" +
+                "       <div id='divForeignGrids_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='gridKardexContainer'>" +
+                "               <br><br><br><br><br><br><br><br><br><br><br>"+
+                "               <div class='ui-widget mensaje-info' >" +
+                "                  <div class='ui-state-highlight ui-corner-all' style='padding: 0 .7em;'>" +
+                "                        <p ><span class='ui-icon ui-icon-info' style='float: left; margin-right: .3em;'></span><strong>En este espacio se muestran los catálogos relacionados a " + $.fn.appgrid.options.logPhrase + " '" + oGrid.getCell(nRow,1) + "', seleccione una carpeta del menú de la izquierda</strong></p>"+
+                "                        </div>" + 
+                "                  </div>"  + 
+                "        </div>" +
                 "   </div>"+
                 "</div>"+
                 "</div>");
