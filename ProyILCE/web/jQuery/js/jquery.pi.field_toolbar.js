@@ -65,8 +65,8 @@
                                 titulo: $(this).attr("titulo_agregar"),
                                 columnas:1,
                                 pk: 0,
-                                height:"500",
-                                width:"500",
+                                height:400,
+                                width:"80%",
                                 updateControl:suffix,
                                 updateForeignForm:$(this).attr("forma"),
                                 originatingObject:$(this).id
@@ -88,8 +88,8 @@
                                 titulo: $(this).attr("titulo_editar"),
                                 columnas:1,
                                 pk: nPK,
-                                height:"500",
-                                width:"500",
+                                height:400,
+                                width:"80%",
                                 updateControl:suffix,
                                 updateForeignForm:$(this).attr("forma"),
                                 originatingObject:$(this).id
