@@ -119,7 +119,7 @@
                 });
 
                 $( "#tabMisApps span.ui-icon-close" ).live( "click", function() {
-                    var index = $( "li", $tabs ).index( $( this ).parent() );
+                    var index = $( "li", $tabMisApps ).index( $( this ).parent() );
                     $tabMisApps .tabs( "remove", index );
                 });
                 
