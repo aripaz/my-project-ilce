@@ -16,7 +16,7 @@ import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
      
 /**
- *  Clase para la implementacion de los metodos usados para el manejo de Perfil
+ *  Clase para la implementación de los métodos usados para el manejo de Perfil
  * @author ccatrilef
  */
 public class Perfil extends Entidad{
@@ -29,7 +29,7 @@ public class Perfil extends Entidad{
     private User user;
 
     /**
-     * Obtencion del user
+     * Obtiene el objeto User
      * @return  User    Objeto User
      */
     public User getUser() {
@@ -37,7 +37,7 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Asignacion del user
+     * Asigna el objeto User
      * @param user  Objeto User
      */
     public void setUser(User user) {
@@ -45,7 +45,7 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Obtiene el objeto bitacora
+     * Obtiene el objeto Bitacora
      * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
@@ -53,7 +53,7 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Asigna el objeto bitacora
+     * Asigna el objeto Bitacora
      * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
@@ -125,13 +125,14 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Constructor Basico
+     * Constructor básico
      */
     public Perfil() {
     }
 
     /**
-     * Asigna un Object
+     * Asigna un Object al campo Data. Usado para situaciones en que no esta
+     * definidos los metodos para un tipo de dato
      * @param data  Objeto que se va a asignar
      */
     public Perfil(Object data) {
@@ -139,61 +140,61 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler ingresarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler editarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler eliminarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Entidad mostrarForma() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Entidad mostrarResultado() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Entidad ingresarBusquedaSencilla() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Entidad ingresarBusquedaAvanzada() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * Metodo para obtener los datos del usuario a partir de los datos de
-     * conexion Usuario y Password. En caso de existir problemas se obtiene
+     * Método para obtener los datos del usuario a partir de los datos de
+     * conexión Usuario y Password. En caso de existir problemas se obtiene
      * el texto con la causa
-     * @param user      Texto de identificacion del usuario
+     * @param user      Texto de identificación del usuario
      * @param password  Texto con la password del usuario
-     * @return  LoginHandler    Resultado de la operacion
+     * @return  LoginHandler    Resultado de la operación
      * @throws ExceptionHandler
      */
     public LoginHandler login(String user, String password) throws ExceptionHandler{
@@ -209,6 +210,7 @@ public class Perfil extends Entidad{
                 lg.setIsLogin(true);
                 //completar los datos del perfil
                 Perfil perf = con.getPerfil(usr, this.getArrVariables());
+
                 perf.setBitacora(this.getBitacora());
 
                 this.clavePerfil = perf.getClavePerfil();
@@ -223,19 +225,23 @@ public class Perfil extends Entidad{
                 lg.setTextExecution(usr.getMessage());
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
-        }finally{
-            
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para efectuar el Login");
+            eh.setDataToXML("User", user);
+            eh.setDataToXML("Password", password);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lg;
     }
 
     /**
-     * Metodo para obtener los datos del usuario a partir de los datos de
-     * conexion contenidos en el Bean User. En caso de existir problemas se
+     * Método para obtener los datos del usuario a partir de los datos de
+     * conexión contenidos en el Bean User. En caso de existir problemas se
      * obtiene el texto con la causa
      * @param usuario   Objeto User con los datos del usuario
-     * @return  LoginHandler    Resultado de la operacion
+     * @return  LoginHandler    Resultado de la operación
      * @throws ExceptionHandler
      */
     public LoginHandler login(User usuario) throws ExceptionHandler {
@@ -270,63 +276,84 @@ public class Perfil extends Entidad{
                 lg.setTextExecution(usr.getMessage());
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Login");
-        }finally{
-
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para efectuar el Login");
+            eh.setDataToXML(usuario);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lg;
     }
 
     /**
-     * Metodo utilizado para el registro de un nuevo usuario
-     * @return  ExecutionHandler    Resultado de la operacion
+     * Método utilizado para el registro de un nuevo usuario
+     * @return  ExecutionHandler    Resultado de la operación
      * @throws ExceptionHandler
      */
     public ExecutionHandler registrarUsuario() throws ExceptionHandler{
         ExecutionHandler sld = new ExecutionHandler();
-        ConSession con = new ConSession();
-        con.setBitacora(this.getBitacora());
+        try{
+            ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
 
-        User newUser = con.insertUser(this.getUser());
-        sld.setTextExecution(newUser.getMessage());
+            User newUser = con.insertUser(this.getUser());
+            sld.setTextExecution(newUser.getMessage());
 
-        if (newUser.getClaveEmpleado()==null){
-            sld.setExecutionOK(false);
-        }else{
-            sld.setExecutionOK(true);
+            if (newUser.getClaveEmpleado()==null){
+                sld.setExecutionOK(false);
+            }else{
+                sld.setExecutionOK(true);
+            }
+            sld.setObjectData(newUser);
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para registrar al usuario");
+            eh.setDataToXML(this.getUser());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
-        sld.setObjectData(newUser);
         return sld;
     }
 
     /**
-     * Metodo utilizado para la recuperacion de la password del usuario
-     * @return  ExecutionHandler    Resultado de la operacion
+     * Método utilizado para la recuperación de la password del usuario
+     * @return  ExecutionHandler    Resultado de la operación
      * @throws ExceptionHandler
      */
     public ExecutionHandler enviarPasswordPerdido() throws ExceptionHandler {
         ExecutionHandler sld = new ExecutionHandler();
-        ConSession con = new ConSession();
-        con.setBitacora(this.getBitacora());
+        try{
+            ConSession con = new ConSession();
+            con.setBitacora(this.getBitacora());
 
-        DataTransfer dataTransfer = new DataTransfer();
-        dataTransfer.setDataObject(this.getUser());
-        
-        User newUser = con.getUserByMail(dataTransfer);
-        sld.setTextExecution(newUser.getMessage());
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setDataObject(this.getUser());
 
-        if (newUser.getClaveEmpleado()==null){
-            sld.setExecutionOK(false);
-        }else{
-            sld.setExecutionOK(true);
+            User newUser = con.getUserByMail(dataTransfer);
+            sld.setTextExecution(newUser.getMessage());
+
+            if (newUser.getClaveEmpleado()==null){
+                sld.setExecutionOK(false);
+            }else{
+                sld.setExecutionOK(true);
+            }
+            sld.setObjectData(newUser);
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para enviar la password al usuario");
+            eh.setDataToXML(this.getUser());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
-        sld.setObjectData(newUser);
         return sld;
     }
 
 
     /**
-     * Metodo para registrar en base de datos el logout de un usuario
+     * Método para registrar en base de datos el logout de un usuario
      * @throws ExceptionHandler
      */
     public void cerrarSession() throws ExceptionHandler{
@@ -341,13 +368,17 @@ public class Perfil extends Entidad{
                 admBit.logout();
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para efectuar el Logout");
-        }finally{
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para efectuar el Logout");
+            eh.setDataToXML(this.getUser());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public List obtenerVisitas() {
 
@@ -355,8 +386,8 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Obtiene el Listado de areas de la aplicacion
-     * @return  List    Listado con las areas
+     * Obtiene el Listado de áreas de la aplicación
+     * @return  List    Listado con las áreas
      * @throws ExceptionHandler
      */
     public List getListArea() throws ExceptionHandler{
@@ -385,7 +416,7 @@ public class Perfil extends Entidad{
                 }
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para buscar las areas");
+            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener las áreas");
         }finally{
 
         }
@@ -393,8 +424,8 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Metodo que indica si un mail ya esta registrado o no
-     * @return  Boolean     Resultado de la validacion
+     * Método que indica si un mail ya esta registrado o no
+     * @return  Boolean     Resultado de la validación
      * @throws ExceptionHandler
      */
     public boolean existUser() throws ExceptionHandler{
@@ -415,12 +446,30 @@ public class Perfil extends Entidad{
             if (!hs.isEmpty()){
                 sld = true;
             }
-
         } catch (ExceptionHandler ex) {
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para buscar si existe el usuario");
-        }finally{
-
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para buscar si existe el usuario");
+            eh.setDataToXML(this.getUser());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return sld;
+    }
+
+    /**
+     * Método que convierte a String el contenido del objeto nPerfil
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "\nPerfil{"
+                + ((clavePerfil!=null)?"\n\tclavePerfil=" + clavePerfil:"")
+                + ((perfil!=null)?"\n\tperfil=" + perfil:"")
+                + ((lstAplicacion!=null)?"\n\tlstAplicacion=" + lstAplicacion.toString() :"")
+                + ((arrVariables!=null)?"\n\tarrVariables=" + arrVariables:"")
+                + ((bitacora!=null)?"\n\tbitacora=" + bitacora.toString():"")
+                + ((user!=null)?"\n\tuser=" + user.toString():"")
+                + "\n}";
     }
 }
