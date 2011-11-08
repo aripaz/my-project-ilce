@@ -7,7 +7,7 @@ import mx.ilce.util.UtilDate;
 
 
 /**
- * Clase implementada para manejar el control de Log de la aplicacion
+ * Clase implementada para manejar el control de Log de la aplicación
  * @author ccatrilef
  */
 public class LogHandler {
@@ -37,8 +37,8 @@ public class LogHandler {
     }
 
     /**
-     * Entrega el valor de validacion de si se debe o no registrar el Select
-     * @return  Boolean     Valor TRUE O FALSE de validacion
+     * Entrega el valor de validación de si se debe o no registrar el Select
+     * @return  Boolean     Valor TRUE O FALSE de validación
      */
     public boolean isBoolSelect() {
         return boolSelect;
@@ -53,7 +53,7 @@ public class LogHandler {
     }
 
     /**
-     * Constructor basico de la clase, inicializa las variables Time y DateFile
+     * Constructor básico de la clase, inicializa las variables Time y DateFile
      */
     public LogHandler() {
         UtilDate ut = new UtilDate();
@@ -67,7 +67,7 @@ public class LogHandler {
      * @param rutaFile      Ruta donde se dejara el archivo
      * @param textMessage   Texto del mensaje
      * @param textData      Data adicional para el mensaje
-     * @return Boolean      Valor con el resultado de la operacion
+     * @return Boolean      Valor con el resultado de la operación
      */
     public boolean logData(String rutaFile,StringBuffer textMessage, StringBuffer textData){
         boolean sld =false;
@@ -105,7 +105,7 @@ public class LogHandler {
     }
 
     /**
-     * Metodo para guardar los warning
+     * Método para guardar los warning
      * @param rutaFile
      * @param textMessage
      * @param textData
@@ -204,7 +204,7 @@ public class LogHandler {
 
     /**
      * Ejecuta la escritura del archivo de Log con los datos contenidos en el Objeto
-     * @return  Boolean     Valor con la validacion del resultado de la operacion
+     * @return  Boolean     Valor con la validación del resultado de la operación
      */
     private boolean writeToFile(){
         boolean sld = true;
@@ -235,10 +235,11 @@ public class LogHandler {
     }
 
     /**
-     * Metodo que escribe en un archivo el contenido del LOG. De ser exitosa la
-     * operacion entrega un TRUE, sino un FALSE
+     * Método que escribe en un archivo el contenido del LOG, agregando un texto
+     * adicional al nombre del archivo para diferenciarlo. De ser exitosa la
+     * operación entrega un TRUE, sino un FALSE
      * @param oper
-     * @return  Boolean     Valor de validacion con el resultado de la operacion
+     * @return  Boolean     Valor de validación con el resultado de la operación
      */
     private boolean writeToFile(String oper){
         boolean sld = true;
@@ -271,10 +272,10 @@ public class LogHandler {
 
     /**
      * Escribe el archivo de Log con la data entregada y el nombre señalado.
-     * De ser exitosa la operacion entrega un TRUE, sino un FALSE
+     * De ser exitosa la operación entrega un TRUE, sino un FALSE
      * @param strEntrada    Data a escribir en el archvio
      * @param nameFile      Nombre que debera poseer el archivo
-     * @return  Boolean     Valor de validacion con el resultado de la operacion
+     * @return  Boolean     Valor de validación con el resultado de la operación
      * @throws IOException
      */
     private boolean guardarArchivo(StringBuffer strEntrada, String nameFile) throws IOException{

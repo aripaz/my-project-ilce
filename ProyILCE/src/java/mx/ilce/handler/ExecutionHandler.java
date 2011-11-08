@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- *  Clase implementada para manejar la ejecucion de la aplicacion. Posee diversos
- * metodos que facilitan el traslado de mensajes y datos
+ * Clase implementada para manejar la ejecución de la aplicación. Posee diversos
+ * métodos que facilitan el traslado de mensajes y datos
  * @author ccatrilef
  */
 public class ExecutionHandler implements Serializable{
@@ -19,7 +19,7 @@ public class ExecutionHandler implements Serializable{
     private Object objectData;
 
     /**
-     * Constructor Basico, se inicializan las variables del objeto
+     * Constructor básico, se inicializan las variables del objeto
      */
     public ExecutionHandler() {
         this.idExecution = new BigDecimal(0);
@@ -61,78 +61,79 @@ public class ExecutionHandler implements Serializable{
     }
 
     /**
-     * Indica si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
-     * @return  Boolean     Valor TRUE O FALSE de la validacion
+     * Indica si la ejecución se realizo de manera correcta (TRUE) o no (FALSE)
+     * @return  Boolean     Valor TRUE O FALSE de la validación
      */
     public boolean isExecutionOK() {
         return executionOK;
     }
 
     /**
-     * Asigna si la ejecucion se realizo de manera correcta (TRUE) o no (FALSE)
-     * @param executionOK   Valor TRUE O FALSE de la validacion
+     * Asigna si la ejecución se realizo de manera correcta (TRUE) o no (FALSE)
+     * @param executionOK   Valor TRUE O FALSE de la validación
      */
     public void setExecutionOK(boolean executionOK) {
         this.executionOK = executionOK;
     }
 
     /**
-     * Obtiene el ID de la execucion
-     * @return  BigDecimal  ID de la ejecucion
+     * Obtiene el ID de la ejecución
+     * @return  BigDecimal  ID de la ejecución
      */
     public BigDecimal getIdExecution() {
         return idExecution;
     }
 
     /**
-     * Asigna el ID de la ejecucion
-     * @param idExecution   ID de la Ejecucion
+     * Asigna el ID de la ejecución
+     * @param idExecution   ID de la Ejecución
      */
     public void setIdExecution(BigDecimal idExecution) {
         this.idExecution = idExecution;
     }
 
     /**
-     * Obtiene el texto de respuesta de la ejecucion
-     * @return  String  Texto de la ejecucion
+     * Obtiene el texto de respuesta de la ejecución
+     * @return  String  Texto de la ejecución
      */
     public String getTextExecution() {
         return textExecution;
     }
 
     /**
-     * Asigna el texto de respuesta de la ejecucion
-     * @param textExecution     Texto de la ejecucion
+     * Asigna el texto de respuesta de la ejecución
+     * @param textExecution     Texto de la ejecución
      */
     public void setTextExecution(String textExecution) {
         this.textExecution = textExecution;
     }
 
     /**
-     * Obtiene el titulo dado a la ejecucion
-     * @return  String      Titulo de la ejecucion
+     * Obtiene el título dado a la ejecución
+     * @return  String      Título de la ejecución
      */
     public String getTitleExecution() {
         return titleExecution;
     }
 
     /**
-     * Asigna el titulo dado a la ejecucion
-     * @param titleExecution    Titulo de la ejecucion
+     * Asigna el título dado a la ejecución
+     * @param titleExecution    Título de la ejecución
      */
     public void setTitleExecution(String titleExecution) {
         this.titleExecution = titleExecution;
     }
 
     /**
-     * Metodo que lleva a un formato String el contenido del objeto
+     * Método que lleva a un formato String el contenido del objeto
      */
     @Override
     public String toString() {
         return "ExecutionHandler{" 
-                + "idExecution=" + idExecution + " || "
-                + "titleExecution=" + titleExecution + " || "
-                + "textExecution=" + textExecution + " || "
-                + "executionOK=" + executionOK + '}';
+                + ((idExecution!=null)?"\nidExecution=" + idExecution:"")
+                + ((titleExecution!=null)?"\ntitleExecution=" + titleExecution :"")
+                + ((textExecution!=null)?"\ntextExecution=" + textExecution:"")
+                + "\nexecutionOK=" + executionOK
+                + "\n}\n";
     }    
 }
