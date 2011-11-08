@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mx.ilce.servlet.Login;
 
 import java.io.IOException;
@@ -15,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
+import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
@@ -22,13 +18,14 @@ import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
- *  Servlet utilizado para la recuperacion de password por el usuario
+ * Servlet utilizado para la recuperación de password por el usuario
  * @author ccatrilef
  */
 public class srvForgotPass extends HttpServlet {
    
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -40,7 +37,6 @@ public class srvForgotPass extends HttpServlet {
         PrintWriter out = response.getWriter();
         HashMap hsForm = null;
         Validation val = new Validation();
-        //String PagDispacher = "/forgotPass.jsp";
         String PagDispacher = "/index.jsp";
         try {
             AdminForm admForm = new AdminForm();
@@ -57,10 +53,14 @@ public class srvForgotPass extends HttpServlet {
                 user.setEmail(e_mail);
                 perfil.setUser(user);
 
+                AdminXML admXML = new AdminXML();
                 if (!perfil.existUser()){
-                    request.getSession().setAttribute("e_mail",e_mail);
-                    request.getSession().setAttribute("msgExist", "No Existe un usuario usando ese mail");
-                    request.getRequestDispatcher(PagDispacher).forward(request, response);
+                    //request.getSession().setAttribute("e_mail",e_mail);
+                    //request.getSession().setAttribute("msgExist", "No Existe un usuario usando ese mail");
+                    //request.getRequestDispatcher(PagDispacher).forward(request, response);
+                    request.getSession().setAttribute("xmlTab",
+                            admXML.salidaXMLResponse("El correo indicado no está registrado, verifique"));
+                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }else{
                     ExecutionHandler exeHn = perfil.enviarPasswordPerdido();
 
@@ -71,7 +71,7 @@ public class srvForgotPass extends HttpServlet {
                     String strSubject = "Recuperacion de password";
                     StringBuilder strMessage = new StringBuilder("");
                     
-                    strMessage.append("Se esta enviado el siguiente mail como solicitud de recuperacion");
+                    strMessage.append("Se esta enviado el siguiente mail como solicitud de recuperación");
                     strMessage.append(" recibido en nuestro sistema.\n");
                     strMessage.append("\nUsuario: ");
                     strMessage.append(e_mail);
@@ -94,6 +94,11 @@ public class srvForgotPass extends HttpServlet {
                 }
             }
         } catch (ExceptionHandler eh) {
+            AdminXML admXML = new AdminXML();
+            request.getSession().setAttribute("xmlTab",
+                        admXML.salidaXMLResponse("Se ha producido un error en el envío del correo de recuperación"));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+            /*
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                 LoginHandler lg = new LoginHandler();
                 lg.setTextExecution(eh.getTextMessage().toString());
@@ -104,18 +109,27 @@ public class srvForgotPass extends HttpServlet {
                 try{
                     val.executeErrorHandler(eh,request, response);
                 }catch (Exception es){
-                    val.setTextMessage("Problemas en la execucion del Error de srvForgotPass");
+                    val.setTextMessage("Problemas en la execución del Error de srvForgotPass");
                     val.executeErrorException(es, request, response);
                 }
-            }
+            }*/
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvForgotPass");
-            val.executeErrorException(e, request, response);
+            AdminXML admXML = new AdminXML();
+            request.getSession().setAttribute("xmlTab",
+                        admXML.salidaXMLResponse("Se ha producido un error en el envío del correo de recuperación"));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+            /*val.setTextMessage("Problemas en la execución de srvForgotPass");
+            val.executeErrorException(e, request, response);*/
         } finally {
             out.close();
         }
     }
 
+    /**
+     * Método para limpiar de memoria los datos asociados al mail. Nos asegura
+     * que ante una nueva invocación no se tomen datos de un mail anterior.
+     * @param request
+     */
     private void cleanMemory(HttpServletRequest request){
         request.getSession().removeAttribute("from");
         request.getSession().removeAttribute("to");
@@ -128,9 +142,8 @@ public class srvForgotPass extends HttpServlet {
         request.getSession().removeAttribute("msgExist");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -143,7 +156,7 @@ public class srvForgotPass extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -156,12 +169,12 @@ public class srvForgotPass extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet utilizado para la recuperación de password por el usuario";
+    }
 
 }
