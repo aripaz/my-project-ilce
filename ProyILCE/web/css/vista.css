@@ -379,6 +379,134 @@ a.session_menu {
     background: url("images/ui-bg_glass_50_3baae3_1x400.png") repeat-x scroll 50% 50% #3BAAE3;
 }
 
-.agile_carousel .numbered_button {
-    float:none !important;
+img.helpScreen {
+    /*border: #000000 !important;
+    border-width: 1px !important;
+    border-style:solid !important;*/
+}
+#divCarouselMisFavoritos .control_set_1 .ac_disabled {
+    background-image: url("../img/sprite_ac_disabled.png");
+}
+#divCarouselMisFavoritos .control_set_1 {
+    float: right;
+    margin: 4px 6px 0;
+    position: relative;
+}
+
+#divCarouselMisFavoritos .numbered_button {
+background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselMisFavoritos .control_set_2 {
+    float: right;
+    margin: 8px 0 0;
+    position: relative;
+}
+
+#divCarouselMisFavoritos .slide_button {
+    float: left;
+}
+
+#divCarouselMisFavoritos .previous_button {
+    background-position: 4px 3px;
+}
+
+#divCarouselMisFavoritos .next_button {
+    background-position: -44px 3px;
+}
+
+#divCarouselMisFavoritos .previous_next_button {
+    background-color: #FFFFFF;
+    background-image: url("../img/sprite_ac_normal.png");
+    border: 1px solid #CFCECE;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px #DFDFDF;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 1000px;
+    width: 16px;
+}
+#divCarouselMisFavoritos .numbered_button  {
+    background-color: transparent;
+    background-image: url("../img/sprite_ac_normal.png");
+    background-position: -95px 0;
+    color: #000000;
+    font-size: 12px;
+    height: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    padding: 0 2px;
+    text-indent: 1000px;
+    width: 10px;
+}
+.agile_carousel .ac_disabled {
+}
+
+.previous_button {
+}
+
+.slide_button {
+    background-position: 0 0 ;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    z-index: 5000;
+}
+
+#divCarouselMisAplicaciones .control_set_1 .ac_disabled {
+    background-image: url("../img/sprite_ac_disabled.png");
+}
+#divCarouselMisAplicaciones .control_set_1 {
+    float: right;
+    margin: 4px 6px 0;
+    position: relative;
+}
+
+#divCarouselMisAplicaciones .control_set_2 {
+    float: right;
+    margin: 8px 0 0;
+    position: relative;
+}
+
+#divCarouselMisAplicaciones .slide_button {
+    float: left;
+}
+
+#divCarouselMisAplicaciones .previous_button {
+    background-position: 4px 3px;
+}
+
+#divCarouselMisAplicaciones .next_button {
+    background-position: -44px 3px;
+}
+
+#divCarouselMisAplicaciones .numbered_button:hover, #divCarouselMisAplicaciones .numbered_button_container .ac_selected {
+    background-image: url("../img/sprite_ac_hover.png");
+}
+
+
+#divCarouselMisAplicaciones .previous_next_button {
+    background-color: #FFFFFF;
+    background-image: url("../img/sprite_ac_normal.png");
+    border: 1px solid #CFCECE;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px #DFDFDF;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 1000px;
+    width: 16px;
+}
+#divCarouselMisAplicaciones .numbered_button  {
+    background-color: transparent;
+    background-image: url("../img/sprite_ac_normal.png");
+    background-position: -95px 0;
+    color: #000000;
+    font-size: 12px;
+    height: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    padding: 0 2px;
+    text-indent: 1000px;
+    width: 10px;
 }
