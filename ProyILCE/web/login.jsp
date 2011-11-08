@@ -17,9 +17,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <link type="text/css" href="css/cupertino/jquery-ui-1.8.7.custom.css"  rel="stylesheet"/>
         <link type="text/css" href="css/vista.css" rel="stylesheet" />
+        <link type="text/css" href="css/agile_carousel.css" rel="stylesheet"/>
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
         <script type="text/javascript" src="jQuery/js/login.js"></script>
+        <script type="text/javascript" src="jQuery/js/agile_carousel.alpha.js"></script>
         <title>Iniciar sesión</title>
+        <style>
+            .agile_carousel .numbered_button {
+               float:none !important;
+            }
+        </style>
     </head>
 
     <body>
@@ -36,79 +43,83 @@
             </tr>
             <tr>
                 <td>
-                    <div id="divLogin">
-                        <form action="srvLogin" method="post" name="frmLogin" id="frmLogin">
+                    <div id="divCarousel">
+                        <div id="divLogin">
+                            <form action="srvLogin" method="post" name="frmLogin" id="frmLogin">
+                                <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
+                                    <tr>
+                                        <td width="48%" ><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
+                                        <td width="52%"><div align="right">
+                                                <input name="lgn" type="text" id="lgn" size="24" />
+                                            </div></td>
+                                    </tr>
+                                    <tr>
+                                        <td ><div id="contrasena" align="right" class="etiqueta_forma">Contrase&ntilde;a</div></td>
+                                        <td><div align="right">
+                                                <input name="psw" type="password" id="psw" size="24" />
+                                            </div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div align="right">
+                                            </div></td>
+                                        <td><div align="right">
+                                                <button id="iniciarsesion">Iniciar sesi&oacute;n</button>
+                                            </div></td>
+                                    </tr>
+                                    <!--<tr>
+                                        <td><div align="right">
+                                            </div></td>
+                                        <td><div align="right">
+                                                <a href="<%=request.getContextPath()%>/forgotPass.jsp" id="lnkRecuperaPwX" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
+                                            </div></td> 
+                                    </tr>-->
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="ui-widget" id="divMsgLogin">
+                                                <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                                                    <p id="msjLogin"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span><%=execHand.getTextExecution()%></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>                                
+                                </table>
+                            </form>
+                        </div>
+                        <div id="divLostPw">
+                            <form action="srvForgotPass" method="post" name="frmRecuperaPw" id="frmRecuperaPw">
                             <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
                                 <tr>
-                                    <td width="48%" ><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
+                                    <td width="48%"><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
                                     <td width="52%"><div align="right">
-                                            <input name="lgn" type="text" id="lgn" size="24" />
-                                        </div></td>
-                                </tr>
-                                <tr>
-                                    <td ><div id="contrasena" align="right" class="etiqueta_forma">Contrase&ntilde;a</div></td>
-                                    <td><div align="right">
-                                            <input name="psw" type="password" id="psw" size="24" />
-                                        </div></td>
-                                </tr>
-                                <tr>
-                                    <td><div align="right">
-                                        </div></td>
-                                    <td><div align="right">
-                                            <button id="iniciarsesion">Iniciar sesi&oacute;n</button>
-                                        </div></td>
-                                </tr>
-                                <tr>
-                                    <td><div align="right">
-                                        </div></td>
-                                    <td><div align="right">
-                                            <a href="<%=request.getContextPath()%>/forgotPass.jsp" id="lnkRecuperaPwX" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
+                                            <input name="rc" type="text" id="rc" size="24" />
                                         </div></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div class="ui-widget" id="divMsgLogin">
+                                        <div align="right">
+                                            <button id="btnRecuperarPw">Recuperar contrase&ntilde;a</button>
+                                        </div></td>
+                                </tr>
+                                <!--<tr>
+                                    <td>&nbsp;</td>
+                                    <td><div align="right"><a href="#" id="lnkIniciarSesion" name="lnkIniciarSesion" class="sesion_menu">Ir a iniciar sesi&oacute;n</a></div></td>
+                                </tr> -->
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="ui-widget" id="divMsjRecuperaPW">
                                             <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                                <p id="msjLogin"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span><%=execHand.getTextExecution()%></p>
+                                                <p id="msjRecuperaPW"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong></strong></p>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                             </table>
-                        </form>
-                    </div>
-                    <div id="divLostPw">
-                        <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
-                            <tr>
-                                <td width="48%"><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
-                                <td width="52%"><div align="right">
-                                        <input name="rc" type="text" id="rc" size="24" />
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div align="right">
-                                        <button id="btnRecuperarPw">Recuperar contrase&ntilde;a</button>
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td><div align="right"><a href="#" id="lnkIniciarSesion" name="lnkIniciarSesion" class="sesion_menu">Ir a iniciar sesi&oacute;n</a></div></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div class="ui-widget" id="divMsjRecuperaPW">
-                                        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                                            <p id="msjRecuperaPW"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong></strong></p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                            </form>
+                        </div>
                     </div>
                 </td>
             </tr>
         </table>
     </body>
 </html>
-<% execHand.setTextExecution(""); %>
+<% execHand.setTextExecution("");%>
