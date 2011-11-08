@@ -637,10 +637,11 @@
     $.fn.appgrid.openKardex = function(nApp, nEntidad,sDateStamp, id) {
         var suffix =  "_" + nApp + "_" + nEntidad +"_" + sDateStamp;
 
-        var $tabs = $('#tabs').tabs({
+        var $tabs = $('#tabMisApps').tabs({
             tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
         });
-
+        
+                
         //Verifica si ya está abierto el tab en modo de edición
         if ($("#tabEditEntity"+suffix + "_" + id).length) {
             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);

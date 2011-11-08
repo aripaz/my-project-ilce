@@ -79,8 +79,57 @@
                     });
             });
             
-            //Activa el carrousel de favoritos
-            id='ayudaAgregarAFavoritos'
+            //Selecciona temporalmente e tab favoritos para audar a calcular el tamaño del carrusel
+            $('#tabUser').tabs( "select", "#tabFavoritos" );
+
+            //Activa el carrousel de ayuda de favoritos
+            $("#divCarouselMisFavoritos").agile_carousel({
+                carousel_data: [{
+                                "content": $("#ayudaComoAgregarAFavoritos").html(),
+                                "content_button": ""
+                                }, {
+                                "content": $("#ayudaComoEliminarFavoritos").html(),
+                                "content_button": ""
+                                }],
+                carousel_outer_height: $("#divCarouselMisFavoritos").height(),
+                carousel_height: $("#divCarouselMisFavoritos").height(),
+                slide_height: $("#divCarouselMisFavoritos").height()+2,
+                carousel_outer_width: $("#divCarouselMisFavoritos").width(),
+                slide_width: $("#divCarouselMisFavoritos").width(), 
+                transition_time: 300,
+                continuous_scrolling: false,
+                control_set_1: "previous_button,next_button",
+                control_set_2: "numbered_buttons"
+            });
+            
+             $('#tabUser').tabs( "select", "#tabPendientes" );
+             
+             $("#tabs").tabs( "select", "#tabAplicaciones" );
+             //Activa el carrousel de ayuda de favoritos
+             $("#divCarouselMisAplicaciones").agile_carousel({
+                carousel_data: [{
+                                "content": $("#ayudaComoUsarMisAplicaciones").html(),
+                                "content_button": ""
+                                }, {
+                                "content": $("#ayudaComoAgregarUnRegistro").html(),
+                                "content_button": ""
+                                }, {
+                                "content": $("#ayudaComoEditarUnRegistro").html(),
+                                "content_button": ""
+                                }],
+                carousel_outer_height: $("#divCarouselMisAplicaciones").height(),
+                carousel_height: $("#divCarouselMisAplicaciones").height(),
+                slide_height: $("#divCarouselMisAplicaciones").height()+2,
+                carousel_outer_width: $("#divCarouselMisAplicaciones").width(),
+                slide_width: $("#divCarouselMisAplicaciones").width(), 
+                transition_time: 300,
+                continuous_scrolling: false,
+                number_slides_visible: 1,
+                control_set_1: "previous_button,next_button",
+                control_set_2: "numbered_buttons"
+            });   
+            
+             $("#tabs").tabs( "select", "#tabInicio" );
             //$("#tabMisFavoritos").tabs( "remove", 0);
             
              $.fn.desktop.ajax(obj);
