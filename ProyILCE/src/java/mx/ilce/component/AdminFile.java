@@ -12,8 +12,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mx.ilce.bean.CampoForma;
 import mx.ilce.bean.DataTransfer;
 import mx.ilce.bitacora.Bitacora;
@@ -21,7 +19,7 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- *  Clase implementada para la administracion de archivos de la aplicacion
+ * Clase implementada para la administración de archivos de la aplicación
  * @author ccatrilef
  */
 public class AdminFile {
@@ -173,7 +171,7 @@ public class AdminFile {
     }
 
     /**
-     * Asigna la ruta del Archivo
+     * Asigna la ruta del archivo
      * @param rutaFile  Ruta del archivo
      */
     public void setRutaFile(String rutaFile) {
@@ -213,7 +211,7 @@ public class AdminFile {
     }
 
     /**
-     * Lee la configuracion de la base de datos a utilizar presente en el
+     * Lee la configuración de la base de datos a utilizar presente en el
      * archivo ProyILCE.properties
      * @return  Properties  Properties obtenidas del archivo
      * @throws Exception
@@ -223,9 +221,10 @@ public class AdminFile {
 	InputStream is = null;
 	File f = null;
         File fichero = null;
+        URL url = null;
 	try {
             String separador = String.valueOf(File.separator);
-            URL url = AdminFile.class.getResource("AdminFile.class");
+            url = AdminFile.class.getResource("AdminFile.class");
 
             if(url.getProtocol().equals("file")) {
 		f = new File(url.toURI());
@@ -239,11 +238,21 @@ public class AdminFile {
                 prop.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,AdminFile.class,
-                    "Problemas para leer el archivo de configuracion");
+            ExceptionHandler eh = new ExceptionHandler(u,AdminFile.class,
+                             "Problemas para leer el archivo de configuración");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,
-                    "Problemas para leer el archivo de configuracion");
+            ExceptionHandler eh = new ExceptionHandler(e,AdminFile.class,
+                             "Problemas para leer el archivo de configuración");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }finally{
             try{
                 if (is != null){
@@ -251,15 +260,15 @@ public class AdminFile {
                 }
             }catch (Exception e){
                 throw new ExceptionHandler(e,AdminFile.class,
-                        "Problemas para cerrar el archivo de configuracion");
+                        "Problemas para cerrar el archivo de configuración");
             }
         }
 	return prop;
     }
 
     /**
-     * Lee el archivo de properties que contiene los ID de query configurados
-     * @return  Properties  Properties con los ID de queries obtenidos
+     * Lee el archivo de properties que contiene los ID de queries configuradas
+     * @return  Properties  Properties con los ID de queries obtenidas
      * @throws Exception
      */
     public static Properties leerIdQuery() throws ExceptionHandler{
@@ -267,9 +276,10 @@ public class AdminFile {
 	InputStream is = null;
 	File f = null;
         File fichero = null;
+        URL url = null;
 	try {
             String separador = String.valueOf(File.separator);
-            URL url = AdminFile.class.getResource("AdminFile.class");
+            url = AdminFile.class.getResource("AdminFile.class");
 
             if(url.getProtocol().equals("file")) {
 		f = new File(url.toURI());
@@ -283,16 +293,29 @@ public class AdminFile {
                 prop.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de Queries");
+            ExceptionHandler eh = new ExceptionHandler(u,AdminFile.class,
+                                        "Problemas para leer el archivo de Queries");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de Queries");
+            ExceptionHandler eh = new ExceptionHandler(e,AdminFile.class,
+                                        "Problemas para leer el archivo de Queries");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	}finally{
             try {
                 if (is != null){
                     is.close();
                 }
             }catch (Exception e){
-                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de Queries");
+                throw new ExceptionHandler(e,AdminFile.class,
+                        "Problemas para cerrar el archivo de Queries");
             }
         }
 	return prop;
@@ -314,15 +337,20 @@ public class AdminFile {
                 sld = prop.getProperty(key);
             }
 	}catch(Exception e){
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener la llave desde el properties");
+            ExceptionHandler eh = new ExceptionHandler(e,AdminFile.class,
+                                        "Problemas para obtener la llave desde el properties");
+            eh.setDataToXML("KEY",key);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	}
         return sld;
     }
 
     /**
-     * Entrega el id de la query que le corresponde segun el archivo de
-     * configuracion.
-     * @param prop  Listado de properties obtenido desde el archivo de configuracion
+     * Entrega el id de la query que le corresponde según el archivo de
+     * configuración.
+     * @param prop  Listado de properties obtenido desde el archivo de configuración
      * @param key   Palabra usada como Key para la busqueda dentro del propertie
      * @return  Integer     ID de la query en el listado de Properties
      */
@@ -336,17 +364,22 @@ public class AdminFile {
             }
             sld = Integer.valueOf(str);
 	}catch(Exception e){
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para obtener el ID de la Query");
+            ExceptionHandler eh = new ExceptionHandler(e,AdminFile.class,
+                                        "Problemas para obtener el ID de la Query");
+            eh.setDataToXML("KEY",key);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	}
         return sld;
     }
 
     /**
      * Borra un archivo desde el servidor. Antes de borrar el archivo, se valida
-     * que la ruta que se entrega corresponda con el de la configuracion, destinada
+     * que la ruta que se entrega corresponda con el de la configuración, destinada
      * a los archivos enviados por el usuario
      * @param hsFile    HashMap con los datos del archivo
-     * @return  boolean     Resultado de la operacion de borrado del archivo temporal
+     * @return  boolean     Resultado de la operación de borrado del archivo temporal
      */
     public static boolean deleFileFromServer(HashMap hsFile) throws ExceptionHandler{
         boolean isOK = false;
@@ -370,15 +403,20 @@ public class AdminFile {
                 }
             }
         } catch (Exception ex) {
-            throw new ExceptionHandler(ex,AdminFile.class,"Problemas para borrar los archivos desde el Server");
+            ExceptionHandler eh = new ExceptionHandler(ex,AdminFile.class,
+                                        "Problemas para borrar los archivos desde el Server");
+            eh.setDataToXML(hsFile);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return isOK;
     }
 
     /**
-     * Metodo para invocar la copia del archivo subido al directorio Temporal
+     * Método para invocar la copia del archivo subido al directorio Temporal
      * hasta el repositorio de archivos
-     * @return  Boolean     Resultado de la operacion de copia
+     * @return  Boolean     Resultado de la operación de copia
      * @throws ExceptionHandler
      */
     public boolean putFile() throws ExceptionHandler{
@@ -433,18 +471,16 @@ public class AdminFile {
                         this.setNameFile(nameSld);
                         sld = true;
                     }
-                } catch (IOException ex) {
-                    ex.fillInStackTrace();
-                }
+                } catch (IOException ex) {}
             }
         }
         return sld;
     }
 
     /**
-     * Metodo que efectua la copia de un archivo desde una ruta de Origen a
+     * Método que efectua la copia de un archivo desde una ruta de Origen a
      * una de Destino
-     * @return  Boolean     Resultado de la operacion de copia
+     * @return  Boolean     Resultado de la operación de copia
      * @throws IOException
      */
     private boolean copiarArchivo() throws IOException{
@@ -452,17 +488,18 @@ public class AdminFile {
         FileInputStream in = null;
         FileOutputStream out = null;
         File srcDir = null;
+        String source = null;
+        String dest = null;
         try{
-            String source = null;
-            String dest = null;
             //asignamos la ruta del usuario
             dest = this.getRutaDest();
+            source = this.getRutaFile();
             srcDir = new File(dest);
             //crear directorio si no existe
             if (!srcDir.exists()) {
                 srcDir.mkdir();
             }
-            source = this.getRutaFile();
+
             dest = dest + File.separator + this.getNameFile();
 
             //copiar archivo subido a destino
@@ -475,7 +512,17 @@ public class AdminFile {
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            ExceptionHandler eh = new ExceptionHandler(e,AdminFile.class,
+                                        "Problemas al copiar el archivo");
+            eh.setDataToXML("ORIGEN",source);
+            eh.setDataToXML("DESTINO",dest);
+            eh.setDataToXML("ARCHIVO",this.getNameFile());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            try {
+                throw eh;
+            } catch (ExceptionHandler ex) {
+            }
         }finally{
             if (in!=null){
                 in.close();
@@ -488,7 +535,7 @@ public class AdminFile {
     }
 
     /**
-     * Metodo que registra en la base de datos, el ingreso de un archivo en el
+     * Método que registra en la base de datos, el ingreso de un archivo en el
      * repositorio
      * @return  Integer     ID del registro del archivo
      * @throws ExceptionHandler

@@ -23,7 +23,7 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.UtilDate;
 
 /**
- * Clase implementada para lograr control de la recuperacion de formularios
+ * Clase implementada para lograr control de la recuperación de formularios
  * desde la capa Vista
  * @author ccatrilef
  */
@@ -32,18 +32,18 @@ public class AdminForm {
     private static File WORKING_DIRECTORY;
 
     /**
-     * Entrega un HashMap que contiene los datos de un formulario, separados en
-     * dos Hash: Datos (FORM) y Archivos (FILES) y dos ArrayList: con los nombres
-     * de los campos del formulario (arrayFORM) y uno con los nombres de los
-     * campos de archivo (arrayFILE). Para poder recuperar los Archivos se
-     * requiere que el contentType del Form sea "multipart/form-data", sino es
-     * de este tipo, no se envia el Hash de archivos y el campo correspondiente
-     * al archivo se incluye dentro del Hash de FORM. La estructura de cada hash
-     * contiene el nombre del campo como clave y el dato obtenido del formulario,
-     * ambos en formato String. Cuando se envia el contentType correcto y existe
-     * el archivo, se deja una copia del mismo, con un nombre nuevo en el servidor,
-     * asociado al campo archivo, va el nuevo nombre y su ruta con que quedo en
-     * el servidor.
+     * Método que entrega un HashMap que contiene los datos de un formulario,
+     * separados en dos Hash: Datos (FORM) y Archivos (FILES) y dos
+     * ArrayList: con los nombres de los campos del formulario (arrayFORM) y
+     * uno con los nombres de los campos de archivo (arrayFILE). Para poder
+     * recuperar los Archivos se requiere que el contentType del Form sea
+     * "multipart/form-data", sino es de este tipo, no se envia el Hash de
+     * archivos y el campo correspondiente al archivo se incluye dentro del
+     * Hash de FORM. La estructura de cada hash contiene el nombre del campo
+     * como clave y el dato obtenido del formulario, ambos en formato String.
+     * Cuando se envia el contentType correcto y existe el archivo, se deja
+     * una copia del mismo, con un nombre nuevo en el servidor, asociado al
+     * campo archivo, va el nuevo nombre y su ruta con que quedo en el servidor.
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return  HashMap     Contiene los datos de las variables encontradas
      * @throws ExceptionHandler
@@ -52,26 +52,30 @@ public class AdminForm {
         HashMap hs = null;
         try{
             String contentType = request.getContentType();
-            if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0))
-            {
+            if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0)){
                 hs = getFormularioMultiPart(request);
             }else if ((contentType != null) && (contentType.indexOf("application/x-www-form-urlencoded") >= 0)){
-                //otro(request);
                 hs = getFormularioWwwForm(request);
             }else{
                 hs = getFormularioSimple(request);
             }
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario");
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el formulario");
+            eh.setDataToXML("CONTENT TYPE", request.getContentType());
+            eh.setDataToXML(hs);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hs;
     }
 
     /**
-     * Entrega un Hash con el contenido de un formulario, en el Hash de
+     * Método que entrega un Hash con el contenido de un formulario, en el Hash de
      * datos (FORM) y un arreglo con los nombres de los campos de datos del
      * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
-     * como otro dato mas, no generandose el hash con los datos de archivo ni
+     * como otro dato más, no generandose el hash con los datos de archivo ni
      * realizandose la copia en el servidor
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return  HashMap     Resultado de los datos leidos del Formulario
@@ -99,15 +103,21 @@ public class AdminForm {
                 hs.put("FORM", hsForm);
                 hs.put("arrayFORM", arrayFORM);
             }
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario Simple");
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el formulario Simple");
+            eh.setDataToXML(request.getParameterNames());
+            eh.setDataToXML(hs);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hs;
 
     }
     
     /**
-     * Entrega un Hash con el contenido de un formulario, separados en el Hash
+     * Método que entrega un Hash con el contenido de un formulario, separados en el Hash
      * de datos (FORM), el de archivos (FILE), un arreglo con nombres campos de
      * datos del formulario (arrayFORM) y un arreglo con los nombres de los
      * campos de archivo (arrayFILE). Cuando los archivos que se indican
@@ -185,84 +195,26 @@ public class AdminForm {
             hs.put("FILE", hsFile);
             hs.put("arrayFORM", arrayFORM);
             hs.put("arrayFILE", arrayFILE);
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el formulario multipart");
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el formulario multipart");
+            eh.setDataToXML(hs);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hs;
     }
 
     /**
-     * Metodo con los ContentType Aceptados y que deben rechazarce
-     * @return
-     */
-    private HashMap getContentTypeAcepted(){
-        HashMap hs = new HashMap();
-        //IMAGENES
-        hs.put("image/gif", "OK");
-        hs.put("image/x-png", "OK");
-        hs.put("image/jpeg", "OK");        
-        hs.put("image/x-ms-bmp", "OK");
-        hs.put("image/bmp", "OK");
-        //WORD
-        hs.put("application/msword", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "OK");
-        //EXCEL
-        hs.put("application/x-excel", "OK");
-        hs.put("application/vnd.ms-excel", "OK");
-        hs.put("application/x-msexcel", "OK");
-        hs.put("application/ms-excel", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.template", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.template", "OK");
-        //POWERPOINT
-        hs.put("application/vnd.ms-powerpoint", "OK");
-        hs.put("application/ms-powerpoint", "OK");
-        hs.put("application/mspowerpoint", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.presentationml.presentation", "OK");
-        hs.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow", "OK");
-        //PROYECT
-        hs.put("application/vnd.ms-project", "OK");
-        //WORK
-        hs.put("application/vnd.ms-works", "OK");
-        hs.put("application/vnd.ms-tnef", "OK");
-        hs.put("application/vnd.artgalry", "OK");
-        //ZIP
-        hs.put("application/zip", "OK");
-        hs.put("application/x-compressed", "OK");
-        //RTF
-        hs.put("application/rtf", "OK");
-        //PDF
-        hs.put("application/pdf", "OK");
-        hs.put("application/x-pdf", "OK");
-        //HTML
-        hs.put("text/html", "OK");
-        //VISIO
-        hs.put("application/visio", "OK");
-        hs.put("application/x-visio", "OK");
-        hs.put("application/vnd.visio", "OK");
-        hs.put("application/visio.drawing", "OK");
-        hs.put("application/vsd", "OK");
-        hs.put("application/x-vsd", "OK");
-        //NO PERMITIDOS
-        hs.put("application/octet-stream", "NOK");
-        hs.put("text/asp", "NOK");
-        hs.put("text/jsp", "NOK");
-        hs.put("text/js", "NOK");
-        hs.put("text/php", "NOK");
-        hs.put("text/x-script.perl", "NOK");
-        
-        return hs;
-    }
-
-    /**
-     * Entrega un Hash con el contenido de un formulario, en el Hash de
+     * Método que entrega un Hash con el contenido de un formulario, en el Hash de
      * datos (FORM) y un arreglo con los nombres de los campos de datos del
      * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
-     * como otro dato mas, no generandose el hash con los datos de archivo ni
+     * como otro dato más, no generandose el hash con los datos de archivo ni
      * realizandose la copia en el servidor. Se usa para formularios del tipo
      * application/x-www-form-urlencoded
      * @param request
-     * @return
+     * @return HashMap Resultado de los datos leidos del formulario
      * @throws ExceptionHandler
      */
     private HashMap getFormularioWwwForm(HttpServletRequest request) throws ExceptionHandler{
@@ -284,7 +236,7 @@ public class AdminForm {
                 while(dataRemaining) {
                     inputLen = instream.read (postedBytes, offset,length-offset);
                     if (inputLen <= 0) {
-                        throw new IOException ("read error");
+                        throw new IOException ("Error de lectura de archivo");
                     }
                     offset += inputLen;
                     if((length-offset) ==0) {
@@ -337,20 +289,26 @@ public class AdminForm {
                 hs = getFormularioSimple(request);
             }
         } catch (IOException ex) {
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el formulario x-www-form-urlencoded");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el formulario x-www-form-urlencoded");
+            eh.setDataToXML(hs);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         } finally {
             try {
                 instream.close();
             } catch (IOException ex) {
-                throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el formulario multipart, al cerrar ServletInputStream");
+                throw new ExceptionHandler(ex,this.getClass(),
+                        "Problemas para obtener el formulario multipart, al cerrar ServletInputStream");
             }
         }
         return hs;
     }
 
     /**
-     * Metodo que entrega los datos de una variable. Primero los busca como
-     * atributo de la session, si no lo encuentra, lo busca como parametro de
+     * Método que entrega los datos de una variable. Primero los busca como
+     * atributo de la Session, si no lo encuentra, lo busca como parámetro de
      * un formulario
      * @param name  Nombre de la variable a buscar
      * @param request   Objeto de la Session que contiene los datos del formulario
@@ -363,16 +321,85 @@ public class AdminForm {
             if (data==null){
                 data = (String) request.getParameter(name);
             }
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener los datos de un campo en el request");
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener los datos de un campo en el request");
+            eh.setDataToXML("CAMPO FORMULARIO", name);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return data;
     }
 
     /**
-     * Metodo para convertir caracteres obtenidos de un encodeURI de Jquery, principalmente
-     * formulado para no perder los simbolos + u otros caracteres enviados por la capa vista
-     * @param val
+     * Método con los ContentType aceptados y que deben rechazarce
+     * @return  HashMap     HashMap con contentType
+     */
+    private HashMap getContentTypeAcepted(){
+        HashMap hs = new HashMap();
+        //IMAGENES
+        hs.put("image/gif", "OK");
+        hs.put("image/x-png", "OK");
+        hs.put("image/jpeg", "OK");
+        hs.put("image/x-ms-bmp", "OK");
+        hs.put("image/bmp", "OK");
+        //WORD
+        hs.put("application/msword", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "OK");
+        //EXCEL
+        hs.put("application/x-excel", "OK");
+        hs.put("application/vnd.ms-excel", "OK");
+        hs.put("application/x-msexcel", "OK");
+        hs.put("application/ms-excel", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.wordprocessingml.template", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.spreadsheetml.template", "OK");
+        //POWERPOINT
+        hs.put("application/vnd.ms-powerpoint", "OK");
+        hs.put("application/ms-powerpoint", "OK");
+        hs.put("application/mspowerpoint", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.presentationml.presentation", "OK");
+        hs.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow", "OK");
+        //PROYECT
+        hs.put("application/vnd.ms-project", "OK");
+        //WORK
+        hs.put("application/vnd.ms-works", "OK");
+        hs.put("application/vnd.ms-tnef", "OK");
+        hs.put("application/vnd.artgalry", "OK");
+        //ZIP
+        hs.put("application/zip", "OK");
+        hs.put("application/x-compressed", "OK");
+        //RTF
+        hs.put("application/rtf", "OK");
+        //PDF
+        hs.put("application/pdf", "OK");
+        hs.put("application/x-pdf", "OK");
+        //HTML
+        hs.put("text/html", "OK");
+        //VISIO
+        hs.put("application/visio", "OK");
+        hs.put("application/x-visio", "OK");
+        hs.put("application/vnd.visio", "OK");
+        hs.put("application/visio.drawing", "OK");
+        hs.put("application/vsd", "OK");
+        hs.put("application/x-vsd", "OK");
+        //NO PERMITIDOS
+        hs.put("application/octet-stream", "NOK");
+        hs.put("text/asp", "NOK");
+        hs.put("text/jsp", "NOK");
+        hs.put("text/js", "NOK");
+        hs.put("text/php", "NOK");
+        hs.put("text/x-script.perl", "NOK");
+
+        return hs;
+    }
+
+    /**
+     * Método para convertir caracteres obtenidos de un encodeURI de Jquery, 
+     * principalmente formulado para no perder caracteres especiales enviados
+     * por la capa vista y que no son bien traducidos por el decode de Java
+     * @param val   String con los datos
      * @return
      */
     private String castCodeEncoded(String val){
@@ -429,9 +456,9 @@ public class AdminForm {
     }
 
     /**
-     * Metodo para convertir caracteres NO UTF8 a uno manejable para que se guarde
+     * Método para convertir caracteres NO UTF8 a uno manejable para que se guarde
      * en la base de datos
-     * @param data
+     * @param data  String con los datos
      * @return
      */
     private String castCodeNoUtf8(String data){
@@ -480,6 +507,13 @@ public class AdminForm {
         return str;
     }
 
+    /**
+     * Método para convertir caracteres obtenidos de un decode de Jquery,
+     * principalmente formulado para no perder caracteres especiales enviados
+     * por la capa vista y que no son bien traducidos por el decode de Java
+     * @param strData   String con los datos
+     * @return
+     */
     private String castCodeUrl(String strData){
         String str = "";
         if (strData!=null){
@@ -555,9 +589,9 @@ public class AdminForm {
     }
 
     /**
-     * Lee el archivo variables.properties, para obtener las variables que serviran
-     * para la evaluacion de queries
-     * @return
+     * Método que lee el archivo variables.properties, para obtener las variables
+     * que serviran para la evaluación de queries
+     * @return  Properties      Objeto con las variables leidas
      * @throws ExceptionHandler
      */
     private static Properties leerConfigVariables() throws ExceptionHandler{
@@ -565,9 +599,10 @@ public class AdminForm {
 	InputStream is = null;
 	File f = null;
         File fichero = null;
+        URL url = null;
 	try {
             String separador = String.valueOf(File.separator);
-            URL url = AdminFile.class.getResource("AdminForm.class");
+            url = AdminFile.class.getResource("AdminForm.class");
 
             if(url.getProtocol().equals("file")) {
 		f = new File(url.toURI());
@@ -581,26 +616,39 @@ public class AdminForm {
                 prop.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,AdminFile.class,"Problemas para leer el archivo de configuracion");
+            ExceptionHandler eh = new ExceptionHandler(u,AdminForm.class,
+                             "Problemas para leer el archivo de configuración de Variables");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	} catch(IOException e) {
-            throw new ExceptionHandler(e,AdminFile.class,"Problemas para leer el archivo de configuracion");
+            ExceptionHandler eh = new ExceptionHandler(e,AdminForm.class,
+                             "Problemas para leer el archivo de configuración de Variables");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }finally{
             try{
                 if (is != null){
                     is.close();
                 }
             }catch (Exception e){
-                throw new ExceptionHandler(e,AdminFile.class,"Problemas para cerrar el archivo de configuracion");
+                throw new ExceptionHandler(e,AdminForm.class,
+                        "Problemas para cerrar el archivo de configuración de Variables");
             }
         }
 	return prop;
     }
 
     /**
-     * Obtiene un arreglo, construido a partir del archivo variables.properties, el cual
+     * Método que obtiene un arreglo, construido a partir del archivo variables.properties, el cual
      * contiene los valores que serviran de referencia para buscar en el formulario
-     * @param hsForm
-     * @return
+     * @param hsForm    Hash que contiene los datos leidos desde el formulario
+     * @return  String[][]  Arreglo con los valores
      * @throws ExceptionHandler
      */
     public String[][] getVariablesFromProperties(HashMap hsForm) throws ExceptionHandler{
@@ -632,11 +680,11 @@ public class AdminForm {
     }
 
     /**
-     * Toma un Objeto de referencia y busca en los valores que entregan los metodos
+     * Método que toma un Objeto de referencia y busca en los valores que entregan los métodos
      * que correspondan (por su nombre) a las variables, reemplazando los valores
      * @param obj   Objeto de referencia, de donde se sacaran los valores
      * @param arrVariable   Arreglo que contiene las variables que se estan buscando
-     * @return
+     * @return  String[][]  Arreglo con el resultado de los valores
      * @throws ExceptionHandler
      */
     public String[][] getVariableByObject(Object obj, String[][] arrVariable) throws ExceptionHandler{
@@ -663,26 +711,51 @@ public class AdminForm {
                 strSld = arrVariable;
             }
         }catch(NullPointerException e0){
-            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e0,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML(arrVariable);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(ClassNotFoundException e1){
-            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Bean individual");
-        }catch(IllegalAccessException e4){
-            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Bean individual");
-        }catch(IllegalArgumentException e5){
-            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Bean individual");
-        }catch(InvocationTargetException e6){
-            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e1,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML(arrVariable);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }catch(IllegalAccessException e2){
+            ExceptionHandler eh = new ExceptionHandler(e2,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML(arrVariable);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }catch(IllegalArgumentException e3){
+            ExceptionHandler eh = new ExceptionHandler(e3,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML(arrVariable);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }catch(InvocationTargetException e4){
+            ExceptionHandler eh = new ExceptionHandler(e4,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML(arrVariable);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return strSld;
     }
 
     /**
-     * Limpia las variables que no hayan sido encontradas en el formulario y/o en la clases de
-     * referencia, dejandolas con un valor null, para que no sean consideradas en el analisis
-     * de las queries.
-     * @param arrVariable   Arreglo que contiene las variables que deben ser consideradas en las
-     * evaluaciones de las queries
-     * @return
+     * Método encargado de limpiar las variables que no hayan sido encontradas
+     * en el formulario y/o en la clases de referencia, dejandolas con un valor
+     * null, para que no sean consideradas en el análisis de las queries.
+     * @param arrVariable   Arreglo que contiene las variables que deben ser 
+     * consideradas en las evaluaciones de las queries
+     * @return String[][]   Arreglo con las variables sin data anuladas
      * @throws ExceptionHandler
      */
     public String[][] cleanVariables(String[][] arrVariable) throws ExceptionHandler{
@@ -704,7 +777,7 @@ public class AdminForm {
     }
 
     /**
-     * Metodo para la entrega de valores por defecto a algunos tipos de datos
+     * Método para la entrega de valores por defecto a algunos tipos de datos
      * especialmente definidos
      * @param className
      * @param value
@@ -725,13 +798,13 @@ public class AdminForm {
     }
 
     /**
-     * Se encarga de limpiar la variable SIDX enviada desde la capa vista para
+     * Método encargado de limpiar la variable SIDX enviada desde la capa vista para
      * poder determinar por cual campo se debe ordenar la query. Usada principalmente
      * en el ordenamiento de las Grillas.
      * @param strData       El contenido de la variable
      * @param separador     El separador usado
-     * @param numPaso       Posicion para considerar en la eliminacion
-     * @return
+     * @param numPaso       Posición para considerar en la eliminación
+     * @return  String      Nombre del campo a usar
      */
     public String cleanSIDX(String strData, String separador, int numPaso){
         String strSld = strData;
