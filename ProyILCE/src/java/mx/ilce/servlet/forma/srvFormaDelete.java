@@ -22,7 +22,7 @@ import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
 
 /**
- *  Servelt implementado para manejar el borrado de datos
+ *  Servelt implementado para manejar el borrado de datos.
  * @author ccatrilef
  */
 public class srvFormaDelete extends HttpServlet {
@@ -30,7 +30,8 @@ public class srvFormaDelete extends HttpServlet {
     private String[][] arrVariables = null;
 
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -115,7 +116,6 @@ public class srvFormaDelete extends HttpServlet {
 
                     Integer xml = (Integer) ((ex.getObjectData()==null)?Integer.valueOf(forma.getPk()):ex.getObjectData());
                     AdminXML admXML = new AdminXML();
-                    //request.getSession().setAttribute("xmlTab", admXML.salidaXML(String.valueOf(xml)));
                     request.getSession().setAttribute("xmlTab", admXML.salidaXMLBitacora(String.valueOf(xml),
                                                                 String.valueOf(forma.getBitacora().getIdBitacora())));
                     spy.setXmlSld(new StringBuffer((String) request.getSession().getAttribute("xmlTab")));
@@ -126,11 +126,11 @@ public class srvFormaDelete extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvDelete");
+                val.setTextMessage("Problemas en la execución del Error de srvFormaDelete");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvDelete");
+            val.setTextMessage("Problemas en la execución de srvFormaDelete");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
@@ -161,9 +161,8 @@ public class srvFormaDelete extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -176,7 +175,7 @@ public class srvFormaDelete extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -189,12 +188,12 @@ public class srvFormaDelete extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servelt implementado para manejar el borrado de datos.";
+    }
 
 }

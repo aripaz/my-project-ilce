@@ -18,7 +18,7 @@ import mx.ilce.mail.DataMail;
 import mx.ilce.util.Validation;
 
 /**
- * Servlet utilizado para recibir las peticiones de generar mail a uno o mas
+ * Servlet utilizado para recibir las peticiones de generar mail a uno o más
  * usuarios
  * @author ccatrilef
  */
@@ -27,7 +27,8 @@ public class srvMail extends HttpServlet {
     private String[][] arrVariables = null;
 
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -103,17 +104,21 @@ public class srvMail extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvForma");
+                val.setTextMessage("Problemas en la execución del Error de srvMail");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvForma");
+            val.setTextMessage("Problemas en la execución de srvMail");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
     }
 
+    /**
+     * Limpia de memoria los datos utilizados para el envío de mail
+     * @param request
+     */
     private void cleanMemory(HttpServletRequest request){
         request.getSession().removeAttribute("from");
         request.getSession().removeAttribute("to");
@@ -126,9 +131,8 @@ public class srvMail extends HttpServlet {
         request.getSession().removeAttribute("msgExist");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -141,7 +145,7 @@ public class srvMail extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -154,12 +158,12 @@ public class srvMail extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet utilizado para recibir las peticiones de generar mail";
+    }
 
 }
