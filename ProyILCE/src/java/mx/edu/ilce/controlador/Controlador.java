@@ -44,8 +44,9 @@ String sNextAction="";
 
                 /* inicia comando login */
                 if (cmd.equals("login")) {
-
+                    
                     String aParametros[] = {"lgn", "psw"};
+                   
                     sNextAction = validaParametros(request, aParametros);
                     if (sNextAction.equals("")) {
                         Conexion m = new Conexion();
@@ -54,18 +55,24 @@ String sNextAction="";
                         if (sNextAction.equals("")) {
                             if (nUsuario != 0) {
                                usuario.setClave(nUsuario);
-                               
                                request.getSession().setAttribute("usuario", usuario);
-                               request.getRequestDispatcher("/vista_.jsp").forward(request, response);
+                               if (request.getParameter("ref")!=null)
+                               request.getRequestDispatcher("/vista_.jsp?ref=").forward(request, response);
                             } else {
                                 request.getSession().setAttribute("mensaje", "Usuario y/o password incorrecto, verifique");
                                 request.getRequestDispatcher("/login_.jsp").forward(request, response);
                             }
                         }
                     }
-                } else //Verifica que la clave de usuario esté activa
+                } 
+                else if (cmd.equals("recupera_password")) {
+                    
+                    
+                }
+                else //Verifica que la clave de usuario esté activa
                 if (request.getSession().getAttribute("usuario") == null) {
-                    request.getRequestDispatcher("/login_.jsp").forward(request, response);
+                    
+                    request.getRequestDispatcher("/srvControl.jsp?ref="+request.getParameter("ref")).forward(request, response);
                 } else {
                     usuario = (Usuario) request.getSession().getAttribute("usuario");
                 }
