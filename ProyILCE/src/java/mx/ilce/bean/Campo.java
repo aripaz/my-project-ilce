@@ -23,17 +23,28 @@ public class Campo implements Serializable {
     private boolean isIncrement;
     private String hourMinSec;
 
+    /**
+     * Obtiene la fecha capturada, incluyendo además los datos de
+     * hora, minuto y segundo
+     * @return
+     */
     public String getHourMinSec() {
         return hourMinSec;
     }
 
+    /**
+     * Asigna la fecha capturada, incluyendo además los datos de
+     * hora, minuto y segundo
+     * @param hourMinSec    Valor de la fecha con hora, minuto y segundo
+     */
     public void setHourMinSec(String hourMinSec) {
         this.hourMinSec = hourMinSec;
     }
 
     /**
-     * Constructor de la clase donde se entregan los distintos elementos que
-     * componen la clase
+     * Constructor de la clase donde se inicializan los distintos elementos que
+     * componen la clase. Se asignan los datos: nombre, valor, codigo, alias,
+     * typeDataDB, typeControl, event, help y tamano
      * @param nombre    Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
      * @param valor     Valor que posee el campo
@@ -44,8 +55,9 @@ public class Campo implements Serializable {
      * @param typeControl   Tipo de dato equivalente usado por el campo en el
      * codigo Java
      * @param event     Evento asociado a este campo, generalmente correspondera
-     * a una funcion javascript
+     * a una función javascript
      * @param help      Texto de ayuda que va asociado al campo
+     * @param tamano    Valor para contener un número que indique algún tamaño
      */
     public Campo(String nombre, String valor, Integer codigo, String alias,
                  String typeDataDB, String typeControl, String event, 
@@ -63,8 +75,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Constructor de la clase donde se entregan los distintos elementos que
-     * componen la clase
+     * Constructor de la clase donde se inicializan los distintos elementos que
+     * componen la clase. Se asignan los datos nombre, codigo y typeDataDB
      * @param nombre    Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
      * @param codigo    Codigo que posee el campo
@@ -78,15 +90,19 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Constructor de la clase donde se entregan los distintos elementos que
-     * componen la clase
-     * @param nombre  Nombre del campo, generalmente asociado a los campos
+     * Constructor de la clase donde se inicializan los distintos elementos que
+     * componen la clase. Se asignan los campos: nombre, nombreDB, codigo,
+     * typeDataDB, typeAPL y valor
+     * @param nombre    Nombre del campo, generalmente asociado a los campos
      * obtenidos mediante una query
-     * @param codigo  Codigo que posee el campo
-     * @param typeDataDB  Tipo de dato que posee el campo en la base de datos
-     * @param valor  Valor que posee el campo
+     * @param nombreDB  Nombre del campo en la Base de datos
+     * @param codigo    Código que posee el campo
+     * @param typeDataDB    Tipo de dato que posee el campo en la base de datos
+     * @param typeAPL       Tipo de dato que le corresponde en la aplicación
+     * @param valor     Valor que posee el campo
      */
-    public Campo(String nombre, String nombreDB, Integer codigo, String typeDataDB, String typeAPL, String valor) {
+    public Campo(String nombre, String nombreDB, Integer codigo, String typeDataDB,
+            String typeAPL, String valor) {
         this.nombre = nombre.replaceAll("_","").toUpperCase();
         this.nombreDB = nombreDB;
         this.codigo = codigo;
@@ -96,7 +112,7 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Constructor de la clase, para inicializar sin datos el objeto
+     * Constructor básico de la clase, para inicializar sin datos el objeto
      */
     public Campo(){
     }
@@ -118,7 +134,7 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Obtiene el codigo asociado a un campo
+     * Obtiene el código asociado a un campo
      * @return
      */
     public Integer getCodigo() {
@@ -126,7 +142,7 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna el codigo asociado a un campo
+     * Asigna el código asociado a un campo
      * @param codigo    Codigo del Campo
      */
     public void setCodigo(Integer codigo) {
@@ -134,8 +150,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Obtiene el evento asociado a un codigo, generalmente correspondera
-     * a un texto o una funcion javascript
+     * Obtiene el evento asociado a un código, generalmente correspondera
+     * a un texto o una función javascript
      * @return
      */
     public String getEvent() {
@@ -143,8 +159,8 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna el evento asociado a un codigo, generalmente correspondera
-     * a un texto o una funcion javascript
+     * Asigna el evento asociado a un código, generalmente correspondera
+     * a un texto o una función javascript
      * @param event     Texto del evento del Campo
      */
     public void setEvent(String event) {
@@ -285,7 +301,7 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Retorna si es Autoincremet el campo. Se debe interpretar TRUE es la clave 
+     * Retorna si es Autoincremet el campo. Se debe interpretar así: TRUE es la clave
      * de la tabla, FALSE no es la clave de la tabla
      * @return
      */
@@ -294,34 +310,36 @@ public class Campo implements Serializable {
     }
 
     /**
-     * Asigna si es Autoincrement el campo. Se debe interpretar TRUE es la clave
+     * Asigna si es Autoincrement el campo. Se debe interpretar así: TRUE es la clave
      * de la tabla, FALSE no es la clave de la tabla
-     * @param isIncrement   Validacion que indica si el campo es Increment o no
+     * @param isIncrement   Validación que indica si el campo es Autoincrement o no
      */
     public void setIsIncrement(boolean isIncrement) {
         this.isIncrement = isIncrement;
     }
 
     /**
-     * Metodo que lleva a un formato String el contenido del objeto
+     * Método para convertir a String el contenido del Objeto. Los datos que
+     * estén con valor NULL son ignorados
+     * @return  String  Texto con los datos del objeto
      */
     @Override
     public String toString() {
         String str = "";
         str = "Campo{\n"
-                + ((nombre!=null)?"|| nombre=" + nombre:"")
-                + ((nombreDB!=null)?" || nombreDB=" + nombreDB:"")
-                + ((alias!=null)?" || alias=" + alias:"")
-                + ((valor!=null)?" || valor=" + valor:"")
-                + ((codigo!=null)?" || codigo=" + codigo:"")
-                + ((typeDataDB!=null)?" || typeDataDB=" + typeDataDB:"")
-                + ((typeDataAPL!=null)?" || typeDataAPL=" + typeDataAPL:"")
-                + ((typeControl!=null)?" || typeControl=" + typeControl:"")
-                + ((event!=null)?" || event=" + event:"")
-                + ((help!=null)?" || help=" + help:"")
-                + ((tamano!=null)?" || tamano=" + tamano:"")
-                + ((hourMinSec!=null)?" || hourMinSec=" + hourMinSec:"")
-                + " || isIncrement=" + isIncrement
+                + ((nombre!=null)?"\n\tnombre=" + nombre:"")
+                + ((nombreDB!=null)?"\n\tnombreDB=" + nombreDB:"")
+                + ((alias!=null)?"\n\talias=" + alias:"")
+                + ((valor!=null)?"\n\tvalor=" + valor:"")
+                + ((codigo!=null)?"\n\tcodigo=" + codigo:"")
+                + ((typeDataDB!=null)?"\n\ttypeDataDB=" + typeDataDB:"")
+                + ((typeDataAPL!=null)?"\n\ttypeDataAPL=" + typeDataAPL:"")
+                + ((typeControl!=null)?"\n\ttypeControl=" + typeControl:"")
+                + ((event!=null)?"\n\tevent=" + event:"")
+                + ((help!=null)?"\n\thelp=" + help:"")
+                + ((tamano!=null)?"\n\ttamano=" + tamano:"")
+                + ((hourMinSec!=null)?"\n\thourMinSec=" + hourMinSec:"")
+                + "\n\tisIncrement=" + isIncrement
                 + "}\n";
         return str;
     }

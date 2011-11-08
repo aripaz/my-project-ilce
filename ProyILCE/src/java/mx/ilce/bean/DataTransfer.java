@@ -1,8 +1,8 @@
 package mx.ilce.bean;
 
 /**
- * Clase implementada para la tranmision de datos entre clases, principalmente 
- * enfocada a llegar a la parte Modelo y la ejecucion de queries
+ * Clase implementada para la transmisión de datos entre clases, principalmente
+ * enfocada a llegar a la parte Modelo y la ejecución de queries
  * @author ccatrilef
  */
 public class DataTransfer {
@@ -20,20 +20,11 @@ public class DataTransfer {
     private String[][] arrVariables;
     private String orderBY;
     private Object dataObject;
-    private String rutaFile;
-
-    public String getRutaFile() {
-        return rutaFile;
-    }
-
-    public void setRutaFile(String rutaFile) {
-        this.rutaFile = rutaFile;
-    }
 
     /**
      * Obtiene un objeto del tipo Object, para soportar cualquier tipo de
      * data que se necesite mantener o enviar y no esta catalogada en los otros
-     * metodos
+     * métodos
      * @return
      */
     public Object getDataObject() {
@@ -43,7 +34,7 @@ public class DataTransfer {
     /**
      * Asigna un objeto del tipo Object, para soportar cualquier tipo de
      * data que se necesite mantener o enviar y no esta catalogada en los otros
-     * metodos
+     * métodos
      * @param dataObject
      */
     public void setDataObject(Object dataObject) {
@@ -51,7 +42,7 @@ public class DataTransfer {
     }
 
     /**
-     * Constructor basico de la clase
+     * Constructor básico de la clase sin datos
      */
     public DataTransfer() {
         
@@ -76,7 +67,7 @@ public class DataTransfer {
     }
 
     /**
-     * Obtiene un arreglo bidimensional, el cual contendra las variables
+     * Obtiene un arreglo bidimensional, el cual contendrá las variables
      * predefinidas del Usuario, como clave_empleado, clave_perfil, etc
      * @return
      */
@@ -85,7 +76,7 @@ public class DataTransfer {
     }
 
     /**
-     * Asigna un arreglo bidimensional, el cual contendra las variables
+     * Asigna un arreglo bidimensional, el cual contendrá las variables
      * predefinidas del Usuario, como clave_empleado, clave_perfil, etc
      * @param arrVariables
      */
@@ -222,7 +213,7 @@ public class DataTransfer {
     }
 
     /**
-     * Obtiene la tabla para realizar la operacion, usada para validar la
+     * Obtiene la tabla para realizar la operación, usada para validar la
      * estructura de una query del tipo INSERT, UPDATE y DELETE
      * @return
      */
@@ -231,7 +222,7 @@ public class DataTransfer {
     }
 
     /**
-     * Asigna la tabla para realizar la operacion, usada para validar la
+     * Asigna la tabla para realizar la operación, usada para validar la
      * estructura de una query del tipo INSERT, UPDATE y DELETE
      * @param tabla
      */
@@ -256,9 +247,9 @@ public class DataTransfer {
     }
 
     /**
-     * Convierte un arreglo de String a un String
+     * Convierte un arreglo de String[] a un String
      * @param strData   Arreglo que se llevara a String
-     * @return  String  Texto con la conversion de los datos
+     * @return  String  Texto con la conversión de los datos
      */
     private String arrayToString(String[] strData){
         StringBuilder sld= new StringBuilder();
@@ -271,9 +262,9 @@ public class DataTransfer {
     }
 
     /**
-     * Convierte un arreglo de String a un String
+     * Convierte un arreglo de String[][] a un String
      * @param strData   Arreglo que se llevara a String
-     * @return  String  Texto con la conversion de los datos
+     * @return  String  Texto con la conversión de los datos
      */
     private String arrayDoubleToString(String[][] strData){
         StringBuilder sld= new StringBuilder();
@@ -281,7 +272,7 @@ public class DataTransfer {
             for (int i=0;i<strData.length;i++){
                 sld.append("\n\t\tNro ").append(i+1).append(":\n\t\t");
                 for (int j=0;j<strData[i].length;j++){
-                    sld.append("dato[").append(j).append("]:").append(strData[i][j]).append(" || ");
+                    sld.append("dato[").append(j).append("]: ").append(strData[i][j]).append(" || ");
                 }
             }
         }
@@ -289,8 +280,8 @@ public class DataTransfer {
     }    
 
     /**
-     * Metodo para convertir a String el contenido del Objeto. Los datos que no
-     * esten con valor NULL son ignorados
+     * Método para convertir a String el contenido del Objeto. Los datos que 
+     * estén con valor NULL son ignorados
      * @return  String  Texto con los datos del objeto
      */
     @Override
@@ -306,7 +297,6 @@ public class DataTransfer {
                 + ((tabla!=null)?"\n\tTabla=" + tabla:"")
                 + ((orderBY!=null)?"\n\tOrderBY=" + orderBY:"")
                 + ((dataObject!=null)?"\n\tDataObject=" + dataObject:"")
-                + ((rutaFile!=null)?"\n\tRutaFile=" + rutaFile:"")
                 + ((campo!=null)?"\n\tCampo=" + campo.toString():"")
                 + ((campoForma!=null)?"\n\tCampoForma=" + campoForma.toString():"")
                 + ((arrData!=null)?"\n\tArrData=" + arrayToString(arrData):"")
@@ -316,8 +306,8 @@ public class DataTransfer {
     }
 
     /**
-     * Metodo similar al toString(), para convertir a String el contenido del Objeto.
-     * Los datos que no esten con valor NULL y los objetos Campo y CampoForma
+     * Método similar al toString(), para convertir a String el contenido del Objeto.
+     * Los datos que estén con valor NULL y los objetos Campo y CampoForma
      * son ignorados
      * @return  String  Texto con los datos del objeto
      */
@@ -333,7 +323,6 @@ public class DataTransfer {
                 + ((tabla!=null)?"\n\tTabla=" + tabla:"")
                 + ((orderBY!=null)?"\n\tOrderBY=" + orderBY:"")
                 + ((dataObject!=null)?"\n\tDataObject=" + dataObject:"")
-                + ((rutaFile!=null)?"\n\tRutaFile=" + rutaFile:"")
                 + ((arrData!=null)?"\n\tArrData=" + arrayToString(arrData):"")
                 + ((arrVariables!=null)?"\n\tArrVariables=" + arrayDoubleToString(arrVariables):"")
                 + "\n}";

@@ -3,8 +3,8 @@ package mx.ilce.bean;
 import java.io.Serializable;
 
 /**
- * Clase implementada para contener los datos del CampoForma
- * Esta es una de las clases PILARES de la aplicacion y debe estar en
+ * Clase implementada para contener los datos del CampoForma.
+ * Esta es una de las clases PILARES de la aplicación y debe estar en
  * correspondencia con la tabla Campo_Forma
  * @author ccatrilef
  */
@@ -39,16 +39,24 @@ public class CampoForma implements Serializable  {
     private Integer noPermitirValorForaneoNulo;//BIT
     private Integer cargaDatoForaneosRetrasada; //BIT
 
+    /**
+     * Obtiene el valor de si debe (1) o no (0) cargar el dato foraneo
+     * @return
+     */
     public Integer getCargaDatoForaneosRetrasada() {
         return cargaDatoForaneosRetrasada;
     }
 
+    /**
+     * Asigna el valor de si debe (1) o no (0) cargar el dato foraneo
+     * @param cargaDatoForaneosRetrasada    Valor con la validación
+     */
     public void setCargaDatoForaneosRetrasada(Integer cargaDatoForaneosRetrasada) {
         this.cargaDatoForaneosRetrasada = cargaDatoForaneosRetrasada;
     }
     
     /**
-     * Obtiene el valor del Validador de si debe permitir foraneo o no
+     * Obtiene el valor de si debe permitir foraneo (1) o no (0)
      * @return
      */
     public Integer getNoPermitirValorForaneoNulo() {
@@ -56,7 +64,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el valor del Validador de si debe permitir foraneo o no
+     * Asigna el valor de si debe permitir foraneo (1) o no (0)
      * @param noPermitirValorForaneoNulo
      */
     public void setNoPermitirValorForaneoNulo(Integer noPermitirValorForaneoNulo) {
@@ -64,7 +72,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el valor del Validador de si se debe agrupar o no
+     * Obtiene el valor de si se debe agrupar (1) o no (0)
      * @return
      */
     public Integer getUsadoParaAgrupar() {
@@ -72,7 +80,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el valor del Validador de si se debe agrupar o no
+     * Asigna el valor de si se debe agrupar (1) o no (0)
      * @param usadoParaAgrupar
      */
     public void setUsadoParaAgrupar(Integer usadoParaAgrupar) {
@@ -96,7 +104,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el valor del Validador de si debe Justificar cambio o no
+     * Obtiene el valor de si debe Justificar cambio (1) o no (0)
      * @return
      */
     public Integer getJustificarCambio() {
@@ -104,7 +112,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el valor del Validador de si debe Justificar cambio o no
+     * Asigna el valor de si debe Justificar cambio (1) o no (0)
      * @param justificarCambio
      */
     public void setJustificarCambio(Integer justificarCambio) {
@@ -128,7 +136,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el valor del Validador de si es visible o no el campo
+     * Obtiene el valor de si es visible (1) o no (0) el campo
      * @return
      */
     public Integer getVisible() {
@@ -136,7 +144,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el valor del Validador de si es visible o no el campo
+     * Asigna el valor del Validador de si es visible (1) o no (0) el campo
      * @param visible
      */
     public void setVisible(Integer visible) {
@@ -224,7 +232,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el validador de la condicion de activo o no del CampoForma
+     * Obtiene el valor de la condición de activo (1) o no (0) del CampoForma
      * @return
      */
     public Integer getActivo() {
@@ -232,7 +240,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el validador de la condicion de activo o no del CampoForma
+     * Asigna el valor de la condición de activo (1) o no (0) del CampoForma
      * @param activo    Validador del estado activo o no del CampoForma
      */
     public void setActivo(Integer activo) {
@@ -320,7 +328,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el codigo que indica si un dato es sensible o no
+     * Obtiene el código que indica si un dato es sensible (1) o no (0)
      * @return
      */
     public Integer getDatoSensible() {
@@ -328,7 +336,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el codigo que indica si un dato es sensible o no
+     * Asigna el código que indica si un dato es sensible (1) o no (0)
      * @param datoSensible  Validador que indica si el dato es sensible o no
      */
     public void setDatoSensible(Integer datoSensible) {
@@ -336,7 +344,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene un texto (generalmente la invocacion de un JavaScript) que estara
+     * Obtiene un texto (generalmente la invocación de un JavaScript) que estara
      * asociado a un evento con el campoForma
      * @return
      */
@@ -345,7 +353,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el texto (generalmente la invocacion de un JavaScript) que estara
+     * Asigna el texto (generalmente la invocación de un JavaScript) que estara
      * asociado a un evento con el CampoForma
      * @param evento    Texto con el evento del CampoForma
      */
@@ -386,7 +394,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el codigo que indica si es obligatorio o no un CampoForma
+     * Obtiene el código que indica si es obligatorio (1) o no (0) un CampoForma
      * @return
      */
     public Integer getObligatorio() {
@@ -394,7 +402,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el codigo que indica si es obligatorio o no un CampoForma
+     * Asigna el código que indica si es obligatorio (1) o no (0) un CampoForma
      * @param obligatorio   Validador de si es obligatorio o no el CampoForma
      */
     public void setObligatorio(Integer obligatorio) {
@@ -444,7 +452,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna un texto con el tipo de control que debe utilizarce para el
-     * campóForma. Por defecto (con valor null) es un campo del tipo Text
+     * CampoForma. Por defecto (con valor null) es un campo del tipo Text
      * @param tipoControl   Tipo de Control asociado al CampoForma
      */
     public void setTipoControl(String tipoControl) {
@@ -452,29 +460,30 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Metodo que lleva formato String el contenido del objeto
-     * @return
+     * Método para convertir a String el contenido del Objeto. Los datos que
+     * estén con valor NULL son ignorados
+     * @return  String  Texto con los datos del objeto
      */
     @Override
     public String toString() {
         String str = "";
         str = "CampoForma{"
-                + ((claveCampo!=null)?"\n|| claveCampo=" + claveCampo:"")
-                + ((claveForma!=null)?"\n|| claveForma=" + claveForma:"")
-                + ((tabla!=null)?"\n|| tabla=" + tabla:"")
-                + ((campo!=null)?"\n|| campo=" + campo:"")
-                + ((aliasCampo!=null)?"\n|| aliasCampo=" + aliasCampo:"")
-                + ((obligatorio!=null)?"\n|| obligatorio=" + obligatorio:"")
-                + ((tipoControl!=null)?"\n|| tipoControl=" + tipoControl:"")
-                + ((evento!=null)?"\n|| evento=" + evento:"")
-                + ((foraneo!=null)?"\n|| foraneo=" + foraneo:"")
-                + ((filtroForaneo!=null)?"\n|| filtroForaneo=" + filtroForaneo:"")
-                + ((ayuda!=null)?"\n|| ayuda=" + ayuda:"")
-                + ((datoSensible!=null)?"\n|| datoSensible=" + datoSensible:"")
-                + ((activo!=null)?"\n|| activo=" + activo:"")
-                + ((tamano!=null)?"\n|| tamano=" + tamano:"")
-                + ((claveFormaForanea!=null)?"\n|| claveFormaForanea=" + claveFormaForanea:"")
-                + ((typeData!=null)?"\n|| typeData=" + typeData:"")
+                + ((claveCampo!=null)?"\n\tclaveCampo=" + claveCampo:"")
+                + ((claveForma!=null)?"\n\tclaveForma=" + claveForma:"")
+                + ((tabla!=null)?"\n\ttabla=" + tabla:"")
+                + ((campo!=null)?"\n\tcampo=" + campo:"")
+                + ((aliasCampo!=null)?"\n\taliasCampo=" + aliasCampo:"")
+                + ((obligatorio!=null)?"\n\tobligatorio=" + obligatorio:"")
+                + ((tipoControl!=null)?"\n\ttipoControl=" + tipoControl:"")
+                + ((evento!=null)?"\n\tevento=" + evento:"")
+                + ((foraneo!=null)?"\n\tforaneo=" + foraneo:"")
+                + ((filtroForaneo!=null)?"\n\tfiltroForaneo=" + filtroForaneo:"")
+                + ((ayuda!=null)?"\n\tayuda=" + ayuda:"")
+                + ((datoSensible!=null)?"\n\tdatoSensible=" + datoSensible:"")
+                + ((activo!=null)?"\n\tactivo=" + activo:"")
+                + ((tamano!=null)?"\n\ttamano=" + tamano:"")
+                + ((claveFormaForanea!=null)?"\n\tclaveFormaForanea=" + claveFormaForanea:"")
+                + ((typeData!=null)?"\n\ttypeData=" + typeData:"")
                 + "\n}";
         return str;
     }
