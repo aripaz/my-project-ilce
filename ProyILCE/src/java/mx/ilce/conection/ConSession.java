@@ -16,7 +16,7 @@ import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- *  Clase para la implementacion de los metodos de conexion y obtencion de datos
+ * Clase para la implementación de los métodos de conexión y obtención de datos
  * asociados a la Session
  * @author ccatrilef
  */
@@ -26,7 +26,7 @@ public class ConSession {
     private Bitacora bitacora;
 
     /**
-     * Obtiene el objeto bitacora
+     * Obtiene el objeto Bitacora
      * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
@@ -34,7 +34,7 @@ public class ConSession {
     }
 
     /**
-     * Asigna el objeto bitacora
+     * Asigna el objeto Bitacora
      * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
@@ -42,7 +42,7 @@ public class ConSession {
     }
 
     /**
-     * Constructor basico de la clase, al crearse se cargan los datos del
+     * Constructor básico de la clase, al crearse se cargan los datos del
      * properties
      * @throws ExceptionHandler
      */
@@ -50,7 +50,8 @@ public class ConSession {
         try{
             this.prop = AdminFile.leerIdQuery();
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para abrir Conexion ConSession");
+            throw new ExceptionHandler(ex,this.getClass(),
+                    "Problemas para abrir conexión ConSession");
         }
     }
 
@@ -68,17 +69,22 @@ public class ConSession {
             }
             intSld = AdminFile.getIdQuery(prop,key);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener ID QUERY desde properties");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener ID QUERY desde properties");
+            eh.setDataToXML("KEY", key);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return intSld;
     }
 
     /**
-     * Obtiene los datos de Usuario, mediante los parametros ingresados de
+     * Obtiene los datos de Usuario, mediante los parámetros ingresados de
      * user y password, si no corresponde la dupla entregada, se hace una
-     * segunda validacion para ver si al menos existe el usuario y solo hubo
+     * segunda validación para ver si al menos existe el usuario y solo hubo
      * error en la password
-     * @param user  Nombre dado en el sistema al usuario para su identificacion
+     * @param user  Nombre dado en el sistema al usuario para su identificación
      * @param password  Password asociada al usuario para identificarlo
      * @return  User    Objeto User con los datos del usuario
      * @throws ExceptionHandler
@@ -140,7 +146,14 @@ public class ConSession {
             }
         }catch(Exception ex){
             usr.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                        "Problemas para obtener el USER");
+            eh.setDataToXML("User", user);
+            eh.setDataToXML("Password", password);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return usr;
     }
@@ -148,7 +161,7 @@ public class ConSession {
     /**
      * Obtiene los datos de Usuario, desde el bean user, desde el se usan el
      * login y password, si no corresponde la dupla entregada, se hace una
-     * segunda validacion para ver si al menos existe el usuario y solo hubo
+     * segunda validación para ver si al menos existe el usuario y solo hubo
      * error en la password
      * @param usuario   Bean que contiene los datos del usuario
      * @return  User    Objeto User con los datos del usuario
@@ -212,13 +225,19 @@ public class ConSession {
             }
         }catch(Exception ex){
             usr.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                        "Problemas para obtener el USER");
+            eh.setDataToXML(usuario);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return usr;
     }
 
     /**
-     * Metodo implementado para la obtencion de los datos del usuario por su mail
+     * Método implementado para la obtención de los datos del usuario por su mail
      * @param dataTrans
      * @return  User    Objeto User con los datos del usuario
      * @throws ExceptionHandler
@@ -259,15 +278,20 @@ public class ConSession {
 
         }catch(Exception ex){
             usr.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                        "Problemas para obtener el USER");
+            eh.setDataToXML(dataTrans);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return usr;
     }
 
     /**
      * Obtiene los datos del perfil de un usuario, desde el bean User se utiliza
-     * el campo clavePerfil como parametro de entrada. Ademas de los datos del
-     * perfil, entrega el listado de aplicaciones que le corresponden segun su
+     * el campo clavePerfil como parámetro de entrada. Además de los datos del
+     * perfil, entrega el listado de aplicaciones que le corresponden según su
      * perfil
      * @param user  Bean que contiene los datos del usuario
      * @return  Perfil  Objeto Perfil con los datos del perfil solicitado
@@ -296,15 +320,21 @@ public class ConSession {
                 perfil.setLstAplicacion(lstApli);
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                        "Problemas para obtener el PERFIL");
+            eh.setDataToXML(user);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return perfil;
     }
 
     /**
      * Obtiene los datos para completar el XML de TAB que le corresponden
-     * segun Perfil. Desde el perfil se toma el campo lstAplicacion para
-     * obtener todos los tab segun los datos aplicacion y forma.
+     * según Perfil. Desde el perfil se toma el campo lstAplicacion para
+     * obtener todos los tab según los datos aplicación y forma.
      * @param perfil    Bean que contiene los datos del perfil
      * @return  HashCampo   Objeto Hash con los datos de los TAB de la forma
      * @throws ExceptionHandler
@@ -342,14 +372,20 @@ public class ConSession {
                 }
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el PERFIL");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                        "Problemas para obtener el PERFIL");
+            eh.setDataToXML(perfil);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hsCmp;
     }
 
     /**
-     * Obtiene los datos que se ingresaran al XML de Session, segun el usuario.
-     * Se utiliza como parametro de entrada el campo claveEmpleado, desde el
+     * Obtiene los datos que se ingresaran al XML de Session, según el usuario.
+     * Se utiliza como parámetro de entrada el campo claveEmpleado, desde el
      * Bean User.En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
@@ -374,14 +410,20 @@ public class ConSession {
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del User");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el XML del User");
+            eh.setDataToXML(usuario);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hsCmp;
     }
 
     /**
-     * Obtiene los datos que se ingresaran al XML de Menu, segun el usuario.
-     * Se utiliza como parametro de entrada el campo clavePerfil, desde el
+     * Obtiene los datos que se ingresaran al XML de Menu, según el usuario.
+     * Se utiliza como parámetro de entrada el campo clavePerfil, desde el
      * Bean User. En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
@@ -406,14 +448,20 @@ public class ConSession {
             hsCmp.setObjData(usuario);
         }catch(Exception ex){
             usuario.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el XML del MENU");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el XML del MENU");
+            eh.setDataToXML(usuario);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hsCmp;
     }
 
     /**
-     * Entrega un objeto con la data y los campos que resultan de ejecutar la
-     * query del ID entregado, junto con los parametros respectivos
+     * Método que entrega un objeto con la data y los campos que resultan de
+     * ejecutar la query del ID entregado, junto con los parámetros respectivos
      * @param IdQuery   ID de la query que se quiere ejecutar
      * @param strData   Arreglo con la data de entrada que se debe usar en la
      * Query   
@@ -433,13 +481,20 @@ public class ConSession {
 
             hsCmp = connQ.getData(dataTransfer);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener la DATA con ID QUERY");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener la DATA con ID QUERY");
+            eh.setDataToXML("CLAVE QUERY", IdQuery.toString());
+            eh.setDataToXML(strData);
+            eh.setDataToXML(arrVariables);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return hsCmp;
     }
 
     /**
-     * Metodo implementado para la insercion del usuario
+     * Método implementado para la inserción del usuario
      * @param user
      * @return  User    Objeto User con los datos del nuevo Usuario
      * @throws ExceptionHandler
@@ -512,13 +567,18 @@ public class ConSession {
             }
         }catch(Exception ex){
             usr.setIsLogged(false);
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener el USER");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener el USER");
+            eh.setDataToXML(user);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return usr;
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public boolean deleteUser(User user){
         throw new UnsupportedOperationException("Not supported yet.");
