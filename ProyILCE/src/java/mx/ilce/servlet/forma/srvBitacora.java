@@ -25,7 +25,7 @@ import mx.ilce.bean.DataTransfer;
 
 
 /**
- * Servlet creado como alternativa para las llamadas asincronas
+ * Servlet creado para la consulta de datos de manera asincrona a la bitácora
  * @author ccatrilef
  */
 public class srvBitacora extends HttpServlet {
@@ -33,7 +33,8 @@ public class srvBitacora extends HttpServlet {
     private String[][] arrVariables = null;
 
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -136,11 +137,11 @@ public class srvBitacora extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvFormaSearch");
+                val.setTextMessage("Problemas en la execución del Error de srvBitacora");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvFormaSearch");
+            val.setTextMessage("Problemas en la execución de srvBitacora");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
@@ -148,7 +149,7 @@ public class srvBitacora extends HttpServlet {
     } 
 
     /**
-     * Genera un String con la estrucura adicional de una query, con la data
+     * Genera un String con la estructura adicional de una query, con la data
      * entregada esto servira de complemento a la query principal, para ayudar
      * en el filtro de datos
      * @param hsDataForm    HashMap con los datos capturados del formulario
@@ -188,7 +189,6 @@ public class srvBitacora extends HttpServlet {
                     dataTransfer.setQuery(strQuery.toString());
                     dataTransfer.setArrData(new String[0]);
                     dataTransfer.setArrVariables(arrVariables);
-                    //HashCampo hsCmp = con.getDataByQuery(strQuery.toString(),new String[0], arrVariables);
                     HashCampo hsCmp = con.getDataByQuery(dataTransfer);
                     
                     if (hsCmp.getLengthCampo()>0){
@@ -214,7 +214,14 @@ public class srvBitacora extends HttpServlet {
                 strSal = str.toString();
             }
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar la QUERY de la forma con el WHERE");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                      "Problemas para ejecutar la QUERY de la forma con el WHERE");
+            eh.setDataToXML(hsDataForm);
+            eh.setDataToXML(lstForma);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+            //throw new ExceptionHandler(ex,this.getClass(),"Problemas para ejecutar la QUERY de la forma con el WHERE");
         }
         return strSal;
     }
@@ -246,9 +253,8 @@ public class srvBitacora extends HttpServlet {
         return strSld;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -261,7 +267,7 @@ public class srvBitacora extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -274,12 +280,11 @@ public class srvBitacora extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet creado para la consulta de datos de manera asincrona a la bitácora";
+    }
 }

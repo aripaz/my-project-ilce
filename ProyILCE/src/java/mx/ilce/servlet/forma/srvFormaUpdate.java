@@ -26,14 +26,15 @@ import mx.ilce.util.Validation;
 
 /**
  * Servlet implementado para actualizar los datos obtenidos de un formulario en
- * la Base de datos, asociado a la forma que le corresponda, segun el perfil
- * del usuario conectado. Utilizada en la actualizacion de datos antiguos
+ * la Base de datos, asociado a la forma que le corresponda, según el perfil
+ * del usuario conectado
  * @author ccatrilef
  */
 public class srvFormaUpdate extends HttpServlet {
    
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -124,17 +125,21 @@ public class srvFormaUpdate extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvFormaUpdate");
+                val.setTextMessage("Problemas en la execución del Error de srvFormaUpdate");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvFormaUpdate");
+            val.setTextMessage("Problemas en la execución de srvFormaUpdate");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
     } 
 
+    /**
+     * Actualiza a memoria los datos del usuario
+     * @param request
+     */
     private void actualizarData(HttpServletRequest request){
         try {
             User user = (User) request.getSession().getAttribute("user");
@@ -159,9 +164,8 @@ public class srvFormaUpdate extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -174,7 +178,7 @@ public class srvFormaUpdate extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -187,12 +191,12 @@ public class srvFormaUpdate extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet implementado para actualizar los datos obtenidos de un formulario";
+    }
 
 }
