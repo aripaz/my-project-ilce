@@ -21,7 +21,8 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LogHandler;
 
 /**
- * Clase implementada para la administracion de los datos de Bitacora
+ * Clase implementada para la administración de los datos de la bitácora del
+ * User y la Aplicación
  * @author ccatrilef
  */
 public class AdmBitacora {
@@ -48,30 +49,30 @@ public class AdmBitacora {
     public static String LOGOUT = "LOGOUT";
 
     /**
-     * Constructor del adminitrador de bitacora
+     * Constructor del administrador de bitácora
      */
     public AdmBitacora() throws ExceptionHandler {
         inicializar();
     }
 
     /**
-     * Obtiene el codigo numerico asignado como salida
-     * @return
+     * Obtiene el código numérico asignado como salida
+     * @return  Integer     Valor asignado
      */
     public Integer getIntSld() {
         return intSld;
     }
 
     /**
-     * Asigna el codigo numerico que se entregara como salida
-     * @param intSld
+     * Asigna el código numérico que se entregara como salida
+     * @param intSld    Valor asignado
      */
     public void setIntSld(Integer intSld) {
         this.intSld = intSld;
     }
 
     /**
-     * Obtiene el listado de variables de la bitacora
+     * Obtiene el listado de variables de la bitácora
      * @return
      */
     public List getLstVariables() {
@@ -79,7 +80,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Agrega el listado de variables de la bitacora
+     * Agrega el listado de variables de la bitácora
      * @param lstVariables
      */
     public void setLstVariables(List lstVariables) {
@@ -87,31 +88,31 @@ public class AdmBitacora {
     }
 
     /**
-     * Obtiene el objeto Bitacora asignado al administrador de Bitacora
-     * @return
+     * Obtiene el objeto Bitacora asignado
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
     }
 
     /**
-     * Asigna el objeto Bitacora para el administrador  de Bitacora
-     * @param bitacora
+     * Asigna el objeto Bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
     }
 
     /**
-     * Obtiene el LogDB usado por el administrador de Bitacora
-     * @return
+     * Obtiene el LogDB usado por el administrador
+     * @return  String
      */
     public String getLogDB() {
         return ((logDB==null)?"":logDB);
     }
 
     /**
-     * Asigna el LogDB que utilizara el administrador de Bitacora
+     * Asigna el LogDB que utilizara el administrador
      * @param logDB
      */
     public void setLogDB(String logDB) {
@@ -151,7 +152,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Obtiene las properties asignadas al administrador de bitacora
+     * Obtiene las properties asignadas al administrador
      * @return
      */
     public Properties getProp() {
@@ -159,16 +160,16 @@ public class AdmBitacora {
     }
 
     /**
-     * Asigna las properties que utilizara el administrador de bitacora
-     * @param prop
+     * Asigna las properties que utilizara el administrador
+     * @param prop  Objeto Propertie con los datos obtenidos
      */
     public void setProp(Properties prop) {
         this.prop = prop;
     }
 
     /**
-     * Metodo para cargar los properties de la Bitacora
-     * @return
+     * Método para cargar los properties de la Bitácora
+     * @return  Properties  Objeto Propertie con los datos obtenidos
      * @throws ExceptionHandler
      */
     private static Properties leerPropertie() throws ExceptionHandler{
@@ -232,11 +233,11 @@ public class AdmBitacora {
     }
 
     /**
-     * Realiza la conexion a la base de datos. Los parametros de conexion se
-     * obtienen de un properties para una facil mantencion sin compilar.
+     * Realiza la conexión a la base de datos. Los parámetros de conexión se
+     * obtienen de un properties para una fácil mantención sin compilar
      * @throws SQLException
      */
-    private void getConexion() throws SQLException, ExceptionHandler{
+    private void getConection() throws SQLException, ExceptionHandler{
         StringBuilder strConexion = new StringBuilder();
         try {
             if (this.getProp()!=null){
@@ -272,7 +273,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Validacion de la query para comprobar que es un insert en las tablas autorizadas
+     * Validación de la query para comprobar que es un INSERT en las tablas autorizadas
      * @return
      */
     private boolean validateInsert(){
@@ -304,8 +305,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Permite ejecutar una query de insert en la tabla de bitacora
-     * @return
+     * Método para ejecutar un INSERT en la tabla de bitácora
+     * @return  Integer     Valor con el resultado de la operación
      * @throws ExceptionHandler
      */
     private Integer executeInsert() throws ExceptionHandler{
@@ -314,7 +315,7 @@ public class AdmBitacora {
         Integer increment =Integer.valueOf(-1);
         try{
             if(validateInsert()){
-                getConexion();
+                getConection();
                 if (this.conn!=null){
                     st = this.conn.createStatement();
                     this.conn.setAutoCommit(true);
@@ -368,7 +369,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Validacion de la query para comprobar que es un update en las tablas autorizadas
+     * Validación de la query para comprobar que es un UPDATE en las tablas autorizadas
      * @return
      */
     private boolean validateUpdate(){
@@ -400,8 +401,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Permite hacer una actualizacion en la tabla de bitacora
-     * @return
+     * Método para ejecutar un UPDATE en la tabla de bitácora
+     * @return  Integer     Valor con el resultado de la operación
      * @throws ExceptionHandler
      */
     private Integer executeUpdate() throws ExceptionHandler{
@@ -409,7 +410,7 @@ public class AdmBitacora {
         Integer increment =Integer.valueOf(-1);
         try{
             if (validateUpdate()){
-                getConexion();
+                getConection();
                 if (this.conn!=null){
                     st = this.conn.createStatement();
                     increment = st.executeUpdate(this.getStrQuery());
@@ -442,7 +443,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Validacion de la query para comprobar que es un delete en las tablas autorizadas
+     * Validación de la query para comprobar que es un DELETE en las tablas autorizadas
      * @return
      */
     private boolean validateDelete(){
@@ -474,8 +475,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Permite hacer una eliminacion de un registro desde la tabla de bitacora
-     * @return
+     * Método para ejecutar un DELETE de un registro en la tabla de bitácora
+     * @return  Integer     Valor con el resultado de la operación
      * @throws ExceptionHandler
      */
     private Integer executeDelete() throws ExceptionHandler{
@@ -483,7 +484,7 @@ public class AdmBitacora {
         Integer increment =Integer.valueOf(-1);
         try{
             if (validateDelete()){
-                getConexion();
+                getConection();
                 if (this.conn!=null){
                     st = this.conn.createStatement();
                     increment = st.executeUpdate(this.getStrQuery());
@@ -516,7 +517,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Inicializa las variables que se requieren para la operacion con el
+     * Inicializa las variables que se requieren para la operación con el
      * administrador
      * @throws ExceptionHandler
      */
@@ -529,8 +530,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Metodo para el registro de login del usuario
-     * @return
+     * Método para el registro de login del usuario
+     * @return  boolean     Valor con el resultado de la operación
      */
     public boolean login() throws ExceptionHandler{
         boolean sld = false;
@@ -612,8 +613,12 @@ public class AdmBitacora {
                                 textData,
                                 "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),
-                            "Problemas al escribir en la Bitacora de Login");
+                    ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                              "Problemas al escribir en la Bitacora de Login");
+                    eh.setDataToXML(this.getBitacora());
+                    eh.setStringData(eh.getDataToXML());
+                    eh.setSeeStringData(true);
+                    throw eh;
                 }
             }
         }
@@ -621,8 +626,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Metodo para el registro del logout del usuario
-     * @return
+     * Método para el registro del logout del usuario
+     * @return  boolean     Valor con el resultado de la operación
      */
     public boolean logout() throws ExceptionHandler{
         boolean sld = true;
@@ -702,15 +707,19 @@ public class AdmBitacora {
                             textData,
                             "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),
-                        "Problemas al escribir en la Bitacora de Logout");
+                ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                          "Problemas al escribir en la Bitacora de Logout");
+                eh.setDataToXML(this.getBitacora());
+                eh.setStringData(eh.getDataToXML());
+                eh.setSeeStringData(true);
+                throw eh;
             }
         }
         return sld;
     }
 
     /**
-     * Metodo para agregar un evento a la bitacora
+     * Método para agregar un evento a la bitácora
      * @return
      */
     public boolean addBitacora()throws ExceptionHandler{
@@ -822,8 +831,12 @@ public class AdmBitacora {
                                 textData,
                                 "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),
-                            "Problemas al escribir en la Bitacora de Aplicación");
+                    ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                              "Problemas al escribir en la Bitacora de Aplicación");
+                    eh.setDataToXML(this.getBitacora());
+                    eh.setStringData(eh.getDataToXML());
+                    eh.setSeeStringData(true);
+                    throw eh;
                 }
             }
         }
@@ -831,7 +844,7 @@ public class AdmBitacora {
     }
 
     /**
-     * Metodo para realizar un UPDATE en la Bitacora
+     * Método para realizar un UPDATE en la Bitacora
      * @return
      */
     private boolean updateBitacora() throws ExceptionHandler{
@@ -943,16 +956,21 @@ public class AdmBitacora {
                             textData,
                             "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),
-                        "Problemas al actualizar en la Bitacora de Aplicación");
+                ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                          "Problemas al actualizar en la Bitacora de Aplicación");
+                eh.setDataToXML(this.getBitacora());
+                eh.setStringData(eh.getDataToXML());
+                eh.setSeeStringData(true);
+                throw eh;
             }
         }
         return sld;
     }
 
     /**
-     * Metodo para realizar un DELETE en la bitacora
-     * @return
+     * Método para invocar un DELETE en la bitácora
+     * @return  boolean     Valor con el resultado de la operación
+     * @throws ExceptionHandler
      */
     private boolean deleteBitacora()throws ExceptionHandler{
         boolean sld = true;
@@ -987,15 +1005,19 @@ public class AdmBitacora {
                             textData,
                             "BITACORA");
             }catch(Exception ex){
-                throw new ExceptionHandler(ex,this.getClass(),
-                        "Problemas al borrar en la Bitacora de Aplicacion");
+                ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                          "Problemas al borrar en la Bitacora de Aplicacion");
+                eh.setDataToXML(this.getBitacora());
+                eh.setStringData(eh.getDataToXML());
+                eh.setSeeStringData(true);
+                throw eh;
             }
         }
         return sld;
     }
 
     /**
-     * Metodo para manejar caracteres especiales que se requieren reemplazar
+     * Método para manejar caracteres especiales que se requieren reemplazar
      * antes de enviarlos como data en una query, ej ('), por ('')
      * @param strData
      * @return
@@ -1008,10 +1030,10 @@ public class AdmBitacora {
     }
 
     /**
-     * Metodo para agregar las variables asociadas a un INSERT o un UPDATE.
-     * Retorna el numero de campos operados exitosamente
+     * Método para agregar las variables asociadas a un INSERT o un UPDATE.
+     * Retorna el número de campos operados exitosamente
      * @param strClaveBitacoraProy
-     * @return
+     * @return  Integer     Número de campos agregados
      * @throws ExceptionHandler
      */
     public Integer addVariablesBitacora(Integer strClaveBitacoraProy)throws ExceptionHandler{
@@ -1071,8 +1093,13 @@ public class AdmBitacora {
                                 textData,
                                 "BITACORA");
                 }catch(Exception ex){
-                    throw new ExceptionHandler(ex,this.getClass(),
-                            "Problemas al escribir las variables de la Bitacora de Aplicación");
+                    ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                              "Problemas al escribir las variables de la Bitacora de Aplicación");
+                    eh.setDataToXML("CLAVE BITACORA",strClaveBitacoraProy);
+                    eh.setDataToXML(this.getLstVariables());
+                    eh.setStringData(eh.getDataToXML());
+                    eh.setSeeStringData(true);
+                    throw eh;
                 }
             }
         }
