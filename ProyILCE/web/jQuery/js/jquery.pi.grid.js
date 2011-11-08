@@ -447,7 +447,7 @@
                                             }
                                                 
                                             nClave=$(xmlFav).find("pk").text();
-                                            //Inserta el html para agragar el grid en el escritorio
+                                            //Inserta el html para agregar el grid en el escritorio
                                             $('#tabMisFavoritos').tabs( "add", "#tabMisFavoritos_"+nClave, oGrid.attr("titulo"));
 
                                             $("#tabMisFavoritos_"+nClave).append("<div class='queued_grids'" +
@@ -465,7 +465,7 @@
                                             );
 
                                             setTimeout("$('.queued_grids:first').gridqueue()",2000);
-                                            alert("Se agregó el grid al escritorio");  
+                                            alert("Se agregó el grid a tus favoritos");  
                                         },
                                         error:function(xhr,err){
                                             alert("Error al eliminar registro");

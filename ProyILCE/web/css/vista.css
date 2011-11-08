@@ -26,6 +26,10 @@ input.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetic
 select.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 90%; float: left; font-size: 12px; height:18px !important}
 .foreign_toolbar { float:right }
 
+td.instrucciones, p.instrucciones, li.instrucciones { margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top;   font-size: 12px !important  
+}
+
+
 #header{height:32px; background-color: #BDD2FF}/* Header */
 
 .splitterContainer {/* Main splitter element */
@@ -72,6 +76,8 @@ overflow: auto;
 .accordionHeader { display: table; width: 100%; border-top: 10px solid #FFFFFF;}
 #tabs { margin-top: 1em; }
 #tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+#tabs li .ui-icon-triangle-1-s { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+
 ui-jqgrid-view {width:100%}
 
 .ui-widget-header { border: 1px solid #aed0ea; background: #deedf7 url(images/ui-bg_highlight-soft_100_deedf7_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold !important; }
@@ -195,6 +201,8 @@ div.linkSearch {
 #tabUser {
     height: 100%; 
     margin: 1px; 
+    float: left;
+    width: 80%;
 }
 
 td.estatus_bar {
@@ -304,7 +312,12 @@ img.bitacora {
 
 .paddingzero {padding: 0 !important}
 .fileinput-input { width: 90px !important;}
-.ui-menu { position: absolute;  z-index: 100;}
+.ui-menu { 
+    position: absolute;
+    z-index: 100;
+    background: url("images/ui-bg_highlight-soft_100_deedf7_1x100.png") repeat-x scroll 50% 50% #DEEDF7;
+}
+                 
 .menus_plataforma {
     display: inline-block;
     width: 100%; }
@@ -332,11 +345,6 @@ a.session_menu {
     display: none;
 }
 
-#tabUser {
-    float: left;
-    width: 80%;
-}
-
 .column {
     float: right;
     width: 18%;
@@ -355,4 +363,22 @@ a.session_menu {
     padding: 5px;
     text-align: center;
     width: 400px;
+}
+
+.ui-menu .ui-menu-item {
+    clear: left;
+    float: left;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+}
+
+#ui-active-menuitem {
+    font-weight:bold;
+    width: 85%;
+    background: url("images/ui-bg_glass_50_3baae3_1x400.png") repeat-x scroll 50% 50% #3BAAE3;
+}
+
+.agile_carousel .numbered_button {
+    float:none !important;
 }

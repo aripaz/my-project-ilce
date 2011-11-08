@@ -81,7 +81,7 @@
                    sTypes+= '"'+$.trim($(this).find('rel').text().replace('\n','')) + '":{"icon":{"image":"' + $.trim($(this).find('icono').text().split('\n')[0]) + '"}},';
                    nClaveNodo= $.trim($(this).find('clave_nodo').text().replace('\n','')) + "-" + sDateStamp;
                    sRel=$.trim($(this).find('rel').text().replace('\n',''));
-                   sTextoNodo=$.trim($(this).find('texto_nodo').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú");
+                   sTextoNodo=$.trim($(this).find('texto_nodo').text().replace('\n','')).replace("&aacute;","á").replace("&eacute;","é").replace("&iacute;","í").replace("&oacute;","ó").replace("&uacute;","ú").replace("&Aacute;","Á").replace("&Eacute;","É").replace("&Iacute;","Í").replace("&Oacute;","Ó").replace("&Uacute;","Ú");;
                    nClaveNodoPadre=$.trim($(this).find('clave_nodo_padre').text().replace('\n',''))+"-"+sDateStamp;
                    sState=$.trim($(this).find('state').text().replace('\n',''));
                    sEvento=$.trim($(this).find('onclick').text().replace('\n',''));

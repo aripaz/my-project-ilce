@@ -38,11 +38,14 @@
             tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
             });
 
-            
-            $("#tabFavoritos").html("<div id='tabMisFavoritos'><ul><li><a href='#tabMisFavoritos1'>Mis favoritos</a></li></ul><div id='tabMisFavoritos1'></div></div>");
-
             $('#tabMisFavoritos').tabs({
-            tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+                tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"/*,
+                select: function(event, ui) { 
+                    gridId=$(ui.panel).children().children()[0].id.replace("gbox_","");
+                    oGrid= $("#"+gridId);
+                    oGrid.setGridWidth(oGrid.parent().width());
+                    return true;
+                }*/
             });
             
             $( "#tabMisFavoritos span.ui-icon-close" ).live( "click", function() {
@@ -75,8 +78,10 @@
                         }
                     });
             });
-
-            $("#tabMisFavoritos").tabs( "remove", 0);
+            
+            //Activa el carrousel de favoritos
+            id='ayudaAgregarAFavoritos'
+            //$("#tabMisFavoritos").tabs( "remove", 0);
             
              $.fn.desktop.ajax(obj);
 
@@ -125,6 +130,7 @@
             }
 
             if(sParametro==='escritorio.grid') {
+                
                 nClave=$(this).find("clave_parametro").text().split("\n")[0]
                 sValor=$(this).find("valor").text().split("\n")[0];
                 nApp=sValor.split(",")[0].split(":")[1];
@@ -152,8 +158,7 @@
                                      " insertInDesktopEnabled='0'></div>");
             }
 
-        })
-        
+        });
+                
     }
-
 })(jQuery);
