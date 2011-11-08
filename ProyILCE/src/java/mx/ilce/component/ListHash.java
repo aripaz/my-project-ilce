@@ -2,7 +2,6 @@ package mx.ilce.component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- *  Clase implementada para guardar datos en un listado Hash
+ * Clase implementada para guardar datos en un listado Hash
  * @author ccatrilef
  */
 public class ListHash {
@@ -20,10 +19,10 @@ public class ListHash {
     private HashMap lista;
 
      /**
-     * Tenemos un metodo donde en una clase "nameClass", se introducen los
+     * Método donde en una clase "nameClass", se introducen los
      * datos del objeto "hsCmp", colocandolos en los campos que correspondan,
-     * segun la definicion de la clase entregada. Se necesita que la clase
-     * poseea los metodos getter y setter para asociar los campos.
+     * según la definición de la clase entregada. Se necesita que la clase
+     * poseea los métodos getter y setter para asociar los campos.
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
@@ -74,29 +73,71 @@ public class ListHash {
             }
             sld = objeto;
         }catch(NullPointerException e0){
-            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e0,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(ClassNotFoundException e1){
-            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e1,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(NoSuchMethodException e2 ){
-            throw new ExceptionHandler(e2,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e2,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(InstantiationException e3){
-            throw new ExceptionHandler(e3,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e3,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(IllegalAccessException e4){
-            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e4,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(IllegalArgumentException e5){
-            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e5,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(InvocationTargetException e6){
-            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Bean individual");
+            ExceptionHandler eh = new ExceptionHandler(e6,this.getClass(),
+                             "Problemas para obtener el Bean individual");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return sld;
     }
 
     /**
-     * Tenemos un metodo donde se entrega un ArrayList, compuesta de elementos
+     * Método donde se entrega un ArrayList, compuesta de elementos
      * que son de la clase "nameClass", en ella se introducen los datos de los
      * registros contenidos en el objeto "hsCmp", colocandolos en los campos
-     * que correspondan, segun la definicion de la clase entregada. Se necesita
-     * que la clase poseea los metodos getter y setter para asociar los campos.
+     * que correspondan, según la definición de la clase entregada. Se necesita
+     * que la clase poseea los métodos getter y setter para asociar los campos.
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
@@ -156,25 +197,67 @@ public class ListHash {
                 }
             }
         }catch(NullPointerException e0){
-            throw new ExceptionHandler(e0,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e0,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(ClassNotFoundException e1){
-            throw new ExceptionHandler(e1,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e1,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(NoSuchMethodException e2 ){
-            throw new ExceptionHandler(e2,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e2,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(InstantiationException e3){
-            throw new ExceptionHandler(e3,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e3,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(IllegalAccessException e4){
-            throw new ExceptionHandler(e4,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e4,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(IllegalArgumentException e5){
-            throw new ExceptionHandler(e5,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e5,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch(InvocationTargetException e6){
-            throw new ExceptionHandler(e6,this.getClass(),"Problemas para obtener el Listado de Bean");
+            ExceptionHandler eh = new ExceptionHandler(e6,this.getClass(),
+                             "Problemas para obtener el Listado de Bean");
+            eh.setDataToXML("NOMBRE DE LA CLASE",nameClass.getName());
+            eh.setDataToXML(hsCmp);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return arr;
     }
 
     /**
-     * Convierte un tipo String(obj) en el tipo entregado (type)
+     * Método que convierte un tipo String(obj) en el tipo entregado (type)
      * @param type  Tipo al cual debe ser convertirse un dato
      * @param obj   String que contiene el valor que debe ser convertido
      * @return  Object  Objeto convertido a la clase que le corresponde
@@ -206,9 +289,21 @@ public class ListHash {
                 }
             }
         }catch (ClassNotFoundException e1){
-            throw new ExceptionHandler(e1,this.getClass(),"Problemas para converti el Tipo de Campo");
+            ExceptionHandler eh = new ExceptionHandler(e1,this.getClass(),
+                             "Problemas para convertir el Tipo de Campo");
+            eh.setDataToXML("TIPO", type.getName());
+            eh.setDataToXML("OBJETO", obj);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }catch (Exception e2){
-            throw new ExceptionHandler(e2,this.getClass(),"Problemas para converti el Tipo de Campo");
+            ExceptionHandler eh = new ExceptionHandler(e2,this.getClass(),
+                             "Problemas para convertir el Tipo de Campo");
+            eh.setDataToXML("TIPO", type.getName());
+            eh.setDataToXML("OBJETO", obj);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return sld;
     }
