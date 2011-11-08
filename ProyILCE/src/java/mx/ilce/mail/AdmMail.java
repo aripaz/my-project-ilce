@@ -1,8 +1,6 @@
 package mx.ilce.mail;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +14,7 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Administracion de la obtencion de datos para envio de Mail
+ * Administracion de la obtención de datos para envio de Mail
  * @author ccatrilef
  */
 public class AdmMail {
@@ -97,50 +95,10 @@ public class AdmMail {
     }
 
     /**
-     * Realiza la conexion a la base de datos. Los parametros de conexion se
-     * obtienen de un properties para una facil mantencion sin compilar.
-     * @throws SQLException
-     */
-    private void getConexion() throws SQLException, ExceptionHandler{
-        StringBuilder strConexion = new StringBuilder();
-        try {
-            if (this.getProp()!=null){
-                String server = getKey(this.getProp(),"SERVER");
-                String base = getKey(this.getProp(),"BASE");
-                String port = getKey(this.getProp(),"PORT");
-                String user = getKey(this.getProp(),"USR");
-                String psw = getKey(this.getProp(),"PSW");
-
-                strConexion.append("jdbc:sqlserver://");
-                strConexion.append(server);
-                strConexion.append(":").append(port);
-                strConexion.append(";databasename=");
-                strConexion.append(base);
-                strConexion.append(";selectMethod=cursor;");
-
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                this.conn = DriverManager.getConnection(strConexion.toString(),user,psw);
-                if (this.conn.isClosed()){
-                    System.out.println("NO HAY CONEXION");
-                }
-            }
-        }catch (SQLException sqlex){
-            throw new ExceptionHandler(sqlex,this.getClass(),
-                    "Problemas para abrir conexión a la Base de Datos");
-        } catch (ClassNotFoundException ex) {
-            throw new ExceptionHandler(ex,this.getClass(),
-                    "No se encontro los Driver de conexión");
-        }catch (Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para abrir conexión a Base de Datos");
-        }
-    }
-
-    /**
      * Obtiene el valor de una palabra clave (key), desde un arreglo de
      * properties
-     * @param prop      Listado de properties obtenido desde el archivo de configuracion
-     * @param strKey    Palabra usada como Key para la busqueda dentro del propertie
+     * @param prop      Listado de properties obtenido desde el archivo de configuración
+     * @param strKey    Palabra usada como Key para la búsqueda dentro del propertie
      * @return String   Valor de la Key solicitada
      */
     private static String getKey(Properties prop, String key) throws ExceptionHandler{
@@ -150,9 +108,13 @@ public class AdmMail {
             if (e.hasMoreElements()){
                 sld = prop.getProperty(key);
             }
-	}catch(Exception e){
-            throw new ExceptionHandler(e,AdmMail.class,
-                    "Problemas para obtener la llave desde el properties");
+	}catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,AdmMail.class,
+                             "Problemas para obtener la llave desde el properties");
+            eh.setDataToXML("KEY",key);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	}
         return sld;
     }
@@ -165,80 +127,89 @@ public class AdmMail {
      */
     public HashMap getReceptorMail(DataMail dataMail) throws ExceptionHandler{
         HashMap hm = new HashMap();
-        this.setDataMail(dataMail);
-        this.setProp(UtilMail.leerConfig());
+        try{
+            this.setDataMail(dataMail);
+            this.setProp(UtilMail.leerConfig());
 
-        ConEntidad conE = new ConEntidad();
-        conE.setBitacora(this.getBitacora());
+            ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
 
-        DataTransfer dataTransfer = new DataTransfer();
-        
-        String idQuery = getKey(this.getProp(),MAILLIST);
-        dataTransfer.setIdQuery(Integer.valueOf(idQuery));
-        String[] arrData = new String[1];
-        arrData[0]= dataMail.getClaveForma().toString();
-        dataTransfer.setArrData(arrData);
+            DataTransfer dataTransfer = new DataTransfer();
 
-        HashCampo hscmp = conE.getDataByIdQuery(dataTransfer);
-        Campo cmp = (hscmp.getCampoByAlias("CONSULTA")==null)?new Campo():hscmp.getCampoByAlias("CONSULTA");
+            String idQuery = getKey(this.getProp(),MAILLIST);
+            dataTransfer.setIdQuery(Integer.valueOf(idQuery));
+            String[] arrData = new String[1];
+            arrData[0]= dataMail.getClaveForma().toString();
+            dataTransfer.setArrData(arrData);
 
-        String queryPersonas = cmp.getValor();
-        if ((queryPersonas==null)||("".equals(queryPersonas))){
-            queryPersonas = "select nombre, apellido_paterno, apellido_materno, "
-                    + " 'carlos.catrilef@gmail.com' as email "
-                    + " from empleado e where e.apellido_paterno = 'catrilef'";
-        }
-        StringBuilder strLstNombre = new StringBuilder();
-        StringBuilder strLstMail = new StringBuilder();
+            HashCampo hscmp = conE.getDataByIdQuery(dataTransfer);
+            Campo cmp = (hscmp.getCampoByAlias("CONSULTA")==null)?new Campo():hscmp.getCampoByAlias("CONSULTA");
 
-        if ((queryPersonas!=null)&&(!"".equals(queryPersonas))) {
-            dataTransfer = new DataTransfer();
-            dataTransfer.setQuery(queryPersonas);
-            HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
-            HashMap hsMp = hsCmp.getListData();
-            for (int i=0;i<hsMp.size();i++){
-                List lst = (List) hsMp.get(Integer.valueOf(i));
-                Iterator it = lst.iterator();
-                StringBuilder strNombre = new StringBuilder();
-                StringBuilder strMail = new StringBuilder();
-                boolean blNombre = false;
-                boolean blApPat = false;
-                boolean blApMat = false;
-                boolean blMail = false;
-                while (it.hasNext()){
-                    Campo cmpPer = (Campo) it.next();
-                    if ("NOMBRE".equals(cmpPer.getNombre())){
-                        strNombre.append(cmpPer.getValor());
-                        blNombre = true;
-                    }
-                    if ("APELLIDOPATERNO".equals(cmpPer.getNombre())){
-                        strNombre.append(" ");
-                        strNombre.append(cmpPer.getValor());
-                        blApPat = true;
-                    }
-                    if ("APELLIDOMATERNO".equals(cmpPer.getNombre())){
-                        strNombre.append(" ");
-                        strNombre.append(cmpPer.getValor());
-                        blApMat = true;
-                    }
-                    if ("EMAIL".equals(cmpPer.getNombre())){
-                        strMail.append(cmpPer.getValor());
-                        blMail = true;
-                    }
-                    if (blNombre && blApPat && blApMat && blMail){
-                        strLstNombre.append(strNombre).append(";");
-                        strLstMail.append(strMail).append(";");
-                        strNombre = new StringBuilder();
-                        strMail = new StringBuilder();
-                        blNombre = false;
-                        blApPat = false;
-                        blApMat = false;
-                        blMail = false;
+            String queryPersonas = cmp.getValor();
+            //TODO:ESTA ES UNA QUERY POR DEFECTO EN CASO QUE FALLE LA QUERY REAL Y SE ACTIVE EL MAIL
+            if ((queryPersonas==null)||("".equals(queryPersonas))){
+                queryPersonas = "select e.nombre, e.apellido_paterno, e.apellido_materno, e.email "
+                        + " from empleado e where e.apellido_paterno = 'x@x.com'";
+            }
+            StringBuilder strLstNombre = new StringBuilder();
+            StringBuilder strLstMail = new StringBuilder();
+
+            if ((queryPersonas!=null)&&(!"".equals(queryPersonas))) {
+                dataTransfer = new DataTransfer();
+                dataTransfer.setQuery(queryPersonas);
+                HashCampo hsCmp = conE.getDataByQuery(dataTransfer);
+                HashMap hsMp = hsCmp.getListData();
+                for (int i=0;i<hsMp.size();i++){
+                    List lst = (List) hsMp.get(Integer.valueOf(i));
+                    Iterator it = lst.iterator();
+                    StringBuilder strNombre = new StringBuilder();
+                    StringBuilder strMail = new StringBuilder();
+                    boolean blNombre = false;
+                    boolean blApPat = false;
+                    boolean blApMat = false;
+                    boolean blMail = false;
+                    while (it.hasNext()){
+                        Campo cmpPer = (Campo) it.next();
+                        if ("NOMBRE".equals(cmpPer.getNombre())){
+                            strNombre.append(cmpPer.getValor());
+                            blNombre = true;
+                        }
+                        if ("APELLIDOPATERNO".equals(cmpPer.getNombre())){
+                            strNombre.append(" ");
+                            strNombre.append(cmpPer.getValor());
+                            blApPat = true;
+                        }
+                        if ("APELLIDOMATERNO".equals(cmpPer.getNombre())){
+                            strNombre.append(" ");
+                            strNombre.append(cmpPer.getValor());
+                            blApMat = true;
+                        }
+                        if ("EMAIL".equals(cmpPer.getNombre())){
+                            strMail.append(cmpPer.getValor());
+                            blMail = true;
+                        }
+                        if (blNombre && blApPat && blApMat && blMail){
+                            strLstNombre.append(strNombre).append(";");
+                            strLstMail.append(strMail).append(";");
+                            strNombre = new StringBuilder();
+                            strMail = new StringBuilder();
+                            blNombre = false;
+                            blApPat = false;
+                            blApMat = false;
+                            blMail = false;
+                        }
                     }
                 }
             }
+            hm.put("TO",strLstMail.toString());
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                      "Problemas para procesar los datos del Mail");
+            eh.setDataToXML(dataMail);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
-        hm.put("TO",strLstMail.toString());
         return hm;
     }
 }

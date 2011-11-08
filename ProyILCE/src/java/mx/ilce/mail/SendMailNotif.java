@@ -10,8 +10,8 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Clase encargada de activar el envio de mail de notificacion
- * segun el estatus de una tarea
+ * Clase encargada de activar el envío de mail de notificación
+ * según el estatus de una tarea
  * @author ccatrilef
  */
 public class SendMailNotif {
@@ -52,153 +52,163 @@ public class SendMailNotif {
     }
 
     /**
-     *  Metodo para envio de mail asociado a un evento y el estatus de la
+     * Método para envio de mail asociado a un evento y el estatus de la
      * actividad a la que viene asociado.
-     * @return  Boolean     Valor de validacion del resultado de la operacion
+     * @return  Boolean     Valor de validación del resultado de la operación
      * @throws ExceptionHandler
      */
     public boolean admSendMail() throws ExceptionHandler{
         boolean sld = false;
+        String queryRegitro = "";
+        try{
+            queryRegitro = "select clave_registro , "
+                    + " fecha_bitacora , clave_empleado , clave_forma, clave_aplicacion"
+                    + " from bitacora_aplicacion "
+                    + " where clave_bitacora = " + this.getBitacora().getIdBitacora();
 
-        String queryRegitro = "select clave_registro , "
-                + " fecha_bitacora , clave_empleado , clave_forma, clave_aplicacion"
-                + " from bitacora_aplicacion "
-                + " where clave_bitacora = " + this.getBitacora().getIdBitacora();
+            ConEntidad con = new ConEntidad();
 
-        ConEntidad con = new ConEntidad();
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setQuery(queryRegitro);
+            HashCampo hsCmp = con.getDataByQuery(dataTransfer);
 
-        DataTransfer dataTransfer = new DataTransfer();
-        dataTransfer.setQuery(queryRegitro);
-        HashCampo hsCmp = con.getDataByQuery(dataTransfer);
+            HashMap hsMap = hsCmp.getListData();
 
-        HashMap hsMap = hsCmp.getListData();
-
-        List lstCmp = null;
-        String idRegistro = null;
-        String fechaBitacora = null;
-        String claveUser = null;
-        String claveForma = null;
-        String claveAplicacion = null;
-        if (!hsMap.isEmpty()){
-            lstCmp = (List) hsMap.get(0);
-            if (!lstCmp.isEmpty()){
-                Campo cmp = (Campo) lstCmp.get(0);
-                idRegistro = cmp.getValor();
-                cmp = (Campo) lstCmp.get(1);
-                fechaBitacora = cmp.getValor();
-                cmp = (Campo) lstCmp.get(2);
-                claveUser = cmp.getValor();
-                cmp = (Campo) lstCmp.get(3);
-                claveForma = cmp.getValor();
-                cmp = (Campo) lstCmp.get(4);
-                claveAplicacion = cmp.getValor();
-            }
-        }
-        String idStatus = null;
-        if ((idRegistro!=null) && (!"".equals(idRegistro))){
-            String queryTarea = "select clave_estatus "
-                    + " from TAREA where clave_tarea =" + idRegistro;
-            dataTransfer.setQuery(queryTarea);
-            hsCmp = con.getDataByQuery(dataTransfer);
-            hsMap = hsCmp.getListData();
+            List lstCmp = null;
+            String idRegistro = null;
+            String fechaBitacora = null;
+            String claveUser = null;
+            String claveForma = null;
+            String claveAplicacion = null;
             if (!hsMap.isEmpty()){
                 lstCmp = (List) hsMap.get(0);
                 if (!lstCmp.isEmpty()){
                     Campo cmp = (Campo) lstCmp.get(0);
-                    idStatus = cmp.getValor();
-                }
-            }
-        }
-        String idFlujo = null;
-        String enviarNotificacion = null;
-        String notificacion = null;
-        String subject = null;
-        String fecha = null;
-        String proyecto = null;
-        if ((idStatus!=null)&&(!"".equals(idStatus))){
-            String queryFlujo = "select clave_flujo "
-                    + ", enviar_notificacion, notificacion "
-                    + ", ct.categoria, tr.fecha_inicial, py.proyecto "
-                    + " from flujo_datos_forma fdf , categoria_tarea ct "
-                    + ", tarea tr , proyecto py "
-                    + " where fdf.clave_forma = " + claveForma
-                    + " and   fdf.clave_aplicacion = " + claveAplicacion
-                    + " and   fdf.secuencia = " + idStatus
-                    + " and   tr.clave_tarea = " + idRegistro
-                    + " and   tr.clave_categoria = ct.clave_categoria "
-                    + " and   tr.clave_proyecto = py.clave_proyecto";
-            dataTransfer.setQuery(queryFlujo);
-            hsCmp = con.getDataByQuery(dataTransfer);
-            hsMap = hsCmp.getListData();
-            if (!hsMap.isEmpty()){
-                lstCmp = (List) hsMap.get(0);
-                if (!lstCmp.isEmpty()){
-                    Campo cmp = (Campo) lstCmp.get(0);
-                    idFlujo = cmp.getValor();
+                    idRegistro = cmp.getValor();
                     cmp = (Campo) lstCmp.get(1);
-                    enviarNotificacion = cmp.getValor();
+                    fechaBitacora = cmp.getValor();
                     cmp = (Campo) lstCmp.get(2);
-                    notificacion = cmp.getValor();
+                    claveUser = cmp.getValor();
                     cmp = (Campo) lstCmp.get(3);
-                    subject = cmp.getValor();
+                    claveForma = cmp.getValor();
                     cmp = (Campo) lstCmp.get(4);
-                    fecha = cmp.getValor();
-                    cmp = (Campo) lstCmp.get(5);
-                    proyecto = cmp.getValor();
+                    claveAplicacion = cmp.getValor();
                 }
             }
-        }
-        if ( (idFlujo!=null)&&(!"".equals(idFlujo)) &&
-             (enviarNotificacion!=null)&&(!"".equals(enviarNotificacion)) &&
-             (notificacion!=null)&&(!"".equals(notificacion))){
-
-            String queryUser = "select em.email, em.nombre , "
-                    + " em.apellido_paterno , em.apellido_materno"
-                    + " from empleado em "
-                    + " where em.clave_empleado =" + claveUser;
-            dataTransfer.setQuery(queryUser);
-            hsCmp = con.getDataByQuery(dataTransfer);
-            hsMap = hsCmp.getListData();
-            String[] strUser = null;
-            if (!hsMap.isEmpty()){
-                strUser = getDataUser(hsMap);
+            String idStatus = null;
+            if ((idRegistro!=null) && (!"".equals(idRegistro))){
+                String queryTarea = "select clave_estatus "
+                        + " from TAREA where clave_tarea =" + idRegistro;
+                dataTransfer.setQuery(queryTarea);
+                hsCmp = con.getDataByQuery(dataTransfer);
+                hsMap = hsCmp.getListData();
+                if (!hsMap.isEmpty()){
+                    lstCmp = (List) hsMap.get(0);
+                    if (!lstCmp.isEmpty()){
+                        Campo cmp = (Campo) lstCmp.get(0);
+                        idStatus = cmp.getValor();
+                    }
+                }
             }
-
-            notificacion = notificacion.replace("%CATEGORIA", subject);
-            notificacion = notificacion.replace("%FECHA", fecha);
-            notificacion = notificacion.replace("%PROYECTO", proyecto);
-            notificacion = notificacion.replace("%DIABITACORA", fechaBitacora);
-            if (strUser!=null){
-                notificacion = notificacion.replace("%USER", strUser[1]);
+            String idFlujo = null;
+            String enviarNotificacion = null;
+            String notificacion = null;
+            String subject = null;
+            String fecha = null;
+            String proyecto = null;
+            if ((idStatus!=null)&&(!"".equals(idStatus))){
+                String queryFlujo = "select clave_flujo "
+                        + ", enviar_notificacion, notificacion "
+                        + ", ct.categoria, tr.fecha_inicial, py.proyecto "
+                        + " from flujo_datos_forma fdf , categoria_tarea ct "
+                        + ", tarea tr , proyecto py "
+                        + " where fdf.clave_forma = " + claveForma
+                        + " and   fdf.clave_aplicacion = " + claveAplicacion
+                        + " and   fdf.secuencia = " + idStatus
+                        + " and   tr.clave_tarea = " + idRegistro
+                        + " and   tr.clave_categoria = ct.clave_categoria "
+                        + " and   tr.clave_proyecto = py.clave_proyecto";
+                dataTransfer.setQuery(queryFlujo);
+                hsCmp = con.getDataByQuery(dataTransfer);
+                hsMap = hsCmp.getListData();
+                if (!hsMap.isEmpty()){
+                    lstCmp = (List) hsMap.get(0);
+                    if (!lstCmp.isEmpty()){
+                        Campo cmp = (Campo) lstCmp.get(0);
+                        idFlujo = cmp.getValor();
+                        cmp = (Campo) lstCmp.get(1);
+                        enviarNotificacion = cmp.getValor();
+                        cmp = (Campo) lstCmp.get(2);
+                        notificacion = cmp.getValor();
+                        cmp = (Campo) lstCmp.get(3);
+                        subject = cmp.getValor();
+                        cmp = (Campo) lstCmp.get(4);
+                        fecha = cmp.getValor();
+                        cmp = (Campo) lstCmp.get(5);
+                        proyecto = cmp.getValor();
+                    }
+                }
             }
+            if ( (idFlujo!=null)&&(!"".equals(idFlujo)) &&
+                 (enviarNotificacion!=null)&&(!"".equals(enviarNotificacion)) &&
+                 (notificacion!=null)&&(!"".equals(notificacion))){
 
-            String queryDest = "select em.email, em.nombre "
-                    + ", em.apellido_paterno , em.apellido_materno"
-                    + " from empleado em , flujo_datos_empleado fde"
-                    + " where em.clave_empleado = fde.clave_empleado_asignado"
-                    + " and fde.clave_flujo = " + idFlujo;
+                String queryUser = "select em.email, em.nombre , "
+                        + " em.apellido_paterno , em.apellido_materno"
+                        + " from empleado em "
+                        + " where em.clave_empleado =" + claveUser;
+                dataTransfer.setQuery(queryUser);
+                hsCmp = con.getDataByQuery(dataTransfer);
+                hsMap = hsCmp.getListData();
+                String[] strUser = null;
+                if (!hsMap.isEmpty()){
+                    strUser = getDataUser(hsMap);
+                }
 
-            dataTransfer.setQuery(queryDest);
-            hsCmp = con.getDataByQuery(dataTransfer);
-            hsMap = hsCmp.getListData();
-            String strTo = "";
-            if (!hsMap.isEmpty()){
-                strTo = getDataDest(hsMap);
+                notificacion = notificacion.replace("%CATEGORIA", subject);
+                notificacion = notificacion.replace("%FECHA", fecha);
+                notificacion = notificacion.replace("%PROYECTO", proyecto);
+                notificacion = notificacion.replace("%DIABITACORA", fechaBitacora);
+                if (strUser!=null){
+                    notificacion = notificacion.replace("%USER", strUser[1]);
+                }
+
+                String queryDest = "select em.email, em.nombre "
+                        + ", em.apellido_paterno , em.apellido_materno"
+                        + " from empleado em , flujo_datos_empleado fde"
+                        + " where em.clave_empleado = fde.clave_empleado_asignado"
+                        + " and fde.clave_flujo = " + idFlujo;
+
+                dataTransfer.setQuery(queryDest);
+                hsCmp = con.getDataByQuery(dataTransfer);
+                hsMap = hsCmp.getListData();
+                String strTo = "";
+                if (!hsMap.isEmpty()){
+                    strTo = getDataDest(hsMap);
+                }
+
+                this.setDataMail(new DataMail());
+                this.getDataMail().setSubJect(subject);
+                this.getDataMail().setTexto(notificacion);
+                this.getDataMail().setStrTo(strTo);
+                this.getDataMail().setStrCopy(strUser[0]);
+                sld = true;
             }
-
-            this.setDataMail(new DataMail());
-            this.getDataMail().setSubJect(subject);
-            this.getDataMail().setTexto(notificacion);
-            this.getDataMail().setStrTo(strTo);
-            this.getDataMail().setStrCopy(strUser[0]);
-            sld = true;
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para activar el envio de Mail de notificación");
+            eh.setDataToXML("QUERY REGISTRO",queryRegitro);
+            eh.setDataToXML(this.getBitacora());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return sld;
     }
 
     /**
      * Obtiene los nombres contenidos en el HashMap. Este requiere que venga
-     * en un orden especifico, el orden se lo da la query con que se obtuvo los
+     * en un orden específico, el orden se lo da la query con que se obtuvo los
      * datos. La salida entrega los nombres tras recorrer el HashMap. Usado para
      * obtener los nombres de los destinatarios de mail.
      * @param hsMap         HashMap con los datos de los nombres
