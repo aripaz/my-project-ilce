@@ -22,13 +22,14 @@ import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
- * Servlet implementado para el envio de mail
+ * Servlet implementado para el envío de mail
  * @author ccatrilef
  */
 public class srvSendMail extends HttpServlet {
    
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -138,10 +139,12 @@ public class srvSendMail extends HttpServlet {
                         request.getSession().setAttribute("xmlTab",
                                 admXML.salidaXMLBitacora(strMAILPK,strMAILBITAC));
                     }else{
+                        //request.getSession().setAttribute("xmlTab",
+                        //        admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
                         request.getSession().setAttribute("xmlTab",
-                                admXML.salidaXML(String.valueOf("MAIL ENVIADO")));
+                                admXML.salidaXMLResponse("Se envió su contraseña a su correo registrado; revise su correo y siga las instrucciones"));
                     }
-                    if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
+                    /*if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                         LoginHandler lg = new LoginHandler();
                         lg.setTextExecution("Mail Enviado, revice su correo");
                         request.getSession().setAttribute("loginHand",lg);
@@ -150,10 +153,16 @@ public class srvSendMail extends HttpServlet {
                         request.getRequestDispatcher(PagDispacher).forward(request, response);
                     }else{
                         request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
-                    }
+                    }*/
+                    request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
                 }
             }
         }catch (ExceptionHandler eh){
+            AdminXML admXML = new AdminXML();            
+            request.getSession().setAttribute("xmlTab",
+                        admXML.salidaXMLResponse("Se ha producido un error en el envío del correo"));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+            /*
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                 LoginHandler lg = new LoginHandler();
                 lg.setTextExecution(eh.getXmlError().toString());
@@ -167,8 +176,13 @@ public class srvSendMail extends HttpServlet {
                     val.setTextMessage("Problemas en la execución del Error de srvSendMail");
                     val.executeErrorException(es, request, response);
                 }
-            }
+            }*/
         }catch(Exception e){
+            AdminXML admXML = new AdminXML();            
+            request.getSession().setAttribute("xmlTab",
+                        admXML.salidaXMLResponse("Se ha producido un error en el envío del correo"));
+            request.getRequestDispatcher("/resource/jsp/xmlTab.jsp").forward(request, response);
+            /*
             if ((PagDispacher!=null)&&(!"".equals(PagDispacher))){
                 LoginHandler lg = new LoginHandler();
                 lg.setTextExecution("Error al procesar el envío de Mail");
@@ -178,14 +192,13 @@ public class srvSendMail extends HttpServlet {
             }else{
                 val.setTextMessage("Problemas en la execución de srvSendMail");
                 val.executeErrorException(e, request, response);
-            }
-        } finally {
+            }*/
         }
     } 
 
     /**
-     * Metodo para limpiar de memoria los datos asociados al mail. Nos asegura
-     * que ante una nueva invocacion no se tomen datos de un mail anterior.
+     * Método para limpiar de memoria los datos asociados al mail. Nos asegura
+     * que ante una nueva invocación no se tomen datos de un mail anterior.
      * @param request
      */
     private void cleanMemory(HttpServletRequest request){
@@ -238,9 +251,8 @@ public class srvSendMail extends HttpServlet {
         return hs;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -253,7 +265,7 @@ public class srvSendMail extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -266,12 +278,11 @@ public class srvSendMail extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet implementado para el envío de mail";
+    }
 }

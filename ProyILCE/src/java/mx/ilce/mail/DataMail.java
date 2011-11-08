@@ -308,16 +308,16 @@ public class DataMail implements Serializable{
     }
 
     /**
-     * Obtiene el Orden
-     * @return  Integer     Orden de posicion
+     * Obtiene el Orden de posición
+     * @return  Integer     Orden de posición
      */
     public Integer getOrden() {
         return orden;
     }
 
     /**
-     * Asigna el Orden
-     * @param orden     Orden de posicion
+     * Asigna el Orden de posición
+     * @param orden     Orden de posición
      */
     public void setOrden(Integer orden) {
         this.orden = orden;
@@ -418,4 +418,37 @@ public class DataMail implements Serializable{
     public void setTipoMail(String tipoMail) {
         this.tipoMail = tipoMail;
     }
+
+    @Override
+    public String toString() {
+        return "DataMail{"
+                + ((claveForma!=null)?"\n\tclaveForma=" + claveForma:"")
+                + ((idQuery!=null)?"\n\tidQuery=" + idQuery :"")
+                + ((query!=null)?"\n\tquery=" + query :"")
+                + ((tipoQuery!=null)?"\n\ttipoQuery=" + tipoQuery :"")
+                + ((idTipoMail!=null)?"\n\tidTipoMail=" + idTipoMail:"")
+                + ((tipoMail!=null)?"\n\ttipoMail=" + tipoMail :"")
+                + ((idMail!=null)?"\n\tidMail=" + idMail :"")
+                + ((mail!=null)?"\n\tmail=" + mail :"")
+                + ((nombre!=null)?"\n\tnombre=" + nombre :"")
+                + ((appPaterno!=null)?"\n\tappPaterno=" + appPaterno :"")
+                + ((appMaterno!=null)?"\n\tappMaterno=" + appMaterno :"")
+                + ((tipo!=null)?"\n\ttipo=" + tipo :"")
+                + ((subJect!=null)?"\n\tsubJect=" + subJect :"")
+                + ((texto!=null)?"\n\ttexto=" + texto :"")
+                + ((textoImpersonal!=null)?"\n\ttextoImpersonal=" + textoImpersonal :"")
+                + ((orden!=null)?"\n\torden=" + orden :"")
+                + ((password!=null)?"\n\tpassword=" + password :"")
+                + ((listaFrom!=null)?"\n\tlistaFrom=" + listaFrom.toString() :"")
+                + ((listaTo!=null)?"\n\tlistaTo=" + listaTo.toString() :"")
+                + ((listCopy!=null)?"\n\tlistCopy=" + listCopy :"")
+                + ((ListO!=null)?"\n\tListO=" + ListO.toString() :"")
+                + ((strTo!=null)?"\n\tstrTo=" + strTo :"")
+                + ((strCopy!=null)?"\n\tstrCopy=" + strCopy :"")
+                + ((strCopyO!=null)?"\n\tstrCopyO=" + strCopyO :"")
+                + "\n}";
+    }
+
+
+
 }

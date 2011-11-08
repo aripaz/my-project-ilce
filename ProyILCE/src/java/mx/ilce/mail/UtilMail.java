@@ -21,7 +21,7 @@ class UtilMail {
     private static File WORKING_DIRECTORY;
 
     /**
-     *  Obtiene un Objeto Address[] que contiene los mail recuperados de un
+     * Obtiene un Objeto Address[] que contiene los mail recuperados de un
      * texto, en el cual estan separados por un caracter entregado como dato
      * de entrada. Se requiere este objeto pues es el que maneja el Controller
      * Java para envio de mail.
@@ -54,7 +54,9 @@ class UtilMail {
         } catch (AddressException e) {
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
                     "Problemas para obtener direcciones de mail");
-            eh.setStringData(entrada);
+            eh.setDataToXML("ENTRADA", entrada);
+            eh.setDataToXML("SEPARADOR", separador);
+            eh.setStringData(eh.getDataToXML());
             eh.setSeeStringData(true);
             throw eh;
         }
@@ -62,7 +64,7 @@ class UtilMail {
     }
 
     /**
-     * Metodo para leer la configuracion de los datos del mail en el archivo
+     * Método para leer la configuración de los datos del mail en el archivo
      * de properties mail.properties
      * @return Properties   Objeto Properties con los datos leidos
      * @throws ExceptionHandler
@@ -72,9 +74,10 @@ class UtilMail {
 	InputStream is = null;
 	File f = null;
         File fichero = null;
+        URL url = null;
 	try {
             String separador = String.valueOf(File.separator);
-            URL url = UtilMail.class.getResource("UtilMail.class");
+            url = UtilMail.class.getResource("UtilMail.class");
 
             if(url.getProtocol().equals("file")) {
 		f = new File(url.toURI());
@@ -88,8 +91,13 @@ class UtilMail {
                 props.load(is);
             }
         } catch(URISyntaxException u){
-            throw new ExceptionHandler(u,UtilMail.class,
-                    "Problemas para leer el archivo de configuración de Mail");
+            ExceptionHandler eh = new ExceptionHandler(u,UtilMail.class,
+                             "Problemas para leer el archivo de configuración de Mail");
+            eh.setDataToXML("ARCHIVO",((url==null)?"":url.toString()));
+            eh.setDataToXML("FILE",((f==null)?"":f.toString()));
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
 	} catch(IOException e) {
             throw new ExceptionHandler(e,UtilMail.class,
                     "Problemas para leer el archivo de configuración de Mail");
