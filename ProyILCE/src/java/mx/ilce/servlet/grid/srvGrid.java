@@ -27,7 +27,8 @@ import mx.ilce.util.Validation;
 public class srvGrid extends HttpServlet {
     private String[][] arrVariables = null;
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -54,7 +55,10 @@ public class srvGrid extends HttpServlet {
                 String claveAplic = (String) hsForm.get("$ca");
 
                 String dp = (String) hsForm.get("$dp");
-                String tipoAccion = "select";
+                String tipoAccion = (String) hsForm.get("$ta");
+                if ((tipoAccion==null)||("".equals(tipoAccion))){
+                    tipoAccion = "select";
+                }
                 String strWhere = (String) hsForm.get("$w");
 
                 String sidx = (String) hsForm.get("sidx");
@@ -124,8 +128,11 @@ public class srvGrid extends HttpServlet {
                             }else{
                                 Exception e = new Exception();
                                 ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Error de Permiso");
-                                eh.setTextError("No existe la configuracion de campos para la Forma solicitada");
-                                eh.setStringData("ID FORMA: "+ claveForma);
+                                eh.setTextError("No existe la configuración de campos para la Forma solicitada");
+                                eh.setDataToXML("CLAVE FORMA",claveForma);
+                                eh.setDataToXML("$dp",dp);
+                                eh.setDataToXML("$ta",tipoAccion);
+                                eh.setStringData(eh.getDataToXML());
                                 eh.setSeeStringData(true);
                                 xmlForma = eh.getXmlError();
                             }
@@ -133,7 +140,11 @@ public class srvGrid extends HttpServlet {
                             Exception e = new Exception();
                             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),"Error de Permiso");
                             eh.setTextError("No existe en el perfil la Forma solicitada");
-                            eh.setStringData("ID FORMA: "+ claveForma);
+                            eh.setDataToXML("CLAVE FORMA",claveForma);
+                            eh.setDataToXML("$dp",dp);
+                            eh.setDataToXML("$ta",tipoAccion);
+                            eh.setDataToXML("CLAVE PERFIL",user.getClavePerfil().toString());
+                            eh.setStringData(eh.getDataToXML());
                             eh.setSeeStringData(true);
                             xmlForma = eh.getXmlError();
                         }
@@ -212,9 +223,8 @@ public class srvGrid extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -227,7 +237,7 @@ public class srvGrid extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -240,12 +250,12 @@ public class srvGrid extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet encargado de cargar los datos de la grilla";
+    }
 
 }

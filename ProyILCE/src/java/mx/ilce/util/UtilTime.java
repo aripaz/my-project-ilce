@@ -1,7 +1,7 @@
 package mx.ilce.util;
 
 /**
- *  Clase implementada para obtener datos de tipo horario
+ * Clase implementada para obtener datos de tipo horario
  * @author ccatrilef
  */
  public class UtilTime {

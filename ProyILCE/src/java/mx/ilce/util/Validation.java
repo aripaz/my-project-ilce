@@ -14,7 +14,7 @@ import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- *  Clase implementada para contener un conjunto de metodos de validacion
+ * Clase implementada para contener un conjunto de métodos de validación
  * @author ccatrilef
  */
 public class Validation {
@@ -38,7 +38,7 @@ public class Validation {
     }
 
     /**
-     * Metodo para validar si un dato es Par o no
+     * Método para validar si un dato es Par o no
      * @param data
      * @return
      */
@@ -49,7 +49,7 @@ public class Validation {
     }
 
     /**
-     * Metodo para el reemplazo de comillas(') a doble comilla('') en los datos
+     * Método para el reemplazo de comillas(') a doble comilla('') en los datos
      * que se entregan a una query
      * @param strData
      * @return
@@ -63,12 +63,12 @@ public class Validation {
     }
 
     /**
-     * Metodo para ejecutar el despliegue de error para cuando se valido que
+     * Método para ejecutar el despliegue de error para cuando se validó que
      * un formulario no esta completo en la data exigida
      * @param lstVal    Data enviada
      * @param clase     Clase donde se produjo el error
-     * @param request   Request de la session HTML
-     * @param response  Response de la session HTML
+     * @param request   Request de la Session HTML
+     * @param response  Response de la Session HTML
      * @throws ServletException
      * @throws IOException
      */
@@ -96,13 +96,13 @@ public class Validation {
     }
 
     /**
-     * Metodo para ejecutar el despliegue de error cuando no se obtiene data de la 
+     * Método para ejecutar el despliegue de error cuando no se obtiene data de la
      * consulta enviada
      * @param dataVal   Data enviada
      * @param clase     Clase donde se produjo el error
      * @param message   Mensaje enviado
-     * @param request   Request de la session HTML
-     * @param response  Response de la session HTML
+     * @param request   Request de la Session HTML
+     * @param response  Response de la Session HTML
      * @throws ServletException
      * @throws IOException
      */
@@ -124,11 +124,11 @@ public class Validation {
     }
 
     /**
-     * Se utiliza para ejecutar el despliegue de error cuando se atrapo una
-     * excepcion del tipo ExceptionHandler
+     * Método utilizado para ejecutar el despliegue de error cuando se atrapo una
+     * Excepcion del tipo ExceptionHandler
      * @param eh    ExceptionHandler atrapada
-     * @param request   Request de la session HTML
-     * @param response  Response de la session HTML
+     * @param request   Request de la Session HTML
+     * @param response  Response de la Session HTML
      * @throws Exception
      */
     public void executeErrorHandler(ExceptionHandler eh, HttpServletRequest request, HttpServletResponse response)
@@ -146,8 +146,8 @@ public class Validation {
     }
 
     /**
-     * Se utiliza para ejecutar el despliegue de error cuando se atrapo una
-     * excepcion del tipo Exception
+     * Método utilizado para ejecutar el despliegue de error cuando se atrapo una
+     * Excepcion del tipo Exception
      * @param es    Exception atrapada
      * @param request   Request de la session HTML
      * @param response  Response de la session HTML
@@ -164,11 +164,11 @@ public class Validation {
 
     /**
      * Validador de datos de de un formulario. Entrega un List que contiene dos
-     * elementos del tipo String, el primero es el resultado de la validacion:
-     * a)true: el formulario contiene los datos enviados, b)false: al menos uno
+     * elementos del tipo String, el primero es el resultado de la validación:
+     * a)TRUE: el formulario contiene los datos enviados, b)FALSE: al menos uno
      * de los datos solicitados no viene en el formulario.
-     * @param lst  listado de parametros a validar
-     * @param form  formulario capturado
+     * @param lst  Listado de parámetros a validar
+     * @param form  Formulario capturado
      * @return
      */
     public List validationForm(ArrayList lst, HashMap form){
@@ -196,9 +196,9 @@ public class Validation {
     }
 
     /**
-     * Valida que esten en memoria el user y el perfil del usuario conectado
-     * @param request   Request de la session HTML
-     * @return
+     * Método que valida que esten en memoria el User y el Perfil del usuario conectado
+     * @param request   Request de la Session HTML
+     * @return  boolean     Validador
      * @throws ServletException
      * @throws IOException
      */
@@ -218,11 +218,11 @@ public class Validation {
     }
 
     /**
-     * Se utiliza para ejecutar el despliegue de error para cuando se valido que
-     * un usuario no esta validamente conectado.
+     * Método que se utiliza para ejecutar el despliegue de error para cuando
+     * se validó que un usuario no esta correctamente conectado.
      * @param clase     Clase donde se produjo el error
-     * @param request   Request de la session HTML
-     * @param response  Response de la session HTML
+     * @param request   Request de la Session HTML
+     * @param response  Response de la Session HTML
      * @throws ServletException
      * @throws IOException
      */
@@ -232,7 +232,7 @@ public class Validation {
             String dataVal = "";
             ExceptionHandler eh = new ExceptionHandler(dataVal,
                     clase.getClass(),
-                    "Error de Datos de Usuario","No se encontro en Session los datos del Usuario");
+                    "Error de Datos de Usuario","No se encontro en el objeto Session los datos del Usuario");
             eh.setRutaFile(AdminFile.getKey(AdminFile.leerConfig(), AdminFile.LOGFILESERVER));
             eh.setLogFile(true);
             eh.writeToFile();
