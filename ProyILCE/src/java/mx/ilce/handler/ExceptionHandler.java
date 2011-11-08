@@ -767,45 +767,34 @@ public final class ExceptionHandler extends Throwable {
         StringBuilder sld= new StringBuilder();
         if (dataTransfer!=null){
             if (dataTransfer.getIdQuery()!=null){
-                sld.append("\n<clave_consulta>")
+                sld.append("\n\t<clave_consulta>")
                    .append(dataTransfer.getIdQuery())
                    .append("</clave_consulta>");
             }
             if (dataTransfer.getStrWhere()!=null){
-                sld.append("\n<w><![CDATA[")
+                sld.append("\n\t<w><![CDATA[")
                    .append(dataTransfer.getStrWhere())
-                   .append("]]></w>")
-                   .append(sld);
-            }
-            if (dataTransfer.getQuery()!=null){
-                sld.append("\n<query_select>\n<![CDATA[")
-                   .append(dataTransfer.getQuery())
-                   .append("]]>\n</query_select>")
-                   .append(sld);
-            }
-            if (dataTransfer.getQueryDelete()!=null){
-                sld.append("\n<query_delete>\n<![CDATA[")
-                   .append(dataTransfer.getQueryDelete())
-                   .append("]]>\n</query_delete>")
-                   .append(sld);
-            }
-            if (dataTransfer.getQueryInsert()!=null){
-                sld.append("\n<query_insert>\n<![CDATA[")
-                   .append(dataTransfer.getQueryInsert())
-                   .append("]]>\n</query_insert>")
-                   .append(sld);
-            }
-            if (dataTransfer.getQueryUpdate()!=null){
-                sld.append("\n<query_update>\n<![CDATA[")
-                   .append(dataTransfer.getQueryUpdate())
-                   .append("]]>\n</query_update>")
-                   .append(sld);
+                   .append("]]></w>");
             }
             if (dataTransfer.getOrderBY()!=null){
-                sld.append("\n<order_by>\n<![CDATA[")
+                sld.append("\n\t<order_by>\n<![CDATA[")
                    .append(dataTransfer.getOrderBY())
-                   .append("]]>\n</order_by>")
-                   .append(sld);
+                   .append("]]>\n</order_by>");
+            }
+            if (dataTransfer.getQueryDelete()!=null){
+                sld.append("\n\t<query_delete>\n<![CDATA[")
+                   .append(dataTransfer.getQueryDelete())
+                   .append("]]>\n</query_delete>");
+            }
+            if (dataTransfer.getQueryInsert()!=null){
+                sld.append("\n\t<query_insert>\n<![CDATA[")
+                   .append(dataTransfer.getQueryInsert())
+                   .append("]]>\n</query_insert>");
+            }
+            if (dataTransfer.getQueryUpdate()!=null){
+                sld.append("\n\t<query_update>\n<![CDATA[")
+                   .append(dataTransfer.getQueryUpdate())
+                   .append("]]>\n</query_update>\n");
             }
         }
         if (headerDataXML!=null){
