@@ -7,7 +7,7 @@ import java.util.Locale;
 
 /**
  * Clase encargada de calcular la fecha, incluyendo las horas, minutos y
- * segundos, en distintos formatos y con distintos caracteres de separacion
+ * segundos, en distintos formatos y con distintos caracteres de separación
  * @author ccatrilef
  */
 public class UtilDate{
@@ -19,11 +19,16 @@ public class UtilDate{
     private int min;
     private int sec;
     private String separador="/";
+    /**
+     * Definición de los formatos de Fecha aceptados.
+     * (-) DMA= Día Mes Año
+     * (-) AMD= Año Mes Día
+     */
     public enum formato {DMA,AMD};
 
     /**
-     * Constructor donde se inicializa con el calculo del momento los datos de
-     * la clase
+     * Constructor donde se inicializan los parámetros con los datos del cálculo
+     * del momento (dia y hora) en que se recibe la solicitud
      */
     public UtilDate() {
         java.util.Calendar now = java.util.Calendar.getInstance();
@@ -36,7 +41,7 @@ public class UtilDate{
     }
 
     /**
-     * Constructor donde se inicializa con los parametros de entrada, los datos
+     * Constructor donde se inicializa con los parámetros de entrada, los datos
      * de la clase
      * @param dia    Dato con el dia a asignar
      * @param mes    Dato con el mes a asignar
@@ -51,6 +56,11 @@ public class UtilDate{
         this.sec = 0;
     }
 
+    /**
+     * Constructor donde se inicializan los parámetros con los datos de la fecha
+     * contenida en el objeto Date, que se recibe en la solicitud
+     * @param date
+     */
     public UtilDate(Date date){
         java.util.Calendar now = java.util.Calendar.getInstance();
         now.setTime(date);
@@ -63,7 +73,7 @@ public class UtilDate{
     }
 
     /**
-     * Constructor donde se inicializa con los parametros de entreda los datos
+     * Constructor donde se inicializa con los parámetros de entrada los datos
      * de la clase
      * @param dia    Dato con el dia a asignar
      * @param mes    Dato con el mes a asignar
@@ -82,7 +92,7 @@ public class UtilDate{
     }
 
     /**
-     * Metodo que recarga los datos de la clase con el calculo del momento
+     * Método que recarga los datos de la clase con el cálculo del momento
      */
     public void recargaFecha(){
         java.util.Calendar now = java.util.Calendar.getInstance();
@@ -95,7 +105,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha que contiene la clase en formato DD/MM/AAAA
+     * Método que entrega la fecha que contiene la clase en formato DD/MM/AAAA
      * @return
      */
     public String getFecha(){
@@ -119,7 +129,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha que contiene la clase en el formato DD/MM/AAAA hh:mm:ss
+     * Método que entrega la fecha que contiene la clase en el formato DD/MM/AAAA hh:mm:ss
      * @return
      */
     public String getFechaHMS(){
@@ -159,7 +169,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha que contiene la clase en el formato solicitado
+     * Método que entrega la fecha que contiene la clase en el formato solicitado
      * AMD=AAAA/MM/DD, DMA=DD/MM/AAAA
      * @param frm    Formato que se desea para la fecha AMD, DMA
      * @return
@@ -191,7 +201,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha que contiene la clase en el formato solicitado
+     * Método que entrega la fecha que contiene la clase en el formato solicitado
      * AMD=AAAA/MM/DD hh:mm:ss, DMA=DD/MM/AAAA hh:mm:ss
      * @param frm    Formato que se desea para la fecha AMD, DMA
      * @return
@@ -239,7 +249,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, en formato DD/MM/AAAA,
+     * Método que entrega la fecha existente en la clase, en formato DD/MM/AAAA,
      * reemplazando el caracter / por el solicitado
      * @param separador Caracter separador que debe poseer la fecha en vez de /
      * @return
@@ -251,7 +261,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, en formato DD/MM/AAAA hh:mm:ss,
+     * Método que entrega la fecha existente en la clase, en formato DD/MM/AAAA hh:mm:ss,
      * reemplazando el caracter / por el solicitado
      * @param separador Caracter separador que debe poseer la fecha en vez de /
      * @return
@@ -263,7 +273,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, en formato DD/MM/AAAA hh:mm:ss,
+     * Método que entrega la fecha existente en la clase, en formato DD/MM/AAAA hh:mm:ss,
      * reemplazando el caracter / por separadorFecha y el caracter : por el
      * separadorHora
      * @param separadorFecha Caracter separador que debe poseer la fecha en vez de /
@@ -278,7 +288,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, en formato solicitado,
+     * Método que entrega la fecha existente en la clase, en formato solicitado,
      * reemplazando el caracter / por separadorFecha y el caracter : por el
      * separadorHora
      * @param separadorFecha Caracter separador que debe poseer la fecha en vez de /
@@ -293,7 +303,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, con el formato solicitado y
+     * Método que entrega la fecha existente en la clase, con el formato solicitado y
      * reemplazando el caracter / por el entregado
      * @param frm   Formato que debe poseer la fecha
      * @param separador Caracter separador que debe poseer la fecha en vez de /
@@ -306,7 +316,7 @@ public class UtilDate{
     }
 
     /**
-     * Entrega la fecha existente en la clase, incluyendo la hora, minutos y
+     * Método que entrega la fecha existente en la clase, incluyendo la hora, minutos y
      * segundos, con el formato solicitado y reemplazando el caracter / por el
      * entregado
      * @param frm   Formato que debe poseer la fecha
@@ -320,7 +330,7 @@ public class UtilDate{
     }
     
     /**
-     * Metodo para validar si una fecha es correcta
+     * Método para validar si una fecha es correcta
      * @param fechax    Fecha que se va a validar
      * @return
      */

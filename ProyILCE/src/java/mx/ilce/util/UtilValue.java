@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- *  Clase implementada para manejar los valores de los datos
+ * Clase implementada para manejar los valores de los datos
  * @author ccatrilef
  */
 public class UtilValue {
@@ -19,10 +19,10 @@ public class UtilValue {
     }
 
     /**
-     * COnvierte un object a alguno de los tipos soportados. Los tipos soportados
+     * Convierte un object a alguno de los tipos soportados. Los tipos soportados
      * son varchar, number y date
      * @param obj   Objeto que debe ser convertido
-     * @param type  Typo al que se desea conenvertir
+     * @param type  Tipo al que se desea conenvertir
      * @return
      */
     public static String castObject(Object obj, String type){
@@ -40,6 +40,13 @@ public class UtilValue {
         return strSld.trim();
     }
 
+    /**
+     * Método que reemplaza en un texto los caracteres especiales de HTML al
+     * que les corresponde
+     * @param data      Texto a revisar
+     * @return  String  Texto transformado
+     * @throws ExceptionHandler
+     */
     public static String replaceHtml(String data) throws ExceptionHandler{
         String str = "";
         if (data!=null){
@@ -86,7 +93,7 @@ public class UtilValue {
     }
 
     /**
-     * Metodo para convertir un texto de una query para que los caracteres sean
+     * Método para convertir un texto de una query, para que los caracteres sean
      * aceptado por la base de datos
      * @param data      Texto a revisar
      * @return  StringBuffer    Texto transformado
