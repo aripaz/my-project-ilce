@@ -15,13 +15,14 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
 
 /**
- *  Servlet para ser invocado pra efectuar el logout del usuario
+ * Servlet para ser invocado para efectuar el logout del usuario
  * @author ccatrilef
  */
 public class srvLogout extends HttpServlet {
    
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -75,9 +76,8 @@ public class srvLogout extends HttpServlet {
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -90,7 +90,7 @@ public class srvLogout extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -103,12 +103,12 @@ public class srvLogout extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet para ser invocado para efectuar el logout del usuario";
     }// </editor-fold>
 
 }

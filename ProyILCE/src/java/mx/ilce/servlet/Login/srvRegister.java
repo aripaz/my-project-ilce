@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.bean.User;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminForm;
-import mx.ilce.component.AdminXML;
 import mx.ilce.controller.Forma;
 import mx.ilce.controller.Perfil;
 import mx.ilce.handler.ExceptionHandler;
@@ -22,13 +19,14 @@ import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**
- * Servlet para dar el registro del usuario
+ * Servlet para poder dar el registro de usuario
  * @author ccatrilef
  */
 public class srvRegister extends HttpServlet {
    
     /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Procesa los requerimientos HTTP de tipo GET y POST, al recibir las
+     * llamadas de los métodos doGet() y doPost()
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -103,10 +101,8 @@ public class srvRegister extends HttpServlet {
                                 request.getSession().setAttribute("perfil", perfil);
                                 request.getSession().setAttribute("forma", forma);
 
-                                //StringBuffer xmlSession = adm.getSessionXML(user, arrVariables);
                                 StringBuffer xmlSession = getXMLSession(user);
 
-                                //StringBuffer xmlMenu = adm.getMenuXML(user,arrVariables);
                                 StringBuffer xmlMenu = getXMLMenuEmpty();
 
                                 request.getSession().setAttribute("xmlSession", xmlSession );
@@ -148,17 +144,23 @@ public class srvRegister extends HttpServlet {
             try{
                 val.executeErrorHandler(eh,request, response);
             }catch (Exception es){
-                val.setTextMessage("Problemas en la execucion del Error de srvGrid");
+                val.setTextMessage("Problemas en la execución del Error de srvRegister");
                 val.executeErrorException(es, request, response);
             }
         }catch(Exception e){
-            val.setTextMessage("Problemas en la execucion de srvGrid");
+            val.setTextMessage("Problemas en la execución de srvRegister");
             val.executeErrorException(e, request, response);
         } finally {
             out.close();
         }
     } 
 
+    /**
+     * Entrega un XML con los datos del usuario, pero sin permisos y con los
+     * datos mínimos
+     * @param user
+     * @return
+     */
     private StringBuffer getXMLSession(User user){
         StringBuffer str = new StringBuffer();
         str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -186,6 +188,10 @@ public class srvRegister extends HttpServlet {
         return str;
     }
 
+    /**
+     * Entrega un XML de menú vacio
+     * @return
+     */
     private StringBuffer getXMLMenuEmpty(){
         StringBuffer str = new StringBuffer();
         str.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><qry>");
@@ -194,9 +200,8 @@ public class srvRegister extends HttpServlet {
         return str;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja los requerimientos HTTP del tipo GET
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -209,7 +214,7 @@ public class srvRegister extends HttpServlet {
     } 
 
     /** 
-     * Handles the HTTP <code>POST</code> method.
+     * Maneja los requerimientos HTTP del tipo POST
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -222,12 +227,11 @@ public class srvRegister extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
+     * Entrega una corta descripción del Servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet para poder dar el registro de usuario";
+    }
 }
