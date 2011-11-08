@@ -6,7 +6,7 @@
     $.fn.gridqueue = function(opc){
 
         $.fn.gridqueue.settings = {
-            height:"250px"
+            height:"400"
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -38,16 +38,18 @@ $.fn.gridqueue.getGridConfig= function(obj){
  *                $('#tabUser').tabs( "select", "#tabFavoritos");  
                 
  **/
+    //$("#divwait").dialog("close");
     var restaura=false;
-    var parentId= obj.parent()[0].id;
+    var parentId= obj.parent().parent()[0].id;
     var tabIndex = $("#tabs").tabs('option', 'selected');
-    
-    if (obj.parent().width()==0 && parentId.indexOf("tabMisFavoritos")>-1) {
-         restaura=true;
+    var nWidth=obj.parent().width();
+    if (nWidth==0) {
+         /*restaura=true;
          $("#tabs").tabs('select',0); 
-         $('#tabUser').tabs( "select", "#tabFavoritos");
-         $('#tabMisFavoritos').tabs( "select", "#tabMisFavoritos_"+nClave);
-    }
+         $('#tabUser').tabs( "select", "#" + parentId);
+         $('#'+parentId).tabs( "select", "#tabMisFavoritos_"+nClave);*/
+        nWidth=$("#grid_1_101_0").width();
+    } 
     
     obj.appgrid({app: obj.attr("app"),
           entidad: obj.attr("form"),
@@ -55,21 +57,23 @@ $.fn.gridqueue.getGridConfig= function(obj){
           titulo:obj.attr("titulo"),
           leyendas:obj.attr("leyendas").split(","),
           inDesktop:obj.attr("indesktop"),
-          height:$.fn.gridqueue.options.height,
+          height:"300",
           openKardex:obj.attr("openKardex"),
           removeGridTitle:true,
           showFilterLink:false,
           inQueue:true,
           insertInDesktopEnabled:0,
           editingApp:"1",
-          width:obj.parent().width()
+          width:nWidth
      });
      
      if (restaura) {
          $("#tabs").tabs('select',tabIndex); 
          $('#tabUser').tabs( "select", "#tabPendientes");
+         $('#tabFavoritos').tabs( "select", 0);
      }
-         
+     
+    //$("#divwait").dialog('open');    
 
 }
 

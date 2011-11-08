@@ -70,7 +70,7 @@
             <img src="img/logo_plataforma.png" class="logo_plataforma"/>
             <div id="session_menu" style="float:right"></div>
         </div>
-
+        <!-- 
         <div class="menus_plataforma">
             <div id="app_menu" style="float:left">
                 <div>
@@ -84,24 +84,19 @@
                 <ul id="apps">
                 </ul>    
             </div>
-            &nbsp;&nbsp;<input id='txtBusquedaGlobal' type='text' />
-            <!-- 
-            <ul>
-                <li><a href="#" id="lnkConfiguracionX">Configuraci&oacute;n</a></li>
-                <li><a href="srvLogout" id="lnkLogoutX">Cerrar sesi&oacute;n</a></li>
-            </ul>
-             -->
-            <div id="switcher" style="float:right; padding-right: 5px;  padding-top: 3px;"></div>
         </div>
-
+        -->
         <div id="tabcontainer">
             <div id="tabs">
                 <ul>
                     <li><a href="#tabInicio">Inicio</a></li>
-                    <li><a href="#tabAplicaciones">Aplicaciones</a></li>
+                    <li><a href="#tabAplicaciones">Aplicaciones</a>   
+                    </li>
                     <li><a href="#tabMapaDelSitio">Mapa del sitio</a></li>
                     <li><a href="#tabAyuda">Ayuda</a></li>
                     <li><a href="#tabContacto">Contacto</a></li>
+                    &nbsp;&nbsp;<input id='txtBusquedaGlobal' type='text' />
+                    <div id="switcher" style="float:right; padding-right: 5px;  padding-top: 3px;"></div>
                 </ul>
                 <div id="tabInicio">
                     <div id="tabUser">    
@@ -115,6 +110,54 @@
                             <div id="grid_1_102_0" class="queued_grids" app="1" form="102" wsParameters="" titulo="Pendientes que yo asigné" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" /></div>
                         </div>
                         <div id="tabFavoritos">
+                            <div id='tabMisFavoritos'>
+                                <ul>
+                                    <li><a href='#tabMisFavoritos1'>Cómo usar mis favoritos</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>
+                                </ul>
+                                <div id='tabMisFavoritos1'>
+                                    <div id='divCarouselMisFavoritos'>
+                                    <table id='ayudaComoAgregarAFavoritos'>
+                                        <tr>
+                                            <td colspan='2'>
+                                                <h3>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td>
+                                            <img src='img/favoritos.png'  border='1'/>
+                                        </td>
+                                        <td class='instrucciones'>
+                                            <p class='instrucciones'>
+                                                En este espacio puedes agregar tus catálogos favoritos, para agregar un favorito haz lo siguiente:</p>
+                                            <ol>
+                                                <li class='instrucciones'>Ve a la pestaña Aplicación</li>
+                                                <li class='instrucciones'>Haz clic en el botón de la aplicación que deseas abrir</li>
+                                                <li class='instrucciones'>Haz clic en el botón <span class='ui-icon ui-icon-heart' style='display:inline-block'></span> de la barra de herramientas del catálogo que deseas hacer tu favorito</li>
+                                            </ol>        
+                                        </td>
+                                        </tr>
+                                    </table>
+                                    <hr />
+                                       <table id='ayudaComoEliminarFavoritos'>
+                                        <tr>
+                                            <td colspan='2'>
+                                                <h3>Elimina los favoritos que ya no utilizas</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td>
+                                            <img src='img/cerrar_favorito.png'  border='1'/>
+                                        </td>
+                                        <td class='instrucciones'>
+                                            <p class='instrucciones'>
+                                                Para eliminar un favorito solo haz clic encima del botón <span class='ui-icon ui-icon-circlesmall-close' style='display:inline-block'></span>de la pestaña que contiene al catálogo</p>
+                                        </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                </div>
+                            </div>                           
                         </div>                    
                     </div>
                     <div class="column ui-sortable">
@@ -149,6 +192,8 @@
                     </div>
                 </div>
                 <div id="tabAplicaciones">
+                    <div id="menu_apps"></div>
+                    <div id="tabMisApps"><ul></ul></div>
                 </div>
                 <div id="tabMapaDelSitio">
                 </div>

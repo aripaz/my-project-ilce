@@ -45,9 +45,24 @@
                 }
                 
                 /* Inserta el html en el elemento apps */
-                $("#apps").html($.fn.appmenu.handleMenu(xml));
+                obj.html( $.fn.appmenu.handleMenu(xml));
+                $("#tabs").tabs();
+
+                /*$( "#tabs span.ui-icon-triangle-1-s" ).live( "click", function() {
+                        var menu = $("#apps").parent().show().position({
+                                my: "left top",
+                                at: "left bottom",
+                                of: this 
+                         });
+                        //Cuando se hace click en cualquier parte del documento se
+                        //oculta el menú
+                        $(document).one("click", function() {
+                                menu.hide();
+                        });
+                        return false;
+                });       */     
                 
-                $("#menu_inicio")
+                /*$("#menu_inicio")
                     .button()
                     .click(function() {
                         alert("Por implementar");
@@ -96,11 +111,22 @@
 				    .buttonset()
                                     .next().
                                         hide().
-                                        menu();
-                   
+                                        menu(); */
+                
+                //Crea el control tab aqui, puesto que desde este control se va a manipular
+                var $tabMisApps = $('#tabMisApps').tabs({
+                    tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
+                });
+
+                $( "#tabMisApps span.ui-icon-close" ).live( "click", function() {
+                    var index = $( "li", $tabs ).index( $( this ).parent() );
+                    $tabMisApps .tabs( "remove", index );
+                });
                 
                  /*Captura el evento clic para los links*/
-                $(".menu").click(function(e, data) {
+                $(".menu")
+                    .button()
+                    .click(function(e, data) {
                         link_id=this.name;
 
                         //Verifica si existe
@@ -110,7 +136,7 @@
 
                         if ($("#tab"+link_id).length) {
                             //Selecciona el tab correspondiente
-                            $tabs.tabs("select", "#tab"+link_id);
+                            $tabMisApps.tabs("select", "#tab"+link_id);
 
                             //Recupera el id del grid del tab       
                             sGridIdSuffix=$($($($("#tab" + link_id).children()[0]).children()[2]).children()[0]).children()[0].id.replace("gbox_grid_","");
@@ -133,8 +159,8 @@
                                 });
                             }
                             else {
-                                $tabs.tabs( "add", "#tab"+link_id, sTitulo);
-                                $tabs.tabs( "select", "#tab"+link_id);
+                                $tabMisApps.tabs( "add", "#tab"+link_id, sTitulo);
+                                $tabMisApps.tabs( "select", "#tab"+link_id);
                                 oTabPanel=$("#tab"+link_id);
                                 // Aqui va a ir la barra de avisos 
                                 oTabPanel.html(""); 
@@ -183,21 +209,12 @@
 
 
                                 $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
-                            //$.fn.appmenu.getLog("#bitacora_"+nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad);    
+                            
                             }
                         }    
-                    });
-                
-                //Crea el control tab aqui, puesto que desde este control se va a manipular
-                var $tabs = $('#tabs').tabs({
-                    tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Cerrar tab</span></li>"
-                });
-
-                $( "#tabs span.ui-icon-close" ).live( "click", function() {
-                    var index = $( "li", $tabs ).index( $( this ).parent() );
-                    $tabs .tabs( "remove", index );
-                });
-                
+                    })
+                    .parent()
+                    .buttonset();                
    
                 //Mecanismo para forzar a que el DOM no se cargue del cache
                 // ya que esto hace que se dupliquen los ids de los grid en cola
@@ -448,7 +465,7 @@
             nInsertar = $(this).find("insertar").text();
             nMostrar = $(this).find("mostrar").text();
 
-            sHtml+="<li><a href='#' class='menu' name='showEntity_" + nAplicacion + "_" + nEntidad +"'  nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a></li>";
+            sHtml+="<a href='#' class='menu' name='showEntity_" + nAplicacion + "_" + nEntidad +"'  nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>";
 
         })
 

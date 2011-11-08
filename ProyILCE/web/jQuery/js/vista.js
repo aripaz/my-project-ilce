@@ -16,7 +16,7 @@ $(document).ready(function() {
     
     $('#switcher').themeswitcher(); 
     //Crea menú de aplicaciones de acuerdo al perfil
-    $("#app_menu").appmenu();
+    $("#menu_apps").appmenu();
     $("#session_menu").sessionmenu();   
     
 }); //close $(
