@@ -65,19 +65,19 @@ public abstract class Entidad implements Serializable{
     }
 
     /**
-     * Metodo Abstracto para el ingreso de una entidad
+     * Método Abstracto para el ingreso de una entidad
      * @param data
      */
     public abstract ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para el ingreso de una entidad
+     * Método Abstracto para el ingreso de una entidad
      * @param data
      */
     public abstract ExecutionHandler editarEntidad(Object data) throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para la eliminacion de entidad
+     * Método Abstracto para la eliminación de entidad
      * @param data      Data para la ubicacion de la Entidad
      * @return
      * @throws ExceptionHandler
@@ -85,28 +85,28 @@ public abstract class Entidad implements Serializable{
     public abstract ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para el despliegue de las formas
+     * Método Abstracto para el despliegue de las formas
      * @return
      * @throws ExceptionHandler
      */
     public abstract Entidad mostrarForma() throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para mostrar el resultado
+     * Método Abstracto para mostrar el resultado
      * @return
      * @throws ExceptionHandler
      */
     public abstract Entidad mostrarResultado() throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para la realizacion de busquedas Sencillas
+     * Método Abstracto para la realizacién de busquedas sencillas
      * @return
      * @throws ExceptionHandler
      */
     public abstract Entidad ingresarBusquedaSencilla() throws ExceptionHandler;
 
     /**
-     * Metodo Abstracto para el ingreso de busquedas Avanzadas
+     * Método Abstracto para el ingreso de busquedas avanzadas
      * @return
      * @throws ExceptionHandler
      */

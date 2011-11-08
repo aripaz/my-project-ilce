@@ -10,13 +10,12 @@ import mx.ilce.bean.HashCampo;
 import mx.ilce.bitacora.Bitacora;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminXML;
-import mx.ilce.component.ListHash;
 import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
- *  Clase para la implementacion de los metodos asociados a la aplicacion
+ * Clase para la implementación de los métodos asociados a la aplicación
  * @author ccatrilef
  */
 public class Aplicacion extends Entidad {
@@ -42,16 +41,24 @@ public class Aplicacion extends Entidad {
     private Bitacora bitacora;
     private String orderBY;
 
+    /**
+     * Obtiene la clave del Perfil
+     * @return
+     */
     public Integer getClavePerfil() {
         return clavePerfil;
     }
 
+    /**
+     * Asigna la clave del Perfil
+     * @param clavePerfil
+     */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
     }
 
     /**
-     * Entrega el texto "Order By" que se usara en la query
+     * Obtiene el texto "Order By" que se usara en la query
      * @return  String  Texto del "Order By"
      */
     public String getOrderBY() {
@@ -67,7 +74,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Constructor Basico de la clase, inicializa las variables de la clase
+     * Constructor básico de la clase, inicializa las variables de la clase
      */
     public Aplicacion() {
         this.claveAplicacion = 0;
@@ -136,7 +143,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @return  boolean     Estado de la validacion
+     * @return  boolean     Estado de la validación
      */
     public boolean isCleanIncrement() {
         return cleanIncrement;
@@ -144,7 +151,7 @@ public class Aplicacion extends Entidad {
 
     /**
      * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @param cleanIncrement    Estado de la validacion
+     * @param cleanIncrement    Estado de la validación
      */
     public void setCleanIncrement(boolean cleanIncrement) {
         this.cleanIncrement = cleanIncrement;
@@ -167,16 +174,16 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el numero de pagina que se debe visualizar en la aplicacion
-     * @return  Integer     Numero de la pagina
+     * Obtiene el número de página que se debe visualizar en la aplicación
+     * @return  Integer     Número de la página
      */
     public Integer getNumPage() {
         return numPage;
     }
 
     /**
-     * Asigna el numero de pagina que se debe visualizar en la aplicacion
-     * @param numPage   Numero de pagina, por defecto es 1
+     * Asigna el número de página que se debe visualizar en la aplicación
+     * @param numPage   Número de página, por defecto es 1
      */
     public void setNumPage(String numPage) {
         if ((numPage==null)||("".equals(numPage))) {
@@ -186,16 +193,16 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el numero de filas que se deben desplegar
-     * @return      Integer     Numero de filas
+     * Obtiene el número de filas que se deben desplegar
+     * @return      Integer     Número de filas
      */
     public Integer getNumRows() {
         return numRows;
     }
 
     /**
-     * Asigna el numero de filas que se deben desplegar
-     * @param numRows   Numero de filas, por defecto es 10
+     * Asigna el número de filas que se deben desplegar
+     * @param numRows   Número de filas, por defecto es 10
      */
     public void setNumRows(String numRows) {
         if ((numRows==null)||("".equals(numRows))){
@@ -253,16 +260,16 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el tipo de accion que se esta efectuando con la Forma
-     * @return  String  Tipo de accion declarada
+     * Obtiene el tipo de acción que se esta efectuando con la Forma
+     * @return  String  Tipo de acción declarada
      */
     public String getTipoAccion() {
         return tipoAccion;
     }
 
     /**
-     * Asigna el tipo de accion que se esta efectuando con la Forma
-     * @param tipoAccion    Tipo de accion declarada
+     * Asigna el tipo de acción que se esta efectuando con la Forma
+     * @param tipoAccion    Tipo de acción declarada
      */
     public void setTipoAccion(String tipoAccion) {
         this.tipoAccion = tipoAccion;
@@ -301,32 +308,32 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el nombre de la aplicacion
-     * @return  String  Nombre de la aplicacion
+     * Obtiene el nombre de la aplicación
+     * @return  String  Nombre de la aplicación
      */
     public String getAplicacion() {
         return aplicacion;
     }
 
     /**
-     * Asigna el nombre de la aplicacion
-     * @param aplicacion    Nombre de la aplicacion
+     * Asigna el nombre de la aplicación
+     * @param aplicacion    Nombre de la aplicación
      */
     public void setAplicacion(String aplicacion) {
         this.aplicacion = aplicacion;
     }
 
     /**
-     * Obtiene la clave de la aplicacion
-     * @return  Integer     Clave de la aplicacion
+     * Obtiene la clave de la aplicación
+     * @return  Integer     Clave de la aplicación
      */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
     }
 
     /**
-     * Asigna la clave de la aplicacion
-     * @param claveAplicacion   Clave de la aplicacion
+     * Asigna la clave de la aplicación
+     * @param claveAplicacion   Clave de la aplicación
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -349,7 +356,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene la descripcion
+     * Obtiene la descripción
      * @return  String  Descripcion asignada
      */
     public String getDescripcion() {
@@ -357,85 +364,85 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Asigna la descripcion
-     * @param descripcion   Descripcion asignada
+     * Asigna la descripción
+     * @param descripcion   Descripción asignada
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler ingresarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler editarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
      /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public ExecutionHandler eliminarEntidad(Object data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion mostrarResultado(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion ingresarBusquedaSencilla(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion ingresarBusquedaAvanzada() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion mostrarPanel(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion guardarBusqueda(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion rescatarBusqueda(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * NO IMPLEMENTADO
+     * NO IMPLEMENTADO, al no requerirse de momento
      */
     public Aplicacion eliminarBusqueda() {
         throw new UnsupportedOperationException("Not supported yet.");
     }    
 
     /**
-     * Agrega una forma (con formato List) al Hash de formas, asignandole como
+     * Método que agrega una forma (con formato List) al Hash de formas, asignandole como
      * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es
      * reemplazada
      * @param key   ID de la Forma
@@ -471,8 +478,8 @@ public class Aplicacion extends Entidad {
      * @throws ExceptionHandler
      */
     public Aplicacion mostrarForma() throws ExceptionHandler{
+        StringBuffer xmlForma = new StringBuffer("");
         try{
-            StringBuffer xmlForma = new StringBuffer("");
             if (this.getDisplay().toUpperCase().equals("HEADER")){
                 xmlForma = this.getHeaderGrid();
             }else if (this.getDisplay().toUpperCase().equals("BODY")){
@@ -482,7 +489,15 @@ public class Aplicacion extends Entidad {
             }
             this.setXmlEntidad(xmlForma);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para Mostrar la Forma");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para Mostrar la Forma");
+            eh.setDataToXML("DISPLAY",this.getDisplay());
+            eh.setDataToXML("CLAVE FORMA",this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION",this.getClaveForma());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }finally{
 
         }
@@ -598,7 +613,15 @@ public class Aplicacion extends Entidad {
             
             strSld = adm.getGridColumByData(hsCmp,lstF);
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),"Problemas para obtener Header Grid");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener Header Grid");
+            eh.setDataToXML("CLAVE FORMA", this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION", this.getTipoAccion());
+            eh.setDataToXML("CLAVE PERFIL", this.getClavePerfil());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return strSld;
     }
@@ -678,8 +701,15 @@ public class Aplicacion extends Entidad {
 
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
         }catch(Exception ex){
-            throw new ExceptionHandler(ex,this.getClass(),
-                    "Problemas para obtener Header y Body Grid");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener Header y Body Grid");
+            eh.setDataToXML("CLAVE FORMA", this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION", this.getTipoAccion());
+            eh.setDataToXML("CLAVE PERFIL", this.getClavePerfil());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return strSld;
     }
@@ -688,7 +718,7 @@ public class Aplicacion extends Entidad {
      * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
      * no esta configurada la forma, pero se tiene la query con la consulta para
      * completarla. Obviamente no estan disponibles todos los datos, pero si los
-     * basicos para construir el XML.
+     * básicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener
      * @return              ArrayList   Contiene los datos de una forma nueva
@@ -736,10 +766,47 @@ public class Aplicacion extends Entidad {
                     }
                 }
             }
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener la Forma, mediante el ID de la query");
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para obtener una nueva Forma, mediante el ID de la query");
+            eh.setDataToXML(arrayData);
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lst;
     }
+
+    /**
+     * Método que convierte a String el contenido del objeto Aplicacion
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "Aplicacion{"
+                + ((claveEmpleado!=null)?"\n\tclaveEmpleado=" + claveEmpleado:"")
+                + ((claveAplicacion!=null)?"\n\tclaveAplicacion=" + claveAplicacion:"")
+                + ((clavePerfil!=null)?"\n\tclavePerfil=" + clavePerfil:"")
+                + ((aplicacion!=null)?"\n\taplicacion=" + aplicacion:"")
+                + ((claveFormaPrincipal!=null)?"\n\tclaveFormaPrincipal=" + claveFormaPrincipal:"")
+                + ((descripcion!=null)?"\n\tdescripcion=" + descripcion:"")
+                + ((aliasMenuNuevaEntidad!=null)?"\n\taliasMenuNuevaEntidad=" + aliasMenuNuevaEntidad:"")
+                + ((aliasMenuMostrarEntidad!=null)?"\n\taliasMenuMostrarEntidad=" + aliasMenuMostrarEntidad:"")
+                + ((claveForma!=null)?"\n\tclaveForma=" + claveForma:"")
+                + ((tipoAccion!=null)?"\n\ttipoAccion=" + tipoAccion:"")
+                + ((display!=null)?"\n\tdisplay=" + display:"")
+                + ((strWhereQuery!=null)?"\n\tstrWhereQuery=" + strWhereQuery:"")
+                + ((hsForma!=null)?"\n\thsForma=" + hsForma:"")
+                + ((numPage!=null)?"\n\tnumPage=" + numPage:"")
+                + ((numRows!=null)?"\n\tnumRows=" + numRows:"")
+                + ((arrayData!=null)?"\n\tarrayData=" + arrayData:"")
+                + "\n\tcleanIncrement=" + cleanIncrement
+                + ((arrVariables!=null)?"\n\tarrVariables=" + arrVariables:"")
+                + ((bitacora!=null)?"\n\tbitacora=" + bitacora:"")
+                + ((orderBY!=null)?"\n\torderBY=" + orderBY:"")
+                + "\n}";
+    }
+
+
 }

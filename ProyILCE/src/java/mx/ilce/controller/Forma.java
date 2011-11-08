@@ -1,5 +1,5 @@
 package mx.ilce.controller;
-  
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,16 +22,16 @@ import mx.ilce.mail.DataMail;
 import mx.ilce.mail.SendMailNotif;
 import mx.ilce.util.Validation;
 
-/**   
- * Clase para la implementacion de los metodos asociados a Forma.
- * Se prevee dejar en memoria esta objeto para que mantenga las formas
+/**
+ * Clase para la implementación de los métodos asociados a Forma.
+ * Se prevee dejar en memoria este objeto para que mantenga las formas
  * obtenidas a partir de las aplicaciones asociadas al Perfil del usuario
  * @author ccatrilef
  */
-public class Forma extends Entidad{ 
+public class Forma extends Entidad{
 
-    private String aliasTab; 
-    private Integer ordenTab; 
+    private String aliasTab;
+    private Integer ordenTab;
     private Integer claveAplicacion;
     private Integer claveForma;
     private Integer claveFormaPadre;
@@ -53,16 +53,24 @@ public class Forma extends Entidad{
     private String orderBY;
     private DataMail dataMail;
 
+    /**
+     * Obtiene la clave del perfil
+     * @return  Integer CLave del Perfil
+     */
     public Integer getClavePerfil() {
         return clavePerfil;
     }
 
+    /**
+     * Asigna la clave del perfil
+     * @param clavePerfil   Clave del perfil
+     */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
     }
 
     /**
-     * Entrega un objeto DataMail
+     * Obtiene un objeto DataMail
      * @return  DataMail    Objeto DataMail
      */
     public DataMail getDataMail() {
@@ -86,7 +94,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asignaa un texto con el Order By
+     * Asigna un texto con el Order By
      * @param orderBY   Texto con el Order by
      */
     public void setOrderBY(String orderBY) {
@@ -94,7 +102,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Entrega la validacion de si se debe incluir las horas en la fecha
+     * Entrega la validación de si se debe incluir las horas en la fecha
      * @return      Boolean
      */
     public boolean isIncludeHour() {
@@ -102,7 +110,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna la validacion para ver si se debe incluir las horas en la fecha
+     * Asigna la validación para ver si se debe incluir las horas en la fecha
      * @param includeHour   Boolean
      */
     public void setIncludeHour(boolean includeHour) {
@@ -142,7 +150,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el 
+     * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el
      * listado del foraneo
      * @return  Boolean
      */
@@ -256,16 +264,16 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene el tipo de accion que se esta efectuando con la Forma
-     * @return  String  Texto con la accion a efectuar
+     * Obtiene el tipo de acción que se esta efectuando con la Forma
+     * @return  String  Texto con la acción a efectuar
      */
     public String getTipoAccion() {
         return ((tipoAccion==null)?"":tipoAccion);
     }
 
     /**
-     * Asigna el tipo de accion que se esta efectuando con la Forma
-     * @param tipoAccion    Texto con la accion a efectuar
+     * Asigna el tipo de acción que se esta efectuando con la Forma
+     * @param tipoAccion    Texto con la acción a efectuar
      */
     public void setTipoAccion(String tipoAccion) {
         if (tipoAccion==null){
@@ -275,16 +283,16 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene el codigo PK ingresado
-     * @return  String      Codigo PK de la Forma
+     * Obtiene el código PK ingresado
+     * @return  String      Código PK de la Forma
      */
     public String getPk() {
         return pk;
     }
 
     /**
-     * Asigna el codigo PK ingresado
-     * @param pk    Codigo PK de la Forma
+     * Asigna el código PK ingresado
+     * @param pk    Código PK de la Forma
      */
     public void setPk(String pk) {
         if (pk==null){
@@ -310,16 +318,16 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene la clave de la aplicacion
-     * @return  Integer     Clave de la Aplicacion
+     * Obtiene la clave de la aplicación
+     * @return  Integer     Clave de la Aplicación
      */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
     }
 
     /**
-     * Asigna la clave de la aplicacion
-     * @param claveAplicacion   Clave de la Aplicacion
+     * Asigna la clave de la aplicación
+     * @param claveAplicacion   Clave de la Aplicación
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -359,7 +367,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el orden del Tab
-     * @return  Integer     Codigo con el orden
+     * @return  Integer     Código con el orden
      */
     public Integer getOrdenTab() {
         return ordenTab;
@@ -367,31 +375,31 @@ public class Forma extends Entidad{
 
     /**
      * Asigna el orden del Tab
-     * @param ordenTab      Codigo con el orden
+     * @param ordenTab      Código con el orden
      */
     public void setOrdenTab(Integer ordenTab) {
         this.ordenTab = ordenTab;
     }
 
     /**
-     * Obtiene el hash con la configuracion de la forma
-     * @return  HashMap     Hash con la configuracion
+     * Obtiene el hash con la configuración de la forma
+     * @return  HashMap     Hash con la configuración
      */
     public HashMap getHsForma() {
         return hsForma;
     }
 
     /**
-     * Asigna el hash con la configuracion de la forma
-     * @param hsForma   Hash con la configuracion
+     * Asigna el hash con la configuración de la forma
+     * @param hsForma   Hash con la configuración
      */
     public void setHsForma(HashMap hsForma) {
         this.hsForma = hsForma;
     }
 
     /**
-     * Agrega una forma (con formato List) al Hash de formas, asignandole como
-     * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es 
+     * Método que agrega una forma (con formato List) al Hash de formas, asignandole como
+     * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es
      * reemplazada
      * @param key   ID de la Forma
      * @param obj   Listado de la forma a agregar
@@ -436,7 +444,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Constructor basico de la forma, inicializa las variables
+     * Constructor básico de la forma, inicializa las variables
      */
     public Forma() {
         this.aliasTab = "";
@@ -446,11 +454,11 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Metodo alternativo implementado para borrar los permisos anteriores
+     * Método alternativo implementado para borrar los permisos anteriores
      * e ingresar los nuevos permisos al mismo tiempo.
      * NO PROBADA
      * @param data  Data de entrada
-     * @return  ExecutionHandler    Resultado de la ejecucion
+     * @return  ExecutionHandler    Resultado de la ejecución
      * @throws ExceptionHandler
      */
     public ExecutionHandler ingresarDataPermisos(Object data) throws ExceptionHandler{
@@ -583,18 +591,23 @@ public class Forma extends Entidad{
                 ex.setExecutionOK(false);
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar Data y Permisos");
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                             "Problemas para Ingresar Data y Permisos");
+            eh.setDataToXML((List)data);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return ex;
     }
 
     /**
-     * Se ingresa una entidad del tipo Forma, para que quede disponible
-     * para la aplicacion.
+     * Método que ngresa una entidad del tipo Forma, para que quede disponible
+     * para la aplicación.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param data  Forma que se ingresara
-     * @return  ExecutionHandler    Resultado de la ejecucion
+     * @return  ExecutionHandler    Resultado de la ejecución
      */
     public ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler{
         ExecutionHandler ex = null;
@@ -734,18 +747,22 @@ public class Forma extends Entidad{
                             new StringBuffer("editarEntidad"),textData);
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para Ingresar el INSERT de la Forma");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para Ingresar el INSERT de la Forma");
+            eh.setDataToXML((List)data);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return ex;
     }
 
     /**
-     * Se toma un Objeto del tipo forma para su edicion.
+     * Método que toma un Objeto del tipo forma para su edición.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param data  Forma que se editara
-     * @return  ExecutionHandler    Resultado de la ejecucion
+     * @return  ExecutionHandler    Resultado de la ejecución
      */
     public ExecutionHandler editarEntidad(Object data) throws ExceptionHandler{
         ExecutionHandler ex = null;
@@ -754,7 +771,7 @@ public class Forma extends Entidad{
 
             HashMap hsForm = (HashMap) lstData.get(0);
             Forma forma = (Forma) lstData.get(1);
-
+            
             String pkInsert = forma.getPk();
             Integer claveFormaInsert = forma.getClaveForma();
 
@@ -896,17 +913,22 @@ public class Forma extends Entidad{
                             new StringBuffer("editarEntidad"),textData);
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el UPDATE de la Forma");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para Ingresar el UPDATE de la Forma");
+            eh.setDataToXML((List)data);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return ex;
     }
 
     /**
-     * Se toma un Objeto del tipo Forma para su eliminacion.
+     * Método que toma un Objeto del tipo Forma para su eliminación.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
      * @param idForma   ID de la Forma que se eliminara
-     * @return  ExecutionHandler    Resultado de la ejecucion
+     * @return  ExecutionHandler    Resultado de la ejecución
      */
     public ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler {
         ExecutionHandler ex = null;
@@ -1021,7 +1043,12 @@ public class Forma extends Entidad{
                 ex.setTextExecution("No se encuentra el listado de la Forma");
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para Ingresar el DELETE de la Forma");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para Ingresar el DELETE de la Forma");
+            eh.setDataToXML((List)data);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return ex;
     }
@@ -1032,13 +1059,13 @@ public class Forma extends Entidad{
      * @throws ExceptionHandler
      */
     public Forma mostrarForma() throws ExceptionHandler {
+        StringBuffer xmlForma = new StringBuffer("");
         try{
             ConSession con = new ConSession();
             con.setBitacora(this.getBitacora());
             boolean enableBitac = this.getBitacora().isEnable();
 
             String[] strData = new String[2];
-            StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
@@ -1050,7 +1077,7 @@ public class Forma extends Entidad{
 
                 //obtenemos los datos de la forma
                 con.getBitacora().setEnable(false);
-                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY), 
+                HashCampo hsCmpQ = con.getDataByIdQuery(con.getIdQuery(AdminFile.FORMAQUERY),
                                                 strData, this.getArrVariables());
 
                 Campo cmp = hsCmpQ.getCampoByName("claveconsulta");
@@ -1064,7 +1091,7 @@ public class Forma extends Entidad{
 
                     //ejecutamos la QUERY que se obtuvo al buscar la forma
                     con.getBitacora().setEnable(enableBitac);
-                    HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()), 
+                    HashCampo hsCmp = con.getDataByIdQuery(Integer.valueOf(cmpAux.getValor()),
                                                 strData, this.getArrVariables());
                     hsCmp.setPkData(this.getPk());
 
@@ -1094,7 +1121,7 @@ public class Forma extends Entidad{
                             fmrForma.setBitacora(this.getBitacora());
                             lstF = fmrForma.getFormaByIdFormaIdPerfil(this.getClaveForma(),this.getClavePerfil(),lstF);
                         }catch(Exception e){}
-                        
+
                         if (hsCmp.getLengthData()==0){
                             xmlForma = admXML.getFormaWithoutData(hsCmp,lstF,this.getClaveForma(),
                                     this.getTipoAccion(), this.getArrVariables());
@@ -1117,37 +1144,45 @@ public class Forma extends Entidad{
                     strEmpty.append("Clave Forma: ").append(this.getClaveForma()).append(", ");
                     strEmpty.append("Accion: ").append(this.getTipoAccion()).append(", ");
                     strEmpty.append("ID QUERY: ").append(idQuery);
-                    val.executeErrorEmptyData(strEmpty.toString(), this.getClass(), 
+                    val.executeErrorEmptyData(strEmpty.toString(), this.getClass(),
                             "No se encontró consulta de la forma y acción solicitadas");
                 }
-            } 
+            }
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),"Problemas para obtener el XML la Forma a mostrar");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener el XML la Forma a mostrar");
+            eh.setDataToXML("CLAVE FORMA", this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION", this.getTipoAccion());
+            eh.setDataToXML("PK", this.getPk());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return this;
     }
 
     /**
-     * NO IMPLEMENTADA
+     * NO IMPLEMENTADA, al no requerirse de momento
      */
     public Forma mostrarResultado() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * Metodo para ingresar una busqueda sencilla desde un formulario
+     * Método para ingresar una busqueda sencilla desde un formulario
      * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
     public Forma ingresarBusquedaSencilla() throws ExceptionHandler {
+        StringBuffer xmlForma = new StringBuffer("");
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
             boolean enableBitac = this.getBitacora().isEnable();
 
             String[] strData = new String[2];
-            StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
@@ -1188,11 +1223,10 @@ public class Forma extends Entidad{
                             admXML.setDeleteIncrement(cleanIncrement);
                         }
                         if (hsCmp.getLengthData()==0){
-                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF,this.getClaveForma(), 
+                            xmlForma = admXML.getFormaWithoutData(hsCmp, lstF,this.getClaveForma(),
                                     this.getTipoAccion(), this.getArrVariables());
                         }else{
-                            admXML.setIncludeHour(true);
-                            xmlForma = admXML.getFormaByData(hsCmp, lstF,this.getClaveForma(), 
+                            xmlForma = admXML.getFormaByData(hsCmp, lstF,this.getClaveForma(),
                                     this.getTipoAccion(), this.getArrVariables());
                         }
                     }else{
@@ -1214,25 +1248,31 @@ public class Forma extends Entidad{
             }
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener el XML la Forma en una busqueda");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener el XML la Forma en una busqueda");
+            eh.setDataToXML("CLAVE FORMA", this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION", this.getTipoAccion());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return this;
     }
 
     /**
-     * Metodo para ingresar una busqueda avanzada desde un formulario
+     * Método para ingresar una busqueda avanzada desde un formulario
      * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
     public Forma ingresarBusquedaAvanzada() throws ExceptionHandler{
+        StringBuffer xmlForma = new StringBuffer("");
         try{
             ConEntidad con = new ConEntidad();
             con.setBitacora(this.getBitacora());
             boolean enableBitac = this.getBitacora().isEnable();
 
             String[] strData = new String[2];
-            StringBuffer xmlForma = new StringBuffer("");
             Validation val = new Validation();
             if (this.claveForma !=null){
                 strData[0] = String.valueOf(this.getClaveForma());
@@ -1285,7 +1325,7 @@ public class Forma extends Entidad{
                             dataTransfer.setArrVariables(this.getArrVariables());
 
                             hsCmpPerm = con.getDataByIdQuery(dataTransfer);
-                            
+
                             admXML.setHashPermisoForma(hsCmpPerm);
                         }
                         admXML.setHsForm(this.getFormData());
@@ -1310,7 +1350,6 @@ public class Forma extends Entidad{
                             xmlForma = admXML.getFormaWithoutData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
                         }else{
-                            //admXML.setIncludeHour(this.isIncludeHour());
                             admXML.setIncludeHour(true);
                             xmlForma = admXML.getFormaByData(hsCmp, lstF, this.getClaveForma(),
                                     this.getTipoAccion(),this.getArrVariables());
@@ -1334,8 +1373,14 @@ public class Forma extends Entidad{
             }
             this.setXmlEntidad(xmlForma);
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener el XML la Forma en una busqueda");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener el XML la Forma en una busqueda");
+            eh.setDataToXML("CLAVE FORMA", this.getClaveForma());
+            eh.setDataToXML("TIPO ACCION", this.getTipoAccion());
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return this;
     }
@@ -1348,17 +1393,17 @@ public class Forma extends Entidad{
     }
 
     /**
-     * NO IMPLEMENTADA
+     * NO IMPLEMENTADA, al no requerirse de momento
      */
     public Forma mostrarPanel(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
-     * Completa el listado de formas segun el listado de aplicaciones que se le
-     * entrega. Cada aplicacion posee una forma y por cada una de ellas, se trae
-     * su configuracion, introduciendolo en el listado, asociandole el ID de la
-     * forma que le corresponde a la configuracion. Cada configuracion (Forma)
+     * Completa el listado de formas según el listado de aplicaciones que se le
+     * entrega. Cada aplicación posee una forma y por cada una de ellas, se trae
+     * su configuración, introduciendolo en el listado, asociandole el ID de la
+     * forma que le corresponde a la configuración. Cada configuración (Forma)
      * esta compuesto por un listado de CampoForma.
      * @param lstAplications    Listado con las aplicaciones del User
      * @throws ExceptionHandler
@@ -1388,15 +1433,20 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener las formas de un listado de Aplicaciones");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener las formas de un listado de Aplicaciones");
+            eh.setDataToXML(lstAplications);
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
     }
 
     /**
-     * Entrega el ID de la forma asociada a la aplicacion, rescatado desde el
-     * listado de aplicaciones que le entrega el Perfil
-     * @param idAplication  ID de la aplicacion donde se va a buscar la forma
+     * Método que entrega el ID de la forma asociada a la aplicación, rescatado
+     * desde el listado de aplicaciones que le entrega el Perfil
+     * @param idAplication  ID de la aplicación donde se va a buscar la forma
      * @param lstAplications    Listado de aplicaciones, estas aplicaciones se
      * deben obtener a travez del Perfil
      * @return  Integer     ID de la Forma
@@ -1416,16 +1466,21 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener el ID de una forma de una Aplicacion");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener el ID de una forma de una Aplicación");
+            eh.setDataToXML("ID APLICACION",idAplication);
+            eh.setDataToXML(lstAplications);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return idForma;
     }
 
     /**
-     * Obtiene un List con la configuracion de la forma entregada. El List esta
+     * Obtiene un List con la configuración de la forma entregada. El List esta
      * formado por Bean del tipo CampoForma
-     * @param arrayData     Arreglo de datos con la configuracion de la forma
+     * @param arrayData     Arreglo de datos con la configuración de la forma
      * @return  List    Listado con los datos de la Forma
      * @throws ExceptionHandler
      */
@@ -1443,8 +1498,13 @@ public class Forma extends Entidad{
             lst = con.getListFormaById(dataTransfer);
 
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener el List con la configuracion de la Forma");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener el List con la configuración de la Forma");
+            eh.setDataToXML(arrayData);
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lst;
     }
@@ -1453,7 +1513,7 @@ public class Forma extends Entidad{
      * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
      * no esta configurada la forma, pero se tiene la query con la consulta para
      * completarla. Obviamente no estan disponibles todos los datos, pero si los
-     * basicos para construir el XML.
+     * básicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener
      * @return  ArrayList   Arreglo con los datos de la Forma
@@ -1470,7 +1530,7 @@ public class Forma extends Entidad{
             dataTransfer.setIdQuery(con.getIdQuery(AdminFile.FORMAQUERY));
             dataTransfer.setArrData(arrayData);
             dataTransfer.setArrVariables(this.getArrVariables());
-            
+
             HashCampo hsCmp = con.getDataByIdQuery(dataTransfer);
 
             Campo cmp = hsCmp.getCampoByName("consulta");
@@ -1487,7 +1547,7 @@ public class Forma extends Entidad{
                 dataTransfer.setQuery(cmpAux.getValor());
                 dataTransfer.setArrData(arrayData);
                 dataTransfer.setArrVariables(this.getArrVariables());
-                
+
                 HashCampo hsCmpList = con.getDataByQuery(dataTransfer);
 
                 List lstCmp = (List) hsCmpList.getListCampos();
@@ -1504,78 +1564,21 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener la Forma, mediante el ID de la query");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener la Forma, mediante el ID de la query");
+            eh.setDataToXML(arrayData);
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lst;
     }
 
-/**
-     * Metodo para convertir un texto de una query para que los caracteres sean
-     * aceptado por la base de datos
-     * @param data      Texto a revisar
-     * @return  StringBuffer    Texto transformado
-     * @throws ExceptionHandler
-     */
-    private StringBuffer castAcent(String data) throws ExceptionHandler {
-        String str = "";
-        try{
-            if (data!=null){
-                String paso=data;
-                if (paso.contains("Á")){
-                    paso=paso.replaceAll("Á","'+char(193)+'");
-                }
-                if (paso.contains("É")){
-                    paso=paso.replaceAll("É","'+char(201)+'");
-                }
-                if (paso.contains("Í")){
-                    paso=paso.replaceAll("Í","'+char(205)+'");
-                }
-                if (paso.contains("Ñ")){
-                    paso=paso.replaceAll("Ñ","'+char(209)+'");
-                }
-                if (paso.contains("Ó")){
-                    paso=paso.replaceAll("Ó","'+char(211)+'");
-                }
-                if (paso.contains("Ú")){
-                    paso=paso.replaceAll("Ú","'+char(218)+'");
-                }
-                if (paso.contains("Ü")){
-                    paso=paso.replaceAll("Ü","'+char(220)+'");
-                }
-                if (paso.contains("á")){
-                    paso=paso.replaceAll("á","'+char(225)+'");
-                }
-                if (paso.contains("é")){
-                    paso=paso.replaceAll("é","'+char(233)+'");
-                }
-                if (paso.contains("í")){
-                    paso=paso.replaceAll("í","'+char(237)+'");
-                }
-                if (paso.contains("ñ")){
-                    paso=paso.replaceAll("ñ","'+char(241)+'");
-                }
-                if (paso.contains("ó")){
-                    paso=paso.replaceAll("ó","'+char(243)+'");
-                }
-                if (paso.contains("ú")){
-                    paso=paso.replaceAll("ú","'+char(250)+'");
-                }
-                str=paso;
-            }else{
-                str=data;
-            }
-        }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para reemplazar los acentos de: "+data);
-        }
-        return new StringBuffer(str);
-    }
-
     /**
-     * Metodo para traer los datos basicos de una forma para poder eliminar un dato.
+     * Método para traer los datos básicos de una forma para poder eliminar un dato.
      * @param arrayData
-     * @return
+     * @return  ArrayList   Listado con la configuración de la forma
      * @throws ExceptionHandler
      */
     public ArrayList getFormaForDeleteById(String[] arrayData) throws ExceptionHandler {
@@ -1600,12 +1603,11 @@ public class Forma extends Entidad{
                 String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
                 String[] strSPlit2 = strSplit[1].split(" ");
                 String tabla = strSPlit2[0];
-
+                //con esta query garantisamos que solo se obtengann los campos y no la data
                 String strQuery = "select * from " + tabla + " where 1 = 2";
 
                 con.getBitacora().setEnable(false);
                 dataTransfer = new DataTransfer();
-                //dataTransfer.setQuery(cmpAux.getValor());
                 dataTransfer.setQuery(strQuery);
                 dataTransfer.setArrData(arrayData);
                 dataTransfer.setArrVariables(this.getArrVariables());
@@ -1624,33 +1626,90 @@ public class Forma extends Entidad{
                 }
             }
         }catch(Exception e){
-            throw new ExceptionHandler(e,this.getClass(),
-                    "Problemas para obtener la Forma, mediante el ID de la query");
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener la Forma, mediante el ID de la query");
+            eh.setDataToXML(arrayData);
+            eh.setDataToXML(this.getArrVariables());
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lst;
     }
 
+    /**
+     * Método para la obtención de los datos de una forma, asociada a la clave
+     * de la forma y el perfil del usuario.
+     * @param claveForma    Clave de la forma
+     * @param clavePerfil   Clave del perfil
+     * @param lst           Listado de parámetros
+     * @return List         Listado con la configuración de la forma
+     * @throws ExceptionHandler
+     */
     public List getFormaByIdFormaIdPerfil(Integer claveForma, Integer clavePerfil, List lst) throws ExceptionHandler{
         List lstF = new ArrayList();
-        ConEntidad conE = new ConEntidad();
-        DataTransfer dataTransfer = new DataTransfer();
+        try{
+            ConEntidad conE = new ConEntidad();
+            DataTransfer dataTransfer = new DataTransfer();
 
-        String query = "select * from campo_forma "
-                + " where clave_forma = " + claveForma;
-        if (clavePerfil!=null){
-            query = query + " and clave_perfil = " + clavePerfil;
-        }
-        dataTransfer.setQuery(query);
-        conE.setBitacora(this.getBitacora());
-        HashCampo hsCampo = conE.getDataByQuery(dataTransfer);
-        ListHash lstHash = new ListHash();
-        ArrayList arrLst = lstHash.getListBean(CampoForma.class, hsCampo);
-        if ((arrLst!=null)&&(!arrLst.isEmpty())){
-            lstF = arrLst;
-        }else{
-            lstF = lst;
+            String query = "select * from campo_forma "
+                    + " where clave_forma = " + claveForma;
+            if (clavePerfil!=null){
+                query = query + " and clave_perfil = " + clavePerfil;
+            }
+            dataTransfer.setQuery(query);
+            conE.setBitacora(this.getBitacora());
+            HashCampo hsCampo = conE.getDataByQuery(dataTransfer);
+            ListHash lstHash = new ListHash();
+            ArrayList arrLst = lstHash.getListBean(CampoForma.class, hsCampo);
+            if ((arrLst!=null)&&(!arrLst.isEmpty())){
+                lstF = arrLst;
+            }else{
+                lstF = lst;
+            }
+        }catch(Exception e){
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                             "Problemas para obtener la Forma, mediante el ID de la forma y el ID del perfil");
+            eh.setDataToXML("CLAVE FORMA",claveForma);
+            eh.setDataToXML("CLAVE PERFIL",clavePerfil);
+            eh.setDataToXML(lst);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
         }
         return lstF;
+    }
+
+    /**
+     * Método que convierte a String el contenido del objeto Forma
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "Forma{"
+                + ((aliasTab!=null)?"\n\taliasTab=" + aliasTab:"")
+                + ((ordenTab!=null)?"\n\tordenTab=" + ordenTab:"")
+                + ((claveAplicacion!=null)?"\n\tclaveAplicacion=" + claveAplicacion:"")
+                + ((claveForma!=null)?"\n\tclaveForma=" + claveForma:"")
+                + ((claveFormaPadre!=null)?"\n\tclaveFormaPadre=" + claveFormaPadre:"")
+                + ((clavePerfil!=null)?"\n\tclavePerfil=" + clavePerfil:"")
+                + ((hsForma!=null)?"\n\thsForma=" + hsForma:"")
+                + ((pk!=null)?"\n\tpk=" + pk:"")
+                + ((tipoAccion!=null)?"\n\ttipoAccion=" + tipoAccion:"")
+                + ((campoPK!=null)?"\n\tcampoPK=" + campoPK:"")
+                + "\n\tcleanIncrement=" + cleanIncrement
+                + ((strWhereQuery!=null)?"\n\tstrWhereQuery=" + strWhereQuery:"")
+                + ((arrayData!=null)?"\n\tarrayData=" + arrayData:"")
+                + ((formData!=null)?"\n\tformData=" + formData:"")
+                + ((formName!=null)?"\n\tformName=" + formName:"")
+                + "\n\tincludeForaneo=" + includeForaneo
+                + ((claveEmpleado!=null)?"\n\tclaveEmpleado=" + claveEmpleado:"")
+                + ((arrVariables!=null)?"\n\tarrVariables=" + arrVariables:"")
+                + ((bitacora!=null)?"\n\tbitacora=" + bitacora:"")
+                + "\n\tincludeHour=" + includeHour
+                + ((orderBY!=null)?"\n\torderBY=" + orderBY:"")
+                + ((dataMail!=null)?"\n\tdataMail=" + dataMail:"")
+                + "\n}";
     }
 
 }
