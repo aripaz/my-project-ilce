@@ -24,10 +24,20 @@ public class HashCampo implements Serializable  {
     private String pkData;
     private String strQuery;
 
+    /**
+     * Obtiene un texto con la query que se utiliza en la consulta a la 
+     * Base de datos
+     * @return
+     */
     public String getStrQuery() {
         return strQuery;
     }
 
+    /**
+     * Obtiene un texto con la query que se utiliza en la consulta a la
+     * Base de datos
+     * @param strQuery
+     */
     public void setStrQuery(String strQuery) {
         this.strQuery = strQuery;
     }
@@ -49,9 +59,9 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Agregamos un registro (linea) al listado de Data
+     * Agrega un registro (línea) al listado de Data
      * @param lst   Listado con data que se guardara en el contenedor de Data
-     * @param codigo    Codigo con la posicion que ocupara el listado
+     * @param codigo    Código con la posición que ocupara el listado
      */
     public void addListData(List lst, Integer codigo){
         this.listData.put(codigo, lst);
@@ -59,11 +69,11 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Agregamos un conjunto de registros (varias lineas) al listado de Data 
+     * Agrega un conjunto de registros (varias líneas) al listado de Data
      * existente, proveniente de otro HashCampo. Si los campos no son 
      * equivalentes, se rechaza el ingreso. Si la lista es vacia, siendo los
      * campos correctos, se retorna TRUE.
-     * Se asume que los registros vienen ordenados con codigo index de 0 a n.
+     * Se asume que los registros vienen ordenados por código index de 0 a n.
      * @param hsCmp     HashCampo que contiene la nueva data a ingresar
      * @return
      */
@@ -85,8 +95,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Obtenemos un campo por medio de su codigo
-     * @param codigo    Codigo del campo a buscar
+     * Obtenemos un Campo por medio de su código
+     * @param codigo    Código del campo a buscar
      * @return
      */
     public Campo getCampoByCod(Integer codigo){
@@ -95,7 +105,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Agregamos un Campo, ordenandolo por su codigo
+     * Agrega un Campo, ordenandolo por su código
      * @param cmp   Campo a agregar
      */
     private void addCampoByCod(Campo cmp){
@@ -104,7 +114,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtenemos un Campo por medio de su alias
-     * @param alias     Alias del campo a buscar
+     * @param alias     Alias del Campo a buscar
      * @return
      */
     public Campo getCampoByAlias(String alias){
@@ -114,7 +124,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Guardamos el codigo de un campo, ordenandolo por el alias
+     * Guarda el código de un Campo, ordenandolo por el alias
      * @param cmp   Campo a agregar
      */
     private void addCampoByAlias(Campo cmp){
@@ -122,8 +132,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Obtenemos un campo por su nombre
-     * @param name      Nombre del campo a buscar
+     * Obtiene un Campo por su nombre
+     * @param name      Nombre del Campo a buscar
      * @return
      */
     public Campo getCampoByName(String name){
@@ -133,7 +143,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Guardamos el codigo de un campo ordenandolo por su nombre
+     * Guarda el código de un campo ordenandolo por su nombre
      * @param cmp   Campo a agregar
      */
     private void addCampoByName(Campo cmp){
@@ -141,8 +151,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Obtenemos un campo por su nombre de Base de Datos
-     * @param name      Nombre de Base de Datos del campo a buscar
+     * Obtenemos un Campo por su nombre de Base de Datos
+     * @param name      Nombre de Base de Datos del Campo a buscar
      * @return
      */
     public Campo getCampoByNameDB(String nameDB){
@@ -153,7 +163,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * guardamos un campo ordenado por Alias, Nombre y Codigo.
+     * Guarda un campo ordenado por alias, nombre y código.
      * @param cmp   Campo a agregar
      */
     public void addCampo(Campo cmp){
@@ -167,7 +177,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Obtiene el numero de campos que posee cada registro
+     * Obtiene el número de campos que posee cada registro
      * @return
      */
     public Integer getLengthCampo() {
@@ -175,15 +185,15 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Asigna el numero de campos que posee cada registro
-     * @param lengthCampo   Numero de campos existentes
+     * Asigna el número de campos que posee cada registro
+     * @param lengthCampo   Número de campos existentes
      */
     public void setLengthCampo(Integer lengthCampo) {
         this.lengthCampo = lengthCampo;
     }
 
     /**
-     * Obtiene el numero de registros de un listado
+     * Obtiene el número de registros de un listado
      * @return
      */
     public Integer getLengthData() {
@@ -191,8 +201,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Asigna el numero de registros que posee un listado
-     * @param lengthData    Numero de registros
+     * Asigna el número de registros que posee un listado
+     * @param lengthData    Número de registros
      */
     public void setLengthData(Integer lengthData) {
         this.lengthData = lengthData;
@@ -245,10 +255,10 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Obtiene un dato del tipo Object, se usara para anexar algun dato de clase
-     * indefinida, ademas del resultado obtenido desde la query que se invoco.
-     * El metodo que la utilice debe indicar que clase es la que contiene en
-     * su descripcion
+     * Obtiene un dato del tipo Object, se usara para anexar algún dato de clase
+     * indefinida, además del resultado obtenido desde la query que se invocó.
+     * El método que la utilice debe indicar que clase es la que contiene en
+     * su descripción
      * @return
      */
     public Object getObjData() {
@@ -256,10 +266,10 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Asigna un dato del tipo Object, se usara para anexar algun dato de clase
-     * indefinida, ademas del resultado obtenido desde la query que se invoco.
-     * El metodo que la utilice debe indicar que clase es la que contiene en
-     * su descripcion
+     * Asigna un dato del tipo Object, se usara para anexar algún dato de clase
+     * indefinida, además del resultado obtenido desde la query que se invocó.
+     * El método que la utilice debe indicar que clase es la que contiene en
+     * su descripción
      * @param objData   Dato Object cualquiera que se desea asignar
      */
     public void setObjData(Object objData) {
@@ -267,8 +277,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Constructor de la clase, donde se le entregan los distintos elementos
-     * que contiene la clase, su contenido depende de la query que se ejecuto
+     * Constructor de la clase, donde se le inicializan los distintos elementos
+     * que contiene la clase, su contenido depende de la query que se ejecutó
      * para su llenado
      * @param lengthCampo   Cantidad de campos que posee la query
      * @param lengthData    Cantidad de registros obtenidos por la query
@@ -307,8 +317,8 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Compara si dos listas de campos son iguales, retorna true si los son,
-     * retorna false si no es asi
+     * Compara si dos listas de campos son iguales, retorna TRUE si los son,
+     * retorna FALSE si no es así
      * @param lst1
      * @param lst2
      * @return
@@ -318,34 +328,23 @@ public class HashCampo implements Serializable  {
         return lst1.equals(lst2);
     }
 
-    private String ArrayListToString(ArrayList arr){
-        StringBuffer str = new StringBuffer();
-        if (arr!=null){
-            Iterator it = arr.iterator();
-            while (it.hasNext()){
-                Campo cmp = (Campo) it.next();
-                str.append(cmp.toString());
-            }
-        }
-        return str.toString();
-    }
-
     /**
-     * Metodo que lleva a un string el contenido del objeto
-     * @return
+     * Método para convertir a String el contenido del Objeto. Los datos que
+     * estén con valor NULL son ignorados
+     * @return  String  Texto con los datos del objeto
      */
     @Override
     public String toString() {
         return "HashCampo{"
-                + ((lengthCampo!=null)?"\n|| lengthCampo=" + lengthCampo:"")
-                + ((lengthData!=null)?"\n|| lengthData=" + lengthData:"")
-                + ((objData!=null)?"\n|| objData=" + objData:"")
-                + ((pkData!=null)?"\n|| pkData=" + pkData:"")
-                + ((listData!=null)?"\n|| listData=" + listData.toString():"")
-                + ((listCampoByCod!=null)?"\n|| listCampoByCod=" + listCampoByCod.toString():"")
-                + ((listCampoByName!=null)?"\n|| listCampoByName=" + listCampoByName.toString():"")
-                + ((listAlias!=null)?"\n|| listAlias=" + listAlias:"")
-                + ((listCampos!=null)?"\n|| listCampos=" + listCampos.toString():"")
+                + ((lengthCampo!=null)?"\n\tlengthCampo=" + lengthCampo:"")
+                + ((lengthData!=null)?"\n\tlengthData=" + lengthData:"")
+                + ((objData!=null)?"\n\tobjData=" + objData:"")
+                + ((pkData!=null)?"\n\tpkData=" + pkData:"")
+                + ((listData!=null)?"\n\tlistData=" + listData.toString():"")
+                + ((listCampoByCod!=null)?"\n\tlistCampoByCod=" + listCampoByCod.toString():"")
+                + ((listCampoByName!=null)?"\n\tlistCampoByName=" + listCampoByName.toString():"")
+                + ((listAlias!=null)?"\n\tlistAlias=" + listAlias:"")
+                + ((listCampos!=null)?"\n\tlistCampos=" + listCampos.toString():"")
                 + "\n}";
     }
 }

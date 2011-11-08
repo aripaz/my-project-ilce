@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import mx.ilce.bitacora.Bitacora;
 
 /**
- *  Clase implementada para contener los datos del User
+ * Clase implementada para contener los datos del User
  * @author ccatrilef
  */
 public class User implements Serializable {
@@ -27,7 +27,7 @@ public class User implements Serializable {
     private Bitacora bitacora;
 
     /**
-     * Constructor basico del User, inicializa las variables basicas
+     * Constructor básico del User, inicializa las variables básicas
      */
     public User() {
         this.login = "";
@@ -37,7 +37,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la clave de area del User
+     * Obtiene la clave de área del User
      * @return
      */
     public Integer getClaveArea() {
@@ -45,7 +45,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la clave de area del User
+     * Asigna la clave de área del User
      * @param claveArea
      */
     public void setClaveArea(Integer claveArea) {
@@ -124,7 +124,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el ID USer
+     * Asigna el ID del usuario
      * @param IDUser
      */
     public void setIDUser(BigDecimal IDUser) {
@@ -132,7 +132,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Entrega la variable boolena (True o False) que indica si esta conectado
+     * Obtiene la variable boolena (TRUE o FALSE) que indica si esta conectado
      * @return
      */
     public boolean isLogged() {
@@ -140,7 +140,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna a la valiable booleana un true o false segun si esta conectado
+     * Asigna a la valiable booleana un TRUE o FALSE según si esta conectado o no
      * @param isLogin
      */
     public void setIsLogged(boolean isLogged) {
@@ -164,7 +164,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Entrega la password de usuario asignada
+     * Obtiene la password de usuario asignada
      * @return
      */
     public String getPassword() {
@@ -244,7 +244,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el mensaje de operacion asignado
+     * Obtiene el mensaje de operación asignado
      * @return
      */
     public String getMessage() {
@@ -252,7 +252,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el mensaje de operacion
+     * Asigna el mensaje de operación
      * @param message
      */
     public void setMessage(String message) {
@@ -260,7 +260,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el objeto bitacora
+     * Obtiene el objeto bitácora
      * @return
      */
     public Bitacora getBitacora() {
@@ -268,7 +268,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el objeto bitacora
+     * Asigna el objeto bitácora
      * @param bitacora
      */
     public void setBitacora(Bitacora bitacora) {
@@ -276,26 +276,28 @@ public class User implements Serializable {
     }
 
     /**
-     * Entrega en formato String el contenido del objeto
-     * @return
+     * Método para convertir a String el contenido del Objeto. Los datos que
+     * estén con valor NULL son ignorados
+     * @return  String  Texto con los datos del objeto
      */
     @Override
     public String toString() {
-        return "User{" + "login=" + login
-                + " || nombre=" + nombre
-                + " || password=" + password
-                + " || apellidoPaterno=" + apellidoPaterno
-                + " || apellidoMaterno=" + apellidoMaterno
-                + " || isLogged=" + isLogged
-                + " || IDUser=" + IDUser
-                + " || urlAvatar=" + urlAvatar
-                + " || message=" + message
-                + " || claveEmpleado=" + claveEmpleado
-                + " || clavePerfil=" + clavePerfil
-                + " || claveArea=" + claveArea
-                + " || email=" + email
-                + " || bitacora=" + bitacora.toString()
-                + " || xmlPermiso=" + xmlPermiso
+        return "\nUser{"
+                + ((login!=null)?"\n\tlogin=" + login:"")
+                + ((nombre!=null)?"\n\tnombre=" + nombre:"")
+                + ((password!=null)?"\n\tpassword=" + password:"")
+                + ((apellidoPaterno!=null)?"\n\tapellidoPaterno=" + apellidoPaterno:"")
+                + ((apellidoMaterno!=null)?"\n\tapellidoMaterno=" + apellidoMaterno:"")
+                + "\n\tisLogged=" + isLogged
+                + ((IDUser!=null)?"\n\tIDUser=" + IDUser:"")
+                + ((urlAvatar!=null)?"\n\turlAvatar=" + urlAvatar:"")
+                + ((message!=null)?"\n\tmessage=" + message:"")
+                + ((claveEmpleado!=null)?"\n\tclaveEmpleado=" + claveEmpleado:"")
+                + ((clavePerfil!=null)?"\n\tclavePerfil=" + clavePerfil:"")
+                + ((claveArea!=null)?"\n\tclaveArea=" + claveArea:"")
+                + ((email!=null)?"\n\temail=" + email:"")
+                + ((bitacora!=null)?"\n\tbitacora=" + bitacora.toString():"")
+                + ((xmlPermiso!=null)?"\n\txmlPermiso=" + xmlPermiso:"")
                 + '}';
     }
 
