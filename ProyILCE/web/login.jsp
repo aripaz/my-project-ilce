@@ -36,9 +36,12 @@
         <table width="35%" border="0" align="center" cellpadding="5" cellspacing="0">
             <tr>
                 <td>
+                    <br /><br />
                     <div align="center">
-                        <img src="img/logo_plataforma_ilce.jpg" width="197" height="154" />
+                        <img src="img/logo ilce.jpg" />
+                        <img src="img/logo_plataforma.png"  />
                     </div>
+                    <br /><br/>
                 </td>
             </tr>
             <tr>

@@ -95,8 +95,25 @@
                     
                     /* Captura el click del link */
                     $(".editLink").click(function(){
+                        nQuery=this.id.split("_")[0].split("-")[1];
                         nApp=this.id.split("_")[1];
                         nForma=this.id.split("_")[2];
+                        
+                        $("body").form({
+                            app: nApp,
+                            forma:8,
+                            datestamp:obj.attr("datestamp"),
+                            modo:"update",
+                            titulo: "Consulta ",
+                            columnas:1,
+                            pk:nQuery,
+                            filtroForaneo:"2=clave_aplicacion=1&3="+obj.attr("wsParameters"),
+                            height:"500",
+                            width:"80%",
+                            originatingObject: obj.id,
+                            updateControl:obj.id
+                        });
+                        
                     })
 
                     return true;
@@ -568,7 +585,7 @@
             if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
                  $.fn.appgrid.options.error+="Hay un error en la consulta (" + 
                      error.find("general").text() + ". " +  
-                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
+                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery-" + error.find("clave_consulta").text()  + "_" + 
                     $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
                 return true;    
                 }

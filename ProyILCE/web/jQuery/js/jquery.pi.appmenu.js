@@ -46,6 +46,8 @@
                 
                 /* Inserta el html en el elemento apps */
                 obj.html( $.fn.appmenu.handleMenu(xml));
+                //Carga las aplicaciones en el mapa del sitio
+                
                 $("#tabs").tabs();
 
                 /*$( "#tabs span.ui-icon-triangle-1-s" ).live( "click", function() {
@@ -466,7 +468,9 @@
             nMostrar = $(this).find("mostrar").text();
 
             sHtml+="<a href='#' class='menu' name='showEntity_" + nAplicacion + "_" + nEntidad +"'  nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>";
-
+            
+            //Agrega los menús al mapa del sitio
+            $("#app_menu_in_map").append("<li>"+sTituloAplicacion+"</li>");
         })
 
         return sHtml;
