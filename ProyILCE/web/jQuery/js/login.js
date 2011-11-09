@@ -35,11 +35,6 @@ $(document).ready(function() {
     $(".slide_number_2").html("Olvid&eacute; mi contrase&ntilde;a");
     //$("#divLostPw").hide();
 
-    $("#lnkRecuperaPw,#lnkIniciarSesion").click(function(){
-        $("#divLogin").toggle();
-        $("#divLostPw").toggle();
-    });
-
     $("#iniciarsesion").click(function(){
         s=$("#texto_mensaje").html;
         if ($("#lgn").val()=="") {
@@ -63,12 +58,30 @@ $(document).ready(function() {
 
     $("#btnRecuperarPw").click(function(){
         if ($("#rc").val()=="") {
-            $("#msjRecuperaPW").html("<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;'></span><strong>Se requiere clave de usuario, verifique</strong>");
+            $($("#msjRecuperaPW").children()[1]).html("Se requiere clave de usuario, verifique");
             $("#divMsjRecuperaPW").show();
             return;
         }
         else {
-            $("#divMsjRecuperaPW").hide();
+            $.ajax(
+            {
+                url: "srvForgotPass?e_mail="+$("#rc").val(),
+                dataType: ($.browser.msie) ? "text" : "xml",
+                success:  function(data){
+                if (typeof data == "string") {
+                    xmlLPResponse = new ActiveXObject("Microsoft.XMLDOM");
+                    xmlLPResponse.async = false;
+                    xmlLPResponse.validateOnParse="true";
+                    xmlLPResponse.loadXML(data);
+                    if (xmlLPResponse.parseError.errorCode>0)
+                        alert("Error de compilación xml:" + xmlLPResponse.parseError.errorCode +"\nParse reason:" + xmlLPResponse.parseError.reason + "\nLinea:" + xmlLPResponse.parseError.line);
+                }                
+                else 
+                    xmlLPResponse = data;            
+                $($("#msjRecuperaPW").html('<span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span><strong>'+$(xmlLPResponse).find("respuesta").text()+'</strong>'));
+                $("#divMsjRecuperaPW").show();
+            }}
+            );
         }
 
     });
