@@ -610,7 +610,12 @@ public class Aplicacion extends Entidad {
                 fmrForma.setBitacora(this.getBitacora());
                 lstF = fmrForma.getFormaByIdFormaIdPerfil(this.getClaveForma(),this.getClavePerfil(),lstF);
             }catch(Exception e){}
-            
+
+            //Solo el administrador puede ver la query
+            String idAdmin = AdminFile.getKey(AdminFile.leerConfig(),AdminFile.IDADMIN);
+            if (idAdmin.equals(String.valueOf(this.getClavePerfil()))){
+                adm.setIncludeQuery(true);
+            }
             strSld = adm.getGridColumByData(hsCmp,lstF);
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
@@ -699,6 +704,11 @@ public class Aplicacion extends Entidad {
                 lstF = fmrForma.getFormaByIdFormaIdPerfil(this.getClaveForma(),this.getClavePerfil(),lstF);
             }catch(Exception e){}
 
+            //Solo el administrador puede ver la query
+            String idAdmin = AdminFile.getKey(AdminFile.leerConfig(),AdminFile.IDADMIN);
+            if (idAdmin.equals(String.valueOf(this.getClavePerfil()))){
+                adm.setIncludeQuery(true);
+            }
             strSld = adm.getGridByData(hsCmp,lstF,this.getNumPage(),this.getNumRows());
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),

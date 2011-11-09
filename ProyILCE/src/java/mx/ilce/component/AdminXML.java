@@ -39,6 +39,25 @@ public class AdminXML {
     private HashMap hsForm;
     private Bitacora bitacora;
     private boolean includeHour=true;
+    private boolean includeQuery=false;
+
+    /**
+     * Obtiene el valor del Validador que indica si se debe incluir la query
+     * dentro del conjunto de datos del XML
+     * @return  Boolean     Valor validador
+     */
+    public boolean isIncludeQuery() {
+        return includeQuery;
+    }
+
+    /**
+     * Asigna un valor al Validador que indica si se debe incluir la query
+     * dentro del conjunto de datos del XML
+     * @param includeQuery  Valor validador
+     */
+    public void setIncludeQuery(boolean includeQuery) {
+        this.includeQuery = includeQuery;
+    }
 
     /**
      * Obtiene el valor del Validador que indica si se debe incluir la hora con
@@ -276,6 +295,13 @@ public class AdminXML {
             }
             int regIni = (regByPage*(page-1));
             str.append("<rows>\n");
+
+            if (this.isIncludeQuery()){
+                str.append("<qry>\n<![CDATA[");
+                str.append(hsData.getStrQuery());
+                str.append("]]>\n</qry>\n");
+            }
+
             str.append(("<page>"+page+"</page>\n"));
             str.append(("<total>"+total+"</total>\n"));
             str.append(("<records>"+reg+"</records>\n"));
@@ -393,6 +419,11 @@ public class AdminXML {
             int reg = hsDat.size();
             str.append("<rows>\n");
 
+            if (this.isIncludeQuery()){
+                str.append("<qry>\n<![CDATA[");
+                str.append(hsData.getStrQuery());
+                str.append("]]>\n</qry>\n");
+            }
             CampoForma cmpForma = (CampoForma) lstCampos.get(0);
             Integer idForma = cmpForma.getClaveForma();
             StringBuffer strForma = new StringBuffer();

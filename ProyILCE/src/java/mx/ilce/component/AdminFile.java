@@ -85,6 +85,11 @@ public class AdminFile {
     public static String LOGFILESERVER = "LOGFILESERVER";
 
     /**
+     * Clave del perfil administrador
+     */
+    public static String IDADMIN = "IDADMIN";
+
+    /**
      * Query con los permisos
      */
     public static String PERMISOS = "PERMISOS";
