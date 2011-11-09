@@ -66,13 +66,6 @@
                                                 <button id="iniciarsesion">Iniciar sesi&oacute;n</button>
                                             </div></td>
                                     </tr>
-                                    <!--<tr>
-                                        <td><div align="right">
-                                            </div></td>
-                                        <td><div align="right">
-                                                <a href="<%=request.getContextPath()%>/forgotPass.jsp" id="lnkRecuperaPwX" class="sesion_menu">Olvidé mi contrase&ntilde;a</a>
-                                            </div></td> 
-                                    </tr>-->
                                     <tr>
                                         <td colspan="2">
                                             <div class="ui-widget" id="divMsgLogin">
@@ -86,7 +79,6 @@
                             </form>
                         </div>
                         <div id="divLostPw">
-                            <form action="srvForgotPass" method="post" name="frmRecuperaPw" id="frmRecuperaPw">
                             <table width="75%" border="0" align="center" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td width="48%"><div id="usuario" align="right" class="etiqueta_forma">Usuario</div></td>
@@ -100,10 +92,6 @@
                                             <button id="btnRecuperarPw">Recuperar contrase&ntilde;a</button>
                                         </div></td>
                                 </tr>
-                                <!--<tr>
-                                    <td>&nbsp;</td>
-                                    <td><div align="right"><a href="#" id="lnkIniciarSesion" name="lnkIniciarSesion" class="sesion_menu">Ir a iniciar sesi&oacute;n</a></div></td>
-                                </tr> -->
                                 <tr>
                                     <td colspan="2">
                                         <div class="ui-widget" id="divMsjRecuperaPW">
@@ -114,7 +102,6 @@
                                     </td>
                                 </tr>
                             </table>
-                            </form>
                         </div>
                     </div>
                 </td>

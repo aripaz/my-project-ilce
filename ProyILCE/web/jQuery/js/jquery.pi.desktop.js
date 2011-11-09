@@ -116,7 +116,15 @@
                                 }, {
                                 "content": $("#ayudaComoEditarUnRegistro").html(),
                                 "content_button": ""
-                                }],
+                                },{
+                                "content": $("#ayudaComoEliminarUnRegistro").html(),
+                                "content_button": ""
+                                },{
+                                "content": $("#ayudaComoFiltrarRegistros").html(),
+                                "content_button": ""
+                                }
+                                
+                            ],
                 carousel_outer_height: $("#divCarouselMisAplicaciones").height(),
                 carousel_height: $("#divCarouselMisAplicaciones").height(),
                 slide_height: $("#divCarouselMisAplicaciones").height()+2,
@@ -128,6 +136,14 @@
                 control_set_1: "previous_button,next_button",
                 control_set_2: "numbered_buttons"
             });   
+            
+            //Activa los tooltips de los links con clase tooltipLink
+            $(".tooltipLink").tooltip({
+                    bodyHandler: function() {
+                            return $("<img/>").attr("src", this.id);
+                    },
+                    showURL: false
+            });
             
              $("#tabs").tabs( "select", "#tabInicio" );
             //$("#tabMisFavoritos").tabs( "remove", 0);
