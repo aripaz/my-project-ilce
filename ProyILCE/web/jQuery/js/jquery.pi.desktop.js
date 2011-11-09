@@ -52,7 +52,7 @@
                     var index = $( "li", $("#tabMisFavoritos")).index( $( this ).parent() );
                     var nPK=$("#tabMisFavoritos").children()[index+1].id.split("_")[1];
                     $("#divwait")
-                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Eliminando grid favorito del usuario</p>")
+                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Eliminando catálogo favorito del usuario</p>")
                     .attr('title','Eliminando favorito...') 
                     .dialog({
                             height: 140,
@@ -221,6 +221,9 @@
                                      " class='queued_grids' " +
                                      " editingApp='1' "+
                                      " insertInDesktopEnabled='0'></div>");
+              
+              //Agrega elf aavorito al mapa del sitio
+              $("#tabMisFavoritos_in_map").append("<li>"+titulo+"</li>");
             }
 
         });
