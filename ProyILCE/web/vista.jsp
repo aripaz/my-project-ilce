@@ -38,13 +38,17 @@
 
         <!-- Carrousel -->
         <script type="text/javascript" src="jQuery/js/agile_carousel.alpha.js"></script>
-
+        
+        <!-- Tooltip -->
+        <script src="jQuery/js/jquery.tooltip.min.js" type="text/javascript"></script>
+        
         <!-- form plugin para considerar uploads  -->
         <script type="text/javascript" src="jQuery/js/jquery.form.js"></script>
         
         <link type="text/css" href="css/agile_carousel.css" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/jquery.tooltip.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
@@ -228,11 +232,11 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div id='ayudaComoEditarUnRegistro'>
+                            <div id='ayudaComoAgregarUnRegistro'>
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Edita un registro del catálogo </h3>
+                                            <h3>Agrega un registro nuevo al catálogo</h3>
                                         </td>
                                     </tr>
                                     <tr>
@@ -253,11 +257,11 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div id='ayudaComoAgregarUnRegistro'>
+                            <div id='ayudaComoEditarUnRegistro'>
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Agrega un registro nuevo al catálogo </h3>
+                                            <h3>Edita un registro del catálogo</h3>
                                         </td>
                                     </tr>
                                     <tr>
@@ -279,6 +283,57 @@
                                     </tr>
                                 </table>
                             </div>
+                            <div id='ayudaComoEliminarUnRegistro'>
+                                <table >
+                                    <tr>
+                                        <td colspan='2'>
+                                            <h3>Elimina un registro del catálogo</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src='img/como_eliminar_registros.png' class='helpScreen' />
+                                        </td>
+                                        <td class='instrucciones'>
+                                         <p class='instrucciones'>
+                                                Para eliminar un registro sigue los siguientes pasos:</p>
+                                            <ol>
+                                                <li>Selecciona del catálogo el registro que deseas eliminar.</li>    
+                                                <li>Haz clic encima del botón <span class='ui-icon ui-icon-trash' style='display:inline-block'></span>de la barra de herramientas del catálogo. <br />
+                                                    La página solicitará que confirmes la eliminación. 
+                                                </li>
+                                                <li>Presiona OK en el dialogo de confirmación para proceder con el borrado</li>
+                                            </ol>                                        
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id='ayudaComoFiltrarRegistros'>
+                                <table >
+                                    <tr>
+                                        <td colspan='2'>
+                                            <h3>Filtra los registros del catálogo</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src='img/como_filtrar_registros.png' class='helpScreen' />
+                                        </td>
+                                        <td class='instrucciones'>
+                                         <p class='instrucciones'>
+                                                Filtra para encontrar el conjunto de registros que cumplen con tus criterios de filtrado. Para filtrar registros sigue los siguientes pasos:</p>
+                                            <ol> 
+                                                <li>Haz clic encima del botón <span class='ui-icon ui-icon-search' style='display:inline-block'></span>de la barra de herramientas del catálogo. <br />
+                                                    La página desplegará una ventana para ingresar los criterios de filtrado 
+                                                </li>
+                                                <li>Ingresa al menos un criterio de filtrado; puedes seleccionar más de uno. Mientras más criterios utilices más reducida será el resultado de la búsqueda.</li>
+                                                <li>Si deseas guardar el filtro para su posterior uso, asignale un nombre en el campo <a href="javascript:void(0);" class="tooltipLink" id="img/guardar_filtro_como.png">Guardar filtro como</a>:"; recuperalo posteriormente en el menú <a href="javascript:void(0);" class="tooltipLink" id="img/mis_filtros.png">"Mis filtros"</a> que se encuentra a la izquierda del catálogo. </li>
+                                                <li>Presiona el botón "Buscar"; esto cerrará la ventana y mostrará el resultado en el catálogo. Para remover el filtro y restaurar los registros haz clic encima de la liga (Quitar filtro) que se encuentra junto al titulo del catálogo." </li>
+                                            </ol>                                        
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>                             
                         </div>
                     </div>
                 </div>
