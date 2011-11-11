@@ -424,7 +424,7 @@
                     })
                     .navButtonAdd('#grid'+ suffix+'_toppager',{
                         caption:"",
-                        buttonicon:"ui-icon-heart",
+                        buttonicon:"ui-icon-star",
                         onClickButton:  function() {
                             nApp=this.id.split("_")[1];
                             nForma=this.id.split("_")[2];
@@ -582,13 +582,23 @@
         var error=$(xml).find("error");
         
         if (error.length>0) {
-            if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
+            if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {
+                 nConsulta= error.find("clave_consulta").text();
                  $.fn.appgrid.options.error+="Hay un error en la consulta (" + 
                      error.find("general").text() + ". " +  
-                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery-" + error.find("clave_consulta").text()  + "_" + 
+                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery-" + nConsulta  + "_" + 
                     $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
                 return true;    
-                }
+            }
+        
+            if (error.find("tipo").text()=="Exception" && $("#_cp_").val()=="1") {
+             $.fn.appgrid.options.error+="No hay una consulta asociada a esta acción" + 
+                 error.find("general").text() + ". " +  
+                 error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery-0" +   + "_" + 
+                $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para crearla"
+            return true;    
+            }    
+
        }      
        
        //Titulo del grid
@@ -664,6 +674,15 @@
             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
         }
         else {
+            $("#divwait")
+            .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Construyendo el kardex...</p>")
+            .attr('title','Espere un momento por favor') 
+            .dialog({
+                    height: 140,
+                    modal: true,
+                    autoOpen: true,
+                    closeOnEscape:false
+            });
             oGrid=$('#grid'+ suffix);
             var nRow=oGrid.getGridParam('selrow');
             sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(nRow,1);

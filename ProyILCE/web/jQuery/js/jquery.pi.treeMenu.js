@@ -148,7 +148,9 @@
                        
                        $("#accordion_"+oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4]).appmenu.getFullMenu(oId.split("_")[1]+"_"+oId.split("_")[2]+"_"+oId.split("_")[3]+"_"+oId.split("_")[4],nApp,nForma);
                  });
-
+                
+                //Se abrió el dialogo de espera en la función openKardex del grid
+                $("#divwait").dialog( "close" );
             },
             error:function(xhr,err){
                 alert("Error al recuperar definición de arbol\nreadyState: "+xhr.readyState+"\nstatus: "+xhr.status);

@@ -470,7 +470,7 @@
             sHtml+="<a href='#' class='menu' name='showEntity_" + nAplicacion + "_" + nEntidad +"'  nueva_entidad='" + sAliasNuevaEntidad +"' edita_entidad='"+ sAliasMostrarEntidad + "'>" + sTituloAplicacion + "</a>";
             
             //Agrega los menús al mapa del sitio
-            $("#app_menu_in_map").append("<li>"+sTituloAplicacion+"</li>");
+            $("#app_menu_in_map").append("<dt><a id='mapLink-tabAplicaciones-tabshowEntity" +nAplicacion + "_" + "_" + nEntidad + "' class='maplink' href='#'>"+sTituloAplicacion+"</dt>");
         })
 
         return sHtml;

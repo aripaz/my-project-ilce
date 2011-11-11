@@ -432,7 +432,8 @@
 
                 $(".money").calculator({
                     useThemeRoller: true,
-                    prompt: 'Calculadora'
+                    prompt: 'Calculadora',
+                    showOn: 'operator'
                 });
 
                 //Se activa el foreign toolbar para editar registros foraneos
@@ -440,6 +441,33 @@
                     app:$.fn.form.options.app
                 });
 
+                //Se activan el click de las liga orientadas a editar definicones de campo
+                if ($("#_cp_").val()=="1") {
+                     $(".edit_field").click(function() {
+                         aId= this.id.split("-");
+                         nApp=aId[1]; 
+                         nForma=aId[2];
+                         nPk=aId[3];
+                         sModo="update";
+                         if (nPk==0)
+                             sModo="insert"
+                             
+                        $("body").form({
+                            app: nApp,
+                            forma:13,
+                            datestamp:obj.attr("datestamp"),
+                            modo:sModo,
+                            titulo: "Diccionario de datos ",
+                            columnas:1,
+                            pk:nPk,
+                            filtroForaneo:aId[4],
+                            height:"500",
+                            width:"80%",
+                            originatingObject: obj.id,
+                            updateControl:obj.id
+                        });                         
+                     });
+                }
                 
                 function validateForm(formData, jqForm, options) { 
                    var bCompleto=true;
@@ -589,6 +617,7 @@
             if (bAutoIncrement)
                 $.fn.form.options.pk_name=oCampo[0].nodeName;
             //Genera etiqueta
+            nClave_campo=(oCampo.find('clave_campo').text()==undefined)?0:oCampo.find('clave_campo').text();
             sAlias=oCampo.find('alias_campo').text();
             bDatoSensible=oCampo.find('dato_sensible').text();
             bActivo=oCampo.find('activo').text();
@@ -610,7 +639,7 @@
                 sRenglon+=sAlias;
             }
             else {
-                sRenglon+=oCampo[0].nodeName;
+                sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='El campo no cuenta con alias, haga clic aqui para abrir su definición en el diccionario de datos'>"+oCampo[0].nodeName+"</a>";
             }
 
             //Verifica si el campo es obligatorio para incluir la leyenda en el alias
@@ -746,10 +775,10 @@
 
                     if (sTipoCampo=='money') {
                         sRenglon+='class="inputWidgeted1';
-                        sWidgetButton='<div class="widgetbutton" tipo="calculator_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                        sWidgetButton='<div class="widgetbutton" tipo="calculator_button" control="' + oCampo[0].nodeName +'"></div>';
                     } else if (sTipoCampo=='datetime') {
                         sRenglon+='class="inputWidgeted1';
-                        sWidgetButton='<div class="widgetbutton" tipo="calendar_button" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
+                        sWidgetButton='<div class="widgetbutton" tipo="calendar_button" control="' + oCampo[0].nodeName +'"></div>';
                     }
                     else
                         sRenglon+='class="singleInput';

@@ -41,7 +41,7 @@
                  sHtml="<div id='div_spnCalculator" + suffix + "' >"+
                        "<table class='ui-pg-table navtable' cellspacing='0' cellpadding='0' border=0' style='float: left; table-layout: auto;'><tr>" +
                        "<td class='ui-pg-button ui-corner-all' title='Muestra calculadora'><div class='ui-pg-div'>" +
-                       "<span id='spnCalculator" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' control='" + obj.attr("control")+ "' class='ui-icon ui-icon-calculator'></span></div></td>"  + //Botón de insertar
+                       "<span id='spnCalculator" + suffix + "' forma='" + obj.attr("forma") + "' titulo_agregar='" + obj.attr("titulo_agregar") + "' control='" + obj.attr("control")+ "' class='ui-icon ui-icon-calculator calculator-trigger'></span></div></td>"  + //Botón de insertar
                        "</tr></table>"
              }
 
