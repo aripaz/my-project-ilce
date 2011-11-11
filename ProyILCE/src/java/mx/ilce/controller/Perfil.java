@@ -131,7 +131,7 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Asigna un Object al campo Data. Usado para situaciones en que no esta
+     * Asigna un Object al campo Data. Usado para situaciones en que no están
      * definidos los metodos para un tipo de dato
      * @param data  Objeto que se va a asignar
      */
@@ -458,7 +458,7 @@ public class Perfil extends Entidad{
     }
 
     /**
-     * Método que convierte a String el contenido del objeto nPerfil
+     * Método que convierte a String el contenido del objeto Perfil
      * @return
      */
     @Override

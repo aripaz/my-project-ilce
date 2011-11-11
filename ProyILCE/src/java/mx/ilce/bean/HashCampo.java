@@ -26,7 +26,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtiene un texto con la query que se utiliza en la consulta a la 
-     * Base de datos
+     * Base de Datos
      * @return
      */
     public String getStrQuery() {

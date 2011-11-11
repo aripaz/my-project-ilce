@@ -109,6 +109,5 @@ public class srvLogout extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Servlet para ser invocado para efectuar el logout del usuario";
-    }// </editor-fold>
-
+    }
 }

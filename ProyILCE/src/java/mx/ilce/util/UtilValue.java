@@ -94,7 +94,7 @@ public class UtilValue {
 
     /**
      * Método para convertir un texto de una query, para que los caracteres sean
-     * aceptado por la base de datos
+     * aceptados por la Base de Datos
      * @param data      Texto a revisar
      * @return  StringBuffer    Texto transformado
      * @throws ExceptionHandler

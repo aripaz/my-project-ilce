@@ -419,6 +419,10 @@ public class DataMail implements Serializable{
         this.tipoMail = tipoMail;
     }
 
+    /**
+     * Método que convierte a String el contenido del objeto DataMail
+     * @return
+     */
     @Override
     public String toString() {
         return "DataMail{"
@@ -448,7 +452,4 @@ public class DataMail implements Serializable{
                 + ((strCopyO!=null)?"\n\tstrCopyO=" + strCopyO :"")
                 + "\n}";
     }
-
-
-
 }
