@@ -38,13 +38,13 @@
 
         <!-- Carrousel -->
         <script type="text/javascript" src="jQuery/js/agile_carousel.alpha.js"></script>
-        
+
         <!-- Tooltip -->
         <script src="jQuery/js/jquery.tooltip.min.js" type="text/javascript"></script>
-        
+
         <!-- form plugin para considerar uploads  -->
         <script type="text/javascript" src="jQuery/js/jquery.form.js"></script>
-        
+
         <link type="text/css" href="css/agile_carousel.css" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/cupertino/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="jQuery/js/jqGrid/css/ui.jqgrid.css"/>
@@ -52,7 +52,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/vista.css"/>
         <link rel="stylesheet" type="text/css" media="screen" href="css/calculator/jquery.calculator.css"/>
-        
+
 
         <script src="jQuery/js/funciones.js" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js" type="text/javascript"></script>
@@ -142,7 +142,7 @@
                                                     <ol>
                                                         <li class='instrucciones'>Ve a la pestaña "Aplicaciones"</li>
                                                         <li class='instrucciones'>Haz clic en el botón de la aplicación que deseas abrir</li>
-                                                        <li class='instrucciones'>Haz clic en el botón <span class='ui-icon ui-icon-heart' style='display:inline-block'></span> de la barra de herramientas del catálogo que deseas hacer tu favorito</li>
+                                                        <li class='instrucciones'>Haz clic en el botón <span class='ui-icon ui-icon-star' style='display:inline-block'></span> de la barra de herramientas del catálogo que deseas hacer tu favorito</li>
                                                     </ol>        
                                                 </td>
                                             </tr>
@@ -241,7 +241,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img src='img/como_editar_registros.png'  class='helpScreen' />
+                                            <img src='img/como_agregar_registros.png'  class='helpScreen' />
                                         </td>
                                         <td class='instrucciones'>
                                             <p class='instrucciones'>
@@ -269,7 +269,7 @@
                                             <img src='img/como_editar_registros.png' class='helpScreen' />
                                         </td>
                                         <td class='instrucciones'>
-                                         <p class='instrucciones'>
+                                            <p class='instrucciones'>
                                                 Para editar un registro sigue los siguientes pasos:</p>
                                             <ol>
                                                 <li>Selecciona del catálogo el registro que deseas editar.</li>    
@@ -295,7 +295,7 @@
                                             <img src='img/como_eliminar_registros.png' class='helpScreen' />
                                         </td>
                                         <td class='instrucciones'>
-                                         <p class='instrucciones'>
+                                            <p class='instrucciones'>
                                                 Para eliminar un registro sigue los siguientes pasos:</p>
                                             <ol>
                                                 <li>Selecciona del catálogo el registro que deseas eliminar.</li>    
@@ -320,7 +320,7 @@
                                             <img src='img/como_filtrar_registros.png' class='helpScreen' />
                                         </td>
                                         <td class='instrucciones'>
-                                         <p class='instrucciones'>
+                                            <p class='instrucciones'>
                                                 Filtra para encontrar el conjunto de registros que cumplen con tus criterios de filtrado. Para filtrar registros sigue los siguientes pasos:</p>
                                             <ol> 
                                                 <li>Haz clic encima del botón <span class='ui-icon ui-icon-search' style='display:inline-block'></span>de la barra de herramientas del catálogo. <br />
@@ -339,6 +339,42 @@
                 </div>
             </div>
             <div id="tabMapaDelSitio">
+                <div id="divCarouselMapa">
+                    <div id="mapa">
+                    <table>
+                        <tr>
+                            <td>
+                                <h3 class="instrucciones">Mapa del sitio</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="instrucciones">
+                                <p class="instrucciones">Aquí se muestran todas y cada una de las partes que componen al sistema para el perfil actual, seleccione la liga correspondiente para acceder al componente deseado.</p>
+                                <dl>
+                                    <dt class="instrucciones" ><a id="mapLink-tabInicio" class="maplink" href="#">Inicio</a>
+                                        <dl class="instrucciones">
+                                            <dt class="instrucciones"><a id="mapLink-tabInicio-tabUser-tabPendientes" class="maplink" href="#">Pendientes</a></dt>
+                                            <dt><a id="mapLink-tabInicio-tabUser-tabFavoritos" class="maplink" href="#">Favoritos</a>
+                                                <dl id="tabMisFavoritos_in_map">
+
+                                                </dl>
+                                            </dt>
+                                        </dl>
+                                    </li>
+                                    <dt class="instrucciones"><a id="mapLink-tabAplicaciones" class="maplink" href="#">Aplicaciones</a>
+                                        <dl id="app_menu_in_map">
+                                        </dl>
+                                    </dt>
+                                    <dt class="instrucciones"><a id="mapLink-tabMapaDelSitio" class="maplink" href="#">Mapa de sitio</a></dt>
+                                    <dt class="instrucciones"><a id="mapLink-tabAyuda" class="maplink" href="#">Ayuda</a></dt>
+                                    <dt class="instrucciones"><a id="mapLink-tabContacto" class="maplink" href="#">Contacto</a></dt>
+                                    <dt class="instrucciones">Búsqueda <input type="text" size="100" id="b_in_map" value="" /></dt>
+                                </dl>
+                            </td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
             </div>
             <div id="tabAyuda">
             </div>

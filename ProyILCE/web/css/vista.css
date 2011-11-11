@@ -26,9 +26,22 @@ input.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetic
 select.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 90%; float: left; font-size: 12px; height:18px !important}
 .foreign_toolbar { float:right }
 
-td.instrucciones, p.instrucciones, li.instrucciones { margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top;   font-size: 12px !important  
+h3.instrucciones {
+    font-family: Arial,Helvetica,sans-serif;
 }
-
+    
+td.instrucciones, p.instrucciones {
+    margin:5px; 
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    vertical-align:top;
+    font-size: 12px !important;
+}
+.instrucciones dl, .instrucciones dl dt {
+    margin-left:5px; 
+    font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top;
+    font-size: 12px !important;
+    padding-left: 14px; 
+}
 
 #header{height:32px; background-color: #BDD2FF}/* Header */
 
@@ -511,6 +524,69 @@ background-image: url("../img/sprite_ac_hover.png");
 }
 
 #divCarouselMisAplicaciones .previous_next_button {
+    background-color: #FFFFFF;
+    background-image: url("../img/sprite_ac_normal.png");
+    border: 1px solid #CFCECE;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px #DFDFDF;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 1000px;
+    width: 16px;
+}
+
+/*------------------**/
+
+#divCarouselMapa .numbered_button  {
+    background-color: transparent;
+    background-image: url("../img/sprite_ac_normal.png");
+    background-position: -95px 0;
+    color: #000000;
+    font-size: 12px;
+    height: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    padding: 0 2px;
+    text-indent: 1000px;
+    width: 10px;
+}
+
+#divCarouselMapa .control_set_1 .ac_disabled {
+    background-image: url("../img/sprite_ac_disabled.png");
+}
+#divCarouselMapa .control_set_1 {
+    float: right;
+    margin: 4px 6px 0;
+    position: relative;
+}
+
+#divCarouselMapa .control_set_2 {
+    float: right;
+    margin: 8px 0 0;
+    position: relative;
+}
+
+#divCarouselMapa  .ac_selected {
+background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselMapa .slide_button {
+    float: left;
+}
+
+#divCarouselMapa .previous_button {
+    background-position: 4px 3px;
+}
+
+#divCarouselMapa .next_button {
+    background-position: -44px 3px;
+}
+
+#divCarouselMapa .numbered_button_container .ac_selected, #divCarouselMisAplicaciones .numbered_button:hover  {
+    background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselMapa .previous_next_button {
     background-color: #FFFFFF;
     background-image: url("../img/sprite_ac_normal.png");
     border: 1px solid #CFCECE;
