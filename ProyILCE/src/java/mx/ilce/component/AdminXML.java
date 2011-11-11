@@ -576,6 +576,11 @@ public class AdminXML {
                         if (cmp.getNombreDB()!=null){
                             CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                             if (cmpAux!=null){
+                                if (cmpAux.getClaveCampo()!=null){
+                                    strCampos.append(("\t\t<clave_campo><![CDATA["
+                                            + replaceAccent(castNULL(String.valueOf(cmpAux.getClaveCampo()).trim()))
+                                            + "]]></clave_campo>\n"));
+                                }
                                 if (cmpAux.getAliasCampo()!=null){
                                     strCampos.append(("\t\t<alias_campo><![CDATA["
                                             + replaceAccent(castNULL(String.valueOf(cmpAux.getAliasCampo()).trim()))
@@ -775,6 +780,11 @@ public class AdminXML {
                         if (cmp.getNombreDB()!=null){
                             CampoForma cmpAux = getCampoForma(lstCampos,cmp.getNombreDB());
                             if (cmpAux!=null){
+                                if (cmpAux.getClaveCampo()!=null){
+                                    strCampos.append(("\t\t<clave_campo><![CDATA["
+                                            + replaceAccent(castNULL(String.valueOf(cmpAux.getClaveCampo()).trim()))
+                                            + "]]></clave_campo>\n"));
+                                }
                                 if (cmpAux.getAliasCampo()!=null){
                                     strCampos.append(("\t\t<alias_campo><![CDATA["
                                             + replaceAccent(castNULL(String.valueOf(cmpAux.getAliasCampo()).trim()))
