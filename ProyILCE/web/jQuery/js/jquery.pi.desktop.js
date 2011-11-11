@@ -137,6 +137,8 @@
                 control_set_2: "numbered_buttons"
             });   
             
+            $("#tabs").tabs( "select", "#tabMapaDelSitio" );
+            
             //Activa los tooltips de los links con clase tooltipLink
             $(".tooltipLink").tooltip({
                     bodyHandler: function() {
@@ -173,6 +175,18 @@
                     xmlConfig= data;}
 
                 $.fn.desktop.handleSession(xmlConfig);
+                
+                //Activa las ligas del mapa de sitio
+                $('.maplink').click(function() {
+                    aTabsSecuence=this.id.split("-");
+                    for (i=1;i<aTabsSecuence.length;i++) {
+                        if (i==1)
+                            $("#tabs").tabs( "select", "#"+aTabsSecuence[i] );
+                        else
+                            $("#"+aTabsSecuence[i-1]).tabs( "select", "#"+aTabsSecuence[i] );
+                    }
+                });
+                
                 $('.queued_grids:first').gridqueue();
                 
             },
@@ -222,8 +236,8 @@
                                      " editingApp='1' "+
                                      " insertInDesktopEnabled='0'></div>");
               
-              //Agrega elf aavorito al mapa del sitio
-              $("#tabMisFavoritos_in_map").append("<li>"+titulo+"</li>");
+              //Agrega el favorito al mapa del sitio
+              $("#tabMisFavoritos_in_map").append("<dt><a id='mapLink-tabInicio-tabUser-tabFavoritos-tabMisFavoritos-tabMisFavoritos_"+nClave+ "' class='maplink' href='#'>"+titulo+"</a></dt>");
             }
 
         });
