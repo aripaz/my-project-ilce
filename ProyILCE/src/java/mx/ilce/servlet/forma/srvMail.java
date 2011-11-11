@@ -116,7 +116,8 @@ public class srvMail extends HttpServlet {
     }
 
     /**
-     * Limpia de memoria los datos utilizados para el envío de mail
+     * Limpia de memoria los datos utilizados para el envío de mail. Nos asegura
+     * que ante una nueva invocación no se tomen datos de un mail anterior.
      * @param request
      */
     private void cleanMemory(HttpServletRequest request){

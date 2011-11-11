@@ -586,6 +586,11 @@ public class AdminXML {
                                             + castNULL(String.valueOf(cmpAux.getObligatorio()).trim())
                                             + "]]></obligatorio>\n"));
                                 }
+                                if (cmpAux.getCargaDatoForaneosRetrasada()!=null){
+                                    strCampos.append(("\t\t<carga_dato_foraneos_retrasada>"
+                                            + castNULL(String.valueOf(cmpAux.getCargaDatoForaneosRetrasada()))
+                                            + "</carga_dato_foraneos_retrasada>\n"));
+                                }
                                 if (cmpAux.getTipoControl()!=null){
                                     strCampos.append(("\t\t<tipo_control><![CDATA["
                                             + castNULL(String.valueOf(cmpAux.getTipoControl()).trim())

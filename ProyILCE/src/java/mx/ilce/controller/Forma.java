@@ -1386,7 +1386,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * NO IMPLEMENTADA
+     * NO IMPLEMENTADA, al no requerirse de momento
      */
     public boolean validarCampos(){
         throw new UnsupportedOperationException("Not supported yet.");

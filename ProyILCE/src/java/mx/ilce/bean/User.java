@@ -53,7 +53,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la clave de empleado del user
+     * Obtiene la clave de empleado del User
      * @return
      */
     public Integer getClaveEmpleado() {
@@ -61,7 +61,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la clave de empleado del user
+     * Asigna la clave de empleado del User
      * @param claveEmpleado
      */
     public void setClaveEmpleado(Integer claveEmpleado) {
@@ -69,7 +69,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la clave de perfil del user
+     * Obtiene la clave de perfil del User
      * @return
      */
     public Integer getClavePerfil() {
@@ -77,7 +77,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la clave de perfil del user
+     * Asigna la clave de perfil del User
      * @param clavePerfil
      */
     public void setClavePerfil(Integer clavePerfil) {
@@ -85,7 +85,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el email del user
+     * Obtiene el email del User
      * @return
      */
     public String getEmail() {
@@ -93,7 +93,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el email del user
+     * Asigna el email del User
      * @param email
      */
     public void setEmail(String email) {
@@ -101,7 +101,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la palabra de login del user
+     * Obtiene la palabra de login del User
      * @return
      */
     public String getLogin() {
@@ -109,14 +109,14 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la palabra de login del user
+     * Asigna la palabra de login del User
      * @param login
      */
     public void setLogin(String login) {
         this.login = login;
     }
     /**
-     * Obtiene el ID del usuario
+     * Obtiene el ID del User
      * @return
      */
     public BigDecimal getIDUser() {
@@ -124,7 +124,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el ID del usuario
+     * Asigna el ID del User
      * @param IDUser
      */
     public void setIDUser(BigDecimal IDUser) {
@@ -148,7 +148,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el nombre de usuario asignado
+     * Obtiene el nombre de User asignado
      * @return
      */
     public String getNombre() {
@@ -156,7 +156,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el nombre de usuario
+     * Asigna el nombre de User
      * @param nombre
      */
     public void setNombre(String nombre) {
@@ -164,7 +164,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la password de usuario asignada
+     * Obtiene la password de User asignada
      * @return
      */
     public String getPassword() {
@@ -172,7 +172,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la password de usuario
+     * Asigna la password de User
      * @param password
      */
     public void setPassword(String password) {
@@ -180,7 +180,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el apellido materno asignado del usuario
+     * Obtiene el apellido materno asignado del User
      * @return
      */
     public String getApellidoMaterno() {
@@ -188,7 +188,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el apellido materno del usuario
+     * Asigna el apellido materno del User
      * @param apellidoMaterno
      */
     public void setApellidoMaterno(String apellidoMaterno) {
@@ -196,7 +196,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene el apellido paterno asignado del usuario
+     * Obtiene el apellido paterno asignado del User
      * @return
      */
     public String getApellidoPaterno() {
@@ -204,7 +204,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna el apellido paterno del usuario
+     * Asigna el apellido paterno del User
      * @param apellidoPaterno
      */
     public void setApellidoPaterno(String apellidoPaterno) {
@@ -212,7 +212,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Obtiene la url asignada del avatar del usuario
+     * Obtiene la url asignada del avatar del User
      * @return
      */
     public String getUrlAvatar() {
@@ -220,7 +220,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Asigna la url del avatar del usuario
+     * Asigna la url del avatar del User
      * @param urlAvatar
      */
     public void setUrlAvatar(String urlAvatar) {

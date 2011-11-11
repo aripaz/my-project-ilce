@@ -221,6 +221,11 @@ public class srvFormaInsert extends HttpServlet {
         }
     }
 
+    /**
+     * Método para limpiar de memoria los datos asociados al mail. Nos asegura
+     * que ante una nueva invocación no se tomen datos de un mail anterior.
+     * @param request
+     */
     private void cleanMemory(HttpServletRequest request){
         request.getSession().removeAttribute("from");
         request.getSession().removeAttribute("to");
