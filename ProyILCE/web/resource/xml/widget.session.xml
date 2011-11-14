@@ -7,5 +7,6 @@
     <email tipo_dato="string"></email>
     <clave_perfil tipo_dato="integer"></clave_perfil>
     <foto tipo_dato="string"></foto>
+    <clave_area tipo_dato="integer"></clave_area>
 </registro>
 

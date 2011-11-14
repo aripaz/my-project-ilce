@@ -1734,7 +1734,7 @@ class ConQuery {
                 break;
             case -5://XMLSESSION
                 sld = "select clave_empleado, nombre, apellido_paterno "
-                        + ", apellido_materno, email, clave_perfil, foto "
+                        + ", apellido_materno, email, clave_perfil, foto, clave_area "
                         + "from empleado where clave_empleado=%1";
                 break;
             case -6://XMLMENU
