@@ -582,12 +582,14 @@
         var error=$(xml).find("error");
         
         if (error.length>0) {
-            if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {
+            if (error.find("tipo").text()=="SQLServerException"  ) {
                  nConsulta= error.find("clave_consulta").text();
                  $.fn.appgrid.options.error+="Hay un error en la consulta (" + 
                      error.find("general").text() + ". " +  
-                     error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery-" + nConsulta  + "_" + 
-                    $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla "
+                     error.find("descripcion").text() +")";
+                    if ($("#_cp_").val()=="1") 
+                        $.fn.appgrid.options.error+=", haga click <a href='#' id='lnkEditQuery-" + nConsulta  + "_" + 
+                        $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla";
                 return true;    
             }
         
