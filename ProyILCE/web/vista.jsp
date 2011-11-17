@@ -386,6 +386,7 @@
     </div>
     <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
     <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
+    <input type="hidden" name="_cp_" id="_ca_" value="<%=user.getClaveArea()%>" />
     <input type="hidden" name="_gq_" id="_gq_" value="" />
     <input type="hidden" name="_ts_" id="_ts_" value="" />
     <div id="divwait" title="Espere un momento, por favor"><br /><p style="text-align: center"><img src='img/throbber.gif' />&nbsp;Cargando preferencias del usuario</p></div>
