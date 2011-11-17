@@ -1659,7 +1659,7 @@ class ConQuery {
             }else if(strType.toUpperCase().equals("INT") ){
                 sld = "java.lang.Integer";
             }else if(strType.toUpperCase().equals("SMALLDATETIME") ){
-                sld = "java.sql.Date";
+                sld = "mx.ilce.bean.SmallDateTime";
             }else if(strType.toUpperCase().equals("DATETIME") ){
                 sld = "java.sql.Date";
             }else if(strType.toUpperCase().equals("BIT") ){
