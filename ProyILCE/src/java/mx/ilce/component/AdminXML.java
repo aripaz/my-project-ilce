@@ -1594,6 +1594,8 @@ public class AdminXML {
             strSld = "money";
         }else if ("java.sql.Date".equals(strData)){
             strSld = "datetime";
+        }else if ("mx.ilce.bean.SmallDateTime".equals(strData)){
+            strSld = "smalldatetime";
         }
         return strSld;
     }
