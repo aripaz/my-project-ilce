@@ -1538,7 +1538,7 @@ public class Forma extends Entidad{
             if (!dq.isEmpty()){
                 ArrayList arr = (ArrayList)dq.get(0);
                 Campo cmpAux = (Campo)arr.get(cmp.getCodigo()-1);
-                String[] strSplit = cmpAux.getValor().toUpperCase().split("FROM");
+                String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
                 String[] strSPlit2 = strSplit[1].split(" ");
                 String tabla = strSPlit2[0];
 
