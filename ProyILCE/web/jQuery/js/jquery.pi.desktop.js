@@ -122,6 +122,9 @@
                                 },{
                                 "content": $("#ayudaComoFiltrarRegistros").html(),
                                 "content_button": ""
+                                },{
+                                "content": $("#ayudaComoAgregarCatalogoAFavoritos").html(),
+                                "content_button": ""
                                 }
                                 
                             ],
