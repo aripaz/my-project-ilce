@@ -23,7 +23,8 @@
             updateForeignForm:"",
             originatingObject:"",
             showRelationships:"false",
-            events:[]
+            events:[],
+            error:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -219,9 +220,11 @@
                   $.globalEval(evento);
               
                 //Ahora carga los eventos relacionados con los campos
-                for (i=1; i<$.fn.form.options.events.length; i++)
-                    $.globalEval($.fn.form.options.events[i]);
-                
+                for (i=1; i<$.fn.form.options.events.length; i++) {
+                    if ($.fn.form.options.events[i]!=undefined && $.fn.form.options.events[i]!="" )
+                        $.globalEval($.fn.form.options.events[i]);
+                }
+                var importe=$("#costo_directo").val()+$("#costo_indirecto").val() * (1+parseInt($("#factor_recuperacion")/100)) * (1+parseInt($("#factor_costo_operacion")/100)) * (1+parseInt($("#factor_riesgo")/100)) * $("#cantidad").val() * $("tipo_cambio").val();
                 //Establece atributo de seguridad
                 $("#formTab_" + formSuffix).attr("security",sPermiso);
                 
@@ -408,7 +411,7 @@
                 });
 
                 //Se ocultan los campos con clase invisible
-                $(".invisible").parent().hide();
+                $(".invisible").hide().next().hide();
              
                 $(".fecha").datepicker({
                     dateFormat: 'dd/mm/yy',
@@ -440,14 +443,23 @@
                 oForm.find('.widgetbutton').fieldtoolbar({
                     app:$.fn.form.options.app
                 });
-
+                
                 //Se activan el click de las liga orientadas a editar definicones de campo
                 if ($("#_cp_").val()=="1") {
-                     $(".edit_field").click(function() {
+                     $(".edit_field").die("click", edita_diccionario)
+                     $(".edit_field").live("click", edita_diccionario)
+                }
+                //Función para editar diccionario desde la liga del alias
+                function edita_diccionario() {
                          aId= this.id.split("-");
                          nApp=aId[1]; 
                          nForma=aId[2];
                          nPk=aId[3];
+                         
+                         //Si la forma ya está presente aborta llamado
+                         if ($("#dlgModal_" + nApp + "_"+ nForma + "_" + nPk).length>0)
+                             return false;
+                         
                          sModo="update";
                          if (nPk==0)
                              sModo="insert"
@@ -466,7 +478,6 @@
                             originatingObject: obj.id,
                             updateControl:obj.id
                         });                         
-                     });
                 }
                 
                 function validateForm(formData, jqForm, options) { 
@@ -522,14 +533,17 @@
                     var error = $(xmlResult).find("error");
                     
                     if (error.length>0) {
-                        if (error.find("tipo").text()=="SQLServerException" && $("#_cp_").val()=="1") {                
                             $.fn.form.options.error+="Ocurrió un problema al guardar el registro (" + 
                                  error.find("general").text() + ". " +  
-                                 error.find("descripcion").text() + "), haga click <a href='#' id='lnkEditQuery_" + 
-                                $.fn.form.options.app +"_" +  $.fn.form.options.entidad +"' class='editLink'>aqui</a> para editarla ";
+                                 error.find("descripcion").text() + ")";
+                                
+                                if ($("#_cp_").val()=="1")
+                                    $.fn.form.options.error+=", haga click <a href='#' id='lnkEditQuery_" + 
+                                    $.fn.form.options.app +"_" +  $.fn.form.options.entidad +"' class='editLink'>aqui</a> para editarla ";
+                                
+                                $("#tdEstatus_" +formSuffix).html($.fn.form.options.error);
                                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.form.options.error);
-                            return true;    
-                            }
+                            return false;    
                    }      
                     
                     var nApp=$("#formTab_" + formSuffix).attr("app")
@@ -609,7 +623,6 @@
             sValorPredeterminado="";
             oCampo=$(this);
             sTipoCampo= oCampo.attr("tipo_dato").toLowerCase();
-            
             if (oCampo.find('evento').text()!="")
                 $.fn.form.options.events[tabIndex-1]=oCampo.find('evento').text();
             
@@ -636,7 +649,10 @@
             sRenglon += '">';    
                     
             if (sAlias!='') {
-                sRenglon+=sAlias;
+               if ($("#_cp_").val()=="1") 
+                   sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='Haga clic aqui para abrir su definición en el diccionario de datos'>"+sAlias+"</a>"
+               else    
+                   sRenglon+=sAlias;
             }
             else {
                 sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='El campo no cuenta con alias, haga clic aqui para abrir su definición en el diccionario de datos'>"+oCampo[0].nodeName+"</a>";
@@ -657,7 +673,7 @@
                 sRenglon+='<td class="etiqueta_forma_control1"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
                 if (bActivo!="1") 
-                    sRenglon+=' disabled="disabled" ';
+                    sRenglon+=' readonly="readonly" ';
                  
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted1'
@@ -680,7 +696,7 @@
                 sRenglon+='id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" >';
                 if ($.fn.form.options.modo=="lookup" || bNoPermitirValorForaneoNulo!="1") {
                     sRenglon+="<option ";
-                    if ($.fn.form.options.modo!='update')
+                    if ($.fn.form.options.modo!='update' && sValorPredeterminado=="")
                         sRenglon+="selected='selected' ";
                     sRenglon +="></option>";
                 }
@@ -690,6 +706,12 @@
                     function(){
                         oCampoForaneo=$(this);
                         sRenglon +="<option ";
+                        
+                        if ($.fn.form.options.modo=='insert' && sValorPredeterminado!="") {
+                            if(eval(sValorPredeterminado)==oCampoForaneo.children()[0].childNodes[0].data)
+                                sRenglon +="selected='selected'";
+                        }
+
                         if ($.fn.form.options.modo=='update' && oCampo[0].childNodes[0].data==oCampoForaneo.children()[0].childNodes[0].data)
                             sRenglon +="selected='selected'";
                         sRenglon +=" value='" + oCampoForaneo.children()[0].childNodes[0].data  +"' >" + oCampoForaneo.children()[1].childNodes[0].data + "</option>";
@@ -709,15 +731,15 @@
                     '<textarea tabindex="' + tabIndex + '" rows="10" ';
                 
                     if (bActivo!="1") 
-                        sRenglon+=' disabled="disabled" ';
+                        sRenglon+=' readonly="readonly" ';
                          
                     sWidgetButton="";
 
-                    if (sTipoCampo=='money') {
+                    if (sTipoCampo=='money' && bActivo=="1" ) {
                         sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calculator_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                         sRenglon +="<div class='widgetbutton' tipo='foreign_toolbar' control='" + oCampo[0].nodeName + "' forma='" + nFormaForanea + "' titulo_agregar='Nuevo " + sAlias.toLowerCase() + "' titulo_editar='Editar " + sAlias.toLowerCase() + "' ></div>";
-                    } else if (sTipoCampo=='datetime') {
+                    } else if (sTipoCampo=='datetime' && bActivo=="1") {
                         sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calendar_buton" control="' + oCampo[0].nodeName + sSuffix +'"></div>';
                     }
@@ -746,7 +768,7 @@
                     '" id="'+ oCampo[0].nodeName+ '" name="' + oCampo[0].nodeName + '" ';
 
                     if (bActivo!="1") 
-                        sRenglon+=' disabled="disabled" ';
+                        sRenglon+=' readonly="readonly" ';
                      
                     // Establece la marca de obligatorio con la seudoclase obligatorio
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
@@ -762,21 +784,21 @@
                         sRenglon+=(oCampo[0].childNodes[0].data=='1')?'checked="checked" ':'';
 
                     sRenglon+=' /></div></td>|';
-                }
+                }   
                 else {
                     sRenglon += '<td class="etiqueta_forma_control1">' + 
-                    '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '"' +
+                    '<input tipo_dato="' + sTipoCampo + '" id="'+ oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" ' +
                     'tabindex="' + tabIndex + '" ';
 
                     if (bActivo!="1") 
-                        sRenglon+=' disabled="disabled" ';
+                        sRenglon+=' readonly="readonly" ';
                      
                     sWidgetButton="";
 
-                    if (sTipoCampo=='money') {
+                    if (sTipoCampo=='money' && bActivo=="1") {
                         sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calculator_button" control="' + oCampo[0].nodeName +'"></div>';
-                    } else if (sTipoCampo=='datetime') {
+                    } else if (sTipoCampo=='datetime' && bActivo=="1") {
                         sRenglon+='class="inputWidgeted1';
                         sWidgetButton='<div class="widgetbutton" tipo="calendar_button" control="' + oCampo[0].nodeName +'"></div>';
                     }
@@ -785,20 +807,21 @@
 
                     if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")
                         sRenglon +=' obligatorio';
-
-                    if (sTipoCampo=="datetime" && $(this).find('tipo_control').text()=="datetimepicker" )
-                        sRenglon +=' fechayhora';
-                    else if (sTipoCampo=="datetime")
-                        sRenglon +=' fecha';
-
-                    if (sTipoCampo=="money")
-                        sRenglon +=' money';
+                    
+                    if (bActivo=="1") {
+                        if (sTipoCampo=="datetime" )
+                            sRenglon +=' fechayhora';
+                        else if (sTipoCampo=="smalldatetime")
+                            sRenglon +=' fecha';
+                        else  if (sTipoCampo=="money")
+                            sRenglon +=' money';
+                    }
 
                     if (oCampo.find('tipo_control').text()=="file" && $.fn.form.options.modo!="lookup")
                         sRenglon +=' file" type="' + oCampo.find('tipo_control').text() + '" value="';
                     else
                         sRenglon +='" type="text" value="';
-                    
+
                     if ($.fn.form.options.modo=='insert')
                         sRenglon+=(sValorPredeterminado!="")?(eval(sValorPredeterminado)):"";
                     else 
@@ -833,6 +856,7 @@
                 if (aRows[i].indexOf("textarea")>-1) {
                     aRowsWithTextAreas[indexOfRowWithTextAreas]=aRows[i];
                     aRows.splice(i,1);
+                    i--;
                     indexOfRowWithTextAreas++;
                 }
                     

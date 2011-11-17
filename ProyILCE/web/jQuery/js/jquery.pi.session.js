@@ -14,7 +14,8 @@
             email:"",
             perfil:"",
             foto:"",
-            ultima_app:""
+            ultima_app:"",
+            area:""
         };
 
         // Ponemos la variable de opciones antes de la iteración (each) para ahorrar recursos
@@ -96,7 +97,7 @@
         $.fn.sessionmenu.options.email=oRegistro.find("email").text();
         $.fn.sessionmenu.options.perfil=oRegistro.find("clave_perfil").text();
         $.fn.sessionmenu.options.foto=oRegistro.find("foto").text();
-
+        $.fn.sessionmenu.options.area=oRegistro.find("clave_area").text();
 
         //Construye html de acuerdo a configuración recuperada
         if ($.fn.sessionmenu.options.foto=="")
