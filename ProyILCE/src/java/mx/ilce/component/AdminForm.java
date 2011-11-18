@@ -169,7 +169,7 @@ public class AdminForm {
 
                     if ((evalType!=null) &&("OK".equals(evalType))){
                         String fileName = filePart.getFileName();
-                        if (fileName != null) {
+                        if ((fileName != null)&&(!"".equals(fileName))) {
                             if (hsFile==null){
                                 hsFile = new HashMap();
                             }
@@ -384,6 +384,8 @@ public class AdminForm {
         hs.put("application/visio.drawing", "OK");
         hs.put("application/vsd", "OK");
         hs.put("application/x-vsd", "OK");
+        //TEXTO
+        hs.put("text/plain", "OK");
         //NO PERMITIDOS
         hs.put("application/octet-stream", "NOK");
         hs.put("text/asp", "NOK");
