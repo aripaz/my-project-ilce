@@ -14,4 +14,5 @@
     <forma tipo_dato="string"></forma>
     <alias_menu_nueva_entidad tipo_dato="string"></alias_menu_nueva_entidad>
     <alias_menu_mostrar_entidad tipo_dato="string"></alias_menu_mostrar_entidad>
+    <prefiltro tipo_dato="integer"></prefiltro>
 </registro>
