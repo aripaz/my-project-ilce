@@ -24,7 +24,7 @@ public class UtilDate{
      * (-) DMA= Día Mes Año
      * (-) AMD= Año Mes Día
      */
-    public enum formato {DMA,AMD};
+    public enum formato {DMA,AMD,AMDhms,DMAhms,AMDhmspp,DMAhmspp};
 
     /**
      * Constructor donde se inicializan los parámetros con los datos del cálculo
@@ -38,6 +38,102 @@ public class UtilDate{
         this.hour = now.get(java.util.Calendar.HOUR_OF_DAY);
         this.min = now.get(java.util.Calendar.MINUTE);
         this.sec = now.get(java.util.Calendar.SECOND);
+    }
+
+    public UtilDate(String fecha, String tokenFormato){
+        String strAnio = "";
+        String strMes = "";
+        String strDia = "";
+        String strHora = "";
+        String strMinuto = "";
+        String strSegundo = "";
+        String strPeriodo = "";
+
+        String fechaTrab = fecha;
+        if (tokenFormato==null){
+            tokenFormato = "";
+        }
+        int posMesAux = tokenFormato.indexOf("ME");
+        int posAnio = tokenFormato.indexOf("AAAA");
+        int posMes = tokenFormato.indexOf("MM");
+        int posDia = tokenFormato.indexOf("DD");
+        int posHora = tokenFormato.indexOf("hh");
+        int posMin = tokenFormato.indexOf("mm");
+        int posSeg = tokenFormato.indexOf("ss");
+        int posPer = tokenFormato.indexOf("PP");
+        int largo = fecha.length();
+
+        try{
+            if (posMesAux>=0){
+                fechaTrab = traduceMonthToString(fechaTrab);
+                largo = fechaTrab.length();
+            }
+            if ((posMes>=0) && (largo>=posMes+2)){
+                strMes = fechaTrab.substring(posMes,posMes+2);
+            }else{
+                if (posMesAux>0){
+                    strMes = fechaTrab.substring(posMesAux,posMesAux+2);
+                }
+            }
+            if ((posAnio>=0) && (largo>=posAnio+4)){
+                strAnio = fechaTrab.substring(posAnio,posAnio+4);
+            }else{
+                posAnio = tokenFormato.indexOf("AA");
+                if ((posAnio>=0) && (largo>=posAnio+2)){
+                    strAnio = fechaTrab.substring(posAnio,posAnio+2);
+                }
+            }
+            if ((posDia>=0) && (largo>=posDia+2)){
+                strDia = fechaTrab.substring(posDia,posDia+2);
+            }
+            if ((posHora>=0) && (largo>=posHora+2)){
+                strHora = fechaTrab.substring(posHora,posHora+2);
+            }
+            if ((posMin>=0) && (largo>=posMin+2)){
+                strMinuto = fechaTrab.substring(posMin,posMin+2);
+            }
+            if ((posSeg>=0) && (largo>=posSeg+2)){
+                strSegundo = fechaTrab.substring(posSeg,posSeg+2);
+            }
+            if ((posPer>=0) && (largo>=posPer+2)){
+                strPeriodo = fechaTrab.substring(posPer,posPer+2);
+            }
+        }catch (Exception e){
+
+        }
+        String str = strDia+"/"+strMes+"/"+strAnio;
+        if (isFechaValida(str)){
+            this.anio = Integer.parseInt(strAnio);
+            this.mes = Integer.parseInt(strMes);
+            this.dia = Integer.parseInt(strDia);
+
+            if (strPeriodo.equals("PM")){
+                if (!strHora.equals("")){
+                    this.hour = Integer.parseInt(strHora)+12;
+                    if (this.hour == 24){
+                        this.hour = 0;
+                    }
+                }
+            }else{
+                if (!strHora.equals("")){
+                    this.hour = Integer.parseInt(strHora);
+                }
+            }
+            if (!strMinuto.equals("")){
+                this.min = Integer.parseInt(strMinuto);
+            }
+            if (!strSegundo.equals("")){
+                this.sec = Integer.parseInt(strSegundo);
+            }
+        }else{
+            strDia="00";
+            strMes="00";
+            strAnio="0000";
+            this.anio = Integer.parseInt(strAnio);
+            this.mes = Integer.parseInt(strMes);
+            this.dia = Integer.parseInt(strDia);
+        }
+
     }
 
     /**
@@ -164,7 +260,7 @@ public class UtilDate{
             strMin="00";
             strSec="00";
         }
-        return strDia+separador+strMes+separador+strAnio+separador+
+        return strDia+separador+strMes+separador+strAnio+
                 " "+strHour+":"+strMin+":"+strSec;
     }
 
@@ -334,7 +430,7 @@ public class UtilDate{
      * @param fechax    Fecha que se va a validar
      * @return
      */
-    public boolean isFechaValida(String fechax) {
+    public final boolean isFechaValida(String fechax) {
         try {
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             formatoFecha.setLenient(false);
@@ -343,5 +439,189 @@ public class UtilDate{
             return false;
         }
         return true;
+    }
+
+    /**
+     * Método que traduce los meses de un formato de nombre a uno numérico,
+     * tanto en ingles como en español. Los nombres de los meses deben ser
+     * nombres completos (Ej:ENERO o JANUARY).
+     * @param strFecha
+     * @return
+     */
+    public final String traduceMonthToString(String strFecha){
+        String strTrab = "";
+        String sld = strFecha;
+
+        strTrab = strFecha.toUpperCase();
+        if (strTrab.contains("ENERO")){
+            String[] spl = strTrab.split("ENERO");
+            if (spl.length==2){
+                sld = spl[0] + "01" + spl[1];
+            }else{
+                sld = spl[0] + "01";
+            }
+        }else if (strTrab.contains("JANUARY")){
+            String[] spl = strTrab.split("JANUARY");
+            if (spl.length==2){
+                sld = spl[0] + "01" + spl[1];
+            }else{
+                sld = spl[0] + "01";
+            }
+        }else if (strTrab.contains("FEBRERO")){
+            String[] spl = strTrab.split("FEBRERO");
+            if (spl.length==2){
+                sld = spl[0] + "02" + spl[1];
+            }else{
+                sld = spl[0] + "02";
+            }
+        }else if (strTrab.contains("FEBRUARY")){
+            String[] spl = strTrab.split("FEBRUARY");
+            if (spl.length==2){
+                sld = spl[0] + "02" + spl[1];
+            }else{
+                sld = spl[0] + "02";
+            }
+        }else if (strTrab.contains("MARZO")){
+            String[] spl = strTrab.split("MARZO");
+            if (spl.length==2){
+                sld = spl[0] + "03" + spl[1];
+            }else{
+                sld = spl[0] + "03";
+            }
+        }else if (strTrab.contains("MARCH")){
+            String[] spl = strTrab.split("MARCH");
+            if (spl.length==2){
+                sld = spl[0] + "03" + spl[1];
+            }else{
+                sld = spl[0] + "03";
+            }
+        }else if (strTrab.contains("ABRIL")){
+            String[] spl = strTrab.split("ABRIL");
+            if (spl.length==2){
+                sld = spl[0] + "04" + spl[1];
+            }else{
+                sld = spl[0] + "04";
+            }
+        }else if (strTrab.contains("APRIL")){
+            String[] spl = strTrab.split("APRIL");
+            if (spl.length==2){
+                sld = spl[0] + "04" + spl[1];
+            }else{
+                sld = spl[0] + "04";
+            }
+        }else if (strTrab.contains("MAYO")){
+            String[] spl = strTrab.split("MAYO");
+            if (spl.length==2){
+                sld = spl[0] + "05" + spl[1];
+            }else{
+                sld = spl[0] + "05";
+            }
+        }else if (strTrab.contains("MAY")){
+            String[] spl = strTrab.split("MAY");
+            if (spl.length==2){
+                sld = spl[0] + "05" + spl[1];
+            }else{
+                sld = spl[0] + "05";
+            }
+        }else if (strTrab.contains("JUNIO")){
+            String[] spl = strTrab.split("JUNIO");
+            if (spl.length==2){
+                sld = spl[0] + "06" + spl[1];
+            }else{
+                sld = spl[0] + "06";
+            }
+        }else if (strTrab.contains("JUNY")){
+            String[] spl = strTrab.split("JUNY");
+            if (spl.length==2){
+                sld = spl[0] + "06" + spl[1];
+            }else{
+                sld = spl[0] + "06";
+            }
+        }else if (strTrab.contains("JULIO")){
+            String[] spl = strTrab.split("JULIO");
+            if (spl.length==2){
+                sld = spl[0] + "07" + spl[1];
+            }else{
+                sld = spl[0] + "07";
+            }
+        }else if (strTrab.contains("JULY")){
+            String[] spl = strTrab.split("JULY");
+            if (spl.length==2){
+                sld = spl[0] + "07" + spl[1];
+            }else{
+                sld = spl[0] + "07";
+            }
+        }else if (strTrab.contains("AGOSTO")){
+            String[] spl = strTrab.split("AGOSTO");
+            if (spl.length==2){
+                sld = spl[0] + "08" + spl[1];
+            }else{
+                sld = spl[0] + "08";
+            }
+        }else if (strTrab.contains("AUGUST")){
+            String[] spl = strTrab.split("AUGUST");
+            if (spl.length==2){
+                sld = spl[0] + "08" + spl[1];
+            }else{
+                sld = spl[0] + "08";
+            }
+        }else if (strTrab.contains("SEPTIEMBRE")){
+            String[] spl = strTrab.split("SEPTIEMBRE");
+            if (spl.length==2){
+                sld = spl[0] + "09" + spl[1];
+            }else{
+                sld = spl[0] + "09";
+            }
+        }else if (strTrab.contains("SEPTEMBER")){
+            String[] spl = strTrab.split("SEPTEMBER");
+            if (spl.length==2){
+                sld = spl[0] + "09" + spl[1];
+            }else{
+                sld = spl[0] + "09";
+            }
+        }else if (strTrab.contains("OCTUBRE")){
+            String[] spl = strTrab.split("OCTUBRE");
+            if (spl.length==2){
+                sld = spl[0] + "10" + spl[1];
+            }else{
+                sld = spl[0] + "10";
+            }
+        }else if (strTrab.contains("OCTOBER")){
+            String[] spl = strTrab.split("OCTOBER");
+            if (spl.length==2){
+                sld = spl[0] + "10" + spl[1];
+            }else{
+                sld = spl[0] + "10";
+            }
+        }else if (strTrab.contains("NOVIEMBRE")){
+            String[] spl = strTrab.split("NOVIEMBRE");
+            if (spl.length==2){
+                sld = spl[0] + "11" + spl[1];
+            }else{
+                sld = spl[0] + "11";
+            }
+        }else if (strTrab.contains("NOVEMBER")){
+            String[] spl = strTrab.split("NOVEMBER");
+            if (spl.length==2){
+                sld = spl[0] + "11" + spl[1];
+            }else{
+                sld = spl[0] + "11";
+            }
+        }else if (strTrab.contains("DICIEMBRE")){
+            String[] spl = strTrab.split("DICIEMBRE");
+            if (spl.length==2){
+                sld = spl[0] + "12" + spl[1];
+            }else{
+                sld = spl[0] + "12";
+            }
+        }else if (strTrab.contains("DECEMBER")){
+            String[] spl = strTrab.split("DECEMBER");
+            if (spl.length==2){
+                sld = spl[0] + "12" + spl[1];
+            }else{
+                sld = spl[0] + "12";
+            }
+        }
+        return sld;
     }
 }

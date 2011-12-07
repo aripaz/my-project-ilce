@@ -248,4 +248,40 @@ public class Validation {
             request.getRequestDispatcher("/resource/jsp/xmlError.jsp").forward(request, response);
         }
     }
+
+    /**
+     * Método para validar si el datos entregado es numérico o no
+     * @param strDato   Dato a validar
+     * @return boolean  Respuesta TRUE o FALSE, según corresponda
+     */
+    public boolean isNumberInteger(String strDato){
+        boolean sld = true;
+        try{
+            Integer integ = new Integer(strDato);
+            if (integ==null){
+                sld = false;
+            }
+        }catch(Exception e){
+            sld = false;
+        }
+        return sld;
+    }
+
+    /**
+     * Método para validar si el datos entregado es numérico o no
+     * @param strDato   Dato a validar
+     * @return boolean  Respuesta TRUE o FALSE, según corresponda
+     */
+    public boolean isNumberDouble(String strDato){
+        boolean sld = true;
+        try{
+            Double dbl = new Double(strDato);
+            if (dbl==null){
+                sld = false;
+            }
+        }catch(Exception e){
+            sld = false;
+        }
+        return sld;
+    }
 }
