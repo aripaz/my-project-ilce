@@ -379,8 +379,10 @@ class AdmImportDB {
                     break;
                 case 5://Excel Simple
                     sld = desglozarXLSSimple(filaHeader,ca,lstData);
+                    break;
                 case 6://Excel con separador
-                    sld = desglozarXLSSimple(filaHeader,ca,lstData);
+                    //sld = desglozarXLSSimple(filaHeader,ca,lstData);
+                    break;
                 default:
                    break;
             }
