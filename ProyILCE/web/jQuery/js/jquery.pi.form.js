@@ -170,7 +170,23 @@
                     var sDescripcionError=oError.find("descripcion").text();
                     $("#grid_"+gridSuffix+"_toppager_right").children(0).html(sDescripcionError);
                     $("#dlgModal_"+ formSuffix).remove();
-                    alert(sDescripcionError);
+                    if (oError.find("general").text()=="Error de Respuesta Vacia" && $("#_cp_").val()=="1")
+                        if (confirm("No hay una consulta establecida para dicha función, ¿desea configurarla?"))
+                            $("body").formqueue({
+                                app: 1,
+                                forma:8,
+                                datestamp:$.fn.form.options.datestamp,
+                                modo:"insert",
+                                columnas:1,
+                                pk:0,
+                                filtroForaneo:"2=clave_aplicacion=1&3=clave_forma="+$.fn.form.options.forma+"&4=clave_perfil=1&5=clave_forma="+$.fn.form.options.forma+"&6=tipo_accion='lookup'",
+                                height:"500",
+                                width:"500",
+                                originatingObject:"",
+                                showRelationships:false                        
+                            });
+                    else
+                        alert(sDescripcionError);
                     return false;
                 }
             

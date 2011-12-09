@@ -333,11 +333,34 @@
                                         </td>
                                     </tr>
                                 </table>
-                            </div>                             
+                            </div>
+                            <div id='ayudaComoAgregarCatalogoAFavoritos'>
+                                <table >
+                                    <tr>
+                                        <td colspan='2'>
+                                            <h3>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src='img/favoritos.png'  class='helpScreen'/>
+                                        </td>
+                                        <td class='instrucciones'>
+                                            <p class='instrucciones'>
+                                                Puedes agregar a la pestaña de inicio los catálogos que utilizas más frecuentemente en "Mis favoritos", para agregar un favorito haz lo siguiente:</p>
+                                            <ol>
+                                                <li class='instrucciones'>Ve a la pestaña "Aplicaciones"</li>
+                                                <li class='instrucciones'>Haz clic en el botón de la aplicación que deseas abrir</li>
+                                                <li class='instrucciones'>Haz clic en el botón <span class='ui-icon ui-icon-star' style='display:inline-block'></span> de la barra de herramientas del catálogo que deseas hacer tu favorito</li>
+                                            </ol>        
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    </div>       
                 </div>
-            </div>
+            </div>    
             <div id="tabMapaDelSitio">
                 <div id="divCarouselMapa">
                     <div id="mapa">
