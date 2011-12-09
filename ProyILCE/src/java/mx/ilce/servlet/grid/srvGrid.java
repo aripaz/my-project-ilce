@@ -103,6 +103,17 @@ public class srvGrid extends HttpServlet {
                                 apl.setDisplay(dp);
                                 apl.setClaveForma(Integer.valueOf(claveForma));
                                 apl.setTipoAccion(tipoAccion);
+                                if (dp.equals("header")){
+                                    if (strWhere==null){
+                                         strWhere = "1=2";
+                                    }else{
+                                        if (strWhere.trim().length()>0){
+                                            strWhere = strWhere + " AND 1=2";
+                                        }else{
+                                            strWhere = "1=2";
+                                        }
+                                    }
+                                }
                                 apl.setStrWhereQuery(strWhere);
                                 apl.setArrayData(strData);
                                 apl.setArrVariables(arrVariables);

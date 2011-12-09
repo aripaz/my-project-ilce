@@ -1101,29 +1101,33 @@ class ConQuery {
                         strConcat = " AND ";
                 }
             }else{
-                //evaluaremos el WHERE Y el AND
-                if (strWhere.trim().length()>6){
-                    //COMIENZA CON WHERE
-                    if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
-                        strConcat = " ";
-                    //COMIENZA CON AND
-                    }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strConcat = " ";
-                        replaceAnd = true;
-                    }else{
-                        strConcat = " WHERE ";
-                    }
-                //evaluaremos solo el AND
-                }else if (strWhere.trim().length()>4){
-                    //COMIENZA CON AND
-                    if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
-                        strConcat = " ";
-                        replaceAnd = true;
-                    }else{
-                        strConcat = " WHERE ";
-                    }
+                if (strWhere.equals("1=2")){
+                    strConcat = " WHERE ";
                 }else{
-                    strConcat = " ";
+                    //evaluaremos el WHERE Y el AND
+                    if (strWhere.trim().length()>6){
+                        //COMIENZA CON WHERE
+                        if (strWhere.toUpperCase().trim().substring(0,6).equals("WHERE ")){
+                            strConcat = " ";
+                        //COMIENZA CON AND
+                        }else if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                            strConcat = " ";
+                            replaceAnd = true;
+                        }else{
+                            strConcat = " WHERE ";
+                        }
+                    //evaluaremos solo el AND
+                    }else if (strWhere.trim().length()>4){
+                        //COMIENZA CON AND
+                        if (strWhere.toUpperCase().trim().substring(0,4).equals("AND ")){
+                            strConcat = " ";
+                            replaceAnd = true;
+                        }else{
+                            strConcat = " WHERE ";
+                        }
+                    }else{
+                        strConcat = " ";
+                    }
                 }
             }
         }else{
