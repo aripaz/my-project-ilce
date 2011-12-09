@@ -33,6 +33,7 @@
             callFormWithRelationships:false,
             updateTreeAfterPost:false,
             logPhrase:"",
+            filtraRegistros:0,
             error:""
         };
 
@@ -141,10 +142,15 @@
                 else
                     sDataType="xml";
 
+                if ($.fn.appgrid.options.filtraRegistros==0)
+                        xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
+                    else
+                        xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters;
+               
                 var oGrid=$("#grid" + suffix).jqGrid(
                 {//datatype: "xmlstring",
                     //datastr: sXML,
-                    url:$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters,
+                    url:xmlURL,
                     datatype: sDataType,
                     colNames:$.fn.appgrid.options.colNames,
                     colModel:$.fn.appgrid.options.colModel,
@@ -174,6 +180,7 @@
                     footerrow: true,
                     userDataOnFooter: true */,
                     gridComplete:function(){
+                            
                         /* Establece eventos a los link del interior del grid*/ 
                         $(".gridlink").click(function(e, data) {
                             var nApp=this.id.split("_")[1];
@@ -195,7 +202,7 @@
                                 columnas:1,
                                 pk:0,
                                 filtroForaneo:"",
-                                height:400,
+                                height:"500",
                                 width:"80%",
                                 originatingObject:oGrid.id,
                                 updateControl:""
@@ -206,6 +213,22 @@
                         $(this).progressbar({value: $(this).attr("avance")});
                     });
                     
+                    // Presenta la forma de búsqueda si el parametro es verdero
+                    if ($.fn.appgrid.options.filtraRegistros==1) {
+                            $("body").form({
+                            app: nApp,
+                            forma:nEntidad,
+                            datestamp:$(this).attr("datestamp"),
+                            modo:"lookup",
+                            titulo: "Filtrado de registros",
+                            columnas:1,
+                            height:"500",
+                            width:"80%",
+                            pk:0,
+                            originatingObject: oGrid.id
+                        });
+                    }
+                        
                      //oGrid.setGridWidth(oGrid.parent().width(),true);
 
                 }});
@@ -250,7 +273,7 @@
                                 columnas:1,
                                 pk:0,
                                 filtroForaneo:"2=clave_aplicacion=" + nEditingApp + "&3="+$(this).attr("wsParameters"),
-                                height:400,
+                                height:"500",
                                 width:"80%",
                                 originatingObject:oGrid.id,
                                 showRelationships:$(this).attr("callFormWithRelationships"),
@@ -374,6 +397,8 @@
                             modo:"lookup",
                             titulo: "Filtrado de registros",
                             columnas:1,
+                            height:"500",
+                            width:"80%",
                             pk:0,
                             originatingObject: oGrid.id
                         });
@@ -611,6 +636,10 @@
            nuevo="Nuevo ";
        else
            nuevo="Nueva ";
+       
+       //Parametro de prefiltro
+       $.fn.appgrid.options.filtraRegistros=$(xml).find("configuracion_grid").find("prefiltro").text();
+       
        
        $.fn.appgrid.options.leyendas[0]=nuevo+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
        $.fn.appgrid.options.leyendas[1]="Edición de "+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
