@@ -1035,6 +1035,7 @@ public class AdminXML {
                 String strForma = "";
                 String strAliasTab = "";
                 String strInstruccion = "";
+                String strPrefiltro = "";
                 for (int i=0;i<lst.size();i++){
                     Campo cmp = (Campo) lst.get(i);
                     if ("tipo_evento".equals(cmp.getNombreDB())){
@@ -1051,6 +1052,12 @@ public class AdminXML {
                     }
                     if ("forma".equals(cmp.getNombreDB())){
                         strForma = cmp.getValor();
+                    }
+                    if ("prefiltro".equals(cmp.getNombreDB())){
+                        strPrefiltro = cmp.getValor();
+                        if (strPrefiltro.equals("null")){
+                            strPrefiltro = "0";
+                        }
                     }
                 }
                 strSld.append("\t<alias_tab><![CDATA[");
@@ -1069,6 +1076,9 @@ public class AdminXML {
                 strSld.append("\t<forma><![CDATA[");
                 strSld.append(castNULL(strForma));
                 strSld.append("]]></forma>\n");
+                strSld.append("\t<prefiltro><![CDATA[");
+                strSld.append(castNULL(strPrefiltro));
+                strSld.append("]]></prefiltro>\n");
             }
         }catch(Exception ex){
             ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),

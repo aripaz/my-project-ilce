@@ -1767,7 +1767,7 @@ class ConQuery {
                         + " where pf.clave_perfil = pa.clave_perfil "
                         + " and pf.clave_forma = p.clave_forma "
                         + " and pf.clave_permiso = 5) as mostrar_informacion_sensible "
-                        + " ,a.prefiltro "
+                        //+ " ,a.prefiltro "
                         + " from perfil_aplicacion pa, aplicacion a "
                         + " , permiso_forma p , forma fo "
                         + " where a.clave_aplicacion=pa.clave_aplicacion "
@@ -1824,7 +1824,7 @@ class ConQuery {
                         + " group by pf.clave_permiso , per.permiso, pf.clave_forma";
                 break;
             case -11: //EVENTO
-                sld = "SELECT alias_tab, evento, instrucciones, forma "
+                sld = "SELECT alias_tab, evento, instrucciones, forma , prefiltro "
                         + " FROM forma "
                         + " where clave_forma = %1";
                 break;
