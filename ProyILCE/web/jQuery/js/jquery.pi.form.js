@@ -315,7 +315,7 @@
                             $("#tdEstatus_" +formSuffix).html(" Es necesario especificar al menos un criterio de b&uacute;squeda, verifique");
                         }    
                         else {
-                            sData=sData.substring(0,sData.length-1)
+                            sData=sData.substring(0,sData.length-1).replace("&"," AND ");
                             oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
                             oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
                             sBitacoraId=oMenuAccordion[1].id;
@@ -328,9 +328,25 @@
                             //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                             $("#lnkRemoveFilter_grid_" + gridSuffix).click(function() {
                                 var sGridId="#grid_" +gridSuffix ;
-                                $(sGridId).jqGrid('setGridParam',{
-                                    url:"srvGrid?$cf=" + nForma + "&$dp=body"
-                                }).trigger("reloadGrid")
+                                if ($(sGridId).attr("requeriesFilter")=="1") {
+                                        $("body").form({
+                                            app: nApp,
+                                            forma:nEntidad,
+                                            datestamp:gridSuffix.split("_")[2],
+                                            modo:"lookup",
+                                            titulo: "Filtrado de registros",
+                                            columnas:1,
+                                            height:"500",
+                                            width:"80%",
+                                            pk:0,
+                                            originatingObject: sGridId
+                                        }); 
+                                 }                                    
+                                else
+                                    $(sGridId).jqGrid('setGridParam',{
+                                        url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                                    }).trigger("reloadGrid");
+                                
                                 $(this).remove();
                             });
 
