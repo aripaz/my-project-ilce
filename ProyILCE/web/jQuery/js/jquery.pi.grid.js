@@ -33,7 +33,7 @@
             callFormWithRelationships:false,
             updateTreeAfterPost:false,
             logPhrase:"",
-            filtraRegistros:0,
+            requeriesFilter:0,
             error:""
         };
 
@@ -58,6 +58,7 @@
                 "' originatingObject='"+ $.fn.appgrid.options.originatingObject +
                 "' callFormWithRelationships='"+$.fn.appgrid.options.callFormWithRelationships+
                 "' updateTreeAfterPost='" + $.fn.appgrid.options.updateTreeAfterPost +
+                "' requeriesFilter='" + $.fn.appgrid.options.requeriesFilter  +
                 "'>" +
                 "</table><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
@@ -142,10 +143,12 @@
                 else
                     sDataType="xml";
 
-                if ($.fn.appgrid.options.filtraRegistros==0)
+                if ($("#grid"+suffix).attr("requeriesFilter")==0 ) //Si no está configurado para filtrar registros, trae el cuerpo
                         xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
-                    else
+                    else if ($("#lnkRemoveFilter_grid"+suffix).length==0)  //Si está configurado y no tiene un filtro solo trae la cabecera
                         xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters;
+                        else
+                            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
                
                 var oGrid=$("#grid" + suffix).jqGrid(
                 {//datatype: "xmlstring",
@@ -213,8 +216,8 @@
                         $(this).progressbar({value: $(this).attr("avance")});
                     });
                     
-                    // Presenta la forma de búsqueda si el parametro es verdero
-                    if ($.fn.appgrid.options.filtraRegistros==1) {
+                    // Presenta la forma de búsqueda si el parametro es verdero y no hay un filtro
+                    if ($("#grid"+suffix).attr("requeriesFilter")==1 && $("#lnkRemoveFilter_grid"+suffix).length==0) {
                             $("body").form({
                             app: nApp,
                             forma:nEntidad,
@@ -527,10 +530,25 @@
                         nForma=this.id.split("_")[3];
                         sDS=this.id.split("_")[4];
                         var sGridId="#grid_" + nApp + "_" + nForma+ "_"+ sDS;
-                        $(sGridId).jqGrid('setGridParam',{
-                            url:"srvGrid?$cf=" + nForma + "&$dp=body"
-                        }).trigger("reloadGrid")
                         $(this).remove();
+                        
+                        if ($("#grid"+suffix).attr("requeriesFilter")=="1")
+                            $("body").form({
+                                app: nApp,
+                                forma:nEntidad,
+                                datestamp:$(this).attr("datestamp"),
+                                modo:"lookup",
+                                titulo: "Filtrado de registros",
+                                columnas:1,
+                                height:"500",
+                                width:"80%",
+                                pk:0,
+                                originatingObject: "#grid"+suffix
+                            });                            
+                        else    
+                            $(sGridId).jqGrid('setGridParam',{
+                                url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                            }).trigger("reloadGrid")
                     });
                 }
 
@@ -638,8 +656,7 @@
            nuevo="Nueva ";
        
        //Parametro de prefiltro
-       $.fn.appgrid.options.filtraRegistros=$(xml).find("configuracion_grid").find("prefiltro").text();
-       
+       $.fn.appgrid.options.requeriesFilter=$(xml).find("configuracion_grid").find("prefiltro").text();
        
        $.fn.appgrid.options.leyendas[0]=nuevo+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
        $.fn.appgrid.options.leyendas[1]="Edición de "+$(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[1];
@@ -669,6 +686,7 @@
         oTamano=oColumnas.find('tamano');
         oAlias= oColumnas.find('alias_campo');
         var suffix =  "_" + $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad+ "_"+ $.fn.appgrid.options.datestamp;
+        $("#grid"+suffix).attr("requeriesFilter",$.fn.appgrid.options.requeriesFilter);
         //var suffix = "-" + sDateTime(new Date());
         oAlias.each( function() {
              

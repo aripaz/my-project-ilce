@@ -94,7 +94,22 @@
 
                                         //Establece la función para la liga lnkRemoveFilter_grid_ que remueve el filtro del grid
                                         $("#lnkRemoveFilter_grid_" + sGridIdSuffix).click(function() {
-                                            $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"}).trigger("reloadGrid")
+                                            if ($("grid_" + sGridIdSuffix).attr("requeriesFilter")=="1") {
+                                                $("body").form({
+                                                    app: nApp,
+                                                    forma:nEntidad,
+                                                    datestamp:$(this).attr("datestamp"),
+                                                    modo:"lookup",
+                                                    titulo: "Filtrado de registros",
+                                                    columnas:1,
+                                                    height:"500",
+                                                    width:"80%",
+                                                    pk:0,
+                                                    originatingObject: oGrid.id
+                                                }); }
+                                            else     
+                                                $("#grid_"+sGridIdSuffix).jqGrid('setGridParam',{url:"srvGrid?$cf=" + nEntidad + "&$dp=body&page=1"}).trigger("reloadGrid")
+                                            
                                             $(this).remove();
                                         });
                                     }
