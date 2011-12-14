@@ -165,6 +165,7 @@
                                 $tabMisApps.tabs( "select", "#tab"+link_id);
                                 oTabPanel=$("#tab"+link_id);
                                 // Aqui va a ir la barra de avisos 
+                                oTabPanel.addClass("appTab");
                                 oTabPanel.html(""); 
                                 //Se inserta el div para el grid
                                 oTabPanel.html(
