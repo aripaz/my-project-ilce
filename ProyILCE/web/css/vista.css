@@ -47,7 +47,7 @@ td.instrucciones, p.instrucciones {
 
 .splitterContainer {/* Main splitter element */
 height:100%;
-width:100%;
+width:98%;
 margin:0;padding:0;
 border: 0px solid #aaa;
 }
@@ -65,11 +65,13 @@ width:220px;
 overflow: auto;
 
 }
-.rightPane{	/*Contains toolbar and horizontal splitter*/
-    /*float:right;width:auto;height:100%;
-    background:#f4f4f4;*/
+.rigthPane{	/*Contains toolbar and horizontal splitter*/
+    float:right;
     width:auto;
-    overflow: auto;
+    height:100%;
+    background:#f4f4f4;
+    width:auto;
+    /*overflow: auto;*/
 }
 
 
@@ -134,15 +136,16 @@ td.errorencampo { color: #FF6600; font-weight:bold; border:none; }
 
 .gridContainer {
     /*float: right;*/
-    width: 100%; 
+    width: 100%; /* Se cambia a 96% para garantizar compatibilidad con IE */
     margin-left:5px
 }
 
 .gridKardexContainer {
-    /*float: left;
-    width: 56%;*/
-    margin-left:5px
+    /*float: right;*/
+    width: 100%;
+    margin-left:5px;
 }
+                 
 .accordionContainer {
     float: left;
     width: 100%;
@@ -363,10 +366,6 @@ a.session_menu {
     width: 18%;
 }
 
-.ui-tabs .ui-tabs-panel {
-    height: 100% !important;
-    overflow:visible;
-}
 
 .mensaje-info {
     text-align: center;
@@ -598,3 +597,51 @@ background-image: url("../img/sprite_ac_hover.png");
     width: 16px;
 }
 
+#tabInicio {
+    height: 900px !important; /* necesario para ajustar alto en firefox y chrome */
+    margin: 1px;
+    width: 98%;               /* necesario para ajustar ancho en IE */
+    float: left;              /* necesario para ancho en IE */ 
+    position: relative;       /* necesario para ancho en IE */ 
+    top: -22px;
+}
+
+#tabAplicaciones {
+    height: 400px !important;
+    margin: 1px;
+    width: 99%;
+    float: left;
+    position: relative;
+    top: -22px;    
+}
+
+#tabMisAplicaciones{
+    height: 400px !important;
+    margin: 1px;
+    width: 97%;
+    float: left;
+    position: relative;
+    /*top: -22px;    */
+}
+
+#tabMisApps{
+    height: 100%;
+    margin: 1px;
+    width: 98%;
+    /*float: left;*/
+    position: relative;
+    /*top: -22px;    */
+}
+
+.appTab {
+    height: 500px !important;
+    margin: 1px;
+    width: 97%;
+    position: relative;
+    /*top: -10px;*/
+}
+
+.ui-tabs .ui-tabs-panel {
+    height: 100% !important;
+    overflow:visible;
+}
