@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import mx.ilce.component.AdminForm;
 import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExceptionHandler;
-import mx.ilce.handler.LoginHandler;
 import mx.ilce.util.Validation;
 
 /**

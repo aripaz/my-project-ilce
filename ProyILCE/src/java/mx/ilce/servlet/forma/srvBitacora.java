@@ -25,7 +25,7 @@ import mx.ilce.bean.DataTransfer;
 
 
 /**
- * Servlet creado para la consulta de datos de manera asincrona a la bitácora
+ * Servlet creado para la consulta de datos de manera asíncrona a la bitácora
  * @author ccatrilef
  */
 public class srvBitacora extends HttpServlet {

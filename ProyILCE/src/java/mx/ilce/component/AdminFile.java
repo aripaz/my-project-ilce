@@ -93,6 +93,8 @@ public class AdminFile {
      * Query con los permisos
      */
     public static String PERMISOS = "PERMISOS";
+    public static String BIBLIOTECA = "BIBLIOTECA";
+    public static String PROYECTO = "PROYECTO";
 
 
     private String rutaFile;
@@ -430,8 +432,8 @@ public class AdminFile {
         String ruta = this.getRutaFile();
         if (ruta!=null){
             Properties prop = leerConfig();
-            String rutaBibl = getKey(prop, "BIBLIOTECA");
-            String Proyecto = getKey(prop, "PROYECTO");
+            String rutaBibl = getKey(prop, BIBLIOTECA);
+            String Proyecto = getKey(prop, PROYECTO);
             String[] data = rutaBibl.split("/");
 
             URL url = AdminFile.class.getResource("AdminFile.class");

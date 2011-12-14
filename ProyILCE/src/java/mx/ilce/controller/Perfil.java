@@ -16,7 +16,7 @@ import mx.ilce.handler.ExecutionHandler;
 import mx.ilce.handler.LoginHandler;
      
 /**
- *  Clase para la implementación de los métodos usados para el manejo de Perfil
+ * Clase para la implementación de los métodos usados para el manejo de Perfil
  * @author ccatrilef
  */
 public class Perfil extends Entidad{

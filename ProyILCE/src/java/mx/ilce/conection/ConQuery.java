@@ -34,6 +34,27 @@ class ConQuery {
     private boolean enableDataLog=true;
     private Bitacora bitacora;
     private String hourMinSec;
+    //esta variable es mientras se deciden a implementar una solución decente
+    //para el manejo de paginados y no los chistes de propuesta que han
+    //entregado hasta ahora, rechazando la obtención por bloque mediante SP
+    private Integer maxRows;
+
+
+    /**
+     * Obtiene el numero maximo de registros que puede obtener una query
+     * @return  Integer Número de registros
+     */
+    public Integer getMaxRows() {
+        return maxRows;
+    }
+
+    /**
+     * Asigna el numero maximo de registros que se puede obtener una query
+     * @param maxRows   Integer Número de registros
+     */
+    public void setMaxRows(Integer maxRows) {
+        this.maxRows = maxRows;
+    }
 
     /**
      * Obtiene un String con la hora, minuto y segundo de un día. Se utiliza
@@ -107,6 +128,18 @@ class ConQuery {
             String port = AdminFile.getKey(prop,"PORT");
             String user = AdminFile.getKey(prop,"USR");
             String psw = AdminFile.getKey(prop,"PSW");
+            String maxReg = AdminFile.getKey(prop,"MAXREG");
+
+            //Le damos el valor por defecto
+            Integer intRow = Integer.valueOf(1000);
+            if (maxReg!=null){
+                try{
+                    intRow = Integer.valueOf(maxReg);
+                }catch(Exception e){
+                    intRow = Integer.valueOf(1000);
+                }
+            }
+            this.setMaxRows(intRow);
 
             strConexion.append("jdbc:sqlserver://");
             strConexion.append(server);
@@ -657,6 +690,9 @@ class ConQuery {
                     }
                 }
                 query = UtilValue.castAcent(query);
+                if (this.getMaxRows()!=null){
+                    ps.setMaxRows(this.getMaxRows().intValue());
+                }
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -811,6 +847,9 @@ class ConQuery {
                     query = "SELECT * FROM (" + query + ") AS TORDER ORDER BY " + dataTransfer.getOrderBY();
                 }
                 query = UtilValue.castAcent(query);
+                if (this.getMaxRows()!=null){
+                    ps.setMaxRows(this.getMaxRows().intValue());
+                }
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -960,6 +999,9 @@ class ConQuery {
                     }
                 }
                 query = UtilValue.castAcent(query);
+                if (this.getMaxRows()!=null){
+                    ps.setMaxRows(this.getMaxRows().intValue());
+                }
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1198,6 +1240,9 @@ class ConQuery {
                 }
                 st = this.conn.createStatement();
                 query = UtilValue.castAcent(query);
+                if (this.getMaxRows()!=null){
+                    st.setMaxRows(this.getMaxRows().intValue());
+                }
                 rs = st.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1433,6 +1478,9 @@ class ConQuery {
                         }
                     }
                     query = UtilValue.castAcent(query);
+                    if (this.getMaxRows()!=null){
+                        st.setMaxRows(this.getMaxRows().intValue());
+                    }
                     rs = st.executeQuery(query);
                     ResultSetMetaData rstm = rs.getMetaData();
 
@@ -1550,6 +1598,9 @@ class ConQuery {
                 query.append("select consulta from consulta_forma ");
                 query.append(" where clave_consulta = ").append(idQuery.toString());
                 st = this.conn.createStatement();
+                if (this.getMaxRows()!=null){
+                    st.setMaxRows(this.getMaxRows().intValue());
+                }
                 rs = st.executeQuery(query.toString());
                 if (rs.next()){
                     strSld =  rs.getString(1);

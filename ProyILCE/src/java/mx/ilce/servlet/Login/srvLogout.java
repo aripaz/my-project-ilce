@@ -15,7 +15,7 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.LoginHandler;
 
 /**
- * Servlet para ser invocado para efectuar el logout del usuario
+ * Servlet implementado para efectuar el logout del usuario
  * @author ccatrilef
  */
 public class srvLogout extends HttpServlet {
