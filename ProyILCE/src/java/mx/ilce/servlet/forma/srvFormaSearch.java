@@ -24,7 +24,7 @@ import mx.ilce.handler.SpyHandler;
 import mx.ilce.util.Validation;
 
 /**
- *  Servlet implementado para hacer busqueda general de datos
+ *  Servlet implementado para hacer búsqueda general de datos
  * @author ccatrilef
  */
 public class srvFormaSearch extends HttpServlet {

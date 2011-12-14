@@ -17,7 +17,7 @@ import mx.ilce.handler.ExceptionHandler;
 
 /**
  * Clase para la implementación de los métodos de conexión y obtención de datos
- * asociados a la Session
+ * asociados al objeto Session
  * @author ccatrilef
  */
 public class ConSession {
