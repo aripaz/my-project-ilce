@@ -164,30 +164,33 @@ public class AdminForm {
                     arrayFORM.add(name);
                 }else if (part.isFile()) {
                     FilePart filePart = (FilePart) part;
-                    String typeFile = filePart.getContentType();
-                    String evalType = (String) hsTypeAcepted.get(typeFile);
+                    String fileName = filePart.getFileName();
+                    if (fileName!=null){
+                        String typeFile = filePart.getContentType();
+                        String evalType = (String) hsTypeAcepted.get(typeFile);
 
-                    if ((evalType!=null) &&("OK".equals(evalType))){
-                        String fileName = filePart.getFileName();
-                        if ((fileName != null)&&(!"".equals(fileName))) {
-                            if (hsFile==null){
-                                hsFile = new HashMap();
+                        if ((evalType!=null) &&("OK".equals(evalType))){
+
+                            if ((fileName != null)&&(!"".equals(fileName))) {
+                                if (hsFile==null){
+                                    hsFile = new HashMap();
+                                }
+                                UtilDate ud = new UtilDate();
+                                String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"");
+                                strDia = strDia.replaceAll(":","");
+                                strDia = strDia.replaceAll(" ","_");
+                                String dirName = FileServerPath + strDia + "." + fileName;
+                                File dir = new File(dirName);
+                                long size = filePart.writeTo(dir);
+                                if (size>0){
+                                    hsFile.put(name, dirName);
+                                    arrayFILE.add(name);
+                                }
                             }
-                            UtilDate ud = new UtilDate();
-                            String strDia = ud.getFechaHMS(UtilDate.formato.AMD,"");
-                            strDia = strDia.replaceAll(":","");
-                            strDia = strDia.replaceAll(" ","_");
-                            String dirName = FileServerPath + strDia + "." + fileName;
-                            File dir = new File(dirName);
-                            long size = filePart.writeTo(dir);
-                            if (size>0){
-                                hsFile.put(name, dirName);
-                                arrayFILE.add(name);
-                            }
+                        }else{
+                            throw new ExceptionHandler("Captura de archivo", AdminForm.class,
+                                    "Formato de archivo no aceptado", "Tipo de archivo enviado:" + typeFile);
                         }
-                    }else{
-                        throw new ExceptionHandler("Captura de archivo", AdminForm.class, 
-                                "Formato de archivo no aceptado", "Tipo de archivo enviado:" + typeFile);
                     }
                 }
             }
