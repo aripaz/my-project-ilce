@@ -5,6 +5,7 @@
         request.getRequestDispatcher("/index.jsp");
     }
 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -75,9 +76,9 @@
                 src="http://jqueryui.com/themeroller/themeswitchertool/">
         </script>
         <div id="banner">
-            <img src="img/logo ilce.jpg" />
-            <img src="img/logo_plataforma.png" class="logo_plataforma"/>
-            <div id="session_menu" style="float:right"></div>
+            <div style="float: left; position: relative; "><img src="img/logo ilce.jpg" />
+            <img src="img/logo_plataforma.png" class="logo_plataforma"/></div>
+            <div id="session_menu" style="float: right; position: relative; "></div>
         </div>
         <!-- 
         <div class="menus_plataforma">
@@ -104,9 +105,9 @@
                     <li><a href="#tabMapaDelSitio">Mapa del sitio</a></li>
                     <li><a href="#tabAyuda">Ayuda</a></li>
                     <li><a href="#tabContacto">Contacto</a></li>
-                    &nbsp;&nbsp;<input id='txtBusquedaGlobal' type='text' />
-                    <div id="switcher" style="float:right; padding-right: 5px;  padding-top: 3px;"></div>
                 </ul>
+                <div style="padding-right: 5px; float: right; padding-top: 3px; position: relative; top: -30px; width:300px"><input id='txtBusquedaGlobal' type='text' style="clear:none; float:left"/>
+                    <div id="switcher"  style="float:right"></div></div>
                 <div id="tabInicio">
                     <div id="tabUser">    
                         <ul>
