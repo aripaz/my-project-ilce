@@ -738,8 +738,9 @@
             sEntidad=$('#grid'+ suffix).jqGrid()[0].id.split("_")[2];
             $tabs.tabs( "add", "#tabEditEntity"+suffix+"_"+id, sTabTitulo);
             $tabs.tabs( "select", "#tabEditEntity"+suffix+"_"+id);
+            oTabPanel =$("#tabEditEntity"+suffix+"_"+id);
             //Crea la interfaz de la aplicación abierta
-            $("#tabEditEntity"+suffix+"_"+id).html("<div id='divEditEntity_" + suffix + "' class='etiqueta_perfil'>" +
+            oTabPanel.html(
                 "<div id='splitterContainer_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='splitterContainer'>"+
                 "   <div id='leftPane_"+ nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp +"' class='leftPane'>"+
                 "       <div id='accordion_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "' class='accordionContainer'>"+
@@ -757,11 +758,10 @@
                 "               <div class='ui-widget mensaje-info' >" +
                 "                  <div class='ui-state-highlight ui-corner-all' style='padding: 0 .7em;'>" +
                 "                        <p ><span class='ui-icon ui-icon-info' style='float: left; margin-right: .3em;'></span><strong>En este espacio se muestran los catálogos relacionados a " + $.fn.appgrid.options.logPhrase + " '" + oGrid.getCell(nRow,1) + "', seleccione una carpeta del menú de la izquierda</strong></p>"+
-                "                        </div>" + 
-                "                  </div>"  + 
+                "                  </div>" + 
+                "              </div>"  + 
                 "        </div>" +
                 "   </div>"+
-                "</div>"+
                 "</div>");
 
                                   

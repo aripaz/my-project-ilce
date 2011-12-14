@@ -272,7 +272,7 @@
                             error:function(xhr,err){
                                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html("Error al guardar registro");
                                 $("#dlgModal_"+ formSuffix).remove();
-                                alert("Error al guardar registro: "+xhr.readyState+"\nstatus: "+xhr.status + "\responseText:"+ xhr.responseText);          
+                                alert("Error al guardar registro: "+xhr.readyState+"\nstatus: "+xhr.status + "\nResponseText:"+ xhr.responseText);          
                             }
                             //type:      type        // 'get' or 'post', override for form's 'method' attribute 
                             //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 

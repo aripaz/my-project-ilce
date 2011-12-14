@@ -79,7 +79,7 @@
                     });
             });
             
-            //Selecciona temporalmente e tab favoritos para audar a calcular el tamaño del carrusel
+            //Selecciona temporalmente el tab favoritos para audar a calcular el tamaño del carrusel
             $('#tabUser').tabs( "select", "#tabFavoritos" );
 
             //Activa el carrousel de ayuda de favoritos
@@ -105,6 +105,8 @@
              $('#tabUser').tabs( "select", "#tabPendientes" );
              
              $("#tabs").tabs( "select", "#tabAplicaciones" );
+             
+             
              //Activa el carrousel de ayuda de favoritos
              $("#divCarouselMisAplicaciones").agile_carousel({
                 carousel_data: [{
@@ -203,16 +205,15 @@
         var sFondo="";
         $(xml).find("registro").each(function(){
             //Carga los datos del xml en la variable de configuración
-            sParametro=$(this).find("parametro").text().split("\n")[0];
+            sParametro=$(this).find("parametro")[0].firstChild.nodeValue;
 
             if (sParametro=='escritorio.imagen de fondo') {
-               sFondo=$(this).find("valor").text().split("\n")[0];
+               sFondo=$(this).find("valor")[0].firstChild.nodeValue;
                if (sFondo!='')
                    obj.css('background-image', 'url('+sFondo+')');
             }
 
             if(sParametro==='escritorio.grid') {
-                
                 nClave=$(this).find("clave_parametro").text().split("\n")[0]
                 sValor=$(this).find("valor").text().split("\n")[0];
                 nApp=sValor.split(",")[0].split(":")[1];
