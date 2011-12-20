@@ -78,6 +78,27 @@
                     
                 });
                 
+                //Crea snowfall
+                $("#avatar").click(function() {
+                    if ($(this).attr("snow")=="0") {
+                         $("#divwait")
+                        .html("<br /><h1>!!El equipo de desarrollo les desea felices fiestas!!</h1><p style='text-align: center'><img src='img/feliz_navidad.jpg' /</p>")
+                        .attr('title','Feliz navidad') 
+                        .dialog({
+                                height: 500,
+                                modal: true,
+                                autoOpen: true,
+                                closeOnEscape:false
+                        });
+                        $(document).snowfall({round : true, minSize: 5, maxSize:8}); // add rounded
+                        $(this).attr("snow","1");
+                    }
+                    else {
+                        $(document).snowfall('clear'); 
+                        $(this).attr("snow","0");
+                    }
+                });
+                
                 //Inicializa el escritorio
                 $("#tabInicio").desktop();
             },
@@ -116,7 +137,7 @@
                   '</tr>'+
                   '</table>'+
                   '</td>' +
-                  '<td><img src="' + $.fn.sessionmenu.options.foto + '" width="75" height="86" border="1" /></td>' +
+                  '<td><img src="' + $.fn.sessionmenu.options.foto + '" width="75" height="86" border="1" id="avatar" snow="0"/></td>' +
                   '</tr>'+
                 '</table>';
         return sHtml;
