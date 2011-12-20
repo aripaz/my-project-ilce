@@ -72,7 +72,26 @@
         {
             url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
             dataType: ($.browser.msie) ? "text" : "xml",
-            success:  function(data){
+            success:  processGridDefinition, 
+            error:function(xhr,err){
+                sTipoError='Problemas al recuperar definición de grid.\n';
+                if (xhr.responseText.indexOf('NullPointerException')>-1)
+                    sTipoError+='Problemas de conexión a la base de datos, verifique la conexión a la red.'
+                else
+                    sTipoError+=xhr.responseText;
+
+                suffix=obj.children()[1].id.replace("pager","");
+                $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+                    "<div class='ui-widget'>"+
+                    "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
+                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
+                    sTipoError+"</p>"+
+                    "</div></div>");
+            }
+        });
+    };
+
+    function processGridDefinition (data){
                 if (typeof data == "string") {
                     xml = new ActiveXObject("Microsoft.XMLDOM");
                     xml.async = false;
@@ -93,30 +112,45 @@
                     "<br><br><br><br><br><br><br><br><br><br><br><div style='padding: 0 .7em; width: 80%; margin-left: auto; margin-right: auto;text-align: center;' class='ui-state-error ui-corner-all'>"+
                     "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
                     $.fn.appgrid.options.error+"</p>"+
-                    "</div></div>");
+                    "</div></div>"+obj.html());
+                   
+                   //Remueve del dom el men saje de espera
+                   $("#loader_"+ $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad + "_" + $.fn.appgrid.options.datestamp).html("");
                     
                     /* Captura el click del link */
                     $(".editLink").click(function(){
+                        sCmd=this.id.split("-")[0];
                         nQuery=this.id.split("_")[0].split("-")[1];
                         nApp=this.id.split("_")[1];
                         nForma=this.id.split("_")[2];
                         
-                        $("body").form({
-                            app: nApp,
-                            forma:8,
-                            datestamp:obj.attr("datestamp"),
-                            modo:"update",
-                            titulo: "Consulta ",
-                            columnas:1,
-                            pk:nQuery,
-                            filtroForaneo:"2=clave_aplicacion=1&3="+obj.attr("wsParameters"),
-                            height:"500",
-                            width:"80%",
-                            originatingObject: obj.id,
-                            updateControl:obj.id
-                        });
+                        if (sCmd=="lnkEditQuery")  {                           
+                            $("body").form({
+                                app: nApp,
+                                forma:8,
+                                datestamp:obj.attr("datestamp"),
+                                modo:"update",
+                                titulo: "Consulta ",
+                                columnas:1,
+                                pk:nQuery,
+                                filtroForaneo:"2=clave_aplicacion=1&3="+obj.attr("wsParameters"),
+                                height:"500",
+                                width:"80%",
+                                originatingObject: obj.id,
+                                updateControl:obj.id
+                            });
+                        }
                         
-                    })
+                        if (sCmd=="lnkReloadGrid") {
+                           //Borra el error y coloca el mensaje de espera"
+                           obj.find(".ui-widget").remove();
+                           $("#loader_"+ $.fn.appgrid.options.app + "_" + $.fn.appgrid.options.entidad + "_" + $.fn.appgrid.options.datestamp).html("<br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br />");
+                           $.fn.appgrid.options.error="";
+                           $.fn.appgrid.getGridDefinition();
+                           /*setTimeout("$('.queued_grids:first').gridqueue()",500);*/
+                        }
+                        
+                    });
 
                     return true;
                 }
@@ -231,8 +265,8 @@
                             originatingObject: oGrid.id
                         });
                     }
-                        
-                     //oGrid.setGridWidth(oGrid.parent().width(),true);
+                    
+                    //oGrid.setGridWidth(oGrid.parent().width(),true);
 
                 }});
 
@@ -599,25 +633,8 @@
 
             /* Finaliza implementación de grid */
 
-            },
-            error:function(xhr,err){
-                sTipoError='Problemas al recuperar definición de grid.\n';
-                if (xhr.responseText.indexOf('NullPointerException')>-1)
-                    sTipoError+='Problemas de conexión a la base de datos, verifique la conexión a la red.'
-                else
-                    sTipoError+=xhr.responseText;
-
-                suffix=obj.children()[1].id.replace("pager","");
-                $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-                    "<div class='ui-widget'>"+
-                    "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
-                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
-                    sTipoError+"</p>"+
-                    "</div></div>");
-            }
-        });
-    };
-
+    }
+            
     $.fn.appgrid.handleGridDefinition = function(xml){
         var iCol=0;
         
@@ -634,8 +651,13 @@
                         $.fn.appgrid.options.error+=", haga click <a href='#' id='lnkEditQuery-" + nConsulta  + "_" + 
                         $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para editarla";
                 return true;    
+            }  
+            
+            if (error.find("tipo").text()=="NullPointerException") {
+               $.fn.appgrid.options.error="Sin conexión. Haga clic <a href='#' class='editLink' id='lnkReloadGrid-0_" + $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"'>aqui</a> para volver a intentarlo";
+               return true; 
             }
-        
+            
             if (error.find("tipo").text()=="Exception" && $("#_cp_").val()=="1") {
              $.fn.appgrid.options.error+="No hay una consulta asociada a esta acción" + 
                  error.find("general").text() + ". " +  
@@ -643,7 +665,7 @@
                 $.fn.appgrid.options.app +"_" +  $.fn.appgrid.options.entidad +"' class='editLink'>aqui</a> para crearla"
             return true;    
             }    
-
+          
        }      
        
        //Titulo del grid
@@ -708,8 +730,9 @@
         });
 
         $("#pager"+ suffix).attr("security", sPermiso);
+    
     }
-
+    
     $.fn.appgrid.openKardex = function(nApp, nEntidad,sDateStamp, id) {
         var suffix =  "_" + nApp + "_" + nEntidad +"_" + sDateStamp;
 
@@ -732,6 +755,7 @@
                     autoOpen: true,
                     closeOnEscape:false
             });
+            
             oGrid=$('#grid'+ suffix);
             var nRow=oGrid.getGridParam('selrow');
             sTabTitulo=oGrid.jqGrid()[0].p.colNames[1] + ' ' + oGrid.getCell(nRow,1);
