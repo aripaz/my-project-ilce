@@ -1,5 +1,20 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.handler;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,7 +113,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Constructor de la Exception donde se entrega un objeto con la clase de la
-     * exception ocurrida, la clase donde ocurrio el problema y un mensaje que se
+     * Exception ocurrida, la clase donde ocurrió el problema y un mensaje que se
      * desea desplegar, junto con los mensajes obtenidos desde la exception y la
      * data adicional entregada.
      * @param obj       Clase del tipo de Error (Exception, NullPointerException, etc)
@@ -577,7 +592,7 @@ public final class ExceptionHandler extends Throwable {
         private String nameFile;
 
         /**
-         * Obtiene el nombre que poseera el archivo de Log
+         * Obtiene el nombre que poseerá el archivo de Log
          * @return  String  Nombre del archivo
          */
         public String getNameFile() {
@@ -585,7 +600,7 @@ public final class ExceptionHandler extends Throwable {
         }
 
         /**
-         * Asigna el nombre que poseera el archivo de Log
+         * Asigna el nombre que poseerá el archivo de Log
          * @param nameFile  Nombre del archivo
          */
         public void setNameFile(String nameFile) {
@@ -593,7 +608,7 @@ public final class ExceptionHandler extends Throwable {
         }
 
         /**
-         * Obtiene la ruta donde se colocara el archivo de Log
+         * Obtiene la ruta donde se colocará el archivo de Log
          * @return  String  Ruta del archivo
          */
         public String getRutaFile() {
@@ -601,7 +616,7 @@ public final class ExceptionHandler extends Throwable {
         }
 
         /**
-         * Asigna la ruta donde se colocara el archivo de Log
+         * Asigna la ruta donde se colocará el archivo de Log
          * @param rutaFile  Ruta del archivo
          */
         public void setRutaFile(String rutaFile) {
@@ -734,8 +749,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna los datos contenidos en el objeto DataTransfer entregado, a la sección
-     * de parametros de reemplazo de la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a continuación.
+     * de parámetros de reemplazo de la estructura XML que registra un error. Si
+     * existían datos previos estos se mantienen y la nueva data se anexa a continuación.
      * @param dataTransfer
      */
     public void setDataToXML(DataTransfer dataTransfer){
@@ -758,8 +773,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna los datos contenidos en el objeto DataTransfer entregado, a la sección
-     * previa a los parametros de reemplazo de la estructura XML que registra un
-     * error. Si existian datos previos estos se mantienen y la
+     * previa a los parámetros de reemplazo de la estructura XML que registra un
+     * error. Si existían datos previos estos se mantienen y la
      * nueva data se anexa a continuación.
      * @param dataTransfer
      */
@@ -805,8 +820,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna los datos entregados a la sección de parametros de reemplazo de
-     * la estructura XML que registra un error. Si existian datos previos estos
+     * Asigna los datos entregados a la sección de parámetros de reemplazo de
+     * la estructura XML que registra un error. Si existían datos previos estos
      * se mantienen y la nueva data se coloca a continuación.
      * @param nombre    Nombre del parámetro
      * @param valor     Valor del parámetro, tipo String
@@ -846,8 +861,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna los datos entregados a la sección de parametros de reemplazo de
-     * la estructura XML que registra un error. Si existian datos previos estos
+     * Asigna los datos entregados a la sección de parámetros de reemplazo de
+     * la estructura XML que registra un error. Si existían datos previos estos
      * se mantienen y la nueva data se coloca a continuación.
      * @param nombre    Nombre del parámetro
      * @param valor     Valor del parámetro, tipo Integer
@@ -887,8 +902,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna los datos entregados a la sección de parametros de reemplazo de
-     * la estructura XML que registra un error. Si existian datos previos estos
+     * Asigna los datos entregados a la sección de parámetros de reemplazo de
+     * la estructura XML que registra un error. Si existían datos previos estos
      * se mantienen y la nueva data se coloca a continuación.
      * @param nombre    Nombre del parámetro
      * @param valor     Valor del parámetro, tipo boolean
@@ -928,8 +943,8 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna los datos entregados a la sección de parametros de reemplazo de
-     * la estructura XML que registra un error. Si existian datos previos estos
+     * Asigna los datos entregados a la sección de parámetros de reemplazo de
+     * la estructura XML que registra un error. Si existían datos previos estos
      * se mantienen y la nueva data se coloca a continuación.
      * @param nombre    Nombre del parámetro
      * @param valor     Valor del parámetro, tipo Date
@@ -971,10 +986,10 @@ public final class ExceptionHandler extends Throwable {
     }
 
     /**
-     * Asigna los datos contenidos en la matríz de datos entregada, a la sección
-     * de parametros de reemplazo de la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a continuación.
-     * @param strData   Matríz con los datos
+     * Asigna los datos contenidos en la matriz de datos entregada, a la sección
+     * de parámetros de reemplazo de la estructura XML que registra un error. Si
+     * existían datos previos estos se mantienen y la nueva data se anexa a continuación.
+     * @param strData   Matriz con los datos
      */
     public void setDataToXML(String[][] strData){
         StringBuilder sld= new StringBuilder();
@@ -1020,8 +1035,8 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Asigna los datos contenidos en el arreglo de datos entregado, a la sección
-     * de parametros de reemplazo de la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a continuación.
+     * de parámetros de reemplazo de la estructura XML que registra un error. Si
+     * existían datos previos estos se mantienen y la nueva data se anexa a continuación.
      * @param strData   Arreglo con los datos
      */
     public void setDataToXML(String[] strData){
@@ -1069,7 +1084,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto User entregado, a la sección
      * de registro_User en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param user  Objeto User
      */
@@ -1122,7 +1137,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto User, la
-     * que correspondera a una reccion registro_User. Usado en las llamadas
+     * que corresponderá a una sección registro_User. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param user    Objeto User
      * @return  StringBuffer    Sección de XML obtenida
@@ -1173,7 +1188,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Perfil entregado, a la sección
      * de registro_Perfil en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param perfil  Objeto Perfil
      */
@@ -1213,7 +1228,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto Perfil, la
-     * que correspondera a una reccion registro_Perfil. Usado en las llamadas
+     * que corresponderá a una sección registro_Perfil. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param perfil    Objeto Perfil
      * @return  StringBuffer    Sección de XML obtenida
@@ -1252,7 +1267,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Bitacora entregado, a la sección
      * de registro_Bitacora en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param perfil  Objeto Perfil
      */
@@ -1316,7 +1331,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto Bitacora, la
-     * que correspondera a una reccion registro_Bitacora. Usado en las llamadas
+     * que corresponderá a una sección registro_Bitacora. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param bitacora    Objeto Bitacora
      * @return  StringBuffer    Sección de XML obtenida
@@ -1380,7 +1395,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Aplicacion entregado, a la sección
      * de registro_Aplicacion en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param aplicacion
      */
@@ -1450,7 +1465,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto Aplicacion, la
-     * que correspondera a una reccion registro_Aplicacion. Usado en las llamadas
+     * que corresponderá a una sección registro_Aplicacion. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param aplicacion    Objeto Aplicacion
      * @return  StringBuffer    Sección de XML obtenida
@@ -1518,7 +1533,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Campo entregado, a la sección
      * de registro_Campo en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param campo
      */
@@ -1574,7 +1589,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto Campo, la
-     * que correspondera a una reccion registro_Campo. Usado en las llamadas
+     * que corresponderá a una sección registro_Campo. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param campo    Objeto Campo
      * @return  StringBuffer    Sección de XML obtenida
@@ -1628,7 +1643,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto CampoForma entregado, a la sección
      * de registro_CampoForma en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param campoForma
      */
@@ -1725,7 +1740,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto CampoForma, la
-     * que correspondera a una reccion registro_CampoForma. Usado en las llamadas
+     * que corresponderá a una sección registro_CampoForma. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param campoForma    Objeto CampoForma
      * @return  StringBuffer    Sección de XML obtenida
@@ -1820,7 +1835,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Forma entregado, a la sección
      * de registro_Forma en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param forma
      */
@@ -1878,7 +1893,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto Forma, la
-     * que correspondera a una reccion registro_Forma. Usado en las llamadas
+     * que corresponderá a una sección registro_Forma. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param forma    Objeto Forma
      * @return  StringBuffer    Sección de XML obtenida
@@ -1931,7 +1946,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto DataMail entregado, a la sección
      * de registro_DataMail en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param dataMail
      */
@@ -2024,7 +2039,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto DataMail, la
-     * que correspondera a una reccion registro_DataMail. Usado en las llamadas
+     * que corresponderá a una sección registro_DataMail. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param dataMail    Objeto DataMail
      * @return  StringBuffer    Sección de XML obtenida
@@ -2115,7 +2130,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Listado entregado, a la sección
      * de registro_Listado en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * Como el contenido de la lista puede ser un objeto cualquiera, se esta
      * dando soporte los distintos tipos manejados por la aplicación:
@@ -2197,7 +2212,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos de un objeto List o
-     * ArrayList, la que correspondera a una reccion registro_Listado. Usado en
+     * ArrayList, la que corresponderá a una sección registro_Listado. Usado en
      * las llamadas recursivas para la generación del XML.
      * @param listado    Objeto List o ArrayList
      * @return  StringBuffer    Sección de XML obtenida
@@ -2262,7 +2277,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto HashMap entregado, a la sección
      * de registro_HashMap en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * Como el contenido del HashMap puede ser un objeto cualquiera, se esta
      * dando soporte los distintos tipos manejados por la aplicación:
@@ -2336,7 +2351,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene una sección del XML de error con los datos del objeto HashMap, la
-     * que correspondera a una reccion registro_DataMail. Usado en las llamadas
+     * que corresponderá a una sección registro_DataMail. Usado en las llamadas
      * recursivas para la generación del XML.
      * @param hash    Objeto HashMap
      * @return  StringBuffer    Sección de XML obtenida
@@ -2399,7 +2414,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto Enumeration entregado, a la sección
      * de registro_Enumeration en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param enumeration
      */
@@ -2425,7 +2440,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Asigna los datos contenidos en el objeto HashCampo entregado, a la sección
      * de registro_HashCampo en la estructura XML que registra un error. Si
-     * existian datos previos estos se mantienen y la nueva data se anexa a
+     * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
      * @param hashCampo
      */

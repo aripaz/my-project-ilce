@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.conection;
 
 import java.sql.Connection;
@@ -41,7 +57,7 @@ class ConQuery {
 
 
     /**
-     * Obtiene el numero maximo de registros que puede obtener una query
+     * Obtiene el número máximo de registros que puede obtener una query
      * @return  Integer Número de registros
      */
     public Integer getMaxRows() {
@@ -49,7 +65,7 @@ class ConQuery {
     }
 
     /**
-     * Asigna el numero maximo de registros que se puede obtener una query
+     * Asigna el número máximo de registros que se puede obtener una query
      * @param maxRows   Integer Número de registros
      */
     public void setMaxRows(Integer maxRows) {
@@ -99,7 +115,7 @@ class ConQuery {
     }
 
     /**
-     * Asigna si el log debe inlcuir la query con datos o no
+     * Asigna si el log debe incluir la query con datos o no
      * @param enableDataLog     Valor validación
      */
     public void setEnableDataLog(boolean enableDataLog) {
@@ -281,7 +297,7 @@ class ConQuery {
     }
 
     /**
-     * Método para validar que se esta ejecutando una instrucción insert, en la
+     * Método para validar que se está ejecutando una instrucción insert, en la
      * tabla que corresponde, con la query entregada.
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
@@ -298,8 +314,8 @@ class ConQuery {
     }
 
     /**
-     * Método que efectua una query de actualización de datos, tras su ejecución
-     * entrega un número uno (1), que efectuo correctamente la operación, cero (0)
+     * Método que efectúa una query de actualización de datos, tras su ejecución
+     * entrega un número uno (1), que efectuó correctamente la operación, cero (0)
      * en caso contrario. El valor es retornado en el atributo Object del HashCampo.
      * El objeto DataTransfer contiene los siguientes datos:
      * (-) CampoForma: con los datos para realizar el update.
@@ -388,7 +404,7 @@ class ConQuery {
     }
 
     /**
-     * Método para validar que se esta ejecutando una instrucción update, en la
+     * Método para validar que se está ejecutando una instrucción update, en la
      * tabla que corresponde, con la query entregada
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
@@ -405,8 +421,8 @@ class ConQuery {
     }
 
     /**
-     * Método que efectua una query de eliminación de datos, tras su ejecución
-     * entrega un número: (1) efectuo correctamente la operacion, (0) en caso
+     * Método que efectúa una query de eliminación de datos, tras su ejecución
+     * entrega un número: (1) efectuó correctamente la operación, (0) en caso
      * contrario. El valor es retornado en el atributo Object del HashCampo.
      * El objeto DataTransfer contiene los siguientes datos:
      * (-) CampoForma: contiene los datos para identificar la tabla.
@@ -621,7 +637,7 @@ class ConQuery {
     }
 
     /**
-     * Método para validar que se esta ejecutando una instrucción Delete, en la
+     * Método para validar que se está ejecutando una instrucción Delete, en la
      * tabla que corresponde, con la query entregada
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
@@ -638,7 +654,7 @@ class ConQuery {
     }
 
     /**
-     * Método que obtiene la data, aplicando a la query los parametros de entrada
+     * Método que obtiene la data, aplicando a la query los parámetros de entrada
      * entregados. El idQuery entregado permite seleccionar la query respectiva.
      * Cada uno de los parámetros de entrada deben convertirse a un String y
      * agregarse en el arreglo respectivo.
@@ -1407,7 +1423,7 @@ class ConQuery {
     /**
      * Método para validar si la query entregada no posee alguna instrucción
      * que permita la modificación de la base de datos. Esto es una medida de
-     * seguridad, para que las queries de modificacción solo sean las autorizadas,
+     * seguridad, para que las queries de modificación solo sean las autorizadas,
      * es decir, que provengan del catálogo de queries de la base de datos y no
      * de una operación externa.
      * @param query     Query que debe ser validada
@@ -1432,8 +1448,8 @@ class ConQuery {
 
     /**
      * Método que obtiene la data aplicando la Query y Data entregada. Solo se
-     * permiten queries de selección de datos, si se envia alguna que posea
-     * instrucciones de modificacion o similar, se bloquea la operación sin ejecutarla.
+     * permiten queries de selección de datos, si se envía alguna que posea
+     * instrucciones de modificación o similar, se bloquea la operación sin ejecutarla.
      * El objeto DataTransfer contiene los siguientes datos:
      * (-) query: Query que se debe ejecutar en la base de Datos.
      * (-) arrData: Parámetros con que se debe completar la query.
@@ -1578,7 +1594,7 @@ class ConQuery {
     }
 
     /**
-     * Método que busca una query desde la base de datos, pasandole el ID que posee
+     * Método que busca una query desde la base de datos, pasándole el ID que posee
      * en la tabla
      * @param idQuery   ID de la Query a buscar
      * @return  String  Texto con la query solicitada
@@ -1697,7 +1713,7 @@ class ConQuery {
 
     /**
      * Método que según el Tipo de Dato entregado que se tiene en la base de datos
-     * se entrega un string con el tipo que le debe corresponder en Java
+     * entrega un string con el tipo que le debe corresponder en Java
      * @param strType   Texto con el tipo de dato a analizar
      * @return  String  Texto con la conversión del tipo de dato
      */

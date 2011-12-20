@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.controller;
 
 import java.util.ArrayList;
@@ -212,7 +228,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el texto adicional que se incluira en la query
+     * Obtiene el texto adicional que se incluirá en la query
      * @return  String  Texto con el "where" para ser usado en la query
      */
     public String getStrWhereQuery() {
@@ -220,7 +236,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Asigna el texto adicional que se incluira en la query
+     * Asigna el texto adicional que se incluirá en la query
      * @param strWhereQuery     Texto con el "where" para ser usado en la query
      */
     public void setStrWhereQuery(String strWhereQuery) {
@@ -260,7 +276,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Obtiene el tipo de acción que se esta efectuando con la Forma
+     * Obtiene el tipo de acción que se está efectuando con la Forma
      * @return  String  Tipo de acción declarada
      */
     public String getTipoAccion() {
@@ -268,7 +284,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Asigna el tipo de acción que se esta efectuando con la Forma
+     * Asigna el tipo de acción que se está efectuando con la Forma
      * @param tipoAccion    Tipo de acción declarada
      */
     public void setTipoAccion(String tipoAccion) {
@@ -442,9 +458,9 @@ public class Aplicacion extends Entidad {
     }    
 
     /**
-     * Método que agrega una forma (con formato List) al Hash de formas, asignandole como
-     * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es
-     * reemplazada
+     * Método que agrega una forma (con formato List) al Hash de formas, 
+     * asignándole como Key, el ID de la Forma. Si existía una forma con la
+     * misma Key, esta es reemplazada
      * @param key   ID de la Forma
      * @param obj   Listado de la forma a agregar
      */
@@ -726,8 +742,8 @@ public class Aplicacion extends Entidad {
 
     /**
      * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
-     * no esta configurada la forma, pero se tiene la query con la consulta para
-     * completarla. Obviamente no estan disponibles todos los datos, pero si los
+     * no está configurada la forma, pero se tiene la query con la consulta para
+     * completarla. Obviamente no están disponibles todos los datos, pero si los
      * básicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener

@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.controller;
 
 import java.io.Serializable;
@@ -6,7 +22,7 @@ import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.handler.ExecutionHandler;
 
 /**
- * Clase abstracta que define las caracteristicas que deben poseer las
+ * Clase abstracta que define las características que deben poseer las
  * clases que heredaran de ella
  * @author ccatrilef
  */
@@ -99,14 +115,14 @@ public abstract class Entidad implements Serializable{
     public abstract Entidad mostrarResultado() throws ExceptionHandler;
 
     /**
-     * Método Abstracto para la realizacién de busquedas sencillas
+     * Método Abstracto para la realización de búsquedas sencillas
      * @return
      * @throws ExceptionHandler
      */
     public abstract Entidad ingresarBusquedaSencilla() throws ExceptionHandler;
 
     /**
-     * Método Abstracto para el ingreso de busquedas avanzadas
+     * Método Abstracto para el ingreso de búsquedas avanzadas
      * @return
      * @throws ExceptionHandler
      */

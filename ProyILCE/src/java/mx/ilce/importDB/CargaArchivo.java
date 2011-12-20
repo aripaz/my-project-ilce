@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.importDB;
 
 import java.io.Serializable;
@@ -6,7 +22,7 @@ import java.io.Serializable;
  * Bean implementado para contener los datos de la carga de archivos
  * @author ccatrilef
  */
-public class CargaArchivo implements Serializable{
+class CargaArchivo implements Serializable{
 
     private Integer idCampoTabla;
     private String nombreCampo;
@@ -30,8 +46,35 @@ public class CargaArchivo implements Serializable{
     private Integer idTipoArchivoCarga;
     private Integer idCampoHeader;
     private Integer fila;
+    private Integer columna;
     private String tagCampoHeader;
+    private boolean ignoreIncomplete;
+    private Integer posicionHeader;
 
+    public Integer getPosicionHeader() {
+        return posicionHeader;
+    }
+
+    public void setPosicionHeader(Integer posicionHeader) {
+        this.posicionHeader = posicionHeader;
+    }
+    
+    public Integer getColumna() {
+        return columna;
+    }
+
+    public void setColumna(Integer columna) {
+        this.columna = columna;
+    }
+
+    public boolean isIgnoreIncomplete() {
+        return ignoreIncomplete;
+    }
+
+    public void setIgnoreIncomplete(boolean ignoreIncomplete) {
+        this.ignoreIncomplete = ignoreIncomplete;
+    }
+    
     public Integer getPosicionSeparador() {
         return posicionSeparador;
     }
@@ -215,7 +258,4 @@ public class CargaArchivo implements Serializable{
     public void setTipoCampo(String tipoCampo) {
         this.tipoCampo = tipoCampo;
     }
-
-
-
 }

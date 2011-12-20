@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.bean;
 
 /**
@@ -23,7 +39,7 @@ public class DataTransfer {
 
     /**
      * Obtiene un objeto del tipo Object, para soportar cualquier tipo de
-     * data que se necesite mantener o enviar y no esta catalogada en los otros
+     * data que se necesite mantener o enviar y no está catalogada en los otros
      * métodos
      * @return
      */
@@ -33,7 +49,7 @@ public class DataTransfer {
 
     /**
      * Asigna un objeto del tipo Object, para soportar cualquier tipo de
-     * data que se necesite mantener o enviar y no esta catalogada en los otros
+     * data que se necesite mantener o enviar y no está catalogada en los otros
      * métodos
      * @param dataObject
      */
@@ -50,7 +66,7 @@ public class DataTransfer {
 
     /**
      * Obtiene un arreglo con los datos de entrada, enfocado a los datos de la
-     * forma %1, %2, %3, etc
+     * forma %1, %2, %3, etc.
      * @return
      */
     public String[] getArrData() {
@@ -59,7 +75,7 @@ public class DataTransfer {
 
     /**
      * Asigna un arreglo con los datos de entrada, enfocado a los datos de la
-     * forma %1, %2, %3, etc
+     * forma %1, %2, %3, etc.
      * @param arrData
      */
     public void setArrData(String[] arrData) {

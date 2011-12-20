@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.bean;
 
 import java.io.Serializable;
@@ -184,7 +200,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene un entero que indica si se edita (1) o no (0) la forma Foranea
+     * Obtiene un entero que indica si se edita (1) o no (0) la forma foránea
      * @return
      */
     public Integer getEditaFormaForanea() {
@@ -192,7 +208,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna un entero que indica si se edita (1) o no (0) la forma Foranea
+     * Asigna un entero que indica si se edita (1) o no (0) la forma foránea
      * @param editaFormaForanea
      */
     public void setEditaFormaForanea(Integer editaFormaForanea) {
@@ -216,7 +232,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene la clave de la forma foranea del CampoForma
+     * Obtiene la clave de la forma foránea del CampoForma
      * @return
      */
     public Integer getClaveFormaForanea() {
@@ -224,8 +240,8 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna la clave de la forma foranea del CampoForma
-     * @param claveFormaForanea     Clave de la forma foranea
+     * Asigna la clave de la forma foránea del CampoForma
+     * @param claveFormaForanea     Clave de la forma foránea
      */
     public void setClaveFormaForanea(Integer claveFormaForanea) {
         this.claveFormaForanea = claveFormaForanea;
@@ -264,7 +280,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el texto de ayuda que esta asociado a un CampoForma
+     * Obtiene el texto de ayuda que está asociado a un CampoForma
      * @return
      */
     public String getAyuda() {
@@ -272,7 +288,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el texto de ayuda que esta asociado a un CampoForma
+     * Asigna el texto de ayuda que está asociado a un CampoForma
      * @param ayuda     Texto de ayuda del CampoForma
      */
     public void setAyuda(String ayuda) {
@@ -312,7 +328,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene la clave de la forma a la que esta asociado el CampoForma
+     * Obtiene la clave de la forma a la que está asociado el CampoForma
      * @return
      */
     public Integer getClaveForma() {
@@ -320,7 +336,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna la clave de la forma a la que esta asociado el campoForma
+     * Asigna la clave de la forma a la que está asociado el campoForma
      * @param claveForma    Clave de la Forma
      */
     public void setClaveForma(Integer claveForma) {
@@ -344,7 +360,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene un texto (generalmente la invocación de un JavaScript) que estara
+     * Obtiene un texto (generalmente la invocación de un JavaScript) que estará
      * asociado a un evento con el campoForma
      * @return
      */
@@ -353,7 +369,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el texto (generalmente la invocación de un JavaScript) que estara
+     * Asigna el texto (generalmente la invocación de un JavaScript) que estará
      * asociado a un evento con el CampoForma
      * @param evento    Texto con el evento del CampoForma
      */
@@ -410,7 +426,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el nombre de la Tabla a la que esta asociado el CampoForma
+     * Obtiene el nombre de la Tabla a la que está asociado el CampoForma
      * @return
      */
     public String getTabla() {
@@ -418,7 +434,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el nombre de la Tabla a la que esta asociado el CampoForma
+     * Asigna el nombre de la Tabla a la que está asociado el CampoForma
      * @param tabla     Nombre de la Tabla
      */
     public void setTabla(String tabla) {
@@ -426,7 +442,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el tamaño que tendra el CampoForma
+     * Obtiene el tamaño que tendrá el CampoForma
      * @return
      */
     public Integer getTamano() {
@@ -434,7 +450,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna el tamaño que tendra el campoForma
+     * Asigna el tamaño que tendrá el campoForma
      * @param tamano    Tamaño del CampoForma
      */
     public void setTamano(Integer tamano) {
@@ -442,7 +458,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene un texto con el tipo de control que debe utilizarce para el
+     * Obtiene un texto con el tipo de control que debe utilizarse para el
      * CampoForma. Por defecto (con valor null) es un campo del tipo Text
      * @return
      */
@@ -451,7 +467,7 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Asigna un texto con el tipo de control que debe utilizarce para el
+     * Asigna un texto con el tipo de control que debe utilizarse para el
      * CampoForma. Por defecto (con valor null) es un campo del tipo Text
      * @param tipoControl   Tipo de Control asociado al CampoForma
      */

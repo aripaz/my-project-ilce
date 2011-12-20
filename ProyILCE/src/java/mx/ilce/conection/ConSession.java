@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.conection;
 
 import java.util.Iterator;
@@ -386,7 +402,7 @@ public class ConSession {
     /**
      * Obtiene los datos que se ingresaran al XML de Session, según el usuario.
      * Se utiliza como parámetro de entrada el campo claveEmpleado, desde el
-     * Bean User.En ObjectData se coloca un objeto Bean del tipo User, con los
+     * Bean User. En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.
      * @param usuario   Bean que contiene los datos del usuario
      * @return  HashCampo   Objeto Hash con los datos para el XML de Usuario
@@ -422,7 +438,7 @@ public class ConSession {
     }
 
     /**
-     * Obtiene los datos que se ingresaran al XML de Menu, según el usuario.
+     * Obtiene los datos que se ingresaran al XML de Menú, según el usuario.
      * Se utiliza como parámetro de entrada el campo clavePerfil, desde el
      * Bean User. En ObjectData se coloca un objeto Bean del tipo User, con los
      * datos que se obtuvieron.

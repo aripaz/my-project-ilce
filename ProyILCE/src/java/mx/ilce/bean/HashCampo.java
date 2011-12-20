@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.bean;
 
 import java.io.Serializable;
@@ -7,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Clase implementada para el manejo de campos, el cual contendra las respuestas
+ * Clase implementada para el manejo de campos, el cual contendrá las respuestas
  * obtenidas desde las operaciones de la Base de Datos
  * @author ccatrilef
  */
@@ -71,7 +87,7 @@ public class HashCampo implements Serializable  {
     /**
      * Agrega un conjunto de registros (varias líneas) al listado de Data
      * existente, proveniente de otro HashCampo. Si los campos no son 
-     * equivalentes, se rechaza el ingreso. Si la lista es vacia, siendo los
+     * equivalentes, se rechaza el ingreso. Si la lista es vacía, siendo los
      * campos correctos, se retorna TRUE.
      * Se asume que los registros vienen ordenados por código index de 0 a n.
      * @param hsCmp     HashCampo que contiene la nueva data a ingresar
@@ -105,7 +121,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Agrega un Campo, ordenandolo por su código
+     * Agrega un Campo, ordenándolo por su código
      * @param cmp   Campo a agregar
      */
     private void addCampoByCod(Campo cmp){
@@ -124,7 +140,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Guarda el código de un Campo, ordenandolo por el alias
+     * Guarda el código de un Campo, ordenándolo por el alias
      * @param cmp   Campo a agregar
      */
     private void addCampoByAlias(Campo cmp){
@@ -143,7 +159,7 @@ public class HashCampo implements Serializable  {
     }
 
     /**
-     * Guarda el código de un campo ordenandolo por su nombre
+     * Guarda el código de un campo ordenándolo por su nombre
      * @param cmp   Campo a agregar
      */
     private void addCampoByName(Campo cmp){

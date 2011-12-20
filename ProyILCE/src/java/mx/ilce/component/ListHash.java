@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,9 +36,9 @@ public class ListHash {
 
      /**
      * Método donde en una clase "nameClass", se introducen los
-     * datos del objeto "hsCmp", colocandolos en los campos que correspondan,
+     * datos del objeto "hsCmp", colocándolos en los campos que correspondan,
      * según la definición de la clase entregada. Se necesita que la clase
-     * poseea los métodos getter y setter para asociar los campos.
+     * posea los métodos getter y setter para asociar los campos.
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada
@@ -135,9 +151,9 @@ public class ListHash {
     /**
      * Método donde se entrega un ArrayList, compuesta de elementos
      * que son de la clase "nameClass", en ella se introducen los datos de los
-     * registros contenidos en el objeto "hsCmp", colocandolos en los campos
+     * registros contenidos en el objeto "hsCmp", colocándolos en los campos
      * que correspondan, según la definición de la clase entregada. Se necesita
-     * que la clase poseea los métodos getter y setter para asociar los campos.
+     * que la clase posea los métodos getter y setter para asociar los campos.
      * @param nameClass    Clase a la que deben introducirse los datos
      * @param hsCmp     Objeto que contiene la data estructurada que debe ser
      *                  introducida en la clase señalada

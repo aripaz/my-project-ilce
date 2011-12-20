@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.importDB;
 
 import com.csvreader.CsvReader;
@@ -40,6 +56,24 @@ class AdmImportDB {
     private String storeProcedure;
     private List dataStoreProcedure;
     private List listHeader;
+    private boolean includeHeader;
+    private DataTable tablaProceso;
+
+    public DataTable getTablaProceso() {
+        return tablaProceso;
+    }
+
+    public void setTablaProceso(DataTable tablaProceso) {
+        this.tablaProceso = tablaProceso;
+    }
+
+    private boolean isIncludeHeader() {
+        return includeHeader;
+    }
+
+    private void setIncludeHeader(boolean includeHeader) {
+        this.includeHeader = includeHeader;
+    }
 
     public List getListHeader() {
         return listHeader;
@@ -176,31 +210,38 @@ class AdmImportDB {
     }
 
     /**
-     * Método para recorrer y desglozar datos de un archivo CSV sin el total
+     * Método para recorrer y desglosar datos de un archivo CSV sin el total
      * para las columnas sumables
      * @param filaHeader    Número de la fila en que se encuentra el header del archivo
      * @param ca            Objeto con la configuración general del archivo
      * @param lstData       Listado de los campos para el tipo de archivo
      * @return  boolean     Resultado de la lectura y validación
      */
-    private boolean desglozarCSV_ST(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+    private boolean desglosarCSV_ST(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
         boolean sld = false;
         FileImport fImport = new FileImport();
         fImport.setFileProcess(this.getRutaFile());
         fImport.setFileBody(getNameFileCSV());
 
-        if (filaHeader!=null){
-            if (filaHeader.compareTo(Integer.valueOf(1))>0){
-                List lstHeader = getListCamposHeader();
-                fImport.putFileHeader(filaHeader,lstHeader);
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeader(lstHeader);
+            if (sld){
                 lstHeader = fImport.getListHeaders();
                 this.setListHeader(lstHeader);
             }
-            sld = fImport.getFileBodyCSV_ST(filaHeader,ca,lstData);
-        }else{
-            sld = fImport.getFileBodyCSV_ST(0,ca,lstData);
         }
-        setRutaFileCSV(fImport.getFileBody());
+        if (sld){
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyCSV_ST(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyCSV_ST(0,ca,lstData);
+            }
+            //Asignamos archivo de trabajo para carga
+            setRutaFileCSV(fImport.getFileBody());
+        }
         if (!sld){
             setStrError(fImport.getTextError());
         }
@@ -208,98 +249,40 @@ class AdmImportDB {
     }
 
     /**
-     * Método para recorrer y desglozar datos de un archivo CSV con el total
+     * Método para recorrer y desglosar datos de un archivo CSV con el total
      * para las columnas sumables
      * @param filaHeader    Número de la fila en que se encuentra el header del archivo
      * @param ca            Objeto con la configuración general del archivo
      * @param lstData       Listado de los campos para el tipo de archivo
      * @return  boolean     Resultado de la lectura y validación
      */
-    private boolean desglozarCSV_CT(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
-        boolean sld = false;
-        FileImport fImport = new FileImport();
-        fImport.setFileProcess(this.getRutaFile());
-        fImport.setFileBody(getNameFileCSV());
-        fImport.setFileTotales(getNameFileCSVTotales());
-
-        if (filaHeader!=null){
-            if (filaHeader.compareTo(Integer.valueOf(1))>0){
-                List lstHeader = getListCamposHeader();
-                fImport.putFileHeader(filaHeader,lstHeader);
-                lstHeader = fImport.getListHeaders();
-                this.setListHeader(lstHeader);
-            }
-            sld = fImport.getFileBodyCSV_CT(filaHeader,ca,lstData);
-        }else{
-            sld = fImport.getFileBodyCSV_CT(0,ca,lstData);
-        }
-        this.setRutaFileCSV(fImport.getFileBody());
-        this.setRutaFileCSVTotal(fImport.getFileTotales());
-        if (!sld){
-            setStrError(fImport.getTextError());
-        }
-        return sld;
-    }
-
-    /**
-     * Método para recorrer y desglozar datos de un archivo PLANO sin el total
-     * para las columnas sumables
-     * @param filaHeader    Número de la fila en que se encuentra el header del archivo
-     * @param ca            Objeto con la configuración general del archivo
-     * @param lstData       Listado de los campos para el tipo de archivo
-     * @return  boolean     Resultado de la lectura y validación
-     */
-    private boolean desglozarPLANO_ST(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
-        boolean sld = false;
-        FileImport fImport = new FileImport();
-        fImport.setFileProcess(this.getRutaFile());
-        fImport.setFileBody(getNameFileCSV());
-
-        if (filaHeader!=null){
-            if (filaHeader.compareTo(Integer.valueOf(1))>0){
-                List lstHeader = getListCamposHeader();
-                fImport.putFileHeader(filaHeader,lstHeader);
-                lstHeader = fImport.getListHeaders();
-                this.setListHeader(lstHeader);
-            }
-            sld = fImport.getFileBodyPLANO_ST(filaHeader,ca,lstData);
-        }else{
-            sld = fImport.getFileBodyPLANO_ST(0,ca,lstData);
-        }
-        setRutaFileCSV(fImport.getFileBody());
-        if (!sld){
-            setStrError(fImport.getTextError());
-        }
-        return sld;
-    }
-
-    /**
-     * Método para recorrer y desglozar datos de un archivo PLANO con el total
-     * para las columnas sumables
-     * @param filaHeader    Número de la fila en que se encuentra el header del archivo
-     * @param ca            Objeto con la configuración general del archivo
-     * @param lstData       Listado de los campos para el tipo de archivo
-     * @return  boolean     Resultado de la lectura y validación
-     */
-    private boolean desglozarPLANO_CT(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+    private boolean desglosarCSV_CT(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
         boolean sld = false;
         FileImport fImport = new FileImport();
         fImport.setFileProcess(this.getRutaFile());
         fImport.setFileBody(getNameFileCSV());
         fImport.setFileTotales(getNameFileCSVTotales());
 
-        if (filaHeader!=null){
-            if (filaHeader.compareTo(Integer.valueOf(1))>0){
-                List lstHeader = getListCamposHeader();
-                fImport.putFileHeader(filaHeader,lstHeader);
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeader(lstHeader);
+            if (sld){
                 lstHeader = fImport.getListHeaders();
                 this.setListHeader(lstHeader);
             }
-            sld = fImport.getFileBodyPLANO_CT(filaHeader,ca,lstData);
-        }else{
-            sld = fImport.getFileBodyPLANO_CT(0,ca,lstData);
         }
-        setRutaFileCSV(fImport.getFileBody());
+        if (sld){
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyCSV_CT(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyCSV_CT(0,ca,lstData);
+            }
+            //Asignamos archivo de trabajo para carga
+            this.setRutaFileCSV(fImport.getFileBody());
+            this.setRutaFileCSVTotal(fImport.getFileTotales());
+        }
         if (!sld){
             setStrError(fImport.getTextError());
         }
@@ -307,7 +290,86 @@ class AdmImportDB {
     }
 
     /**
-     * Método para recorrer y desglozar datos de un archivo Excel simple el cual
+     * Método para recorrer y desglosar datos de un archivo PLANO sin el total
+     * para las columnas sumables
+     * @param filaHeader    Número de la fila en que se encuentra el header del archivo
+     * @param ca            Objeto con la configuración general del archivo
+     * @param lstData       Listado de los campos para el tipo de archivo
+     * @return  boolean     Resultado de la lectura y validación
+     */
+    private boolean desglosarPLANO_ST(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+        boolean sld = false;
+        FileImport fImport = new FileImport();
+        fImport.setFileProcess(this.getRutaFile());
+        fImport.setFileBody(getNameFileCSV());
+
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeader(lstHeader);
+            if (sld){
+                lstHeader = fImport.getListHeaders();
+                this.setListHeader(lstHeader);
+            }
+        }
+        if (sld){
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyPLANO_ST(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyPLANO_ST(0,ca,lstData);
+            }
+            //Asignamos archivo de trabajo para carga
+            setRutaFileCSV(fImport.getFileBody());
+        }
+        if (!sld){
+            setStrError(fImport.getTextError());
+        }
+        return sld;
+    }
+
+    /**
+     * Método para recorrer y desglosar datos de un archivo PLANO con el total
+     * para las columnas sumables
+     * @param filaHeader    Número de la fila en que se encuentra el header del archivo
+     * @param ca            Objeto con la configuración general del archivo
+     * @param lstData       Listado de los campos para el tipo de archivo
+     * @return  boolean     Resultado de la lectura y validación
+     */
+    private boolean desglosarPLANO_CT(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+        boolean sld = false;
+        FileImport fImport = new FileImport();
+        fImport.setFileProcess(this.getRutaFile());
+        fImport.setFileBody(getNameFileCSV());
+        fImport.setFileTotales(getNameFileCSVTotales());
+
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeader(lstHeader);
+            if (sld){
+                lstHeader = fImport.getListHeaders();
+                this.setListHeader(lstHeader);
+            }
+        }
+        if (sld){
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyPLANO_CT(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyPLANO_CT(0,ca,lstData);
+            }
+            //Asignamos archivo de trabajo para carga
+            setRutaFileCSV(fImport.getFileBody());
+        }
+        if (!sld){
+            setStrError(fImport.getTextError());
+        }
+        return sld;
+    }
+
+    /**
+     * Método para recorrer y desglosar datos de un archivo Excel simple el cual
      * puede tener o no totales para validar
      * @param filaHeader    Número de la fila en que se encuentra el header del archivo
      * @param ca            Objeto con la configuración general del archivo
@@ -315,28 +377,77 @@ class AdmImportDB {
      * @return  boolean     Resultado de la lectura y validación
      * @throws ExceptionHandler
      */
-    private boolean desglozarXLSSimple(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+    private boolean desglosarXLSSimple(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
         boolean sld = true;
         FileImport fImport = new FileImport();
         fImport.setFileProcess(this.getRutaFile());
         fImport.setFileBody(getNameFileCSV());
 
-        if (filaHeader!=null){
-            if (filaHeader.compareTo(Integer.valueOf(1))>0){
-                List lstHeader = getListCamposHeader();
-                fImport.putFileHeader(filaHeader,lstHeader);
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeaderXLS(lstHeader);
+            if (sld){
                 lstHeader = fImport.getListHeaders();
                 this.setListHeader(lstHeader);
             }
-            sld = fImport.getFileBodyXLSSimple(filaHeader,ca,lstData);
-        }else{
-            sld = fImport.getFileBodyXLSSimple(0,ca,lstData);
         }
-        setRutaFileCSV(fImport.getFileBody());
+        if (sld){
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyXLSSimple(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyXLSSimple(0,ca,lstData);
+            }
+            //asignamos archivo de trabajo para carga
+            setRutaFileCSV(fImport.getFileBody());
+        }
         if (!sld){
             setStrError(fImport.getTextError());
         }
+        return sld;
+    }
 
+    /**
+     * Método para recorrer y desglosar datos de un archivo Excel simple el cual
+     * puede tener o no totales para validar
+     * @param filaHeader    Número de la fila en que se encuentra el header del archivo
+     * @param ca            Objeto con la configuración general del archivo
+     * @param lstData       Listado de los campos para el tipo de archivo
+     * @return  boolean     Resultado de la lectura y validación
+     * @throws ExceptionHandler
+     */
+    private boolean desglosarXLSSeparador(Integer filaHeader, CargaArchivo ca, List lstData) throws ExceptionHandler{
+        boolean sld = true;
+        FileImport fImport = new FileImport();
+        fImport.setFileProcess(this.getRutaFile());
+        fImport.setFileBody(getNameFileCSV());
+
+        //Trabajamos con datos que no estan en registros
+        List lstHeader = getListCamposHeader();
+        if ((lstHeader!=null) && (!lstHeader.isEmpty())) {
+            sld = fImport.putFileHeaderXLS(lstHeader);
+            if (sld){
+                lstHeader = fImport.getListHeaders();
+                this.setListHeader(lstHeader);
+            }
+        }
+        if (sld){
+            List lstSeparador = getListCamposSeparador();
+            fImport.setListSeparador(lstSeparador);
+            //Trabajamos con los registros
+            if (filaHeader!=null){
+                sld = fImport.getFileBodyXLSSeparador(filaHeader,ca,lstData);
+            }else{
+                sld = fImport.getFileBodyXLSSeparador(0,ca,lstData);
+            }
+            this.setIncludeHeader(fImport.isIncludeHeader());
+            //asignamos archivo de trabajo para carga
+            setRutaFileCSV(fImport.getFileBody());
+        }
+        if (!sld){
+            setStrError(fImport.getTextError());
+        }
         return sld;
     }
 
@@ -344,11 +455,11 @@ class AdmImportDB {
      * Se obtiene un listado con los siguientes elementos:
      * (-) Las secciones del archivo: ENCABEZADO, HEADERS, BODY, FOOTER.
      * (-) Los totales de cada campo sumable
-     * (-) Número de registros que debia poseer el archivo
+     * (-) Número de registros que debía poseer el archivo
      * @param listCampos    Listado con la configuración de campos del archivo
      * @return  boolean     Resultado de la operación (TRUE: exitoso, FALSE: con errores)
      */
-    private boolean desglozarArchivo(List listCampos) throws ExceptionHandler{
+    private boolean desglosarArchivo(List listCampos) throws ExceptionHandler{
         boolean sld = false;
         Integer filaHeader = null;
         Integer typeFile = null;
@@ -365,23 +476,23 @@ class AdmImportDB {
         if (typeFile!=null){
             switch (typeFile){
                 case 1://CSV_ST:
-                    sld = desglozarCSV_ST(filaHeader,ca,lstData);
+                    sld = desglosarCSV_ST(filaHeader,ca,lstData);
                     break;
                 case 2://CSV_CT:
-                    sld = desglozarCSV_CT(filaHeader,ca,lstData);
+                    sld = desglosarCSV_CT(filaHeader,ca,lstData);
                     this.setTotalCSV(true);
                     break;
                 case 3://PLANO_ST:
-                    sld = desglozarPLANO_ST(filaHeader,ca,lstData);
+                    sld = desglosarPLANO_ST(filaHeader,ca,lstData);
                     break;
                 case 4://PLANO_CT:
-                    sld = desglozarPLANO_CT(filaHeader,ca,lstData);
+                    sld = desglosarPLANO_CT(filaHeader,ca,lstData);
                     break;
                 case 5://Excel Simple
-                    sld = desglozarXLSSimple(filaHeader,ca,lstData);
+                    sld = desglosarXLSSimple(filaHeader,ca,lstData);
                     break;
                 case 6://Excel con separador
-                    //sld = desglozarXLSSimple(filaHeader,ca,lstData);
+                    sld = desglosarXLSSeparador(filaHeader,ca,lstData);
                     break;
                 default:
                    break;
@@ -389,8 +500,6 @@ class AdmImportDB {
         }
         return sld;
     }
-
-
 
     /**
      * Método que obtiene el objeto HashMap con los totales de los campos que
@@ -414,22 +523,52 @@ class AdmImportDB {
     }
 
     /**
+     * Método que incluye los campos header en el hashMap de campo, ordenados
+     * por nombre
+     * @param hsNombre      Objeto Hashmap con los campos ordenados por nombre
+     * @return  HashMap     Objeto con los campos agregados
+     * @throws ExceptionHandler
+     */
+    private HashMap includeHeader(HashMap hsNombre) throws ExceptionHandler{
+        HashMap hsSld = new HashMap();
+        
+        hsSld = hsNombre;
+        List lstHeader = getListCamposSeparador();
+
+        if (lstHeader!=null){
+            List lstCamp = (List) lstHeader.get(0);
+            Iterator it = lstCamp.iterator();
+            while (it.hasNext()){
+                CargaArchivo ca = (CargaArchivo) it.next();
+                hsSld.put(ca.getNombreCampo(), ca);
+            }
+        }
+        return hsSld;
+    }
+
+    /**
      * Método que procesa la lectura, validación y conversión de un archivo
      * a un conjunto de Insert en la tabla configurada, según el tipo de carga
      */
-    public void procesarArchivo(){
+    public boolean procesarArchivo(){
         Validation val = new Validation();
         CsvReader reader = null;
         CsvReader readerTot = null;
+        boolean sld = true;
         try{
             List lst = getListCampos();
             HashMap hsNombre = (HashMap) lst.get(0);
             HashMap hsAlias = (HashMap) lst.get(1);
             HashMap hsTotales = new HashMap();
+            DataTable dt = getDataTable();
+            this.setTablaProceso(dt);
 
-            if (desglozarArchivo(lst)){
+            if (desglosarArchivo(lst)){
                 List lstColum = new ArrayList();
                 if (!lst.isEmpty()){
+                    if (this.isIncludeHeader()){
+                        hsNombre = includeHeader(hsNombre);
+                    }
                     reader = new CsvReader(getRutaFileCSV());
                     reader.setDelimiter(',');
                     if (this.isTotalCSV()){
@@ -450,6 +589,9 @@ class AdmImportDB {
                     if (!lstColum.isEmpty()){
                         CargaArchivo car = (CargaArchivo) hsNombre.get(lstColum.get(0));
                         tabla = car.getTabla();
+                        if (this.getTablaProceso()!=null){
+                            tabla = this.getTablaProceso().getDominioTable() + "." + tabla;
+                        }
                         String dataError = "";
                         String cuenta = "";
                         String cuentaAnterior = "";
@@ -563,21 +705,32 @@ class AdmImportDB {
                         }
                         //se presentaron errores en algun instante de la operacion
                         if (!dataError.equals("")){
-                            this.setStrError(dataError);
+                            sld = false;
+                            this.setStrError("\nMessage:Existen errores en la operación."
+                                    + "Error:" + dataError
+                                    + this.getStrError());
                             this.setExistError(true);
                         }
                     }else{
-                        this.setStrError("No existen campos configurados que coincidan con el archivo");
+                        sld = false;
+                        this.setStrError("\nMessage:No existen campos configurados que coincidan con el archivo."
+                            + "Error:"
+                            + this.getStrError());
                         this.setExistError(true);
                     }
                 }else{
-                    this.setStrError("No existe configuración para el tipo de archivo");
+                    sld = false;
+                    this.setStrError("\nMessage:No existe configuración para el tipo de archivo."
+                            + "Error:"
+                            + this.getStrError());
                     this.setExistError(true);
                 }
             }else{
+                sld = false;
+                this.setStrError("\nMessage:Problemas al generar archivo de carga."
+                            + "Error:"
+                            + this.getStrError());
                 this.setExistError(true);
-                String stError = this.getStrError();
-                this.setStrError("Problemas al generar archivo de carga.\n" + ((stError==null)?"":stError) );
             }
         }catch (ExceptionHandler eh){
             eh.writeToFile();
@@ -591,12 +744,13 @@ class AdmImportDB {
                 readerTot.close();
             }
         }
+        return sld;
     }
 
     /**
      * Método que determina si un dato debe ser considerado en la sumatoria
      * para validar el monto de los datos sumables y el monto total declarado
-     * en el archivo, validandolo medisnte el calculo del pivote correspondiente
+     * en el archivo, validándolo mediante el cálculo del pivote correspondiente
      * @param pivote            Texto con el pivote a analizar
      * @param pivoteAnterior    Texto con el pivote utilizado anteriormente
      * @return  boolean         Resultado de la operación
@@ -604,7 +758,7 @@ class AdmImportDB {
     private boolean isPivoteAcumulable(String pivote, String pivoteAnterior){
         boolean sld = false;
         FileImport fImport = new FileImport();
-        sld = fImport.isPivoteAcumulable(pivote, pivoteAnterior, 1);        
+        sld = fImport.isPivoteAcumulable(pivote, pivoteAnterior, 1);
         return sld;
     }
 
@@ -656,7 +810,7 @@ class AdmImportDB {
             seguir = false;
         }
         if (seguir){
-            query = "insert into " +  tabla + " " 
+            query = "insert into " +  tabla + " "
                     + strListadoCampos + ",id_EstadoCarga"
                     + ") values "
                     + strListadoDatos + "," + this.getIdEstadoCarga()
@@ -704,11 +858,35 @@ class AdmImportDB {
                        .append("</numero>\n");
                 //Errores sin una estructura
                 }else{
-                    xml.append("<numero id=\"").append(i).append("\">\n")
-                       .append("\t<descripcion>")
-                       .append(data)
-                       .append("</descripcion>\n")
-                       .append("</numero>\n");
+                    if ((data.contains("Message:")) &&
+                        (data.contains("Error:"))){
+                        int posMessage = data.indexOf("Message:");
+                        int posError = data.indexOf("Error:");
+                        int posQuery = data.indexOf("Query:");
+                        xml.append("<numero id=\"").append(i).append("\">\n")
+                           .append("<general>")
+                           .append(data.substring(posMessage+8,posError))
+                           .append("</general>");
+                           if (posQuery>0){
+                                xml.append("<descripcion>")
+                                   .append(data.substring(posError+6,posQuery))
+                                   .append("</descripcion>");
+                                xml.append("<query><![CDATA[\n")
+                                   .append(data.substring(posQuery+6))
+                                   .append("]]>\n</query>\n");
+                           }else{
+                                xml.append("<descripcion>")
+                                   .append(data.substring(posError+6))
+                                   .append("</descripcion>");
+                           }
+                        xml.append("</numero>\n");
+                    }else{
+                        xml.append("<numero id=\"").append(i).append("\">\n")
+                           .append("\t<descripcion>")
+                           .append(data)
+                           .append("</descripcion>\n")
+                           .append("</numero>\n");
+                    }
                 }
             }
         }
@@ -771,7 +949,7 @@ class AdmImportDB {
         String query = "select id_ArchivoCarga, archivoCarga , id_Tabla , id_TipoArchivoCarga "
                 + " from UPL_ArchivoCarga";
 
-        ConImportDB con = new ConImportDB();
+        ConImportDB con = getConection();
         con.setStrQuery(query);
 
         lst = con.getListArchivo();
@@ -781,7 +959,7 @@ class AdmImportDB {
 
     /**
      * Método que inserta el estado VALIDANDO en la base de datos, del archivo
-     * de carga que se esta cargando
+     * de carga que se está cargando
      * @return  boolean resultado de la operación
      */
     public boolean insertEstadoValidando(){
@@ -803,14 +981,22 @@ class AdmImportDB {
                     + ",getdate()"
                     + ")";
 
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             con.setStrQuery(query);
             Integer idResultado = con.executeInsert();
             this.setIdEstadoCarga(idResultado);
         }catch (Exception ex){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Validando de la carga."
+                            + "Error:" + ex.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }catch (ExceptionHandler e){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Validando de la carga."
+                            + "Error:" + e.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }
         return sld;
     }
@@ -831,7 +1017,7 @@ class AdmImportDB {
                     + " where id_EstadoCarga = "
                     + this.getIdEstadoCarga();
 
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             con.setStrQuery(query);
             Integer idResultado = con.executeUpdate();
             if (idResultado<0){
@@ -839,8 +1025,16 @@ class AdmImportDB {
             }
         }catch (Exception ex){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Cagando de la carga."
+                            + "Error:" + ex.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }catch (ExceptionHandler e){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Cargando de la carga."
+                            + "Error:" + e.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }
         return sld;
     }
@@ -861,7 +1055,7 @@ class AdmImportDB {
                     + " where id_EstadoCarga = "
                     + this.getIdEstadoCarga();
 
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             con.setStrQuery(query);
             Integer idResultado = con.executeUpdate();
             if (idResultado<0){
@@ -869,8 +1063,16 @@ class AdmImportDB {
             }
         }catch (Exception ex){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Finalizado de la carga."
+                            + "Error:" + ex.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }catch (ExceptionHandler e){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado Finalizado de la carga."
+                            + "Error:" + e.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }
         return sld;
     }
@@ -894,7 +1096,7 @@ class AdmImportDB {
                     + " where id_EstadoCarga = "
                     + this.getIdEstadoCarga();
 
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             con.setStrQuery(query);
             Integer idResultado = con.executeUpdate();
             if (idResultado<0){
@@ -902,8 +1104,16 @@ class AdmImportDB {
             }
         }catch (Exception ex){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado de Error de la carga."
+                            + "Error:" + ex.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }catch (ExceptionHandler e){
             sld = false;
+            this.setStrError("\nMessage:Error al actualizar el estado de Error de la carga."
+                            + "Error:" + e.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }
         return sld;
     }
@@ -927,7 +1137,7 @@ class AdmImportDB {
                     + " where id_EstadoCarga = "
                     + this.getIdEstadoCarga();
 
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             con.setStrQuery(query);
             Integer idResultado = con.executeUpdate();
             if (idResultado<0){
@@ -935,6 +1145,10 @@ class AdmImportDB {
             }
         }catch (Exception ex){
             sld = false;
+            this.setStrError("\nMessage:Error al agregar la data al Store Procedure."
+                            + "Error:" + ex.getMessage()
+                            + this.getStrError());
+            this.setExistError(true);
         }catch (ExceptionHandler e){
             sld = false;
         }
@@ -942,7 +1156,7 @@ class AdmImportDB {
     }
 
     /**
-     * Método que obtiene el listado de campos a amenjar en el archivo de carga
+     * Método que obtiene el listado de campos a manejar en el archivo de carga
      * @return  List    Listado con los campos, cada uno es un objeto CargaArchivo
      * @throws ExceptionHandler
      */
@@ -950,11 +1164,12 @@ class AdmImportDB {
         List lst = new ArrayList();
         String query = "select ct.id_CampoTabla , ct.nombreCampo, ct.id_TipoCampo "
                 + " , tc.tipoCampo , ct.aliasCampo , ct.obligatorio "
-                + " , tb.nombreTabla , ct.formato , ct.sumable , ct.posicionInicio "
+                + " , tb.nombreTabla , ct.formato , ct.sumable "
+                + " , ct.posicionInicio, ct.posicionHeader "
                 + " , ct.largo , ct.posicionInicioTotal , ct.largoTotal "
                 + " , ac.nroFilaHeader, ac.tagTotales, ac.tagNroRegistros "
                 + " , ac.separador , ct.pivote , ac.id_TipoArchivoCarga "
-                + " , ac.posicionSeparador "
+                + " , ac.posicionSeparador, ac.ignoreIncomplete "
                 + " from UPL_CampoTabla ct , UPL_TipoCampo tc "
                 + ", UPL_ArchivoCarga ac, UPL_Tabla tb "
                 + " where ac.id_ArchivoCarga = " + this.getIdArchivoCarga()
@@ -963,36 +1178,62 @@ class AdmImportDB {
                 + " and ac.id_Tabla = tb.id_Tabla "
                 + " order by ct.orden asc ";
 
-        ConImportDB con = new ConImportDB();
+        ConImportDB con = getConection();
         con.setStrQuery(query);
         lst = con.getCampos();
         return lst;
     }
 
     /**
-     * Método que obtiene los campos Header que estan asociados a la
-     * configuración de la carga de un archivo
+     * Método que obtiene los campos Header que están asociados a la
+     * configuración de la carga de un archivo. Se excluyen aquellos que son
+     * usados como parte del separador de registros
      * @return  List    Listado con los campos, cada uno es un objeto CargaArchivo
      * @throws ExceptionHandler
      */
     private List getListCamposHeader() throws ExceptionHandler{
-        List lst = new ArrayList();
+        List sld = new ArrayList();
         String query = "select ch.id_CampoHeader, ch.nombreCampo"
-                + ", ch.id_TipoCampo, ch.fila ,ch.tagCampoHeader "
+                + ", ch.id_TipoCampo, ch.fila, ch.columna, ch.tagCampoHeader "
                 + ", ch.posicionInicio, ch.largo, ch.formato, tc.tipoCampo "
                 + " from UPL_CampoHeader ch , UPL_TipoCampo tc "
                 + " where ch.id_ArchivoCarga = " + this.getIdArchivoCarga()
-                + " and ch.id_TipoCampo = tc.id_TipoCampo ";
+                + " and ch.id_TipoCampo = tc.id_TipoCampo "
+                + " and ch.useInSeparador = 0 ";
 
-        ConImportDB con = new ConImportDB();
+        ConImportDB con = getConection();
         con.setStrQuery(query);
-        lst = con.getCamposHeader();
+        sld = con.getCamposHeader();
 
-        return lst;
+        return sld;
     }
 
     /**
-     * Método que efectua el procesamiento de las queries obtenidas tras la
+     * Método que obtiene los campos Separadores y que serán usados para ser
+     * asociados al grupo de registros que corresponda en el archivo.
+     * @return  List    Listado con los campos Separadores, cada uno es un objeto CargaArchivo
+     * @throws ExceptionHandler
+     */
+    private List getListCamposSeparador() throws ExceptionHandler{
+        List sld = new ArrayList();
+        String query = "select ch.id_CampoHeader, ch.nombreCampo"
+                + ", ch.id_TipoCampo, ch.fila, ch.columna, ch.tagCampoHeader "
+                + ", ch.posicionInicio, ch.largo, ch.formato, tc.tipoCampo "
+                + " from UPL_CampoHeader ch , UPL_TipoCampo tc "
+                + " where ch.id_ArchivoCarga = " + this.getIdArchivoCarga()
+                + " and ch.id_TipoCampo = tc.id_TipoCampo "
+                + " and ch.useInSeparador = 1 "
+                + " order by ch.posicionInicio ";
+
+        ConImportDB con = getConection();
+        con.setStrQuery(query);
+        sld = con.getCamposHeader();
+
+        return sld;
+    }
+
+    /**
+     * Método que efectúa el procesamiento de las queries obtenidas tras la
      * lectura y validación del archivo de carga
      * @return  boolean     Resultado con la operación
      */
@@ -1002,7 +1243,7 @@ class AdmImportDB {
         String[] strDataQuery = strData.split("\n");
 
         if (strDataQuery!=null){
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             for (int i=0;i<strDataQuery.length;i++){
                 String query = strDataQuery[i];
                 if (query!=null){
@@ -1012,9 +1253,9 @@ class AdmImportDB {
                         Integer idResultado = con.executeInsert();
                         if (idResultado<=0){
                             sld = false;
-                            String strErr = this.getStrError();
-                            this.setStrError("\nError al insertar registro."
-                                    + "\nINSERT:" + query + strErr);
+                            this.setStrError("\nMessage:Error al insertar registro."
+                                            + "Error:"
+                                            + "Query:" + query + this.getStrError());
                             this.setExistError(true);
                         }
                     }
@@ -1031,7 +1272,7 @@ class AdmImportDB {
     }
 
     /**
-     * Método que ingresa a la base de datos los header de un proceso de 
+     * Método que ingresa a la base de datos los header de un proceso de
      * carga de datos
      * @param listaHeader   Listado con los header a ingresar
      * @return
@@ -1039,7 +1280,7 @@ class AdmImportDB {
     private boolean processHeader(List listaHeader){
         boolean sld = true;
         if (listaHeader!=null){
-            ConImportDB con = new ConImportDB();
+            ConImportDB con = getConection();
             Iterator it = listaHeader.iterator();
             while ((it.hasNext()) && sld) {
                 List lst = (List) it.next();
@@ -1053,10 +1294,9 @@ class AdmImportDB {
                 try {
                     con.executeInsert();
                 } catch (ExceptionHandler ex) {
-                    String strErr = this.getStrError();
-                    this.setStrError("\nError al insertar registro."
+                    this.setStrError("\nMessage:Error al insertar registro."
                                     + "Error:" + ex.getTypeError()
-                                    + "\nINSERT:" + query + strErr);
+                                    + "Query:" + query + this.getStrError());
                     this.setExistError(true);
                     sld = false;
                 }
@@ -1076,9 +1316,9 @@ class AdmImportDB {
 
         String strProcedure = this.getStoreProcedure();
         List lstData = this.getDataStoreProcedure();
-        List lstHeader = this.getListCamposHeader();
 
-        ConImportDB con = new ConImportDB();
+        ConImportDB con = getConection();
+
         con.executeProcedure(strProcedure, lstData);
 
         return sld;
@@ -1104,7 +1344,48 @@ class AdmImportDB {
             }
         }catch (Exception e){
             sld = false;
+            this.setStrError("\nMessage:Error al agregar la data al Store Procedure. "
+                            + "Error:"+e.getMessage()+"\n"
+                            + this.getStrError());
+            this.setExistError(true);
         }
         return sld;
     }
+
+    /**
+     * Método para la obtención de los datos adicionales de la tabla de carga
+     * @return  DataTable   Objeto con los datos adicionales
+     * @throws ExceptionHandler
+     */
+    private DataTable getDataTable() throws ExceptionHandler{
+        DataTable sld = null;
+        String query = "select ac.id_ArchivoCarga, ac.archivoCarga, ta.id_Tabla "
+                + ", ta.nombreTabla, ta.dominio , ta.base, ta.usuario , ta.password "
+                + " from UPL_ArchivoCarga ac, UPL_Tabla ta"
+                + " where ac.id_Tabla = ta.id_Tabla"
+                + " and ac.id_ArchivoCarga = " + this.getIdArchivoCarga();
+
+        ConImportDB con = getConection();
+        con.setStrQuery(query);
+        sld = con.getTable();
+
+        return sld;
+    }
+
+
+    /**
+     * Obtiene un objeto de conexión a la base de datos. En caso que existan
+     * datos adicionales de la tabla de proceso, se incluyen esos datos.
+     * @return  ConImportDB     Objeto de conexión
+     */
+    private ConImportDB getConection(){
+        ConImportDB con = new ConImportDB();
+
+        if (this.getTablaProceso()!=null){
+            con.setDataTable(this.getTablaProceso());
+        }
+
+        return con;
+    }
+
 }

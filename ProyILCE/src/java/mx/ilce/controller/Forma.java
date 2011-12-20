@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.controller;
 
 import java.util.ArrayList;
@@ -216,7 +232,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene el texto adicional que se incluira en la query
+     * Obtiene el texto adicional que se incluirá en la query
      * @return  String  Texto con el WHERE para una Query
      */
     public String getStrWhereQuery() {
@@ -224,7 +240,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna el texto adicional que se incluira en la query
+     * Asigna el texto adicional que se incluirá en la query
      * @param strWhereQuery     Texto con el WHERE para una query
      */
     public void setStrWhereQuery(String strWhereQuery) {
@@ -264,7 +280,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Obtiene el tipo de acción que se esta efectuando con la Forma
+     * Obtiene el tipo de acción que se está efectuando con la Forma
      * @return  String  Texto con la acción a efectuar
      */
     public String getTipoAccion() {
@@ -272,7 +288,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Asigna el tipo de acción que se esta efectuando con la Forma
+     * Asigna el tipo de acción que se está efectuando con la Forma
      * @param tipoAccion    Texto con la acción a efectuar
      */
     public void setTipoAccion(String tipoAccion) {
@@ -398,9 +414,9 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Método que agrega una forma (con formato List) al Hash de formas, asignandole como
-     * Key, el ID de la Forma. Si existia una forma con la misma Key, esta es
-     * reemplazada
+     * Método que agrega una forma (con formato List) al Hash de formas, 
+     * asignándole como Key, el ID de la Forma. Si existía una forma con
+     * la misma Key, esta es reemplazada
      * @param key   ID de la Forma
      * @param obj   Listado de la forma a agregar
      */
@@ -602,7 +618,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Método que ngresa una entidad del tipo Forma, para que quede disponible
+     * Método que ingresa una entidad del tipo Forma, para que quede disponible
      * para la aplicación.
      * Se le entrega un dato Object, el cual debe ser casteado al tipo
      * Forma para su procesamiento.
@@ -1171,7 +1187,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Método para ingresar una busqueda sencilla desde un formulario
+     * Método para ingresar una búsqueda sencilla desde un formulario
      * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
@@ -1261,7 +1277,7 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Método para ingresar una busqueda avanzada desde un formulario
+     * Método para ingresar una búsqueda avanzada desde un formulario
      * @return  Forma   Objeto Forma
      * @throws ExceptionHandler
      */
@@ -1402,9 +1418,9 @@ public class Forma extends Entidad{
     /**
      * Completa el listado de formas según el listado de aplicaciones que se le
      * entrega. Cada aplicación posee una forma y por cada una de ellas, se trae
-     * su configuración, introduciendolo en el listado, asociandole el ID de la
+     * su configuración, introduciéndolo en el listado, asociándole el ID de la
      * forma que le corresponde a la configuración. Cada configuración (Forma)
-     * esta compuesto por un listado de CampoForma.
+     * está compuesta por un listado de CampoForma.
      * @param lstAplications    Listado con las aplicaciones del User
      * @throws ExceptionHandler
      */
@@ -1511,8 +1527,8 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene un arrayList con el formato de una forma. Esta se utiliza cuando
-     * no esta configurada la forma, pero se tiene la query con la consulta para
-     * completarla. Obviamente no estan disponibles todos los datos, pero si los
+     * no está configurada la forma, pero se tiene la query con la consulta para
+     * completarla. Obviamente no están disponibles todos los datos, pero si los
      * básicos para construir el XML.
      * @param arrayData     Arreglo de datos con los datos de la forma que se
      * quiere obtener

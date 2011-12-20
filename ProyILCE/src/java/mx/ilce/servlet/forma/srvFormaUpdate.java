@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -27,7 +43,9 @@ import mx.ilce.util.Validation;
 /**
  * Servlet implementado para actualizar los datos obtenidos de un formulario en
  * la Base de datos, asociado a la forma que le corresponda, según el perfil
- * del usuario conectado
+ * del usuario conectado. Quedo desactualizado dado que no se ocupo, pues se
+ * solicitó, por parte de los desarrolladores de la Capa Vista, sobrecargar el
+ * Servlet srvFormaInsert para que efectúe las operaciones de Insert y Update.
  * @author ccatrilef
  */
 public class srvFormaUpdate extends HttpServlet {
