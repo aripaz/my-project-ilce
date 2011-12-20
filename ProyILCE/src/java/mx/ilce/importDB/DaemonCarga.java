@@ -18,6 +18,7 @@ package mx.ilce.importDB;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExceptionHandler;
 
 /** 
@@ -54,45 +55,43 @@ class DaemonCarga extends Thread {
             admImp.procesarArchivo();
             admImp.updateEstadoCargando();
 
-            String sldData = "";
-            String sldError = "";
-            StringBuffer xmlForma = new StringBuffer("");
-            if (admImp.isExistError()){
-                if ("XML".equals(this.getDisplay())){
-                    sldError =  admImp.getXMLError();
-                    sldData = admImp.getStrQuery();
-                    xmlForma = new StringBuffer(sldError);
-                }else{
-                    sldError = admImp.getStrError();
-                    sldData = admImp.getStrQuery();
-                    xmlForma = new StringBuffer(sldError);
-                }
-                xmlForma = new StringBuffer("NOT OK");
-            }else{
-                if ("XML".equals(this.getDisplay())){
-                    sldData = admImp.getStrQuery();
-                    xmlForma = new StringBuffer(sldData);
+                String sldData = "";
+                String sldError = "";
+                StringBuffer xmlForma = new StringBuffer("");
+                if (admImp.isExistError()){
+                    if ((this.getDisplay()==null) || ("Normal".equals(this.getDisplay()))){
+                        sldError = admImp.getStrError();
+                        sldData = admImp.getStrQuery();
+                        xmlForma = new StringBuffer(sldError);
+                    }else{
+                        sldError =  admImp.getXMLError();
+                        sldData = admImp.getStrQuery();
+                        xmlForma = new StringBuffer(sldError);
+                    }
                 }else{
                     sldData = admImp.getStrQuery();
                     xmlForma = new StringBuffer(sldData);
+                    //ejecución de las queries
+                    boolean sld = admImp.processQuery();
+
+                    if (!sld){
+                        xmlForma.append(admImp.getStrError());
+                        admImp.setStoreProcedure(AdmImportDB.processERROR);
+                    }else{
+                        admImp.setStoreProcedure(AdmImportDB.processCARGA);
+                    }
+                    AdminXML admXML = new AdminXML();
+                    admImp.addToDataStoreProcedure(admImp.getIdEstadoCarga());
+                    if (admImp.processStoreProcedure()){
+                        admImp.updateEstadoFinalizado();
+                        xmlForma = new StringBuffer(admXML.salidaXMLResponse("Proceso OK"));
+                    }else{
+                        admImp.updateEstadoErrorCarga();
+                        xmlForma = new StringBuffer(admImp.getXMLError());
+                    }
                 }
-                //ejecución de las queries
-                boolean sld = admImp.processQuery();
-
-                if (!sld){
-                    xmlForma.append(admImp.getStrError());
-                    admImp.setStoreProcedure(AdmImportDB.processERROR);
-                }else{
-                    admImp.setStoreProcedure(AdmImportDB.processCARGA);
-                }
-
-                admImp.addToDataStoreProcedure(admImp.getIdEstadoCarga());
-                admImp.processStoreProcedure();
-
-                admImp.updateEstadoFinalizado();
-                xmlForma = new StringBuffer("OK");
             }
-        } catch (ExceptionHandler ex) {
+        catch (ExceptionHandler ex) {
             Logger.getLogger(DaemonCarga.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

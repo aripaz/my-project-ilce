@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mx.ilce.component.AdminFile;
 import mx.ilce.component.AdminForm;
+import mx.ilce.component.AdminXML;
 import mx.ilce.handler.ExceptionHandler;
 import mx.ilce.util.Validation;
 
@@ -96,24 +97,18 @@ public class srvImportDB extends HttpServlet {
                 String sldError = "";
                 StringBuffer xmlForma = new StringBuffer("");
                 if (admImp.isExistError()){
-                    if ("XML".equals(strDisplay)){
-                        sldError =  admImp.getXMLError();
-                        sldData = admImp.getStrQuery();
-                        xmlForma = new StringBuffer(sldError);
-                    }else{
+                    if ((strDisplay==null) || ("Normal".equals(strDisplay))){
                         sldError = admImp.getStrError();
                         sldData = admImp.getStrQuery();
                         xmlForma = new StringBuffer(sldError);
-                    }
-                    xmlForma = new StringBuffer("NOT OK");
-                }else{
-                    if ("XML".equals(strDisplay)){
-                        sldData = admImp.getStrQuery();
-                        xmlForma = new StringBuffer(sldData);
                     }else{
+                        sldError =  admImp.getXMLError();
                         sldData = admImp.getStrQuery();
-                        xmlForma = new StringBuffer(sldData);
+                        xmlForma = new StringBuffer(sldError);
                     }
+                }else{
+                    sldData = admImp.getStrQuery();
+                    xmlForma = new StringBuffer(sldData);
                     //ejecución de las queries
                     boolean sld = admImp.processQuery();
 
@@ -123,18 +118,22 @@ public class srvImportDB extends HttpServlet {
                     }else{
                         admImp.setStoreProcedure(AdmImportDB.processCARGA);
                     }
-
+                    AdminXML admXML = new AdminXML();
                     admImp.addToDataStoreProcedure(admImp.getIdEstadoCarga());
-                    admImp.processStoreProcedure();
-
-                    admImp.updateEstadoFinalizado();
-                    xmlForma = new StringBuffer("OK");
+                    if (admImp.processStoreProcedure()){
+                        admImp.updateEstadoFinalizado();
+                        xmlForma = new StringBuffer(admXML.salidaXMLResponse("Proceso OK"));
+                    }else{
+                        admImp.updateEstadoErrorCarga();
+                        xmlForma = new StringBuffer(admImp.getXMLError());
+                    }
                 }
                 request.getSession().setAttribute("xmlForma", xmlForma);
-                if ("XML".equals(strDisplay)){
-                    request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
-                }else{
+
+                if ((strDisplay==null) || ("Normal".equals(strDisplay))){
                     request.getRequestDispatcher("/jspPruebaCarga.jsp").forward(request, response);
+                }else{
+                    request.getRequestDispatcher("/resource/jsp/xmlForma.jsp").forward(request, response);
                 }
             }else{
                 AdmImportDB admImp = new AdmImportDB();
