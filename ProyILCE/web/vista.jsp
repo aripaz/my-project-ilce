@@ -22,7 +22,7 @@
         <script type="text/javascript" src="jQuery/js/jquery.jstree.js"></script>
 
         <!-- splitter -->
-        <script type="text/javascript" src="jQuery/js/splitter.js" type="text/javascript"</script>
+        <script type="text/javascript" src="jQuery/js/splitter.js" ></script>
 
         <!-- Cookie for splitter -->
         <script type="text/javascript"  src="jQuery/js/jquery.cookie.js" ></script>
@@ -42,7 +42,7 @@
 
         <!-- Tooltip -->
         <script src="jQuery/js/jquery.tooltip.min.js" type="text/javascript"></script>
-
+        
         <!-- form plugin para considerar uploads  -->
         <script type="text/javascript" src="jQuery/js/jquery.form.js"></script>
 
