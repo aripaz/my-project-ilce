@@ -79,7 +79,7 @@
                 });
                 
                 //Crea snowfall
-                $("#avatar").click(function() {
+                /*$("#avatar").click(function() {
                     if ($(this).attr("snow")=="0") {
                          $("#divwait")
                         .html("<br /><h1>!!El equipo de desarrollo les desea felices fiestas!!</h1><p style='text-align: center'><img src='img/feliz_navidad.jpg' /</p>")
@@ -97,7 +97,7 @@
                         $(document).snowfall('clear'); 
                         $(this).attr("snow","0");
                     }
-                });
+                });*/
                 
                 //Inicializa el escritorio
                 $("#tabInicio").desktop();
