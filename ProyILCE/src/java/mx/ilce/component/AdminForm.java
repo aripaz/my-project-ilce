@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.component;
 
 import com.oreilly.servlet.multipart.FilePart;
@@ -37,11 +53,11 @@ public class AdminForm {
      * ArrayList: con los nombres de los campos del formulario (arrayFORM) y
      * uno con los nombres de los campos de archivo (arrayFILE). Para poder
      * recuperar los Archivos se requiere que el contentType del Form sea
-     * "multipart/form-data", sino es de este tipo, no se envia el Hash de
+     * "multipart/form-data", sino es de este tipo, no se envía el Hash de
      * archivos y el campo correspondiente al archivo se incluye dentro del
      * Hash de FORM. La estructura de cada hash contiene el nombre del campo
      * como clave y el dato obtenido del formulario, ambos en formato String.
-     * Cuando se envia el contentType correcto y existe el archivo, se deja
+     * Cuando se envía el contentType correcto y existe el archivo, se deja
      * una copia del mismo, con un nombre nuevo en el servidor, asociado al
      * campo archivo, va el nuevo nombre y su ruta con que quedo en el servidor.
      * @param request   Objeto de la Session que contiene los datos del formulario
@@ -75,8 +91,8 @@ public class AdminForm {
      * Método que entrega un Hash con el contenido de un formulario, en el Hash de
      * datos (FORM) y un arreglo con los nombres de los campos de datos del
      * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
-     * como otro dato más, no generandose el hash con los datos de archivo ni
-     * realizandose la copia en el servidor
+     * como otro dato más, no generándose el hash con los datos de archivo ni
+     * realizándose la copia en el servidor
      * @param request   Objeto de la Session que contiene los datos del formulario
      * @return  HashMap     Resultado de los datos leidos del Formulario
      * @throws ExceptionHandler
@@ -213,8 +229,8 @@ public class AdminForm {
      * Método que entrega un Hash con el contenido de un formulario, en el Hash de
      * datos (FORM) y un arreglo con los nombres de los campos de datos del
      * formulario (arrayFORM). Los datos asociados a archivos solo se entregan
-     * como otro dato más, no generandose el hash con los datos de archivo ni
-     * realizandose la copia en el servidor. Se usa para formularios del tipo
+     * como otro dato más, no generándose el hash con los datos de archivo ni
+     * realizándose la copia en el servidor. Se usa para formularios del tipo
      * application/x-www-form-urlencoded
      * @param request
      * @return HashMap Resultado de los datos leidos del formulario
@@ -336,7 +352,7 @@ public class AdminForm {
     }
 
     /**
-     * Método con los ContentType aceptados y que deben rechazarce
+     * Método con los ContentType aceptados y que deben rechazarse
      * @return  HashMap     HashMap con contentType
      */
     private HashMap getContentTypeAcepted(){
@@ -595,7 +611,7 @@ public class AdminForm {
 
     /**
      * Método que lee el archivo variables.properties, para obtener las variables
-     * que serviran para la evaluación de queries
+     * que servirán para la evaluación de queries
      * @return  Properties      Objeto con las variables leidas
      * @throws ExceptionHandler
      */
@@ -651,7 +667,7 @@ public class AdminForm {
 
     /**
      * Método que obtiene un arreglo, construido a partir del archivo variables.properties, el cual
-     * contiene los valores que serviran de referencia para buscar en el formulario
+     * contiene los valores que servirán de referencia para buscar en el formulario
      * @param hsForm    Hash que contiene los datos leidos desde el formulario
      * @return  String[][]  Arreglo con los valores
      * @throws ExceptionHandler
@@ -756,7 +772,7 @@ public class AdminForm {
 
     /**
      * Método encargado de limpiar las variables que no hayan sido encontradas
-     * en el formulario y/o en la clases de referencia, dejandolas con un valor
+     * en el formulario y/o en la clases de referencia, dejándolas con un valor
      * null, para que no sean consideradas en el análisis de las queries.
      * @param arrVariable   Arreglo que contiene las variables que deben ser 
      * consideradas en las evaluaciones de las queries

@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.importDB;
 
 import java.sql.CallableStatement;
@@ -23,6 +39,17 @@ import mx.ilce.handler.LogHandler;
 class ConImportDB {
     private Connection conn;
     private String strQuery;
+    private DataTable dataTable;
+
+    public DataTable getDataTable() {
+        return dataTable;
+    }
+
+    public void setDataTable(DataTable dataTable) {
+        this.dataTable = dataTable;
+    }
+
+
 
     public String getStrQuery() {
         return strQuery;
@@ -43,11 +70,17 @@ class ConImportDB {
             Properties prop = AdminFile.leerConfig();
 
             String server = AdminFile.getKey(prop,"SERVER");
-            String base = AdminFile.getKey(prop,"BASE");
-            String port = AdminFile.getKey(prop,"PORT");
-            String user = AdminFile.getKey(prop,"USR");
+            String base = base = AdminFile.getKey(prop,"BASE");
+            String user = user = AdminFile.getKey(prop,"USR");
             String psw = AdminFile.getKey(prop,"PSW");
 
+            if (this.getDataTable()!=null){
+                base = this.getDataTable().getBaseTable();
+                user = this.getDataTable().getUserTable();
+                psw = this.getDataTable().getPassTable();
+            }
+            
+            String port = AdminFile.getKey(prop,"PORT");
             strConexion.append("jdbc:sqlserver://");
             strConexion.append(server);
             strConexion.append(":").append(port);
@@ -225,6 +258,8 @@ class ConImportDB {
                     ca.setPivote(getDataBoolean(rs,"pivote"));
                     ca.setIdTipoArchivoCarga(getDataInteger(rs,"id_TipoArchivoCarga"));
                     ca.setPosicionSeparador(getDataInteger(rs,"posicionSeparador"));
+                    ca.setIgnoreIncomplete(getDataBoolean(rs,"ignoreIncomplete"));
+                    ca.setPosicionHeader(getDataInteger(rs,"posicionHeader"));
                     
                     hsNombre.put(ca.getNombreCampo(), ca);
                     if (ca.getAliasCampo()!=null){
@@ -308,6 +343,7 @@ class ConImportDB {
                     ca.setLargo(getDataInteger(rs,"largo"));
                     ca.setFormato(getDataString(rs,"formato"));
                     ca.setTipoCampo(getDataString(rs,"tipoCampo"));
+                    ca.setColumna(getDataInteger(rs,"columna"));
                    
                     hsNombre.put(ca.getNombreCampo(), ca);
                     lstCampos.add(ca);
@@ -355,6 +391,83 @@ class ConImportDB {
             }
         }
         return lst;
+    }
+
+    /**
+     * Obtiene los datos adicionales de una tabla. Se entrega un resultado
+     * distinto de null solo si vienen todos los datos.
+     * @return  DataTable   Objeto con los datos adiconales de la tabla
+     * @throws ExceptionHandler
+     */
+    public DataTable getTable() throws ExceptionHandler {
+        DataTable  sld = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String query = "";
+        try{
+            getConection();
+            query = this.getStrQuery();
+            if (!"".equals(query)){
+                st = this.conn.createStatement();
+                rs = st.executeQuery(query);
+                if (rs.next()){
+                    DataTable dt = new DataTable();
+                    dt.setNameTable(getDataString(rs,"nombreTabla"));
+                    dt.setDominioTable(getDataString(rs,"dominio"));
+                    dt.setBaseTable(getDataString(rs,"base"));
+                    dt.setUserTable(getDataString(rs,"usuario"));
+                    dt.setPassTable(getDataString(rs,"password"));
+                    if (  (!"".equals(dt.getNameTable()))
+                        &&(!"".equals(dt.getDominioTable()))
+                        &&(!"".equals(dt.getBaseTable()))
+                        &&(!"".equals(dt.getUserTable()))
+                        &&(!"".equals(dt.getPassTable())) )
+                    {
+                        sld = dt;
+                    }
+                    
+                }
+            }
+        }catch(SQLException e){
+            ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
+                                                "Problemas para obtención de datos de la tabla");
+            eh.setStrQuery(query);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtención de datos de la tabla");
+            eh.setStrQuery(query);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }finally{
+            try{
+                StringBuffer textData=new StringBuffer();
+                LogHandler log = new LogHandler();
+                log.setStrQuery(query);
+                log.logData(AdminFile.getKey(AdminFile.leerConfig(),AdminFile.LOGFILESERVER),
+                            new StringBuffer("getTable"),
+                            textData);
+            }catch(Exception ex){
+                throw new ExceptionHandler(ex,this.getClass(),
+                                    "Problemas al escribir en el Archivo de Log");
+            }
+            try{
+                if (rs!=null){
+                    rs.close();
+                }
+                if (st!=null){
+                    st.close();
+                }
+                this.conn.close();
+            }catch(SQLException es){
+                throw new ExceptionHandler(es,this.getClass(),
+                                    "Problemas para cerrar conexión a la Base de Datos");
+            }
+        }
+        return sld;
     }
 
     /**

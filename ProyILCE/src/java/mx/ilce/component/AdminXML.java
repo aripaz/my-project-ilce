@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.component;
 
 import java.util.Iterator;
@@ -155,7 +171,7 @@ public class AdminXML {
 
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se deben ignorar o no
-     * los datos del tipo increment
+     * los datos del tipo Increment
      * @param deleteIncreement  Estado a aplicar a la variable
      */
     public void setDeleteIncrement(boolean deleteIncrement) {
@@ -193,7 +209,7 @@ public class AdminXML {
     }
 
     /**
-     * Método que obtiene el menu en formato XML que le corresponde al usuario conectado
+     * Método que obtiene el menú en formato XML que le corresponde al usuario conectado
      * según su perfil
      * @param user      Objeto User con los datos del usuario conectado
      * @return  StringBuffer    XML con configuración del Menu
@@ -915,7 +931,7 @@ public class AdminXML {
     }
 
     /**
-     * Método que obtiene las formas foraneas con una estructura tipo html. Se
+     * Método que obtiene las formas foráneas con una estructura tipo html. Se
      * revisa el arreglo de variables para revisar si existe la instrucción que
      * gatille su inclusión en el XML. El texto tiene una estructura del tipo HTML.
      * @param claveForma    Clave de la forma analizada
@@ -1093,7 +1109,7 @@ public class AdminXML {
 
     /**
      * Método que permite crear la sección de un XML a partir de la forma que
-     * se esta entregando en la data
+     * se está entregando en la data
      * @param strData   Data de entrada que se usara en la query
      * @param strRegistro   Nombre del registro desde donde se invoco el método
      * @return  StringBuffer    Sección de XML asociado a la forma, usado en la
@@ -1220,7 +1236,7 @@ public class AdminXML {
 
     /**
      * Obtiene un Documento XML, a partir del nombre solicitado. Se asume que
-     * los archivos XML estan en la ruta resource/xml/[nombre archivo]
+     * los archivos XML están en la ruta resource/xml/[nombre archivo]
      * @param fileName  Nombre del archivo
      * @return  Document    Documento obtenido tras leer un archivo fisico XML
      * @throws ExceptionHandler
@@ -1524,7 +1540,7 @@ public class AdminXML {
     }
 
     /**
-     * Método para reemplazar los acentos que vienen en la configuracion HTML por
+     * Método para reemplazar los acentos que vienen en la configuración HTML por
      * el texto correspondiente
      * @param data  String que será recorrido para la revisión de loa acentos
      * @return  String  String con los acentos reemplazados
@@ -1611,7 +1627,7 @@ public class AdminXML {
     }
 
      /**
-     * Método que al recibbir un texto con la palabra NULL, o con valor null entrega un ""
+     * Método que al recibir un texto con la palabra NULL, o con valor null entrega un ""
      * @param strData   Texto a analizar
      * @return  String  String con el resultado del analisis
      */

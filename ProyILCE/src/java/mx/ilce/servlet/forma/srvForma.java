@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.servlet.forma;
 
 import java.io.IOException;
@@ -149,7 +165,7 @@ public class srvForma extends HttpServlet {
 
     /**
      * Genera un String con la estructura adicional de una query, con la data
-     * entregada esto servira de complemento a la query principal, para ayudar
+     * entregada esto servirá de complemento a la query principal, para ayudar
      * en el filtro de datos
      * @param hsDataForm    HashMap con los datos capturados del formulario
      * @param lstForma  Listado de campos de la forma
@@ -226,7 +242,7 @@ public class srvForma extends HttpServlet {
 
     /**
      * Genera un Array con la data obtenida desde el formulario, cuando esta
-     * data corresponde a las que poseen los nombres $1, $2, $3, etc
+     * data corresponde a las que poseen los nombres $1, $2, $3, etc.
      * @param hsForm    Datos capturados desde el formulario
      * @return
      */

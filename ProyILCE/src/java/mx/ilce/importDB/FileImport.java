@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.importDB;
 
 import java.io.BufferedReader;
@@ -26,7 +42,7 @@ import mx.ilce.util.UtilDate;
  * Clase implementada para el manejo de Archivos de Importación de Datos a Tablas
  * @author ccatrilef
  */
-public class FileImport {
+class FileImport {
 
     private String fileProcess;
     private String fileHeader;
@@ -40,10 +56,28 @@ public class FileImport {
     private String strHeader;
     private boolean useTotal;
     private List listHeaders;
+    private List listSeparador;
+    private boolean includeHeader = false;
 
     DecimalFormat formateador = new DecimalFormat("###,###,###,###.##");
 
     private static Integer PIVOTECUENTA = 1;
+
+    public boolean isIncludeHeader() {
+        return includeHeader;
+    }
+
+    public void setIncludeHeader(boolean includeHeader) {
+        this.includeHeader = includeHeader;
+    }
+
+    public List getListSeparador() {
+        return listSeparador;
+    }
+
+    public void setListSeparador(List listSeparador) {
+        this.listSeparador = listSeparador;
+    }
 
     public List getListHeaders() {
         return listHeaders;
@@ -101,10 +135,18 @@ public class FileImport {
         this.camposValidos = camposValidos;
     }
 
+    /**
+     * Obtiene el texto de error asignado al objeto. Si es null devuelve ""
+     * @return  String  Texto de error
+     */
     public String getTextError() {
         return ((textError==null)?"":textError);
     }
 
+    /**
+     * Asigna un texto de error al objeto.
+     * @param textError     Texto a asignar
+     */
     public void setTextError(String textError) {
         this.textError = textError;
     }
@@ -149,11 +191,12 @@ public class FileImport {
     /**
      * Método para obtener el encabezado de un archivo, hasta la fila anterior
      * indicada en el número entregado.
+     * Se trabaja con un archivo Plano o CSV
      * El archivo que se lee es el indicado en la variable global fileProcess.
-     * @param filaHeader
-     * @return
+     * @param lstHeader     Listado de campos de la configuracion del archivo
+     * @return  boolean     Resultado de la operación
      */
-    public boolean putFileHeader(Integer filaHeader, List lstHeader){
+    public boolean putFileHeader(List lstHeader){
         boolean sld = false;
 
         if (lstHeader!=null){
@@ -188,6 +231,72 @@ public class FileImport {
                 sld = true;
             }
         }
+        if (!sld){
+            String strError = "\nMessage:Problemas para obtener datos Generales desde el archivo."
+                              + "Error:"
+                              + this.getTextError();
+            this.setTextError(strError);
+        }
+        return sld;
+    }
+
+    /**
+     * Método para obtener los datos de encabezado que no corresponden a los
+     * encontrados en los registros, pero son generales para todos ellos.
+     * Se trabaja con un archivo Excel XLS
+     * El archivo que se lee es el indicado en la variable global fileProcess.
+     * @param lstHeader     Listado de campos de la configuracion del archivo
+     * @return  boolean     Resultado de la operación
+     */
+    public boolean putFileHeaderXLS(List lstHeader){
+        boolean sld = false;
+
+        if (lstHeader!=null){
+            List lstCampos = (List) lstHeader.get(0);
+            if (lstCampos!=null){
+                Iterator it = lstCampos.iterator();
+                while (it.hasNext()){
+                    CargaArchivo ca = (CargaArchivo) it.next();
+                    Cell[] fila = getRowsXlsFromFile(ca.getFila());
+                    String dato = "";
+                    if ((fila!=null)&&(ca.getColumna()!=null)){
+                        String strFila = fila[ca.getColumna()-1].getContents();
+                        Integer posFin = 0;
+
+                        if (ca.getLargo()!=null){
+                            posFin = ca.getPosicionInicio()+ca.getLargo();
+                        }else{
+                            posFin = ca.getPosicionInicio();
+                        }
+
+                        if (posFin>strFila.length()){
+                            posFin = strFila.length()-1;
+                        }else{
+                            posFin = posFin-1;
+                        }
+
+                        dato = strFila.substring(ca.getPosicionInicio()-1,posFin);
+
+                        if (Date.class.getName().equals(getTypeDataApp(ca.getTipoCampo()))){
+                            UtilDate ut = new UtilDate(dato, ca.getFormato());
+                            dato = ut.getFecha();
+                        }
+                        String nombreCampo = ca.getNombreCampo();
+                        List lstData = new ArrayList();
+                        lstData.add(nombreCampo);
+                        lstData.add(dato);
+                        addToListHeader(lstData);
+                    }
+                }
+                sld = true;
+            }
+        }
+        if (!sld){
+            String strError = "\nMessage:Problemas para obtener datos Generales desde el archivo."
+                    + "Error:"
+                    + this.getTextError();
+            this.setTextError(strError);
+        }
         return sld;
     }
 
@@ -207,8 +316,8 @@ public class FileImport {
     }
 
     /**
-     * Método que obtiene el texto ubicado en la fila que corresponde
-     * al número entregado.
+     * Método que obtiene el texto ubicado en la fila que corresponde al número
+     * entregado.
      * El archivo que se lee es el indicado en la variable global fileProcess.
      * @param filaHeader
      * @return  String Texto con el contenido leido en la fila indicada
@@ -230,12 +339,61 @@ public class FileImport {
         } catch (EOFException eof){
             sld = "EOF";
         } catch (IOException ex) {
-            //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
+            String strError = "\nMessage:Problemas en la lectura del archivo."
+                    + "Error:" + ex.getMessage()
+                    + this.getTextError();
+            this.setTextError(strError);
         } finally {
             try {
                 fr.close();
             } catch (IOException ex) {
-                //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
+                String strError = "\nMessage:Problemas para cerrar el archivo."
+                        + "Error:" + ex.getMessage()
+                        + this.getTextError();
+                this.setTextError(strError);
+            }
+        }
+        return sld;
+    }
+
+    /**
+     * Método que obtiene una fila desde un archivo Excel XLS.
+     * El archivo que se lee es el indicado en la variable global fileProcess.
+     * @param fila      Numero de la fila a obtener desde el archivo
+     * @return Cell[]   Objeto obtenido al leer archivo Excel
+     */
+    public Cell[] getRowsXlsFromFile(Integer fila){
+        Cell[] sld = null;
+        Sheet hoja = null;
+        File xlsData = null;
+        Workbook workbook = null;
+        Sheet[] hojas = null;
+        try {
+            xlsData = new File(this.getFileProcess());
+            if (xlsData!=null){
+                workbook = Workbook.getWorkbook(xlsData);
+                if (workbook != null) {
+                    hojas = workbook.getSheets();
+                }
+                int largoHojas = hojas.length;
+                if (largoHojas > 0) {
+                    hoja = workbook.getSheet(0);
+                    sld = hoja.getRow(fila - 1);
+                }
+            }
+        } catch (IOException ex) {
+            String strError = "\nMessage:Problemas para obtener la fila desde el archivo."
+                    + "Error:" + ex.getMessage()
+                    + this.getTextError();
+            this.setTextError(strError);
+        } catch (BiffException ex) {
+            String strError = "\nMessage:Problemas en la lectura del archivo."
+                    + "Error:" + ex.getMessage()
+                    + this.getTextError();
+            this.setTextError(strError);
+        }finally{
+            if (workbook!=null){
+                workbook.close();
             }
         }
         return sld;
@@ -268,10 +426,11 @@ public class FileImport {
                 }
             }catch (Exception e){
                 sld = false;
-                String stError = getTextError();
-                stError = stError + "\nProblemas generar el Header con la configuración de campos."
-                                  + "\nDATOS LEIDOS:" + strFileHeaders;
-                setTextError(stError);
+                String strError = "\nMessage:Problemas generar el Header con la configuración de campos."
+                        + "DATOS LEIDOS:" + strFileHeaders
+                        + "Error:" + e.getMessage()
+                        + this.getTextError();
+                this.setTextError(strError);
             }
         }else{
             try{
@@ -293,17 +452,20 @@ public class FileImport {
                         }
                     }catch (Exception e){
                         sld = false;
-                        String stError = getTextError();
-                        stError = stError + "\nProblemas generar el Header con la configuración de campos."
-                                          + "\nDATOS LEIDOS:" + strFileHeaders;
-                        setTextError(stError);
+                        String strError = "\nMessage:Problemas al generar el Header con la configuración de campos."
+                                + "DATOS LEIDOS:" + strFileHeaders
+                                + "Error:" + e.getMessage()
+                                + this.getTextError();
+                        this.setTextError(strError);
                     }
                 }
             } catch (Exception e) {
                 sld = false;
-                String stError = getTextError();
-                stError = stError + "\nProblemas obtener el Header del archivo indicado en la fila:" + filaHeader +".";
-                setTextError(stError);
+                String strError = "\nMessage:Problemas obtener el Header del archivo indicado en la fila:" + filaHeader +"."
+                        + "DATOS LEIDOS:" + strFileHeaders
+                        + "Error:" + e.getMessage()
+                        + this.getTextError();
+                this.setTextError(strError);
             }
         }
         this.setUseTotal(compararTotal);
@@ -356,20 +518,22 @@ public class FileImport {
                     }
                 } catch (Exception e){
                     sld = false;
-                    String stError = getTextError();
-                    stError = stError + "\nProblemas al escribir archivo de transferencia.";
-                    setTextError(stError);
+                    String strError = "\nMessage:Problemas al escribir archivo de transferencia."
+                            + "Error:" + e.getMessage()
+                            + this.getTextError();
+                    this.setTextError(strError);
                 }
             }else{
-                String stError = getTextError();
-                stError = "\nProblemas al validar archivo CSV sin Totales."
-                        + "\nNo se encuentran los campos en el Header." + stError;
-                setTextError(stError);
+                String strError = "\nMessage:Problemas al validar archivo CSV sin Totales."
+                        + "Error:" + "No se encuentran los campos en el Header."
+                        + this.getTextError();
+                this.setTextError(strError);
             }
         }else{
-            String stError = getTextError();
-            stError = "\nProblemas al validar archivo CSV sin Totales." + stError;
-            setTextError(stError);
+            String strError = "\nMessage:Problemas al validar archivo CSV sin Totales."
+                        + "Error: Error al obtener la fila del Header"
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         return sld;
     }
@@ -426,24 +590,32 @@ public class FileImport {
                     }
                 } catch (Exception e){
                     sld = false;
-                    String stError = getTextError();
-                    stError = stError + "\nProblemas al escribir archivo de transferencia.";
-                    setTextError(stError);
+                    String strError = "\nMessage:Problemas al escribir archivo de transferencia."
+                                + "Error:" + e.getMessage()
+                                + this.getTextError();
+                    this.setTextError(strError);
                 }
             }else{
-                String stError = getTextError();
-                stError = "\nProblemas al validar archivo CSV con Totales."
-                        + "\nNo se encuentran los campos en el Header." + stError;
-                setTextError(stError);
+                String strError = "\nMessage:Problemas al validar archivo CSV con Totales."
+                            + "Error: No se encuentran los campos en el Header."
+                            + this.getTextError();
+                this.setTextError(strError);
             }
         }else{
-            String stError = getTextError();
-            stError = "\nProblemas al validar archivo CSV con Totales." + stError;
-            setTextError(stError);
+            String strError = "\nMessage:Problemas al validar archivo CSV con Totales."
+                        + "Error: Error al obtener la fila del Header"
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         //guardamos los totales si se solicita
         if (sld && compararTotal){
             sld = writeToFileTotalesCSV(strFileHeaders,strTotales);
+        }
+        if (!sld){
+            String strError = "\nMessage:Problemas al escribir el archivo de Totales."
+                        + "Error:"
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         return sld;
     }
@@ -490,10 +662,10 @@ public class FileImport {
             }
         }catch (Exception e){
             sld = false;
-            String stError = getTextError();
-            stError = stError + "\nProblemas en la obtención del Header del Archivo."
-                    + "\nHEADER LEIDO:" + strFileHeaders;
-            setTextError(stError);
+            String strError = "\nMessage:Problemas en la obtención del Header del Archivo."
+                        + "Error: Header leido - " + strFileHeaders 
+                        + this.getTextError();
+            this.setTextError(strError);
         }
 
         if (existCampos){
@@ -546,9 +718,10 @@ public class FileImport {
                             }catch(Exception e){
                                 seguir=false;
                                 sld=false;
-                                setTextError("Problemas al extraer un registro."
-                                            + ((strFila!=null)?"\nFILA: "+strFila:"")
-                                            + ((filaCSV!=null)?"\nDATOS LEIDOS: "+filaCSV:"") );
+                                String strError = "\nMessage:Problemas al extraer un registro."
+                                            + "Error: FILA:" + strFila + " DATA LEIDA:" + filaCSV
+                                            + this.getTextError();
+                                this.setTextError(strError);
                             }
                             if (sld){
                                 sld = writeToFileCSV(filaCSV);
@@ -565,19 +738,18 @@ public class FileImport {
                 Integer intNumReg = Integer.valueOf(strNumReg);
                 if (!numRegistros.equals(intNumReg)){
                     sld = false;
-                    String stError = getTextError();
-                    stError = stError + "\nEl número de Registros leidos no coincide con el declarado en el archivo."
-                            + ((numRegistros!=null)?"\nREGISTROS LEIDOS: "+numRegistros:"")
-                            + ((strNumReg!=null)?"\nREGISTROS ARCHIVO: "+strNumReg:"");
-                    setTextError(stError);
+                    String strError = "\nMessage:El número de Registros leidos no coincide con el declarado en el archivo."
+                                + "Error: REGISTROS LEIDOS: "+numRegistros + " REGISTROS ARCHIVO: "+strNumReg
+                                + this.getTextError();
+                    this.setTextError(strError);
                 }
             }
         }else{
             sld = false;
-            String stError = getTextError();
-            stError = stError + "\nExisten campos obligatorios no declarados en el header."
-                    + "\nCAMPOS: " + getStringCamposInvalidos();
-            setTextError(stError);
+            String strError = "\nMessage:Existen campos obligatorios no declarados en el header."
+                        + "Error: CAMPOS: " + getStringCamposInvalidos()
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         return sld;
     }
@@ -628,10 +800,10 @@ public class FileImport {
             }
         }catch (Exception e){
             sld = false;
-            String stError = getTextError();
-            stError = stError + "\nProblemas en la obtención del Header del Archivo."
-                    + "\nHEADER LEIDO:" + strFileHeaders;
-            setTextError(stError);
+            String strError = "\nMessage:Problemas en la obtención del Header del Archivo."
+                        + "Error: HEADER LEIDO:" + strFileHeaders
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         if (existCampos){
             //TRABAJAR EXTRAYENDO LOS REGISTROS
@@ -721,9 +893,10 @@ public class FileImport {
                                     }
                                 }catch(Exception e){
                                     sld=false;
-                                    setTextError("Problemas al extraer un registro."
-                                                + ((strFila!=null)?"\nFILA: "+strFila:"")
-                                                + ((filaCSV!=null)?"\nDATOS LEIDOS: "+filaCSV:"") );
+                                    String strError = "\nMessage:Problemas al extraer un registro."
+                                                + "Error: FILA: "+strFila + " DATOS LEIDOS: "+filaCSV
+                                                + this.getTextError();
+                                    this.setTextError(strError);
                                 }
                                 if (sld){
                                     sld = writeToFileCSV(filaCSV);
@@ -740,11 +913,10 @@ public class FileImport {
                 Integer intNumReg = Integer.valueOf(strNumReg);
                 if (!numRegistros.equals(intNumReg)){
                     sld = false;
-                    String stError = getTextError();
-                    stError = stError + "\nEl número de Registros leidos no coincide con el declarado en el archivo."
-                            + ((numRegistros!=null)?"\nREGISTROS LEIDOS: "+numRegistros:"")
-                            + ((strNumReg!=null)?"\nREGISTROS ARCHIVO: "+strNumReg:"");
-                    setTextError(stError);
+                    String strError = "\nMessage:El número de Registros leidos no coincide con el declarado en el archivo."
+                                + "Error: REGISTROS LEIDOS: "+numRegistros + " REGISTROS ARCHIVO: "+strNumReg
+                                + this.getTextError();
+                    this.setTextError(strError);
                 }
             }
             //validar los totales y numero de registros
@@ -761,11 +933,10 @@ public class FileImport {
                                 String d1 = formateador.format(total);
                                 String d2 = formateador.format(datoSuma);
                                 sld = false;
-                                String stError = getTextError();
-                                stError = stError + "\nLa suma de datos no coincide con el Monto Total del archivo."
-                                        + ((total!=null)?"\nMONTO TOTAL ARCHIVO: "+d1:"")
-                                        + ((datoSuma!=null)?"\nSUMA CAMPOS: "+d2:"");
-                                setTextError(stError);
+                                String strError = "\nMessage:La suma de datos no coincide con el Monto Total del archivo."
+                                            + "Error: MONTO TOTAL ARCHIVO: "+d1 + " SUMA CAMPOS: "+d2
+                                            + this.getTextError();
+                                this.setTextError(strError);
                             }
                         }
                     }
@@ -773,10 +944,10 @@ public class FileImport {
             }
         }else{
             sld = false;
-            String stError = getTextError();
-            stError = stError + "\nExisten campos obligatorios no declarados en el header."
-                    + "\nCAMPOS: " + getStringCamposInvalidos();
-            setTextError(stError);
+            String strError = "\nMessage:Existen campos obligatorios no declarados en el header."
+                        + "Error: CAMPOS: " + getStringCamposInvalidos()
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         return sld;
     }
@@ -833,7 +1004,7 @@ public class FileImport {
                     Iterator it = listCampos.iterator();
                     while (it.hasNext() && sld){
                         CargaArchivo caG = (CargaArchivo) it.next();
-                        String datoCell = rowHeader[caG.getPosicionInicio()-1].getContents();
+                        String datoCell = rowHeader[caG.getPosicionHeader()-1].getContents();
                         if ((datoCell!=null) && ( (caG.getNombreCampo().equals(datoCell))
                                                 ||(caG.getAliasCampo().equals(datoCell))  ))
                         {
@@ -900,19 +1071,41 @@ public class FileImport {
                                     Double total = (Double) hsSumas.get(caG.getNombreCampo());
                                     if (dbl.compareTo(total)!=0){
                                         sld = false;
+                                        String strError = "\nMessage:Los totales evaluados no coinciden."
+                                                    + "Error:"
+                                                    + this.getTextError();
+                                        this.setTextError(strError);
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }else{
+                sld = false;
+                String strError = "\nMessage:No existen registros en el archivo para evaluar."
+                            + "Error:"
+                            + this.getTextError();
+                this.setTextError(strError);
             }
         }catch (IOException ie ){
-            Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ie);
+            sld = false;
+            String strError = "\nMessage:Problemas en la lectura del archivo."
+                        + "Error:" + ie.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
         }catch (BiffException be){
-            Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, be);
+            sld = false;
+            String strError = "\nMessage:Problemas en la lectura de los datos."
+                        + "Error:" + be.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
         }catch (Exception e){
-            Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, e);
+            sld = false;
+            String strError = "\nMessage:Problemas al procesar el archivo."
+                        + "Error:" + e.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
         }
         return sld;
     }
@@ -938,23 +1131,27 @@ public class FileImport {
         Sheet[] hojas = null;
         int filas = 0;
         Workbook workbook = null;
+        File xlsData = null;
         try{
-            File xlsData = new File(this.getFileProcess());
+            xlsData = new File(this.getFileProcess());
             workbook = Workbook.getWorkbook(xlsData);
             hojas = workbook.getSheets();
             int largoHojas = hojas.length;
+            //vemos si tiene al menos una hoja
             if (largoHojas>0){
                 hoja = workbook.getSheet(0);
                 filas = hoja.getRows();
             }
+            //vemos si hay que calcular los totales
             if (ca.getPosicionInicioTotal()!=null){
                 validateTotal = true;
+                //los totales estan en la fila indicada
                 rowTotal = ca.getPosicionInicioTotal();
+                //si fila total es cero, indica que esta en la última fila
                 if (rowTotal==0){
                     rowTotal = filas-1;
                 }
             }
-
             //VEMOS SI TENEMOS DATOS
             if ((hoja!=null) && (filas>0)){
                 //obtener fila de header si existe
@@ -969,7 +1166,7 @@ public class FileImport {
                     Iterator it = listCampos.iterator();
                     while (it.hasNext() && sld){
                         CargaArchivo caG = (CargaArchivo) it.next();
-                        String datoCell = rowHeader[caG.getPosicionInicio()-1].getContents();
+                        String datoCell = rowHeader[caG.getPosicionHeader()-1].getContents();
                         if ((datoCell!=null) && ( (caG.getNombreCampo().equals(datoCell))
                                                 ||(caG.getAliasCampo().equals(datoCell))  ))
                         {
@@ -980,6 +1177,10 @@ public class FileImport {
                         }else{
                             //No se encuentra el dato
                             sld = false;
+                            String strError = "\nMessage:Los datos del encabezado leido no coinciden con la configuración."
+                                        + "Error:"
+                                        + this.getTextError();
+                            this.setTextError(strError);
                         }
                     }
                 }else{
@@ -990,36 +1191,70 @@ public class FileImport {
                         strFileHeaders = strFileHeaders + caG.getNombreCampo() + ",";
                     }
                 }
+                List lstSeparador = this.getListSeparador();
+                if (lstSeparador!=null){
+                    List lst = (List) lstSeparador.get(0);
+                    Iterator it = lst.iterator();
+                    while (it.hasNext()){
+                        CargaArchivo caG = (CargaArchivo) it.next();
+                        String campo = caG.getNombreCampo();
+                        strFileHeaders = strFileHeaders + campo + ",";
+                    }
+                    this.setIncludeHeader(true);
+                }
                 if (sld){
                     sld = writeToFileCSV(strFileHeaders);
+                    List dataSeparador = null;
                     while ((fila<filas)&&(rowTotal!=fila)){
                         Cell[] row = hoja.getRow(fila);
                         if (row!=null) {
                             String filaCSV = "";
-                            Iterator it = listCampos.iterator();
-                            while (it.hasNext() && sld){
-                                CargaArchivo caG = (CargaArchivo) it.next();
-                                String dato = row[caG.getPosicionInicio()-1].getContents();
-                                if (dato==null){
-                                    dato = "";
-                                }
-                                if (("".equals(dato))&&(caG.isObligatorio())){
-                                    sld = false;
+                            //vemos si esta definido el separador
+                            if (ca.getSeparador()!=null){
+                                String celdaSeparador = row[ca.getPosicionSeparador()-1].getContents();
+                                //vemos si estamos en la fila con separador
+                                if (celdaSeparador.equals(ca.getSeparador())){
+                                    //aqui obtenemos los datos asociados al registro
+                                    dataSeparador = getDataSeparador(row);
+                                //es una fila normal
                                 }else{
-                                    dato = getDatoClean(dato, caG);
-                                    if (caG.isSumable() && validateTotal){
-                                        Double dbl = (Double) hsSumas.get(caG.getNombreCampo());
-                                        if (dbl==null){
-                                            dbl = Double.valueOf(0.0);
+                                    Iterator it = listCampos.iterator();
+                                    boolean seguir = true;
+                                    while (it.hasNext() && seguir){
+                                        CargaArchivo caG = (CargaArchivo) it.next();
+                                        String dato = row[caG.getPosicionInicio()-1].getContents();
+                                        filaCSV = getDataCell(filaCSV,dato,caG);
+                                        //se encontro un campo obligatorio vacio
+                                        if (filaCSV==null){
+                                            if (!ca.isIgnoreIncomplete()){
+                                                sld = false;
+                                            }
+                                            seguir = false;
                                         }
-                                        dbl = dbl + Double.valueOf(dato);
-                                        hsSumas.put(caG.getNombreCampo(), dbl);
                                     }
-                                    filaCSV = filaCSV + dato + ",";
+                                }
+                            }else{
+                                Iterator it = listCampos.iterator();
+                                boolean seguir = true;
+                                while (it.hasNext() && seguir){
+                                    CargaArchivo caG = (CargaArchivo) it.next();
+                                    String dato = row[caG.getPosicionInicio()-1].getContents();
+                                    filaCSV = getDataCell(filaCSV,dato,caG);
+                                    //se encontro un campo obligatorio vacio
+                                    if (filaCSV==null){
+                                        if (!ca.isIgnoreIncomplete()){
+                                            sld = false;
+                                        }
+                                        seguir = false;
+                                    }
                                 }
                             }
                             if (sld){
-                                sld = writeToFileCSV(filaCSV);
+                                if (dataSeparador==null){
+                                    sld = writeToFileCSV(filaCSV);
+                                }else{
+                                    sld = writeToFileCSV(filaCSV,dataSeparador);
+                                }
                             }
                             fila++;
                         }
@@ -1036,12 +1271,22 @@ public class FileImport {
                                     Double total = (Double) hsSumas.get(caG.getNombreCampo());
                                     if (dbl.compareTo(total)!=0){
                                         sld = false;
+                                        String strError = "\nMessage:Los totales evaluados no coinciden."
+                                                    + "Error:"
+                                                    + this.getTextError();
+                                        this.setTextError(strError);
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }else{
+                sld = false;
+                String strError = "\nMessage:No existen registros en el archivo para evaluar."
+                            + "Error:"
+                            + this.getTextError();
+                this.setTextError(strError);
             }
         }catch (IOException ie ){
             Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ie);
@@ -1049,43 +1294,62 @@ public class FileImport {
             Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, be);
         }catch (Exception e){
             Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return sld;
-    }
-
-/*
-    private HSSFWorkbook readFile(String filename) throws IOException {
-        FileInputStream xlsData = new FileInputStream(this.getFileProcess());
-
-        return new HSSFWorkbook(xlsData);
-    }
-
-    public boolean getFileBodyXLS(){
-        boolean sld = true;
-        try {
-            FileInputStream xlsData = new FileInputStream(this.getFileProcess());
-            if (xlsData !=null){
-                HSSFWorkbook wb = new HSSFWorkbook(xlsData);
-                HSSFSheet hoja = wb.getSheetAt(0);
-                int lastRow = hoja.getLastRowNum();
-                //short row = (short) 2;
-                for (int i=0;i<lastRow;i++){
-                    HSSFRow row = hoja.getRow(i);
-                    Iterator it = row.iterator();
-                    while (it.hasNext()){
-                        HSSFCell cell = (HSSFCell) it.next();
-                        String dato = cell.getStringCellValue();
-                    }
-                }
+        }finally{
+            if (workbook!=null){
+                workbook.close();
             }
-        } catch (IOException ex){
-            Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (Exception e){
-            e.printStackTrace();
+            if (xlsData!=null){
+                xlsData = null;
+            }
         }
         return sld;
     }
-*/
+
+    private String getDataCell(String fila, String dato, CargaArchivo caG){
+        String filaCSV = null;
+        if (dato==null){
+            dato = "";
+        }
+        if (caG.isIgnoreIncomplete())
+
+        if (("".equals(dato))&&(caG.isObligatorio())){
+            filaCSV = null;
+        }else{
+            dato = getDatoClean(dato, caG);
+            filaCSV = fila + dato + ",";
+        }
+        return filaCSV;
+    }
+
+
+    /**
+     * Método que obtiene los datos del tipo separador desde la fila que se
+     * le esta entregando
+     * @param row       Fila que esta indicada como del tipo separador
+     * @return  List    Listado con los campos obtenidos
+     */
+    private List getDataSeparador(Cell[] row){
+        List sld = new ArrayList();
+
+        List lstSeparador = this.getListSeparador();
+
+        if ((lstSeparador!=null)&&(!lstSeparador.isEmpty())){
+            List listCampos = (List)lstSeparador.get(0);
+            Iterator it = listCampos.iterator();
+            while (it.hasNext()){
+                CargaArchivo ca = (CargaArchivo) it.next();
+                String dato = row[ca.getColumna()-1].getContents();
+                dato = getSubstring(dato,ca.getPosicionInicio(),ca.getLargo());
+                dato = getDatoClean(dato, ca);
+                List lst = new ArrayList();
+                lst.add(ca.getNombreCampo());
+                lst.add(dato);
+                sld.add(lst);
+            }
+        }
+        return sld;
+    }
+
     /**
      * Método que entrega en un String, el listado de campos invalidos encontrados
      * en la revisión del Header
@@ -1336,7 +1600,7 @@ public class FileImport {
         boolean sld = true;
         FileWriter archivo = null;
         try {
-            if (dato!=null){
+            if ((dato!=null)&&(!"".equals(dato))){
                 //Limpieza último caracter
                 String ultChar = dato.substring(dato.length() - 1);
                 if (",".equals(ultChar)) {
@@ -1359,15 +1623,82 @@ public class FileImport {
             }
         } catch (IOException ex) {
             sld = false;
-            //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
+            String strError = "\nMessage:Error de lectura del archivo."
+                        + "Error:" + ex.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
         } finally {
             try {
                 if (archivo!=null){
                     archivo.close();
                 }
             } catch (IOException ex) {
-                //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
                 sld = false;
+                String strError = "\nMessage:Error al cerrar el archivo."
+                            + "Error:" + ex.getMessage()
+                            + this.getTextError();
+                this.setTextError(strError);
+            }
+        }
+        return sld;
+    }
+
+    /**
+     * Método que agrega los datos obtenidos desde la fila separador a
+     * continuación de los datos recopilados para la fila
+     * @param dato          Texto a ingresar al archivo
+     * @param dataSeparador Datos adicionales a ingresar
+     * @return  boolean Resultado de la operación (TRUE:Exitoso, FALSE:Con errores)
+     */
+    private boolean writeToFileCSV(String dato, List dataSeparador){
+        boolean sld = true;
+
+        FileWriter archivo = null;
+        try {
+            if ((dato!=null)&&(!"".equals(dato))){
+                //Limpieza último caracter
+                String ultChar = dato.substring(dato.length() - 1);
+                if (",".equals(ultChar)) {
+                    dato = dato.substring(0, dato.length() - 1);
+                }
+                //Obtener ruta archivo CSV
+                String rutaFile = getFileBody();
+
+                Iterator it = dataSeparador.iterator();
+                while (it.hasNext()){
+                    List lst = (List) it.next();
+                    String valor = (String) lst.get(1);
+                    dato = dato + "," + valor;
+                }
+                //Escritura del dato en archivo CSV
+                archivo = new FileWriter(rutaFile, true);
+                PrintWriter pw = null;
+                if (archivo!=null){
+                    pw = new PrintWriter(archivo);
+                    pw.println(dato);
+                }else{
+                    archivo = new FileWriter(rutaFile,true);
+                    pw = new PrintWriter(archivo);
+                    pw.println(dato);
+                }
+            }
+        } catch (IOException ex) {
+            sld = false;
+            String strError = "\nMessage:Error en la lectura deñ archivo."
+                        + "Error:" + ex.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
+        } finally {
+            try {
+                if (archivo!=null){
+                    archivo.close();
+                }
+            } catch (IOException ex) {
+                sld = false;
+                String strError = "\nMessage:Error al cerrar el archivo."
+                            + "Error:" + ex.getMessage()
+                            + this.getTextError();
+                this.setTextError(strError);
             }
         }
         return sld;
@@ -1409,16 +1740,53 @@ public class FileImport {
             }
         } catch (IOException ex) {
             sld = false;
-            //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
+            String strError = "\nMessage:Error de lectura del archivo."
+                        + "Error:" + ex.getMessage()
+                        + this.getTextError();
+            this.setTextError(strError);
         } finally {
             try {
                 if (archivo!=null){
                     archivo.close();
                 }
             } catch (IOException ex) {
-                //Logger.getLogger(FileImport.class.getName()).log(Level.SEVERE, null, ex);
                 sld = false;
+                sld = false;
+                String strError = "\nMessage:Error al cerrar el archivo."
+                            + "Error:" + ex.getMessage()
+                            + this.getTextError();
+                this.setTextError(strError);
             }
+        }
+        return sld;
+    }
+
+    /**
+     * Método para la obtencion de un substring, el cual validara las situaciones
+     * donde se entreguen valores null, el substring es sobrepasa al largo del
+     * string o se intenten dar valores negativos.
+     * @param dato          String del sual obtener el subString
+     * @param posInicio     Posicion de inicio desde donde parte el subString
+     * @param largo         Largo del subString que se quiere obtener
+     * @return  String      SubString obtenido
+     */
+    private String getSubstring(String dato, Integer posInicio, Integer largo){
+        String sld = "";
+
+        Integer ini = (posInicio==null)?1:posInicio;
+        Integer len = dato.length();
+        Integer lar = (largo==null)?len:largo;
+
+        if (ini<=0){
+            ini=1;
+        }
+        if (lar<=0){
+            lar=1;
+        }
+        if (ini+lar>len){
+            sld = dato.substring(ini-1,len-1);
+        }else{
+            sld = dato.substring(ini-1,(ini+lar-1));
         }
         return sld;
     }

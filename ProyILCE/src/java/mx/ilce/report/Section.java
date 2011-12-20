@@ -14,14 +14,30 @@
  * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
  * LICENCE-ILCE incluido en la raiz del proyecto.
  */
-package mx.ilce.bean;
+package mx.ilce.report;
+
+import java.io.Serializable;
 
 /**
- * Clase creada para dar correspondencia a los tipos de datos entregados por 
- * SQL Server, ya que se necesita hacer distinción entre este tipo de dato
- * y un número entero, para ser manejado por los XML que controla la aplicación
+ * Clase para la contencion de las secciones y sus configuraciones
  * @author ccatrilef
  */
-public class Money {
+class Section implements Serializable{
+
+        private String tipo;
+        private Object data;
+
+        public Object getData() {
+            return data;
+        }
+        public void setData(Object data) {
+            this.data = data;
+        }
+        public String getTipo() {
+            return tipo;
+        }
+        public void setTipo(String tipo) {
+            this.tipo = tipo;
+        }
 
 }

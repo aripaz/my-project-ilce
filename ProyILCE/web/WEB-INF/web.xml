@@ -64,6 +64,10 @@
         <servlet-name>srvImportDB</servlet-name>
         <servlet-class>mx.ilce.importDB.srvImportDB</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SrvElement</servlet-name>
+        <servlet-class>mx.ilce.report.SrvElement</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>srvLogin</servlet-name>
         <url-pattern>/srvLogin</url-pattern>
@@ -127,6 +131,10 @@
     <servlet-mapping>
         <servlet-name>srvImportDB</servlet-name>
         <url-pattern>/srvImportDB</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SrvElement</servlet-name>
+        <url-pattern>/SrvElement</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

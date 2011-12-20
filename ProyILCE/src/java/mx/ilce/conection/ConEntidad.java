@@ -1,3 +1,19 @@
+/**
+ * Desarrollado para ILCE (Instituto Latinoamericano de la Comunicación
+ * Educativa) bajo el contexto del Proyecto de Migración de la Aplicación SAEP,
+ * desde un esquema .NET a Java.
+ * Marzo-Diciembre 2011
+ * Autor: Carlos Leonel Catrilef Cea
+ * Version: 1.0
+ *
+ * - Las licencias de los componentes y librerías utilizadas, están adjuntas en
+ * el(los) archivo(s) LICENCE que corresponda(n), junto al código fuente de la
+ * aplicación, tal como establecen para el uso no comercial de las mismas.
+ * - Todos los elementos de la aplicación: Componentes, Módulos, Bean, Clases, etc,
+ * se entienden revisadas y aprobadas solamente para esta aplicación.
+ * - Sobre condiciones de uso, reproducción y distribución referirse al archivo
+ * LICENCE-ILCE incluido en la raiz del proyecto.
+ */
 package mx.ilce.conection;
 
 import java.util.List;
@@ -166,7 +182,7 @@ public class ConEntidad {
 
     /**
      * Método que obtiene la configuración de la formas a partir del ID de la
-     * misma y los campos que se estan buscando.
+     * misma y los campos que se están buscando.
      * El objeto de DataTransfer contiene los siguientes datos:
      * (-) strData: Debe contener dos parámetros, el ID de la Forma y un
      * listado de String con los nombres de los campos que se quieren obtener. 
@@ -245,7 +261,7 @@ public class ConEntidad {
 
     /**
      * Método que obtiene la data generada a partir de la Query entregada y los
-     * parámetros de entrada que deben utilizarce con la Query.
+     * parámetros de entrada que deben utilizarse con la Query.
      * El objeto de DataTransfer contiene los siguientes datos:
      * (-) strQuery: Query que se desea ejecutar.
      * (-) strData: Arreglo con los datos de entrada para la query. 
