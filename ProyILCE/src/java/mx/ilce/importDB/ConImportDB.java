@@ -60,7 +60,7 @@ class ConImportDB {
     }
 
     /**
-     * Método que se encarga de abrir una coenxión a la base de datos
+     * Método que se encarga de abrir una conexión a la base de datos
      * @throws SQLException
      * @throws ExceptionHandler
      */
@@ -594,7 +594,7 @@ class ConImportDB {
     }
 
     /**
-     * Método que se encarga de obtener un listado con el simbolo "?", el cual
+     * Método que se encarga de obtener un listado con el símbolo "?", el cual
      * se repite un número de veces equivalente al largo que se entrega
      * @param largo     Número de veces que debe ir el simbolo "?"
      * @return  String  Texto con el resultado
@@ -615,7 +615,7 @@ class ConImportDB {
      * Método para la ejecución de un Store Procedure cualquiera, recibiendo una
      * cantidad variable de datos para su ejecución. El listado con los datos
      * posee a su vez un listado con dos datos, donde el primero es un String
-     * con el nombre del tipo de dato del parametro y en el segundo va el objeto
+     * con el nombre del tipo de dato del parámetro y en el segundo va el objeto
      * respectivo con el valor.
      * @param nameProcedure     Texto con el nombre del Store Procedure
      * @param arrData           Listado con los datos del Store Procedure

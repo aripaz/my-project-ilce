@@ -734,8 +734,18 @@ class AdmImportDB {
             }
         }catch (ExceptionHandler eh){
             eh.writeToFile();
+            sld = false;
+            this.setStrError("\nMessage:" + eh.getTextMessage()
+                        + "Error:" + eh.getTextError()
+                        + ((eh.getStrQuery()!=null)?"Query:"+eh.getStrQuery():""));
+            this.setExistError(true);
         }catch(Exception e){
-            //e.printStackTrace();
+            ExceptionHandler eh = new ExceptionHandler(e,AdmImportDB.class,"Error al generar archivo de carga");
+            sld = false;
+            this.setStrError("\nMessage:" + eh.getTextMessage()
+                        + "Error:" + eh.getTextError()
+                        + ((eh.getStrQuery()!=null)?"Query:"+eh.getStrQuery():""));
+            this.setExistError(true);
         }finally{
             if (reader!=null){
                 reader.close();
@@ -1360,7 +1370,7 @@ class AdmImportDB {
     private DataTable getDataTable() throws ExceptionHandler{
         DataTable sld = null;
         String query = "select ac.id_ArchivoCarga, ac.archivoCarga, ta.id_Tabla "
-                + ", ta.nombreTabla, ta.dominio , ta.base, ta.usuario , ta.password "
+                + ", ta.nombreTabla, ta.dominio , ta.base, ta.usuario, ta.password "
                 + " from UPL_ArchivoCarga ac, UPL_Tabla ta"
                 + " where ac.id_Tabla = ta.id_Tabla"
                 + " and ac.id_ArchivoCarga = " + this.getIdArchivoCarga();

@@ -477,8 +477,8 @@ class FileImport {
 
     /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
-     * ingresado a la base de datos. El archivo leido es del tipo CSV y no posee 
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
+     * ingresado a la base de datos. El archivo leído es del tipo CSV y no posee
      * totales que validar. Si el valor filaHeader que se indica es 0, se entiende
      * que no hay header y se construye uno a partir de la configuración de campos
      * del archivo, que viene el listCampos
@@ -540,8 +540,8 @@ class FileImport {
 
     /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
-     * ingresado a la base de datos. El archivo leido es del tipo CSV y posee
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
+     * ingresado a la base de datos. El archivo leído es del tipo CSV y posee
      * totales que validar. Si el valor filaHeader que se indica es 0, se entiende
      * que no hay header y se construye uno a partir de la configuración de campos
      * del archivo, que viene el listCampos
@@ -622,8 +622,8 @@ class FileImport {
 
     /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
-     * ingresado a la base de datos. El archivo leido es del tipo PLANO y no posee
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
+     * ingresado a la base de datos. El archivo leído es del tipo PLANO y no posee
      * totales que validar. Si el valor filaHeader que se indica es 0, se entiende
      * que no hay header y se construye uno a partir de la configuración de campos
      * del archivo, que viene el listCampos
@@ -756,7 +756,7 @@ class FileImport {
 
     /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
      * ingresado a la base de datos.
      * El archivo que se lee es el indicado en la variable global fileProcess.
      * El archivo que se genera es el indicado en la variable global fileBody.
@@ -1324,7 +1324,7 @@ class FileImport {
 
     /**
      * Método que obtiene los datos del tipo separador desde la fila que se
-     * le esta entregando
+     * le está entregando
      * @param row       Fila que esta indicada como del tipo separador
      * @return  List    Listado con los campos obtenidos
      */
@@ -1375,7 +1375,7 @@ class FileImport {
 
     /**
      * Método que entrega en un String un dato limpio de caracteres en blanco
-     * y en el caso de los numericos, con un formato capas de ser procesado por
+     * y en el caso de los numéricos, con un formato capas de ser procesado por
      * la aplicación
      * @param dato  String con el dato a validar
      * @param caG   Objeto con la configuración del campo
@@ -1402,11 +1402,11 @@ class FileImport {
     }
 
     /**
-     * Método que valida si todos los campos obligatorios estan en el header
+     * Método que valida si todos los campos obligatorios están en el header
      * declarado. Si el header hace referencia a los campos, al menos a todos los
      * obligatorios, estos se agregan a la variable global de campos validos
-     * para despues permitir ubicar su posicion , según la posicion del campo en el
-     * Header del archivo, ademas de la variable de Header Valido . Si llega a
+     * para después permitir ubicar su posición, según la posición del campo en el
+     * Header del archivo, además de la variable de Header Valido . Si llega a
      * faltar algún campo obligatorio, se rechaza la estructura completa.
      * @param header    Texto con el header de campos del archivo
      * @param listado   Listado con la configuración de campos para el archivo
@@ -1494,7 +1494,7 @@ class FileImport {
 
     /**
      * Método que entrega el número de veces que se repite un caracter en un texto.
-     * Si entrega -1 es que hubo algun error en la operación.
+     * Si entrega -1 es que hubo algún error en la operación.
      * @param strData   Texto en que se buscara
      * @param strChar   Texto o caracter a buscar
      * @return  String  Número con el conteo de ocurrencias encontradas
