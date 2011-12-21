@@ -687,9 +687,6 @@ public class AdmReport {
      */
     public List getListTypeElement() throws ExceptionHandler{
 
-        /*String query = "select te.id_typeElement , te.typeElement "
-                + " from RPF_TypeElement te";*/
-
         String query = "select te.id_typeElement , te.typeElement "
                 + " from RPF_TypeElement te,RPF_TypeElemTypeStruct ts "
                 + " where ts.id_typeElement = te.id_typeElement"
@@ -804,11 +801,17 @@ public class AdmReport {
      */
     public List getListTypeConfigElem() throws ExceptionHandler{
 
-        String query = "select tc.id_typeConfig , tc.typeConfig "
-                + " from RPF_TypeConfig tc , RPF_TypeConfTypeStruct tt"
-                + " where tt.id_typeConfig = tc.id_typeConfig"
-                + " and tt.id_typeStructure = " + this.getStructure().getIdTypeStructure();
-        
+        String query = "select id_typeConfig, typeConfig "
+                + " from RPF_TypeConfig where id_typeConfig in ("
+                + " select distinct tct.id_typeConfig from RPF_TypeConfTypeStruct tct"
+                + " where tct.id_typeStructure in ("
+                + "  select te.id_typeStructure from RPF_TypeElemTypeStruct te"
+                + "  , RPF_TypeStructure ts"
+                + "  where te.id_typeElement = (select id_typeElement "
+                + "        from RPF_ElementStruct"
+                + "        where id_elementStruct = " + this.getElementStruct().getIdElementStruct()
+                + " ) and te.id_typeStructure = ts.id_typeStructure))";
+
         ConReport con = new ConReport();
         con.setQuery(query);
         List listData = con.getListTypeConfigElem();

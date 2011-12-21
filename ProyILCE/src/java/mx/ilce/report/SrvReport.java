@@ -1154,12 +1154,18 @@ public class SrvReport extends HttpServlet {
         AdmReport adm = new AdmReport();
         Structure confSTRMAIN = (Structure) request.getSession().getAttribute("confSTRMAIN");
         adm.setStructure(confSTRMAIN);
+        String idElement = (String) hsForm.get("idElement");
+        if (idElement!=null){
+            ElementStruct elem = new ElementStruct();
+            elem.setIdElementStruct(Integer.valueOf(idElement));
+            adm.setElementStruct(elem);
 
-        List lstTypeConfigElem = adm.getListTypeConfigElem();
-        request.getSession().setAttribute("lstTypeConfigElem", lstTypeConfigElem);
-        request.getSession().setAttribute("frmADDCNFELEM", "OK");
+            List lstTypeConfigElem = adm.getListTypeConfigElem();
+            request.getSession().setAttribute("lstTypeConfigElem", lstTypeConfigElem);
+            request.getSession().setAttribute("frmADDCNFELEM", "OK");
 
-        request.getSession().removeAttribute("frmCNFELEM");
+            request.getSession().removeAttribute("frmCNFELEM");
+        }
     }
 
     private void addConfigElemChange(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
@@ -1257,18 +1263,21 @@ public class SrvReport extends HttpServlet {
     {
         String idElement = (String) hsForm.get("idElement");
         String idConfigElement = (String) hsForm.get("idConfigElement");
-        ElementStruct elem = new ElementStruct();
-        elem.setIdElementStruct(Integer.valueOf(idElement));
-        elem.setIdConfigElement(Integer.valueOf(idConfigElement));
+        
+        if (idConfigElement!=null){
+            ElementStruct elem = new ElementStruct();
+            elem.setIdElementStruct(Integer.valueOf(idElement));
+            elem.setIdConfigElement(Integer.valueOf(idConfigElement));
 
-        AdmReport adm = new AdmReport();
-        adm.setElementStruct(elem);
+            AdmReport adm = new AdmReport();
+            adm.setElementStruct(elem);
 
-        adm.deleteConfigElement();
+            adm.deleteConfigElement();
 
-        List lstConfigElem = adm.getListConfigElement();
-        request.getSession().setAttribute("lstConfigElem", lstConfigElem);
-        request.getSession().setAttribute("frmCNFELEM", "OK");
+            List lstConfigElem = adm.getListConfigElement();
+            request.getSession().setAttribute("lstConfigElem", lstConfigElem);
+            request.getSession().setAttribute("frmCNFELEM", "OK");
+        }
     }
 
     private void updateConfigElemFrm(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
@@ -1276,61 +1285,63 @@ public class SrvReport extends HttpServlet {
         String idElement = (String) hsForm.get("idElement");
         String idConfigElement = (String) hsForm.get("idConfigElement");
 
-        request.getSession().setAttribute("idConfigElement", idConfigElement);
+        if (idConfigElement!=null){
+            request.getSession().setAttribute("idConfigElement", idConfigElement);
 
-        ElementStruct elem = new ElementStruct();
-        elem.setIdElementStruct(Integer.valueOf(idElement));
-        elem.setIdConfigElement(Integer.valueOf(idConfigElement));
+            ElementStruct elem = new ElementStruct();
+            elem.setIdElementStruct(Integer.valueOf(idElement));
+            elem.setIdConfigElement(Integer.valueOf(idConfigElement));
 
-        AdmReport adm = new AdmReport();
-        adm.setElementStruct(elem);
-
-        ElementStruct elemCNF = adm.getConfigElement();
-
-        List lstConfigElem = adm.getListConfigElement();
-        request.getSession().setAttribute("lstConfigElem", lstConfigElem);
-
-        String idTypeConfigElem = elemCNF.getIdTypeConfig().toString();
-        String idTypeValueElem = elemCNF.getIdTypeValue().toString();
-        if (elemCNF.getIdConfigValue()!=null){
-            String idConfigValueElem = elemCNF.getIdConfigValue().toString();
-            request.getSession().setAttribute("idConfigValueElem", idConfigValueElem);
-        }
-        String txtConfigValueElem = elemCNF.getConfigValue();
-        if (elemCNF.getIdMeasure()!=null){
-            String idMeasureElem = elemCNF.getIdMeasure().toString();
-            request.getSession().setAttribute("idMeasureElem", idMeasureElem);
-        }
-
-        request.getSession().setAttribute("idTypeConfigElem", idTypeConfigElem);
-        request.getSession().setAttribute("idTypeValueElem", idTypeValueElem);
-        request.getSession().setAttribute("txtConfigValueElem", txtConfigValueElem);
-
-        List lstTypeConfigElem = adm.getListTypeConfigElem();
-        request.getSession().setAttribute("lstTypeConfigElem", lstTypeConfigElem);
-
-        if (idTypeConfigElem!=null){
-            elem.setIdTypeConfig(elemCNF.getIdTypeConfig());
+            AdmReport adm = new AdmReport();
             adm.setElementStruct(elem);
-            List lstTypeValueElem = adm.getListTypeValueElem();
 
-            List lstConfigValueElem = adm.getListConfigValueElem();
+            ElementStruct elemCNF = adm.getConfigElement();
 
-            if ((lstConfigValueElem==null)||(lstConfigValueElem.isEmpty())){
-                List lstMeasureElem = adm.getListMeasureElem();
-                request.getSession().setAttribute("lstMeasureElem", lstMeasureElem);
-                request.getSession().removeAttribute("lstConfigValueElem");
-            }else{
-                request.getSession().setAttribute("lstConfigValueElem", lstConfigValueElem);
-                request.getSession().removeAttribute("lstMeasureElem");
+            List lstConfigElem = adm.getListConfigElement();
+            request.getSession().setAttribute("lstConfigElem", lstConfigElem);
+
+            String idTypeConfigElem = elemCNF.getIdTypeConfig().toString();
+            String idTypeValueElem = elemCNF.getIdTypeValue().toString();
+            if (elemCNF.getIdConfigValue()!=null){
+                String idConfigValueElem = elemCNF.getIdConfigValue().toString();
+                request.getSession().setAttribute("idConfigValueElem", idConfigValueElem);
             }
-            request.getSession().setAttribute("lstTypeValueElem", lstTypeValueElem);
-        }
+            String txtConfigValueElem = elemCNF.getConfigValue();
+            if (elemCNF.getIdMeasure()!=null){
+                String idMeasureElem = elemCNF.getIdMeasure().toString();
+                request.getSession().setAttribute("idMeasureElem", idMeasureElem);
+            }
 
-        request.getSession().setAttribute("idConfigElement", idConfigElement);
-        request.getSession().setAttribute("idElement", idElement);
-        request.getSession().setAttribute("elemCNF", elemCNF);
-        request.getSession().setAttribute("frmUPDCNFELEM", "OK");
+            request.getSession().setAttribute("idTypeConfigElem", idTypeConfigElem);
+            request.getSession().setAttribute("idTypeValueElem", idTypeValueElem);
+            request.getSession().setAttribute("txtConfigValueElem", txtConfigValueElem);
+
+            List lstTypeConfigElem = adm.getListTypeConfigElem();
+            request.getSession().setAttribute("lstTypeConfigElem", lstTypeConfigElem);
+
+            if (idTypeConfigElem!=null){
+                elem.setIdTypeConfig(elemCNF.getIdTypeConfig());
+                adm.setElementStruct(elem);
+                List lstTypeValueElem = adm.getListTypeValueElem();
+
+                List lstConfigValueElem = adm.getListConfigValueElem();
+
+                if ((lstConfigValueElem==null)||(lstConfigValueElem.isEmpty())){
+                    List lstMeasureElem = adm.getListMeasureElem();
+                    request.getSession().setAttribute("lstMeasureElem", lstMeasureElem);
+                    request.getSession().removeAttribute("lstConfigValueElem");
+                }else{
+                    request.getSession().setAttribute("lstConfigValueElem", lstConfigValueElem);
+                    request.getSession().removeAttribute("lstMeasureElem");
+                }
+                request.getSession().setAttribute("lstTypeValueElem", lstTypeValueElem);
+            }
+
+            request.getSession().setAttribute("idConfigElement", idConfigElement);
+            request.getSession().setAttribute("idElement", idElement);
+            request.getSession().setAttribute("elemCNF", elemCNF);
+            request.getSession().setAttribute("frmUPDCNFELEM", "OK");
+        }
     }
 
     private void updateConfigElemChange(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
