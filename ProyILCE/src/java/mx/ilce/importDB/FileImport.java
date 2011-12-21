@@ -954,7 +954,7 @@ class FileImport {
 
     /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
      * ingresado a la base de datos.
      * El archivo que se lee es el indicado en la variable global fileProcess.
      * El archivo que se genera es el indicado en la variable global fileBody.
@@ -1112,7 +1112,7 @@ class FileImport {
 
 /**
      * Método que genera un archivo con el body y los header, procesando el
-     * archivo de entrada y transformandolo a uno CSV que pueda ser leido para ser
+     * archivo de entrada y transformándolo a uno CSV que pueda ser leído para ser
      * ingresado a la base de datos.
      * El archivo que se lee es el indicado en la variable global fileProcess.
      * El archivo que se genera es el indicado en la variable global fileBody.
@@ -1351,7 +1351,7 @@ class FileImport {
     }
 
     /**
-     * Método que entrega en un String, el listado de campos invalidos encontrados
+     * Método que entrega en un String, el listado de campos inválidos encontrados
      * en la revisión del Header
      * @return
      */
