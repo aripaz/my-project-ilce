@@ -41,20 +41,34 @@ class ConImportDB {
     private String strQuery;
     private DataTable dataTable;
 
+    /**
+     * Obtiene el objeto DataTable
+     * @return  DataTable      Objeto DataTable
+     */
     public DataTable getDataTable() {
         return dataTable;
     }
 
+    /**
+     * Asigna el objeto DataTable
+     * @param dataTable     Objeto DataTable
+     */
     public void setDataTable(DataTable dataTable) {
         this.dataTable = dataTable;
     }
 
-
-
+    /**
+     * Obtiene la query a ejecutar
+     * @return  String      Texto con la query
+     */
     public String getStrQuery() {
         return strQuery;
     }
 
+    /**
+     * Asigna la query a ejecutar
+     * @param strQuery  Texto con la query
+     */
     public void setStrQuery(String strQuery) {
         this.strQuery = strQuery;
     }
@@ -596,7 +610,7 @@ class ConImportDB {
     /**
      * Método que se encarga de obtener un listado con el símbolo "?", el cual
      * se repite un número de veces equivalente al largo que se entrega
-     * @param largo     Número de veces que debe ir el simbolo "?"
+     * @param largo     Número de veces que debe ir el símbolo "?"
      * @return  String  Texto con el resultado
      */
     private String getVariables(int largo){
