@@ -25,15 +25,15 @@ public class LoginHandler extends ExecutionHandler{
     private boolean isLogin;
 
     /**
-     * Obtiene el estado de Logged del User: TRUE lo esta, FALSE no lo esta
-     * @return
+     * Obtiene el estado de Logged del User: TRUE lo está, FALSE no lo está
+     * @return  boolean     Resultado de la validación
      */
     public boolean isLogin() {
         return isLogin;
     }
 
     /**
-     * Asigna el estado de Logged del User:  TRUE lo esta, FALSE no lo esta
+     * Asigna el estado de Logged del User:  TRUE lo está, FALSE no lo está
      * @param isLogin   Estado que tendra el usuario.
      */
     public void setIsLogin(boolean isLogin) {

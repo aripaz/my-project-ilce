@@ -54,7 +54,7 @@ public class LogHandler {
 
     /**
      * Entrega el valor de validación de si se debe o no registrar el Select
-     * @return  Boolean     Valor TRUE O FALSE de validación
+     * @return  boolean     Valor TRUE O FALSE de validación
      */
     public boolean isBoolSelect() {
         return boolSelect;
@@ -83,7 +83,7 @@ public class LogHandler {
      * @param rutaFile      Ruta donde se dejara el archivo
      * @param textMessage   Texto del mensaje
      * @param textData      Data adicional para el mensaje
-     * @return Boolean      Valor con el resultado de la operación
+     * @return boolean      Valor con el resultado de la operación
      */
     public boolean logData(String rutaFile,StringBuffer textMessage, StringBuffer textData){
         boolean sld =false;
@@ -106,7 +106,7 @@ public class LogHandler {
      * @param rutaFile      Ruta donde se dejara el archivo
      * @param textMessage   Texto del mensaje
      * @param textData      Data adicional para el mensaje
-     * @return
+     * @return  boolean     Resultado de la operación de escritura
      */
     public boolean logData(String rutaFile,StringBuffer textMessage,
             StringBuffer textData, String HeaderFile){
@@ -122,10 +122,10 @@ public class LogHandler {
 
     /**
      * Método para guardar los warning
-     * @param rutaFile
-     * @param textMessage
-     * @param textData
-     * @return
+     * @param rutaFile      Ruta del archivo
+     * @param textMessage   Texto del mensaje
+     * @param textData      Datos obtenidos
+     * @return  boolean     Resultado de la operación de escritura
      */
     public boolean logWarning(String rutaFile,StringBuffer textMessage, StringBuffer textData){
         boolean sld =false;
@@ -140,7 +140,7 @@ public class LogHandler {
 
     /**
      * Obtiene el campo DateFile que se usara para el nombre del archivo de Log
-     * @return
+     * @return  String  Texto con el valor
      */
     private String getDateFile() {
         return dateFile;
@@ -156,7 +156,7 @@ public class LogHandler {
 
     /**
      * Obtiene el texto contenido en textData
-     * @return
+     * @return  StringBuffer    Texto con la data obtenida
      */
     private StringBuffer getTextData() {
         return textData;
@@ -172,7 +172,7 @@ public class LogHandler {
 
     /**
      * Obtiene el texto del mensaje contenido en textMessage
-     * @return
+     * @return  StringBuffer    Texto con el mensaje obtenido
      */
     private StringBuffer getTextMessage() {
         return textMessage;
@@ -188,7 +188,7 @@ public class LogHandler {
 
     /**
      * Obtiene el texto de la fecha y hora asignada al objeto
-     * @return
+     * @return  String  Texto con la fecha y hora obtenida
      */
     private String getTime() {
         return time;
@@ -204,7 +204,7 @@ public class LogHandler {
 
     /**
      * Obtiene la ruta donde se depositara el archivo de Log
-     * @return
+     * @return  String  Ruta del archivo
      */
     private String getRutaFile() {
         return rutaFile;
@@ -220,7 +220,7 @@ public class LogHandler {
 
     /**
      * Ejecuta la escritura del archivo de Log con los datos contenidos en el Objeto
-     * @return  Boolean     Valor con la validación del resultado de la operación
+     * @return  boolean     Valor con la validación del resultado de la operación
      */
     private boolean writeToFile(){
         boolean sld = true;
@@ -254,8 +254,8 @@ public class LogHandler {
      * Método que escribe en un archivo el contenido del LOG, agregando un texto
      * adicional al nombre del archivo para diferenciarlo. De ser exitosa la
      * operación entrega un TRUE, sino un FALSE
-     * @param oper
-     * @return  Boolean     Valor de validación con el resultado de la operación
+     * @param oper          Texto adicional para colocar al nombre de archivo
+     * @return  boolean     Valor de validación con el resultado de la operación
      */
     private boolean writeToFile(String oper){
         boolean sld = true;
@@ -291,7 +291,7 @@ public class LogHandler {
      * De ser exitosa la operación entrega un TRUE, sino un FALSE
      * @param strEntrada    Data a escribir en el archvio
      * @param nameFile      Nombre que debera poseer el archivo
-     * @return  Boolean     Valor de validación con el resultado de la operación
+     * @return  boolean     Valor de validación con el resultado de la operación
      * @throws IOException
      */
     private boolean guardarArchivo(StringBuffer strEntrada, String nameFile) throws IOException{
@@ -301,10 +301,8 @@ public class LogHandler {
             w = new FileWriter(rutaFile + "/" + nameFile, true);
             w.append(strEntrada.toString());
         }catch (IOException eFile){
-            //eFile.printStackTrace();
             sld = false;
         }catch(Exception e){
-            //e.printStackTrace();
             sld = false;
         }finally{
             if (w!=null){

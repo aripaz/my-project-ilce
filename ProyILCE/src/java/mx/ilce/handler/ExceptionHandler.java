@@ -211,7 +211,7 @@ public final class ExceptionHandler extends Throwable {
      * en la Exception. Requiere que previamente se haya entregado la ruta donde
      * se depositará el archivo de error y haber marcado como TRUE que debe generarse
      * el archivo
-     * @return
+     * @return  boolean     Resultado de la operación de escritura
      */
     public boolean writeToFile(){
         boolean sld = true;
@@ -348,7 +348,7 @@ public final class ExceptionHandler extends Throwable {
      * Método que construye un texto con la secuencia de ejecución del exception
      * con el objeto de identificar en que clase se produjo, en que método y en
      * que línea se produjo el error
-     * @return
+     * @return  StringBuffer    Texto con la secuencia de error
      */
     private StringBuffer getStringSecuenceError(){
         StringBuffer sld = new StringBuffer();
@@ -384,7 +384,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Método que entrega un valor booleano para considerar o no la inclusión
      * de la data contenida en el campo stringData
-     * @return  Boolean     Valor TRUE o FALSE de la validación
+     * @return  boolean     Valor TRUE o FALSE de la validación
      */
     public boolean seeStringData() {
         return seeStringData;
@@ -418,7 +418,7 @@ public final class ExceptionHandler extends Throwable {
 
     /**
      * Obtiene la respuesta de si se debe generar o no el archivo de Log
-     * @return  Boolean     Valor TRUE o FALSE de la validación
+     * @return  boolean     Valor TRUE o FALSE de la validación
      */
     public boolean isLogFile() {
         return logFile;
@@ -627,7 +627,7 @@ public final class ExceptionHandler extends Throwable {
          * Método que escribe la data entregada al archivo de Log. Si el archivo
          * existe, el texto entregado se adjunta al final del archivo
          * @param strEntrada    Texto con lo que debe anexarse al archivo de error
-         * @return  Boolean     Valor de la validación del resultado de la operación
+         * @return  boolean     Valor de la validación del resultado de la operación
          * @throws IOException
          */
         public boolean guardarArchivo(StringBuffer strEntrada) throws IOException{
@@ -731,7 +731,7 @@ public final class ExceptionHandler extends Throwable {
     /**
      * Obtiene la estructura XML de los datos ingresados hasta el momento
      * de la invocación
-     * @return
+     * @return  String  Texto con el XML
      */
     public String getDataToXML(){
         String sld = "";
@@ -1397,7 +1397,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_Aplicacion en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param aplicacion
+     * @param aplicacion    Objeto Aplicacion
      */
     public void setDataToXML(Aplicacion aplicacion){
         StringBuilder sld = new StringBuilder();
@@ -1535,7 +1535,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_Campo en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param campo
+     * @param campo     Objeto Campo
      */
     public void setDataToXML(Campo campo){
         StringBuilder sld = new StringBuilder();
@@ -1645,7 +1645,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_CampoForma en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param campoForma
+     * @param campoForma    Objeto CampoForma
      */
     public void setDataToXML(CampoForma campoForma){
         StringBuilder sld = new StringBuilder();
@@ -1837,7 +1837,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_Forma en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param forma
+     * @param forma     Objeto Forma
      */
     public void setDataToXML(Forma forma){
         StringBuilder sld = new StringBuilder();
@@ -1948,7 +1948,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_DataMail en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param dataMail
+     * @param dataMail  Objeto DataMail
      */
     public void setDataToXML(DataMail dataMail){
         StringBuilder sld = new StringBuilder();
@@ -2416,7 +2416,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_Enumeration en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param enumeration
+     * @param enumeration   Objeto Enumeration
      */
     public void setDataToXML(Enumeration enumeration){
         StringBuilder sld = new StringBuilder();
@@ -2442,7 +2442,7 @@ public final class ExceptionHandler extends Throwable {
      * de registro_HashCampo en la estructura XML que registra un error. Si
      * existían datos previos estos se mantienen y la nueva data se anexa a
      * continuación.
-     * @param hashCampo
+     * @param hashCampo     Objeto HashCampo
      */
     public void setDataToXML(HashCampo hashCampo){
         StringBuilder sld = new StringBuilder();
