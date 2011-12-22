@@ -42,7 +42,7 @@ public class Campo implements Serializable {
     /**
      * Obtiene la fecha capturada, incluyendo además los datos de
      * hora, minuto y segundo
-     * @return
+     * @return  String      Valor de la fecha con hora, minuto y segundo
      */
     public String getHourMinSec() {
         return hourMinSec;
@@ -135,7 +135,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el alias asociado a un campo
-     * @return
+     * @return  String  Alias del Campo
      */
     public String getAlias() {
         return alias;
@@ -151,7 +151,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el código asociado a un campo
-     * @return
+     * @return  Integer     Código del Campo
      */
     public Integer getCodigo() {
         return codigo;
@@ -159,7 +159,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el código asociado a un campo
-     * @param codigo    Codigo del Campo
+     * @param codigo    Código del Campo
      */
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
@@ -167,8 +167,8 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el evento asociado a un código, generalmente corresponderá
-     * a un texto o una función javascript
-     * @return
+     * a un texto o una función JavaScript
+     * @return  String  Texto del evento del Campo
      */
     public String getEvent() {
         return event;
@@ -176,7 +176,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el evento asociado a un código, generalmente corresponderá
-     * a un texto o una función javascript
+     * a un texto o una función JavaScript
      * @param event     Texto del evento del Campo
      */
     public void setEvent(String event) {
@@ -185,7 +185,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el texto de ayuda asociado a un campo
-     * @return
+     * @return  String      Texto de ayuda del Campo
      */
     public String getHelp() {
         return help;
@@ -202,7 +202,7 @@ public class Campo implements Serializable {
     /**
      * Obtiene el nombre del campo sin el caracter _, este se debe obtener
      * desde el campo asociado en la query
-     * @return
+     * @return  String  Nombre del Campo
      */
     public String getNombre() {
         return nombre;
@@ -220,7 +220,7 @@ public class Campo implements Serializable {
     /**
      * Obtiene el nombre del campo con el caracter _, este se debe obtener 
      * desde el campo asociado en la query
-     * @return
+     * @return  String  Nombre proveniente de la Base de Datos del Campo
      */
     public String getNombreDB() {
         return nombreDB;
@@ -237,7 +237,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el tipo de Control que le corresponde al campo
-     * @return
+     * @return  String      Tipo de control asignado al Campo
      */
     public String getTypeControl() {
         return typeControl;
@@ -253,7 +253,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el tipo de dato que le corresponde en la Base de Datos al campo
-     * @return
+     * @return  String  Tipo de dato proveniente de la Base de Datos
      */
     public String getTypeDataDB() {
         return typeDataDB;
@@ -270,7 +270,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el tipo de dato que le corresponde en Java al campo
-     * @return
+     * @return  String  Tipo de dato usado en la aplicación para el Campo
      */
     public String getTypeDataAPL() {
         return typeDataAPL;
@@ -278,7 +278,7 @@ public class Campo implements Serializable {
 
     /**
      * Asigna el tipo de dato que le corresponde en Java al campo
-     * @param typeDataAPL   Typo de dato usado en la aplicacion para el Campo
+     * @param typeDataAPL   Tipo de dato usado en la aplicación para el Campo
      */
     public void setTypeDataAPL(String typeDataAPL) {
         this.typeDataAPL = typeDataAPL;
@@ -286,7 +286,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el valor que posee el campo
-     * @return
+     * @return  String      Valor del Campo
      */
     public String getValor() {
         return valor;
@@ -302,7 +302,7 @@ public class Campo implements Serializable {
 
     /**
      * Obtiene el tamaño de un campo
-     * @return
+     * @return  Integer     Tamaño del Campo
      */
     public Integer getTamano() {
         return tamano;
@@ -319,7 +319,7 @@ public class Campo implements Serializable {
     /**
      * Retorna si es Autoincremet el campo. Se debe interpretar así: TRUE es la clave
      * de la tabla, FALSE no es la clave de la tabla
-     * @return
+     * @return  boolean     Validación que indica si el campo es Autoincrement o no
      */
     public boolean getIsIncrement() {
         return isIncrement;

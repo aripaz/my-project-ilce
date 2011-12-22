@@ -54,7 +54,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la clave de área del User
-     * @return
+     * @return  Integer     Valor de la clave
      */
     public Integer getClaveArea() {
         return claveArea;
@@ -62,7 +62,7 @@ public class User implements Serializable {
 
     /**
      * Asigna la clave de área del User
-     * @param claveArea
+     * @param claveArea     Valor de la clave
      */
     public void setClaveArea(Integer claveArea) {
         this.claveArea = claveArea;
@@ -70,7 +70,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la clave de empleado del User
-     * @return
+     * @return  Integer     Valor de la clave
      */
     public Integer getClaveEmpleado() {
         return claveEmpleado;
@@ -78,7 +78,7 @@ public class User implements Serializable {
 
     /**
      * Asigna la clave de empleado del User
-     * @param claveEmpleado
+     * @param claveEmpleado     Valor de la clave
      */
     public void setClaveEmpleado(Integer claveEmpleado) {
         this.claveEmpleado = claveEmpleado;
@@ -86,7 +86,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la clave de perfil del User
-     * @return
+     * @return  Integer     Valor de la clave
      */
     public Integer getClavePerfil() {
         return clavePerfil;
@@ -94,7 +94,7 @@ public class User implements Serializable {
 
     /**
      * Asigna la clave de perfil del User
-     * @param clavePerfil
+     * @param clavePerfil   Valor de la clave
      */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
@@ -102,7 +102,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el email del User
-     * @return
+     * @return  String  Texto con el email
      */
     public String getEmail() {
         return email;
@@ -110,7 +110,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el email del User
-     * @param email
+     * @param email     Texto con el email
      */
     public void setEmail(String email) {
         this.email = email;
@@ -118,7 +118,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la palabra de login del User
-     * @return
+     * @return  String  Texto con el login
      */
     public String getLogin() {
         return login;
@@ -126,14 +126,14 @@ public class User implements Serializable {
 
     /**
      * Asigna la palabra de login del User
-     * @param login
+     * @param login     Texto con el login
      */
     public void setLogin(String login) {
         this.login = login;
     }
     /**
      * Obtiene el ID del User
-     * @return
+     * @return  BigDecimal  Valor del ID
      */
     public BigDecimal getIDUser() {
         return IDUser;
@@ -141,7 +141,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el ID del User
-     * @param IDUser
+     * @param IDUser    Valor del ID
      */
     public void setIDUser(BigDecimal IDUser) {
         this.IDUser = IDUser;
@@ -149,7 +149,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la variable booleana (TRUE o FALSE) que indica si está conectado
-     * @return
+     * @return  boolean     Valor de la variable
      */
     public boolean isLogged() {
         return isLogged;
@@ -157,7 +157,7 @@ public class User implements Serializable {
 
     /**
      * Asigna a la variable booleana un TRUE o FALSE según si está conectado o no
-     * @param isLogin
+     * @param isLogin   Valor de la variable
      */
     public void setIsLogged(boolean isLogged) {
         this.isLogged = isLogged;
@@ -165,7 +165,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el nombre de User asignado
-     * @return
+     * @return  String  Texto con el nombre
      */
     public String getNombre() {
         return nombre;
@@ -173,7 +173,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el nombre de User
-     * @param nombre
+     * @param nombre    Texto con el nombre
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -181,7 +181,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la password de User asignada
-     * @return
+     * @return  String      Texto con la password
      */
     public String getPassword() {
         return password;
@@ -189,7 +189,7 @@ public class User implements Serializable {
 
     /**
      * Asigna la password de User
-     * @param password
+     * @param password  Texto con la password
      */
     public void setPassword(String password) {
         this.password = password;
@@ -197,7 +197,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el apellido materno asignado del User
-     * @return
+     * @return  String  Texto con el apellido materno
      */
     public String getApellidoMaterno() {
         return apellidoMaterno;
@@ -205,7 +205,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el apellido materno del User
-     * @param apellidoMaterno
+     * @param apellidoMaterno   Texto con el apellido materno
      */
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
@@ -213,7 +213,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el apellido paterno asignado del User
-     * @return
+     * @return  String  Texto con el apellido paterno
      */
     public String getApellidoPaterno() {
         return apellidoPaterno;
@@ -221,7 +221,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el apellido paterno del User
-     * @param apellidoPaterno
+     * @param apellidoPaterno   Texto con el apellido materno
      */
     public void setApellidoPaterno(String apellidoPaterno) {
         this.apellidoPaterno = apellidoPaterno;
@@ -229,7 +229,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene la url asignada del avatar del User
-     * @return
+     * @return  String  Texto con la URL
      */
     public String getUrlAvatar() {
         return urlAvatar;
@@ -237,7 +237,7 @@ public class User implements Serializable {
 
     /**
      * Asigna la url del avatar del User
-     * @param urlAvatar
+     * @param urlAvatar Texto con la URL
      */
     public void setUrlAvatar(String urlAvatar) {
         this.urlAvatar = urlAvatar;
@@ -245,7 +245,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el XML de permiso asignado
-     * @return
+     * @return  StringBuffer    Texto con el XML de permisos
      */
     public StringBuffer getXmlPermiso() {
         return xmlPermiso;
@@ -253,7 +253,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el XML de permiso
-     * @param xmlPermiso
+     * @param xmlPermiso    Texto con el XML de permisos
      */
     public void setXmlPermiso(StringBuffer xmlPermiso) {
         this.xmlPermiso = xmlPermiso;
@@ -261,7 +261,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el mensaje de operación asignado
-     * @return
+     * @return  String  Texto con el mensaje
      */
     public String getMessage() {
         return message;
@@ -269,7 +269,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el mensaje de operación
-     * @param message
+     * @param message   Texto con el mensaje
      */
     public void setMessage(String message) {
         this.message = message;
@@ -277,7 +277,7 @@ public class User implements Serializable {
 
     /**
      * Obtiene el objeto bitácora
-     * @return
+     * @return  Bitacora    Objeto Bitacora
      */
     public Bitacora getBitacora() {
         return bitacora;
@@ -285,7 +285,7 @@ public class User implements Serializable {
 
     /**
      * Asigna el objeto bitácora
-     * @param bitacora
+     * @param bitacora  Objeto Bitacora
      */
     public void setBitacora(Bitacora bitacora) {
         this.bitacora = bitacora;
