@@ -268,6 +268,12 @@ public class SrvReport extends HttpServlet {
         }
     }
 
+    /**
+     * Método para activar el formulario para agregar reportes
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void addReportFrm(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         request.getSession().removeAttribute("ADDCNFSTR");
@@ -286,6 +292,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("frmADDRPT", "OK");
     }
 
+    /**
+     * Método para agregar un reporte
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void addReport(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         String nombreRPT = (String) hsForm.get("nombreRPT");
@@ -302,6 +314,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("lstReport", lstReport);
     }
 
+    /**
+     * Método para limpiar de memoria los datos del formulario para agregar reportes
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void cleanAddReport(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         request.getSession().removeAttribute("frmADDRPT");
@@ -309,6 +327,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().removeAttribute("idReport");
     }
 
+    /**
+     * Método para eliminar un reporte
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void delReport(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         //OK - ir agregando los otros delete anidados
@@ -330,6 +354,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("lstReport", lstReport);
     }
 
+    /**
+     * Método para activar el formulario para actualizar un reporte
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void updateReportFrm(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         String idReport = (String) hsForm.get("idReport");
@@ -348,6 +378,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("reportUPD", reportUPD);
     }
 
+    /**
+     * Método para actualizar un reporte
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void updateReport(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         String idReport = (String) hsForm.get("idReport");
@@ -378,6 +414,12 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("lstStructure", lstStructure);
     }
 
+    /**
+     * Método para limpiar de memoria el formulario para actualizar un reporte
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void cleanUpdateReport(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         String idReport = (String) hsForm.get("idReport");
@@ -397,7 +439,13 @@ public class SrvReport extends HttpServlet {
         request.getSession().setAttribute("idReport", idReport);
         request.getSession().setAttribute("lstStructure", lstStructure);
     }
-//---------------------------------
+
+    /**
+     * Método para activar el formulario para mostrar una estructura
+     * @param request
+     * @param hsForm
+     * @throws ExceptionHandler
+     */
     private void structFrm(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
         String idReport = (String) hsForm.get("idReport");
@@ -862,11 +910,15 @@ public class SrvReport extends HttpServlet {
 
     private void updateConfigStructChange(HttpServletRequest request, HashMap hsForm) throws ExceptionHandler
     {
+        Structure confSTRMAIN = (Structure) request.getSession().getAttribute("confSTRMAIN");
+
         String idTypeConfig = (String) hsForm.get("idTypeConfig");
         String idConfigStructure = (String) hsForm.get("idConfigStructure");
 
         //RECUPERAR DATOS PARA MODIFICAR
         AdmReport adm = new AdmReport();
+        adm.setStructure(confSTRMAIN);
+        
         Config conf = new Config();
         conf.setIdConfigStructure(Integer.valueOf(idConfigStructure));
 
