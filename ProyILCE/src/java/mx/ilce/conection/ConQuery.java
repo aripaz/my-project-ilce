@@ -408,7 +408,7 @@ class ConQuery {
      * tabla que corresponde, con la query entregada
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
-     * @return
+     * @return  boolean     Resultado de la validación
      */
     private boolean validateUpdate(String tabla, String query){
         boolean queryOK = true;
@@ -641,7 +641,7 @@ class ConQuery {
      * tabla que corresponde, con la query entregada
      * @param tabla     Nombre de la tabla
      * @param query     Query a validar
-     * @return
+     * @return  boolean     Resultado de la validación
      */
     private boolean validateDelete(String tabla, String query){
         boolean queryOK = true;
@@ -661,7 +661,7 @@ class ConQuery {
      * Los parámetros de entrada deben venir en el orden que se indica en la
      * Query.
      * El objeto DataTransfer contiene los siguientes datos:
-     * (-) idQuery: Codigo de la query a utilizar.
+     * (-) idQuery: Código de la query a utilizar.
      * (-) arrData: Arreglo con los parámetros de entrada.
      * (-) arrVariables: Arreglo con variables que no necesariamente son obligatorias,
      * pero pueden estar definidas en el User o el ambiente de la aplicación.
@@ -816,7 +816,7 @@ class ConQuery {
 
     /**
      * Método que obtiene la data, aplicando a la query entregada un parámetro de entrada,
-     * el cual consiste en un string con un "WHERE" o un "AND" dependiendo de la
+     * el cual consiste en un objeto String con un "WHERE" o un "AND" dependiendo de la
      * query, este texto adicional condicionara la respuesta de la query.
      * El idQuery entregado permite seleccionar la query respectiva.
      * El objeto DataTransfer contiene los siguientes datos:
@@ -962,7 +962,7 @@ class ConQuery {
 
     /**
      * Método que obtiene la data, aplicando a la query un parámetro de entrada, el cual
-     * consiste en: (1) Un string con un "WHERE" o un "AND" dependiendo de la query,
+     * consiste en: (1) Un objeto String con un "WHERE" o un "AND" dependiendo de la query,
      * que condicionara su respuesta, (2) Un arreglo con la data de entrada para
      * la query. El idQuery entregado permite seleccionar la query respectiva.
      * El objeto DataTransfer contiene los siguientes datos:
@@ -1119,7 +1119,7 @@ class ConQuery {
      * una query correcta
      * @param query     Query Principal
      * @param strWhere  Instrucción a agregar a la query
-     * @return
+     * @return  String  Texto con la query que incluye el WHERE entregado
      */
     private String addWhereToQuery(String query, String strWhere){
         String strQuery = query;
@@ -1713,7 +1713,7 @@ class ConQuery {
 
     /**
      * Método que según el Tipo de Dato entregado que se tiene en la base de datos
-     * entrega un string con el tipo que le debe corresponder en Java
+     * entrega un objeto String con el tipo que le debe corresponder en Java
      * @param strType   Texto con el tipo de dato a analizar
      * @return  String  Texto con la conversión del tipo de dato
      */
@@ -1752,7 +1752,7 @@ class ConQuery {
      * llamados a la base de datos, dado el abuso de las llamadas a queries que
      * se realizan, y dado que estas no pueden estar sufriendo modificaciones
      * constantes como las otras queries definidas por la Capa Vista
-     * @param idQuery
+     * @param idQuery   ID de la query a usar
      * @return  String  Texto con la conversión de los datos
      */
     private String getQueryMain(Integer idQuery){
@@ -1838,7 +1838,6 @@ class ConQuery {
                         + " where pf.clave_perfil = pa.clave_perfil "
                         + " and pf.clave_forma = p.clave_forma "
                         + " and pf.clave_permiso = 5) as mostrar_informacion_sensible "
-                        //+ " ,a.prefiltro "
                         + " from perfil_aplicacion pa, aplicacion a "
                         + " , permiso_forma p , forma fo "
                         + " where a.clave_aplicacion=pa.clave_aplicacion "

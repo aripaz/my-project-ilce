@@ -420,7 +420,7 @@ public class ConEntidad {
 
     /**
      * Asigna la query de borrado
-     * @param queryDel
+     * @param queryDel  Query de borrado
      */
     public void setQueryDel(String queryDel) {
         this.queryDel = queryDel;
