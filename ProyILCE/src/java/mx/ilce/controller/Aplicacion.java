@@ -158,7 +158,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * Indica mediante TRUE o FALSE si se deben ignorar los campos con Autoincrement
      * @return  boolean     Estado de la validación
      */
     public boolean isCleanIncrement() {
@@ -166,7 +166,7 @@ public class Aplicacion extends Entidad {
     }
 
     /**
-     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con Autoincrement
      * @param cleanIncrement    Estado de la validación
      */
     public void setCleanIncrement(boolean cleanIncrement) {
@@ -833,6 +833,4 @@ public class Aplicacion extends Entidad {
                 + ((orderBY!=null)?"\n\torderBY=" + orderBY:"")
                 + "\n}";
     }
-
-
 }

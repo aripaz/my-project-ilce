@@ -71,7 +71,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene la clave del perfil
-     * @return  Integer CLave del Perfil
+     * @return  Integer Clave del Perfil
      */
     public Integer getClavePerfil() {
         return clavePerfil;
@@ -95,7 +95,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna un objeto DataMail
-     * @param dataMail
+     * @param dataMail  Objeto DataMail
      */
     public void setDataMail(DataMail dataMail) {
         this.dataMail = dataMail;
@@ -119,7 +119,7 @@ public class Forma extends Entidad{
 
     /**
      * Entrega la validación de si se debe incluir las horas en la fecha
-     * @return      Boolean
+     * @return      boolean     Valor de la validación
      */
     public boolean isIncludeHour() {
         return includeHour;
@@ -127,7 +127,7 @@ public class Forma extends Entidad{
 
     /**
      * Asigna la validación para ver si se debe incluir las horas en la fecha
-     * @param includeHour   Boolean
+     * @param includeHour   boolean     Valor de la validación
      */
     public void setIncludeHour(boolean includeHour) {
         this.includeHour = includeHour;
@@ -168,7 +168,7 @@ public class Forma extends Entidad{
     /**
      * Indica con TRUE o FALSE si al ir formando el XML se debe incluir o no el
      * listado del foraneo
-     * @return  Boolean
+     * @return  boolean     Valor de la validación
      */
     public boolean isIncludeForaneo() {
         return includeForaneo;
@@ -177,7 +177,7 @@ public class Forma extends Entidad{
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se debe incluir o no el
      * listado del foraneo
-     * @param includeForaneo    Boolean
+     * @param includeForaneo    boolean     Valor de la validación
      */
     public void setIncludeForaneo(boolean includeForaneo) {
         this.includeForaneo = includeForaneo;
@@ -185,7 +185,7 @@ public class Forma extends Entidad{
 
     /**
      * Obtiene el FormData
-     * @return  HashMap     Con la data de la forma
+     * @return  HashMap     Objeto con la data de la forma
      */
     public HashMap getFormData() {
         return formData;
@@ -248,15 +248,15 @@ public class Forma extends Entidad{
     }
 
     /**
-     * Indica mediante TRUE o FALSE si se deben ignorar los campos con increment
-     * @return  Boolean     Entrada TRUE o FALSE sobre estado del increment
+     * Indica mediante TRUE o FALSE si se deben ignorar los campos con Autoincrement
+     * @return  boolean     Entrada TRUE o FALSE sobre estado del increment
      */
     public boolean isCleanIncrement() {
         return cleanIncrement;
     }
 
     /**
-     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con increment
+     * Asigna mediante TRUE o FALSE si se deben ignorar los campos con Autoincrement
      * @param cleanIncrement    Entrada TRUE o FALSE sobre estado del increment
      */
     public void setCleanIncrement(boolean cleanIncrement) {
@@ -728,6 +728,7 @@ public class Forma extends Entidad{
 
             SendMailNotif sen = new SendMailNotif();
             sen.setBitacora(conE.getBitacora());
+            //COMENTADO HASTA QUE ARREGLEN LAS TABLAS
             /*
             if (sen.admSendMail()){
                 this.setDataMail(sen.getDataMail());
@@ -895,6 +896,7 @@ public class Forma extends Entidad{
 
             SendMailNotif sen = new SendMailNotif();
             sen.setBitacora(conE.getBitacora());
+            //COMENTADO HASTA QUE ARREGLEN LAS TABLAS
             /*
             if (sen.admSendMail()){
                 this.setDataMail(sen.getDataMail());
@@ -1619,7 +1621,7 @@ public class Forma extends Entidad{
                 String[] strSplit = cmpAux.getValor().toUpperCase().split(" FROM ");
                 String[] strSPlit2 = strSplit[1].split(" ");
                 String tabla = strSPlit2[0];
-                //con esta query garantisamos que solo se obtengann los campos y no la data
+                //con esta query garantizamos que solo se obtengann los campos y no la data
                 String strQuery = "select * from " + tabla + " where 1 = 2";
 
                 con.getBitacora().setEnable(false);

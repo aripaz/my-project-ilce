@@ -66,7 +66,7 @@ public abstract class Entidad implements Serializable{
 
     /**
      * Obtiene la data de la Entidad
-     * @return
+     * @return  Objeto      Objeto del tipo Object(acepta cualquier objeto)
      */
     public Object getData() {
         return data;
@@ -82,48 +82,48 @@ public abstract class Entidad implements Serializable{
 
     /**
      * Método Abstracto para el ingreso de una entidad
-     * @param data
+     * @param data  Objeto del tipo Object(acepta cualquier objeto)
      */
     public abstract ExecutionHandler ingresarEntidad(Object data) throws ExceptionHandler;
 
     /**
      * Método Abstracto para el ingreso de una entidad
-     * @param data
+     * @param data  Objeto del tipo Object(acepta cualquier objeto)
      */
     public abstract ExecutionHandler editarEntidad(Object data) throws ExceptionHandler;
 
     /**
      * Método Abstracto para la eliminación de entidad
      * @param data      Data para la ubicacion de la Entidad
-     * @return
+     * @return  ExecutionHandler    Resultado de la operación
      * @throws ExceptionHandler
      */
     public abstract ExecutionHandler eliminarEntidad(Object data) throws ExceptionHandler;
 
     /**
      * Método Abstracto para el despliegue de las formas
-     * @return
+     * @return  Entidad     Forma obtenida
      * @throws ExceptionHandler
      */
     public abstract Entidad mostrarForma() throws ExceptionHandler;
 
     /**
      * Método Abstracto para mostrar el resultado
-     * @return
+     * @return  Entidad     Resultado obtenido
      * @throws ExceptionHandler
      */
     public abstract Entidad mostrarResultado() throws ExceptionHandler;
 
     /**
      * Método Abstracto para la realización de búsquedas sencillas
-     * @return
+     * @return  Entidad     Resultado de la búsqueda
      * @throws ExceptionHandler
      */
     public abstract Entidad ingresarBusquedaSencilla() throws ExceptionHandler;
 
     /**
      * Método Abstracto para el ingreso de búsquedas avanzadas
-     * @return
+     * @return  Entidad     Resultado de la búsqueda
      * @throws ExceptionHandler
      */
     public abstract Entidad ingresarBusquedaAvanzada() throws ExceptionHandler;
