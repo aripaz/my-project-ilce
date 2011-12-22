@@ -60,7 +60,7 @@ public class AdminXML {
     /**
      * Obtiene el valor del Validador que indica si se debe incluir la query
      * dentro del conjunto de datos del XML
-     * @return  Boolean     Valor validador
+     * @return  boolean     Valor validador
      */
     public boolean isIncludeQuery() {
         return includeQuery;
@@ -78,7 +78,7 @@ public class AdminXML {
     /**
      * Obtiene el valor del Validador que indica si se debe incluir la hora con
      * los campos de tipo fecha
-     * @return  Boolean     Valor validador
+     * @return  boolean     Valor validador
      */
     public boolean isIncludeHour() {
         return includeHour;
@@ -144,7 +144,7 @@ public class AdminXML {
     /**
      * Obtiene el valor del Validador que indica con TRUE o FALSE si al ir
      * formando el XML se debe incluir o no el listado del foraneo
-     * @return      Boolean     Valor validador
+     * @return      boolean     Valor validador
      */
     public boolean isIncludeForaneo() {
         return includeForaneo;
@@ -161,9 +161,8 @@ public class AdminXML {
 
     /**
      * Obtiene el valor del Validador que indica con TRUE o FALSE si al ir
-     * formando el XML se debe ignorar o no
-     * los datos de tipo Increement
-     * @return  Boolean     Estado a aplicar a la variable
+     * formando el XML se debe ignorar o no los datos de tipo Autoincrement
+     * @return  boolean     Estado a aplicar a la variable
      */
     public boolean isDeleteIncrement() {
         return deleteIncrement;
@@ -171,7 +170,7 @@ public class AdminXML {
 
     /**
      * Asigna con TRUE o FALSE si al ir formando el XML se deben ignorar o no
-     * los datos del tipo Increment
+     * los datos del tipo Autoincrement
      * @param deleteIncreement  Estado a aplicar a la variable
      */
     public void setDeleteIncrement(boolean deleteIncrement) {
