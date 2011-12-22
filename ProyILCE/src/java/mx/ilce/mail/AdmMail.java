@@ -30,7 +30,7 @@ import mx.ilce.conection.ConEntidad;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Clase implementada para la administración y obtención de datos para envio de Mail
+ * Clase implementada para la administración y obtención de datos para envío de Mail
  * @author ccatrilef
  */
 public class AdmMail {

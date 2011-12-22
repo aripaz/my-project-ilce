@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Clase implementada para contener utilidades asociadas al envio de mail
+ * Clase implementada para contener utilidades asociadas al envío de mail
  * @author ccatrilef
  */
 class UtilMail {
@@ -38,9 +38,9 @@ class UtilMail {
 
     /**
      * Obtiene un Objeto Address[] que contiene los mail recuperados de un
-     * texto, en el cual estan separados por un caracter entregado como dato
+     * texto, en el cual están separados por un caracter entregado como dato
      * de entrada. Se requiere este objeto pues es el que maneja el Controller
-     * Java para envio de mail.
+     * Java para envío de mail.
      * @param entrada       Texto con los mail
      * @param separador     Separador de los mail en el texto
      * @return Address[]    Objeto con los mail
