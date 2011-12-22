@@ -421,7 +421,7 @@ public class AdminForm {
      * principalmente formulado para no perder caracteres especiales enviados
      * por la capa vista y que no son bien traducidos por el decode de Java
      * @param val   String con los datos
-     * @return
+     * @return  String  Texto con las modificaciones
      */
     private String castCodeEncoded(String val){
         String str = val;
@@ -480,7 +480,7 @@ public class AdminForm {
      * Método para convertir caracteres NO UTF8 a uno manejable para que se guarde
      * en la base de datos
      * @param data  String con los datos
-     * @return
+     * @return  String  Texto con las modificaciones
      */
     private String castCodeNoUtf8(String data){
         String str = "";
@@ -533,7 +533,7 @@ public class AdminForm {
      * principalmente formulado para no perder caracteres especiales enviados
      * por la capa vista y que no son bien traducidos por el decode de Java
      * @param strData   String con los datos
-     * @return
+     * @return  String  Texto con las modificaciones
      */
     private String castCodeUrl(String strData){
         String str = "";
@@ -799,10 +799,10 @@ public class AdminForm {
 
     /**
      * Método para la entrega de valores por defecto a algunos tipos de datos
-     * especialmente definidos
-     * @param className
-     * @param value
-     * @return
+     * especialmente definidos, cuando vienen con valor NULL
+     * @param className     Nombre de la clase
+     * @param value         Valor que contiene en este instante
+     * @return  String      Texto con el valor que le corresponde
      */
     public String getDefaultValueByClass(String className, String value){
         String strSld = null;

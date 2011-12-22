@@ -82,36 +82,38 @@ public class AdminFile {
      * Query para obtener el evento asociado a una forma
      */
     public static String EVENTO = "EVENTO";
-
-    public static String FORMASFORANEAS="FORMASFORANEAS";
-
     /**
-     * Numero con el tamaño maximo de un archivo en Bytes
+     * Query para manejo de formas foráneas
+     */
+    public static String FORMASFORANEAS="FORMASFORANEAS";
+    /**
+     * Número con el tamaño máximo de un archivo en Bytes
      */
     public static String MAXSIZEFILE = "MAXSIZEFILE";
-
     /**
      * Ruta del server para depositar los archivos enviados por usuarios
      */
     public static String FILESERVER = "FILESERVER";
-
     /**
      * Ruta del server para depositar los archivos de Log
      */
     public static String LOGFILESERVER = "LOGFILESERVER";
-
     /**
      * Clave del perfil administrador
      */
     public static String IDADMIN = "IDADMIN";
-
     /**
      * Query con los permisos
      */
     public static String PERMISOS = "PERMISOS";
+    /**
+     * Directorio donde se colocan los archivos asociados a usuarios
+     */
     public static String BIBLIOTECA = "BIBLIOTECA";
+    /**
+     * Cabecera de la Ruta web del proyecto
+     */
     public static String PROYECTO = "PROYECTO";
-
 
     private String rutaFile;
     private String rutaDest;
@@ -439,7 +441,7 @@ public class AdminFile {
     /**
      * Método para invocar la copia del archivo subido al directorio Temporal
      * hasta el repositorio de archivos
-     * @return  Boolean     Resultado de la operación de copia
+     * @return  boolean     Resultado de la operación de copia
      * @throws ExceptionHandler
      */
     public boolean putFile() throws ExceptionHandler{
@@ -503,7 +505,7 @@ public class AdminFile {
     /**
      * Método que efectúa la copia de un archivo desde una ruta de Origen a
      * una de Destino
-     * @return  Boolean     Resultado de la operación de copia
+     * @return  boolean     Resultado de la operación de copia
      * @throws IOException
      */
     private boolean copiarArchivo() throws IOException{
