@@ -89,7 +89,7 @@ public class AdmBitacora {
 
     /**
      * Obtiene el listado de variables de la bitácora
-     * @return
+     * @return  List    Listado de variables
      */
     public List getLstVariables() {
         return lstVariables;
@@ -97,7 +97,7 @@ public class AdmBitacora {
 
     /**
      * Agrega el listado de variables de la bitácora
-     * @param lstVariables
+     * @param lstVariables      Listado de variables
      */
     public void setLstVariables(List lstVariables) {
         this.lstVariables = lstVariables;
@@ -121,7 +121,7 @@ public class AdmBitacora {
 
     /**
      * Obtiene el LogDB usado por el administrador
-     * @return  String
+     * @return  String      Texto con el valor
      */
     public String getLogDB() {
         return ((logDB==null)?"":logDB);
@@ -129,7 +129,7 @@ public class AdmBitacora {
 
     /**
      * Asigna el LogDB que utilizara el administrador
-     * @param logDB
+     * @param logDB     Texto con el valor
      */
     public void setLogDB(String logDB) {
         this.logDB = ((logDB==null)?"":logDB);
@@ -137,7 +137,7 @@ public class AdmBitacora {
 
     /**
      * Obtiene el LogDBProy usado por el Administrador
-     * @return
+     * @return  String      Texto con el valor
      */
     public String getLogDBProy() {
         return ((logDBProy==null)?"":logDBProy);
@@ -145,7 +145,7 @@ public class AdmBitacora {
 
     /**
      * Asigna el logDBProy usado por el administrador
-     * @param logDBProy
+     * @param logDBProy     Texto con el valor
      */
     public void setLogDBProy(String logDBProy) {
         this.logDBProy = ((logDBProy==null)?"":logDBProy);
@@ -153,7 +153,7 @@ public class AdmBitacora {
 
     /**
      * Obtiene la query a utilizar para el ingreso de datos
-     * @return
+     * @return  String  Texto con la query
      */
     public String getStrQuery() {
         return strQuery;
@@ -161,7 +161,7 @@ public class AdmBitacora {
 
     /**
      * Asigna la query a utilizar para el ingreso de datos
-     * @param strQuery
+     * @param strQuery  Texto con la query
      */
     public void setStrQuery(String strQuery) {
         this.strQuery = strQuery;
@@ -169,7 +169,7 @@ public class AdmBitacora {
 
     /**
      * Obtiene las properties asignadas al administrador
-     * @return
+     * @return  Properties  Objeto Propertie con los datos obtenidos
      */
     public Properties getProp() {
         return prop;
@@ -232,7 +232,7 @@ public class AdmBitacora {
      * properties
      * @param prop      Listado de properties obtenido desde el archivo de configuracion
      * @param strKey    Palabra usada como Key para la busqueda dentro del propertie
-     * @return
+     * @return  String  Valor obtenido con la Key
      */
     public static String getKey(Properties prop, String key) throws ExceptionHandler{
         String sld = "";
@@ -290,7 +290,7 @@ public class AdmBitacora {
 
     /**
      * Validación de la query para comprobar que es un INSERT en las tablas autorizadas
-     * @return
+     * @return  boolean     Resultado de la validación
      */
     private boolean validateInsert(){
         boolean sld=false;
@@ -386,7 +386,7 @@ public class AdmBitacora {
 
     /**
      * Validación de la query para comprobar que es un UPDATE en las tablas autorizadas
-     * @return
+     * @return  boolean     Resultado de la validación
      */
     private boolean validateUpdate(){
         boolean sld=false;
@@ -460,7 +460,7 @@ public class AdmBitacora {
 
     /**
      * Validación de la query para comprobar que es un DELETE en las tablas autorizadas
-     * @return
+     * @return  boolean     Resultado de la validación
      */
     private boolean validateDelete(){
         boolean sld=false;
@@ -736,7 +736,7 @@ public class AdmBitacora {
 
     /**
      * Método para agregar un evento a la bitácora
-     * @return
+     * @return  boolean     Resultado de la operación
      */
     public boolean addBitacora()throws ExceptionHandler{
         boolean sld = false;
@@ -860,8 +860,8 @@ public class AdmBitacora {
     }
 
     /**
-     * Método para realizar un UPDATE en la Bitacora
-     * @return
+     * Método para realizar un UPDATE en los registros de la Bitácora
+     * @return  boolean     Resultado de la operación
      */
     private boolean updateBitacora() throws ExceptionHandler{
         boolean sld = true;
@@ -1036,7 +1036,7 @@ public class AdmBitacora {
      * Método para manejar caracteres especiales que se requieren reemplazar
      * antes de enviarlos como data en una query, por ejemplo: (') por ('')
      * @param strData
-     * @return
+     * @return  String  Texto con el resultado del reemplazo
      */
     private String replaceChar(String strData){
         String strSld = "";
