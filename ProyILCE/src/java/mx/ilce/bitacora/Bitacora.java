@@ -74,7 +74,7 @@ public final class Bitacora implements Serializable {
 
     /**
      * Constructor a partir de los datos del request
-     * @param request
+     * @param request   Objeto del tipo HttpServletRequest
      */
     public Bitacora(HttpServletRequest request){
         this.setIp(request.getRemoteAddr());
@@ -178,7 +178,7 @@ public final class Bitacora implements Serializable {
 
     /**
      * Obtiene la clave del empleado
-     * @return  Integer     CLave del empleado
+     * @return  Integer     Clave del empleado
      */
     public Integer getClaveEmpleado() {
         return ((claveEmpleado==null)?cero:claveEmpleado);
