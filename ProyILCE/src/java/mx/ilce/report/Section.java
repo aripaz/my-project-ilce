@@ -19,7 +19,7 @@ package mx.ilce.report;
 import java.io.Serializable;
 
 /**
- * Clase para la contencion de las secciones y sus configuraciones
+ * Clase para la contención de las secciones y sus configuraciones
  * @author ccatrilef
  */
 class Section implements Serializable{

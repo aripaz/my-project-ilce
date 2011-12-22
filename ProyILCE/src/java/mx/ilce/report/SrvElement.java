@@ -34,7 +34,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Servlet implementado para poder acceder a la seleccion de elementos
+ * Servlet implementado para poder acceder a la selección de elementos
  * @author ccatrilef
  */
 public class SrvElement extends HttpServlet {

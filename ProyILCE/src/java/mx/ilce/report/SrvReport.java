@@ -32,7 +32,7 @@ import mx.ilce.component.AdminForm;
 import mx.ilce.handler.ExceptionHandler;
 
 /**
- * Servlet encargado de la generacion de reportes
+ * Servlet encargado de la generación de reportes
  * @author ccatrilef
  */
 public class SrvReport extends HttpServlet {
@@ -1515,7 +1515,7 @@ public class SrvReport extends HttpServlet {
 
     /**
      * Genera un Array con la data obtenida desde el formulario, cuando esta
-     * data corresponde a las que poseen los nombres $1, $2, $3, etc
+     * data corresponde a las que poseen los nombres $1, $2, $3, etc.
      * @param hsForm    Datos capturados desde el formulario
      * @return
      */

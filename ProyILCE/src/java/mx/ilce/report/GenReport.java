@@ -52,8 +52,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 /**
- * Clase generadora de los reportes, tras la obtencion de los datos para su
- * configuracion y generacion.
+ * Clase generadora de los reportes, tras la obtención de los datos para su
+ * configuración y generación.
  * @author ccatrilef
  */
 public class GenReport  implements Serializable{
@@ -396,7 +396,7 @@ public class GenReport  implements Serializable{
     }
 
     /**
-     * Método que obtiene la ruta del directorio donde sera colocado el archivo
+     * Método que obtiene la ruta del directorio donde será colocado el archivo
      * de reporte
      * @return  String  Ruta obtenida para el archivo
      * @throws ExceptionHandler
@@ -720,7 +720,7 @@ public class GenReport  implements Serializable{
     }
 
     /**
-     * Método que contruye un bloque
+     * Método que construye un bloque
      * @param lst
      * @param lstElem
      * @return
@@ -1190,8 +1190,8 @@ public class GenReport  implements Serializable{
     }
 
     /**
-     * Método que contruye un Flujo. Este puede contener textos, tablas,
-     * imagenes, etc
+     * Método que construye un Flujo. Este puede contener textos, tablas,
+     * imágenes, etc.
      * @param lst   Listado con la configuración del flujo
      * @return
      */

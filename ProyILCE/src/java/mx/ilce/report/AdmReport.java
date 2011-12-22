@@ -130,7 +130,7 @@ public class AdmReport {
     }
 
     /**
-     * Método para agregar reportes nuevos. Se contruye el reporte más las
+     * Método para agregar reportes nuevos. Se construye el reporte más las
      * estructuras y sus configuraciones por defecto que debe poseer. Se
      * requiere el nombre del Reporte.
      * @return Integer  ID del reporte
@@ -564,7 +564,7 @@ public class AdmReport {
     }
 
     /**
-     * Método para la eliminacion de una query de estructura. Se requiere el ID
+     * Método para la eliminación de una query de estructura. Se requiere el ID
      * de la query de estructura
      * @return Integer  ID con el resultado de la operación
      * @throws ExceptionHandler
@@ -641,7 +641,7 @@ public class AdmReport {
     }
 
     /**
-     * Método que entrega un Elemento de una estrucura mediante el ID del
+     * Método que entrega un Elemento de una estructura mediante el ID del
      * elemento. Se requiere el ID del elemento a buscar
      * @return ElementStruct    Objeto ElementStruct
      * @throws ExceptionHandler
@@ -861,7 +861,7 @@ public class AdmReport {
     }
 
     /**
-     * Método que entrega el listado de valores de configuracion. Se requiere
+     * Método que entrega el listado de valores de configuración. Se requiere
      * el ID del tipo de configuración
      * @return List     Listado con objetos Config
      * @throws ExceptionHandler
@@ -1008,8 +1008,8 @@ public class AdmReport {
 
     /**
      * Método para obtener los elementos que pueden ser seleccionados para
-     * generar un nuevo Reporte. Aqui se utilizan reportes generados con
-     * anterioridad que no necesariamente estan disponibles al usuario, pero
+     * generar un nuevo Reporte. Aquí se utilizan reportes generados con
+     * anterioridad que no necesariamente están disponibles al usuario, pero
      * contienen elementos que pueden ser usados para generar otros reportes.
      * Se entregara un listados con los distintos tipos de elementos que se
      * obtuvieron.

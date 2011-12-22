@@ -68,16 +68,16 @@ public class Config implements Serializable{
     }
 
     /**
-     * Obtiene el valor de validacion de si es externa o no la query
-     * @return Integer      Valor de validacion
+     * Obtiene el valor de validación de si es externa o no la query
+     * @return Integer      Valor de validación
      */
     public Integer getIsExtern() {
         return isExtern;
     }
 
     /**
-     * Asigna el valor de validacion de si es externa o no la query
-     * @param isExtern      Valor de validacion
+     * Asigna el valor de validación de si es externa o no la query
+     * @param isExtern      Valor de validación
      */
     public void setIsExtern(Integer isExtern) {
         this.isExtern = isExtern;
@@ -116,32 +116,32 @@ public class Config implements Serializable{
     }
 
     /**
-     * Obtiene el valor de la configuracion
-     * @return  String  Valor de la configuracion
+     * Obtiene el valor de la configuración
+     * @return  String  Valor de la configuración
      */
     public String getConfigValue() {
         return configValue;
     }
 
     /**
-     * Asigna el valor de la configuracion
-     * @param configValue   Valor de la configuracion
+     * Asigna el valor de la configuración
+     * @param configValue   Valor de la configuración
      */
     public void setConfigValue(String configValue) {
         this.configValue = configValue;
     }
 
     /**
-     * Obtiene el ID del valor de configuracion
-     * @return  Integer     ID del valor de configuracion
+     * Obtiene el ID del valor de configuración
+     * @return  Integer     ID del valor de configuración
      */
     public Integer getIdConfigValue() {
         return idConfigValue;
     }
 
     /**
-     * Asigna el ID del valor de configuracion
-     * @param idConfigValue     ID del valor de configuracion
+     * Asigna el ID del valor de configuración
+     * @param idConfigValue     ID del valor de configuración
      */
     public void setIdConfigValue(Integer idConfigValue) {
         this.idConfigValue = idConfigValue;
@@ -156,72 +156,72 @@ public class Config implements Serializable{
     }
 
     /***
-     * Asigna el ID del tipo de valor de configuracion
-     * @param idTypeConfigValue     ID del tipo de valor de configuracion
+     * Asigna el ID del tipo de valor de configuración
+     * @param idTypeConfigValue     ID del tipo de valor de configuración
      */
     public void setIdTypeValue(Integer idTypeValue) {
         this.idTypeValue = idTypeValue;
     }
 
     /**
-     * Obtiene el tipo de valor de configuracion
-     * @return String   Tipo de valor de configuracion
+     * Obtiene el tipo de valor de configuración
+     * @return String   Tipo de valor de configuración
      */
     public String getTypeValue() {
         return typeValue;
     }
 
     /**
-     * Asigna el tipo de valor de configuracion
-     * @param typeConfigValue   Tipo de valor de configuracion
+     * Asigna el tipo de valor de configuración
+     * @param typeConfigValue   Tipo de valor de configuración
      */
     public void setTypeValue(String typeValue) {
         this.typeValue = typeValue;
     }
 
     /**
-     * Obtiene el ID del tipo de configuracion
-     * @return  Integer     ID del tipo de configuracion
+     * Obtiene el ID del tipo de configuración
+     * @return  Integer     ID del tipo de configuración
      */
     public Integer getIdTypeConfig() {
         return idTypeConfig;
     }
 
     /**
-     * Asigna el ID del tipo de configuracion
-     * @param idTypeConfig      ID del tipo de configuracion
+     * Asigna el ID del tipo de configuración
+     * @param idTypeConfig      ID del tipo de configuración
      */
     public void setIdTypeConfig(Integer idTypeConfig) {
         this.idTypeConfig = idTypeConfig;
     }
 
     /**
-     * Obtiene el tipo de configuracion
-     * @return  String  Tipo de configuracion
+     * Obtiene el tipo de configuración
+     * @return  String  Tipo de configuración
      */
     public String getTypeConfig() {
         return typeConfig;
     }
 
     /**
-     * Asigna el tipo de configuracion
-     * @param typeConfig    Tipo de configuracion
+     * Asigna el tipo de configuración
+     * @param typeConfig    Tipo de configuración
      */
     public void setTypeConfig(String typeConfig) {
         this.typeConfig = typeConfig;
     }
 
     /**
-     * Obtiene el ID de configuracion de estructura
-     * @return Integer ID de configuracion de estructura
+     * Obtiene el ID de configuración de estructura
+     * @return Integer ID de configuración de estructura
      */
     public Integer getIdConfigStructure() {
         return ((idConfigStructure==null)?0:idConfigStructure);
     }
 
     /**
-     * Asigna el ID de configuracion de estructura
-     * @param idConfigStructure     ID de configuracion de estructura
+     * Asigna el ID de configuración de estructura
+     * @param idConfigStructure     ID de configuración de estructura
      */
     public void setIdConfigStructure(Integer idConfigStructure) {
         this.idConfigStructure = idConfigStructure;
@@ -242,24 +242,6 @@ public class Config implements Serializable{
     public void setIdStructure(Integer idStructure) {
         this.idStructure = idStructure;
     }
-
-    /**
-     * Obtiene el nombre de la estructura
-     * @return String   Nombre de la estructura
-     */
-    /*
-    public String getStructure() {
-        return structure;
-    }*/
-
-    /**
-     * Asigna el nombre de la estructura
-     * @param structure     Nombre de la estructura
-     */
-    /*
-    public void setStructure(String structure) {
-        this.structure = structure;
-    }*/
 
     /**
      * Obtiene el ID del tipo de estructura
@@ -310,32 +292,32 @@ public class Config implements Serializable{
     }
 
     /**
-     * Obtiene el ID del orden de posicion
-     * @return  Integer     ID del orden de posicion
+     * Obtiene el ID del orden de posición
+     * @return  Integer     ID del orden de posición
      */
     public Integer getIdOrder() {
         return idOrder;
     }
 
     /**
-     * Asigna el ID del orden de posicion
-     * @param idOrder   ID del orden de posicion
+     * Asigna el ID del orden de posición
+     * @param idOrder   ID del orden de posición
      */
     public void setIdOrder(Integer idOrder) {
         this.idOrder = idOrder;
     }
 
     /**
-     * Obtiene el valor de validacion de si es principal o no la estructura
-     * @return  int    Valor de validacion
+     * Obtiene el valor de validación de si es principal o no la estructura
+     * @return  int    Valor de validación
      */
     public int getMainFig() {
         return mainFig;
     }
 
     /**
-     * Asigna el valor de validacion de si es principal o no la estructura
-     * @param mainFig   Valor de validacion
+     * Asigna el valor de validación de si es principal o no la estructura
+     * @param mainFig   Valor de validación
      */
     public void setMainFig(int mainFig) {
         this.mainFig = mainFig;

@@ -1300,7 +1300,7 @@ class ConReport {
     }
 
     /**
-     * Método que obtiene el listado con los valores de configuracion
+     * Método que obtiene el listado con los valores de configuración
      * @return List     Listado con objetos Config
      * @throws ExceptionHandler
      */
@@ -1671,7 +1671,7 @@ class ConReport {
 
     /**
      * Método que entrega el listado con las configuraciones de estructura.
-     * Usado en la configuracion del reporte
+     * Usado en la configuración del reporte
      * @return List     Listado con objetos Config
      * @throws ExceptionHandler
      */
@@ -2094,7 +2094,7 @@ class ConReport {
 
     /**
      * Método que según el tipo entregado que se tiene en la base de datos
-     * entrega un string con el tipo que le debe corresponder en Java
+     * entrega un objeto String con el tipo que le debe corresponder en Java
      * @param strType   Texto con el tipo de dato a analizar
      * @return
      */
