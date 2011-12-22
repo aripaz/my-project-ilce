@@ -43,7 +43,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtiene un texto con la query que se utiliza en la consulta a la 
      * Base de Datos
-     * @return
+     * @return  String  Texto con la query
      */
     public String getStrQuery() {
         return strQuery;
@@ -52,7 +52,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtiene un texto con la query que se utiliza en la consulta a la
      * Base de datos
-     * @param strQuery
+     * @param strQuery  Texto con la query
      */
     public void setStrQuery(String strQuery) {
         this.strQuery = strQuery;
@@ -60,7 +60,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtiene el dato PK desde el objeto
-     * @return
+     * @return  String  Texto con el PK
      */
     public String getPkData() {
         return pkData;
@@ -68,7 +68,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Asigna el dato PK del objeto
-     * @param pkData
+     * @param pkData    Texto con el PK
      */
     public void setPkData(String pkData) {
         this.pkData = pkData;
@@ -91,7 +91,7 @@ public class HashCampo implements Serializable  {
      * campos correctos, se retorna TRUE.
      * Se asume que los registros vienen ordenados por código index de 0 a n.
      * @param hsCmp     HashCampo que contiene la nueva data a ingresar
-     * @return
+     * @return  boolean     Resultado de la operación
      */
     public boolean addListToListData(HashCampo hsCmp){
         boolean ingresado = false;
@@ -113,7 +113,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtenemos un Campo por medio de su código
      * @param codigo    Código del campo a buscar
-     * @return
+     * @return  Campo   Objeto Campo
      */
     public Campo getCampoByCod(Integer codigo){
         HashMap hm = this.listCampoByCod;
@@ -131,7 +131,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtenemos un Campo por medio de su alias
      * @param alias     Alias del Campo a buscar
-     * @return
+     * @return  Campo   Objeto Campo
      */
     public Campo getCampoByAlias(String alias){
         HashMap hm = this.listAlias;
@@ -150,7 +150,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtiene un Campo por su nombre
      * @param name      Nombre del Campo a buscar
-     * @return
+     * @return  Campo   Objeto Campo
      */
     public Campo getCampoByName(String name){
         HashMap hm = this.listCampoByName;
@@ -169,7 +169,7 @@ public class HashCampo implements Serializable  {
     /**
      * Obtenemos un Campo por su nombre de Base de Datos
      * @param name      Nombre de Base de Datos del Campo a buscar
-     * @return
+     * @return  Campo   Objeto Campo
      */
     public Campo getCampoByNameDB(String nameDB){
         HashMap hm = this.listCampoByName;
@@ -194,7 +194,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtiene el número de campos que posee cada registro
-     * @return
+     * @return  Integer     Número de campos
      */
     public Integer getLengthCampo() {
         return lengthCampo;
@@ -210,7 +210,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtiene el número de registros de un listado
-     * @return
+     * @return  Integer     Número de registros
      */
     public Integer getLengthData() {
         return lengthData;
@@ -226,7 +226,7 @@ public class HashCampo implements Serializable  {
 
     /**
      * Obtiene el listado con los registros de la data recuperada en una query
-     * @return
+     * @return  HashMap     Objeto HashMap con los listados
      */
     public HashMap getListData() {
         return listData;
@@ -243,7 +243,7 @@ public class HashCampo implements Serializable  {
     /**
      * Entrega el listado de nombres de campo que se usaron para obtener un
      * listado de registros de una query
-     * @return
+     * @return  List    Objeto List con el listado
      */
     public List getListCampos() {
         return listCampos;
@@ -275,7 +275,7 @@ public class HashCampo implements Serializable  {
      * indefinida, además del resultado obtenido desde la query que se invocó.
      * El método que la utilice debe indicar que clase es la que contiene en
      * su descripción
-     * @return
+     * @return  Object      Objeto del tipo Object (soporta cualquier objeto)
      */
     public Object getObjData() {
         return objData;
@@ -335,9 +335,9 @@ public class HashCampo implements Serializable  {
     /**
      * Compara si dos listas de campos son iguales, retorna TRUE si los son,
      * retorna FALSE si no es así
-     * @param lst1
-     * @param lst2
-     * @return
+     * @param lst1  Listado 1
+     * @param lst2  Listado 2
+     * @return  boolean     Resultado de la operación
      */
     private boolean equalsCampos(List lst1, List lst2){
 

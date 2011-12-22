@@ -41,7 +41,7 @@ public class DataTransfer {
      * Obtiene un objeto del tipo Object, para soportar cualquier tipo de
      * data que se necesite mantener o enviar y no está catalogada en los otros
      * métodos
-     * @return
+     * @return  Object  Objeto del tipo Object (soporta cualquier objeto)
      */
     public Object getDataObject() {
         return dataObject;
@@ -51,7 +51,7 @@ public class DataTransfer {
      * Asigna un objeto del tipo Object, para soportar cualquier tipo de
      * data que se necesite mantener o enviar y no está catalogada en los otros
      * métodos
-     * @param dataObject
+     * @param dataObject    Objeto del tipo Object (soporta cualquier objeto)
      */
     public void setDataObject(Object dataObject) {
         this.dataObject = dataObject;
@@ -67,7 +67,7 @@ public class DataTransfer {
     /**
      * Obtiene un arreglo con los datos de entrada, enfocado a los datos de la
      * forma %1, %2, %3, etc.
-     * @return
+     * @return  String[]    Arreglo de String
      */
     public String[] getArrData() {
         return ((arrData==null)?new String[0]:arrData);
@@ -76,7 +76,7 @@ public class DataTransfer {
     /**
      * Asigna un arreglo con los datos de entrada, enfocado a los datos de la
      * forma %1, %2, %3, etc.
-     * @param arrData
+     * @param arrData   Arreglo de String
      */
     public void setArrData(String[] arrData) {
         this.arrData = arrData;
@@ -85,7 +85,7 @@ public class DataTransfer {
     /**
      * Obtiene un arreglo bidimensional, el cual contendrá las variables
      * predefinidas del Usuario, como clave_empleado, clave_perfil, etc
-     * @return
+     * @return  String[][]      Matriz de String
      */
     public String[][] getArrVariables() {
         return ((arrVariables==null)?new String[0][0]:arrVariables);
@@ -94,7 +94,7 @@ public class DataTransfer {
     /**
      * Asigna un arreglo bidimensional, el cual contendrá las variables
      * predefinidas del Usuario, como clave_empleado, clave_perfil, etc
-     * @param arrVariables
+     * @param arrVariables  Matriz de String
      */
     public void setArrVariables(String[][] arrVariables) {
         this.arrVariables = arrVariables;
@@ -102,7 +102,7 @@ public class DataTransfer {
 
     /**
      * Obtiene un dato del tipo Campo
-     * @return
+     * @return  Campo   Objeto del tipo Campo
      */
     public Campo getCampo() {
         return campo;
@@ -110,7 +110,7 @@ public class DataTransfer {
 
     /**
      * Asigna un dato del tipo Campo
-     * @param campo
+     * @param campo Objeto del tipo Campo
      */
     public void setCampo(Campo campo) {
         this.campo = campo;
@@ -118,7 +118,7 @@ public class DataTransfer {
 
     /**
      * Obtiene un dato del tipo CampoForma
-     * @return
+     * @return  CampoForma  Objeto del tipo CampoForma
      */
     public CampoForma getCampoForma() {
         return campoForma;
@@ -126,7 +126,7 @@ public class DataTransfer {
 
     /**
      * Asigna un dato del tipo CampoForma
-     * @param campoForma
+     * @param campoForma    Objeto del tipo CampoForma
      */
     public void setCampoForma(CampoForma campoForma) {
         this.campoForma = campoForma;
@@ -134,7 +134,7 @@ public class DataTransfer {
 
     /**
      * Obtiene el ID de la query a ejecutar
-     * @return
+     * @return  Integer     ID de la query
      */
     public Integer getIdQuery() {
         return idQuery;
@@ -142,7 +142,7 @@ public class DataTransfer {
 
     /**
      * Asigna el ID de la query a ejecutar
-     * @param idQuery
+     * @param idQuery   ID de la query
      */
     public void setIdQuery(Integer idQuery) {
         this.idQuery = idQuery;
@@ -150,7 +150,7 @@ public class DataTransfer {
 
     /**
      * Obtiene la query a ejecutar
-     * @return
+     * @return  String  Texto con la query
      */
     public String getQuery() {
         return query;
@@ -158,7 +158,7 @@ public class DataTransfer {
 
     /**
      * Asigna la query a ejecutar
-     * @param query
+     * @param query     Texto con la query
      */
     public void setQuery(String query) {
         this.query = query;
@@ -166,7 +166,7 @@ public class DataTransfer {
 
     /**
      * Obtiene una query del tipo DELETE para ejecutar
-     * @return
+     * @return  String  Texto con la query para DELETE
      */
     public String getQueryDelete() {
         return queryDelete;
@@ -174,7 +174,7 @@ public class DataTransfer {
 
     /**
      * Asigna una query del tipo DELETE para ejecutar
-     * @param queryDelete
+     * @param queryDelete   Texto con la query para DELETE
      */
     public void setQueryDelete(String queryDelete) {
         this.queryDelete = queryDelete;
@@ -182,7 +182,7 @@ public class DataTransfer {
 
     /**
      * Obtiene una query del tipo INSERT para ejecutar
-     * @return
+     * @return  String  Texto con la query para INSERT
      */
     public String getQueryInsert() {
         return queryInsert;
@@ -190,7 +190,7 @@ public class DataTransfer {
 
     /**
      * Asigna una query del tipo INSERT para ejecutar
-     * @param queryInsert
+     * @param queryInsert   Texto con la query para INSERT
      */
     public void setQueryInsert(String queryInsert) {
         this.queryInsert = queryInsert;
@@ -198,7 +198,7 @@ public class DataTransfer {
 
     /**
      * Obtiene una query del tipo UPDATE para ejecutar
-     * @return
+     * @return  String      Texto con la query para UPDATE
      */
     public String getQueryUpdate() {
         return queryUpdate;
@@ -206,7 +206,7 @@ public class DataTransfer {
 
     /**
      * Asigna una query del tipo UPDATE para ejecutar
-     * @param queryUpdate
+     * @param queryUpdate   Texto con la query para UPDATE
      */
     public void setQueryUpdate(String queryUpdate) {
         this.queryUpdate = queryUpdate;
@@ -214,7 +214,7 @@ public class DataTransfer {
 
     /**
      * Obtiene el texto WHERE que se debe agregar a una query
-     * @return
+     * @return  String      Texto con el WHERE
      */
     public String getStrWhere() {
         return strWhere;
@@ -222,7 +222,7 @@ public class DataTransfer {
 
     /**
      * Asigna el texto WHERE que se debe agregar a una query
-     * @param strWhere
+     * @param strWhere  Texto con el WHERE
      */
     public void setStrWhere(String strWhere) {
         this.strWhere = strWhere;
@@ -231,7 +231,7 @@ public class DataTransfer {
     /**
      * Obtiene la tabla para realizar la operación, usada para validar la
      * estructura de una query del tipo INSERT, UPDATE y DELETE
-     * @return
+     * @return  String  Nombre de la tabla
      */
     public String getTabla() {
         return tabla;
@@ -240,7 +240,7 @@ public class DataTransfer {
     /**
      * Asigna la tabla para realizar la operación, usada para validar la
      * estructura de una query del tipo INSERT, UPDATE y DELETE
-     * @param tabla
+     * @param tabla     Nombre de la tabla
      */
     public void setTabla(String tabla) {
         this.tabla = tabla;
@@ -248,7 +248,7 @@ public class DataTransfer {
 
     /**
      * Obtiene el texto con el ORDER BY que se debe utilizar en la query
-     * @return
+     * @return  String  Texto con el Order by
      */
     public String getOrderBY() {
         return orderBY;
@@ -256,7 +256,7 @@ public class DataTransfer {
 
     /**
      * Asigna el texto con el ORDER BY que se debe utilizar en la query
-     * @param orderBY
+     * @param orderBY   Texto con el Order by
      */
     public void setOrderBY(String orderBY) {
         this.orderBY = orderBY;

@@ -57,7 +57,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor de si debe (1) o no (0) cargar el dato foraneo
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getCargaDatoForaneosRetrasada() {
         return cargaDatoForaneosRetrasada;
@@ -73,7 +73,7 @@ public class CampoForma implements Serializable  {
     
     /**
      * Obtiene el valor de si debe permitir foraneo (1) o no (0)
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getNoPermitirValorForaneoNulo() {
         return noPermitirValorForaneoNulo;
@@ -81,7 +81,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor de si debe permitir foraneo (1) o no (0)
-     * @param noPermitirValorForaneoNulo
+     * @param noPermitirValorForaneoNulo    Valor con la validación
      */
     public void setNoPermitirValorForaneoNulo(Integer noPermitirValorForaneoNulo) {
         this.noPermitirValorForaneoNulo = noPermitirValorForaneoNulo;
@@ -89,7 +89,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor de si se debe agrupar (1) o no (0)
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getUsadoParaAgrupar() {
         return usadoParaAgrupar;
@@ -97,7 +97,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor de si se debe agrupar (1) o no (0)
-     * @param usadoParaAgrupar
+     * @param usadoParaAgrupar      Valor con la validación
      */
     public void setUsadoParaAgrupar(Integer usadoParaAgrupar) {
         this.usadoParaAgrupar = usadoParaAgrupar;
@@ -105,7 +105,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor del AliasTab
-     * @return
+     * @return  String  Texto con el AliasTab
      */
     public String getAliasTab() {
         return aliasTab;
@@ -113,7 +113,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor del AliasTab
-     * @param aliasTab
+     * @param aliasTab  Texto con el AliasTab
      */
     public void setAliasTab(String aliasTab) {
         this.aliasTab = aliasTab;
@@ -121,7 +121,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor de si debe Justificar cambio (1) o no (0)
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getJustificarCambio() {
         return justificarCambio;
@@ -129,7 +129,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor de si debe Justificar cambio (1) o no (0)
-     * @param justificarCambio
+     * @param justificarCambio  Valor con la validación
      */
     public void setJustificarCambio(Integer justificarCambio) {
         this.justificarCambio = justificarCambio;
@@ -137,7 +137,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor predeterminado
-     * @return
+     * @return  String  Texto con el valor
      */
     public String getValorPredeterminado() {
         return valorPredeterminado;
@@ -145,7 +145,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor predeterminado
-     * @param valorPredeterminado
+     * @param valorPredeterminado   Texto con el valor
      */
     public void setValorPredeterminado(String valorPredeterminado) {
         this.valorPredeterminado = valorPredeterminado;
@@ -153,7 +153,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor de si es visible (1) o no (0) el campo
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getVisible() {
         return visible;
@@ -161,7 +161,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor del Validador de si es visible (1) o no (0) el campo
-     * @param visible
+     * @param visible   Valor con la validación
      */
     public void setVisible(Integer visible) {
         this.visible = visible;
@@ -169,7 +169,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene la claveAplicacion del objeto
-     * @return
+     * @return  Integer     Valor de la clave
      */
     public Integer getClaveAplicacion() {
         return claveAplicacion;
@@ -177,7 +177,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna la claveAplicacion del objeto
-     * @param claveAplicacion
+     * @param claveAplicacion   Valor de la clave
      */
     public void setClaveAplicacion(Integer claveAplicacion) {
         this.claveAplicacion = claveAplicacion;
@@ -185,7 +185,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene la clavePerfil del objeto
-     * @return
+     * @return  Integer     Valor de la clave
      */
     public Integer getClavePerfil() {
         return clavePerfil;
@@ -193,7 +193,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna la clavePerfil del objeto
-     * @param clavePerfil
+     * @param clavePerfil   Valor de la clave
      */
     public void setClavePerfil(Integer clavePerfil) {
         this.clavePerfil = clavePerfil;
@@ -201,7 +201,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene un entero que indica si se edita (1) o no (0) la forma foránea
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getEditaFormaForanea() {
         return editaFormaForanea;
@@ -209,7 +209,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna un entero que indica si se edita (1) o no (0) la forma foránea
-     * @param editaFormaForanea
+     * @param editaFormaForanea     Valor con la validación
      */
     public void setEditaFormaForanea(Integer editaFormaForanea) {
         this.editaFormaForanea = editaFormaForanea;
@@ -217,7 +217,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el nombre del tipo de dato del CampoForma
-     * @return
+     * @return  String      Tipo de Dato del CampoForma
      */
     public String getTypeData() {
         return typeData;
@@ -233,7 +233,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene la clave de la forma foránea del CampoForma
-     * @return
+     * @return  Integer     Clave de la forma foránea
      */
     public Integer getClaveFormaForanea() {
         return claveFormaForanea;
@@ -249,7 +249,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el valor de la condición de activo (1) o no (0) del CampoForma
-     * @return
+     * @return  Integer     Valor con la validación
      */
     public Integer getActivo() {
         return activo;
@@ -257,22 +257,22 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el valor de la condición de activo (1) o no (0) del CampoForma
-     * @param activo    Validador del estado activo o no del CampoForma
+     * @param activo    Valor con la validación
      */
     public void setActivo(Integer activo) {
         this.activo = activo;
     }
 
     /**
-     * Obtiene el texto con el Alias de un campoForma
-     * @return
+     * Obtiene el texto con el Alias de un objeto CampoForma
+     * @return  String  Alias del CampoForma
      */
     public String getAliasCampo() {
         return aliasCampo;
     }
 
     /**
-     * Asigna el texto con el Alias de un CampoForma
+     * Asigna el texto con el Alias de un objeto CampoForma
      * @param aliasCampo    Alias del CampoForma
      */
     public void setAliasCampo(String aliasCampo) {
@@ -281,7 +281,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el texto de ayuda que está asociado a un CampoForma
-     * @return
+     * @return  String  Texto de ayuda del CampoForma
      */
     public String getAyuda() {
         return ayuda;
@@ -297,7 +297,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el nombre del CampoForma
-     * @return
+     * @return  String  Nombre del CampoForma
      */
     public String getCampo() {
         return campo;
@@ -313,7 +313,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene la clave del CampoForma
-     * @return
+     * @return  String  Clave del CampoForma
      */
     public Integer getClaveCampo() {
         return claveCampo;
@@ -328,15 +328,15 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene la clave de la forma a la que está asociado el CampoForma
-     * @return
+     * Obtiene la clave de la forma a la que está asociado el objeto CampoForma
+     * @return  Integer Clave de la Forma
      */
     public Integer getClaveForma() {
         return claveForma;
     }
 
     /**
-     * Asigna la clave de la forma a la que está asociado el campoForma
+     * Asigna la clave de la forma a la que está asociado el objeto CampoForma
      * @param claveForma    Clave de la Forma
      */
     public void setClaveForma(Integer claveForma) {
@@ -345,7 +345,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el código que indica si un dato es sensible (1) o no (0)
-     * @return
+     * @return  Integer     Validador que indica si el dato es sensible o no
      */
     public Integer getDatoSensible() {
         return datoSensible;
@@ -361,8 +361,8 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene un texto (generalmente la invocación de un JavaScript) que estará
-     * asociado a un evento con el campoForma
-     * @return
+     * asociado a un evento con el objeto CampoForma
+     * @return  String  Texto con el evento del CampoForma
      */
     public String getEvento() {
         return evento;
@@ -370,7 +370,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Asigna el texto (generalmente la invocación de un JavaScript) que estará
-     * asociado a un evento con el CampoForma
+     * asociado a un evento con el objeto CampoForma
      * @param evento    Texto con el evento del CampoForma
      */
     public void setEvento(String evento) {
@@ -379,7 +379,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el texto con el dato foraneo que le corresponde al CampoForma
-     * @return
+     * @return  String      Texto del filtro foraneo
      */
     public String getFiltroForaneo() {
         return filtroForaneo;
@@ -395,7 +395,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el dato foraneo que se asigno al CampoForma
-     * @return
+     * @return  String  Nombre del dato foraneo
      */
     public String getForaneo() {
         return foraneo;
@@ -411,7 +411,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el código que indica si es obligatorio (1) o no (0) un CampoForma
-     * @return
+     * @return  Integer     Validador de si es obligatorio o no el CampoForma
      */
     public Integer getObligatorio() {
         return obligatorio;
@@ -427,7 +427,7 @@ public class CampoForma implements Serializable  {
 
     /**
      * Obtiene el nombre de la Tabla a la que está asociado el CampoForma
-     * @return
+     * @return  String      Nombre de la Tabla
      */
     public String getTabla() {
         return tabla;
@@ -442,15 +442,15 @@ public class CampoForma implements Serializable  {
     }
 
     /**
-     * Obtiene el tamaño que tendrá el CampoForma
-     * @return
+     * Obtiene el tamaño que tendrá el objeto CampoForma
+     * @return  Integer     Tamaño del CampoForma
      */
     public Integer getTamano() {
         return tamano;
     }
 
     /**
-     * Asigna el tamaño que tendrá el campoForma
+     * Asigna el tamaño que tendrá el objeto CampoForma
      * @param tamano    Tamaño del CampoForma
      */
     public void setTamano(Integer tamano) {
@@ -460,7 +460,7 @@ public class CampoForma implements Serializable  {
     /**
      * Obtiene un texto con el tipo de control que debe utilizarse para el
      * CampoForma. Por defecto (con valor null) es un campo del tipo Text
-     * @return
+     * @return  String  Tipo de Control asociado al CampoForma
      */
     public String getTipoControl() {
         return tipoControl;
