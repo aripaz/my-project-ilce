@@ -196,7 +196,7 @@ public class DataMail implements Serializable{
     }
 
     /**
-     * Obtiene el listado de mail que lo estan enviando
+     * Obtiene el listado de mail que lo están enviando
      * @return  List    Listado de mail
      */
     public List getListaFrom() {
@@ -204,7 +204,7 @@ public class DataMail implements Serializable{
     }
 
     /**
-     * Asigna el listado de mail que lo estan enviando
+     * Asigna el listado de mail que lo están enviando
      * @param listaFrom     Listado de mail
      */
     public void setListaFrom(List listaFrom) {

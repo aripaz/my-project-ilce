@@ -68,7 +68,7 @@ public class SendMailNotif {
     }
 
     /**
-     * Método para envio de mail asociado a un evento y el estatus de la
+     * Método para envío de mail asociado a un evento y el estatus de la
      * actividad a la que viene asociado.
      * @return  Boolean     Valor de validación del resultado de la operación
      * @throws ExceptionHandler
@@ -258,7 +258,7 @@ public class SendMailNotif {
     }
 
     /**
-     * Obtiene un Texto que incluye los datos leidos en el HashMap. Usado para
+     * Obtiene un Texto que incluye los datos leídos en el HashMap. Usado para
      * obtener los mail de los destinatarios en un solo texto.
      * @param hsMap     Datos a recorrer
      * @return  String  Texto conteniendo los datos leidos
