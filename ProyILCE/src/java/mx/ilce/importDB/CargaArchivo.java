@@ -51,98 +51,194 @@ class CargaArchivo implements Serializable{
     private boolean ignoreIncomplete;
     private Integer posicionHeader;
 
+    /**
+     * Obtiene la posición del header dentro del archivo
+     * @return  Integer     Posición del Header
+     */
     public Integer getPosicionHeader() {
         return posicionHeader;
     }
 
+    /**
+     * Asigna la posición del header dentro del archivo
+     * @param posicionHeader    Posición del Header
+     */
     public void setPosicionHeader(Integer posicionHeader) {
         this.posicionHeader = posicionHeader;
     }
-    
+
+    /**
+     * Obtiene el número de columna
+     * @return  Integer     Número de columna
+     */
     public Integer getColumna() {
         return columna;
     }
 
+    /**
+     * Asigna el número de columna
+     * @param columna   Número de columna
+     */
     public void setColumna(Integer columna) {
         this.columna = columna;
     }
 
+    /**
+     * Obtiene el validador de si se deben ignorar o no los datos incompletos
+     * @return  boolean     Valor del validador
+     */
     public boolean isIgnoreIncomplete() {
         return ignoreIncomplete;
     }
 
+    /**
+     * Asigna el validador de si se deben ignorar o no los datos incompletos
+     * @param ignoreIncomplete  Valor del validador
+     */
     public void setIgnoreIncomplete(boolean ignoreIncomplete) {
         this.ignoreIncomplete = ignoreIncomplete;
     }
-    
+
+    /**
+     * Obtiene la posición donde se encuentra el separador dentro del archivo
+     * @return  Integer     Posición del separador
+     */
     public Integer getPosicionSeparador() {
         return posicionSeparador;
     }
 
+    /**
+     * Asigna la posición donde se encuentra el separador dentro del archivo
+     * @param posicionSeparador     Posición del separador
+     */
     public void setPosicionSeparador(Integer posicionSeparador) {
         this.posicionSeparador = posicionSeparador;
     }
 
+    /**
+     * Obtiene el número de fila
+     * @return  Integer     Número de fila
+     */
     public Integer getFila() {
         return fila;
     }
 
+    /**
+     * Asigna el número de fila
+     * @param fila  Número de fila
+     */
     public void setFila(Integer fila) {
         this.fila = fila;
     }
 
+    /**
+     * Obtiene el ID del CampoHeader
+     * @return  Integer     ID del CampoHeader
+     */
     public Integer getIdCampoHeader() {
         return idCampoHeader;
     }
 
+    /**
+     * Asigna el ID del CampoHeader
+     * @param idCampoHeader     ID del CampoHeader
+     */
     public void setIdCampoHeader(Integer idCampoHeader) {
         this.idCampoHeader = idCampoHeader;
     }
 
+    /**
+     * Obtiene el TAG del CampoHeader
+     * @return  String      TAG del CampoHeader
+     */
     public String getTagCampoHeader() {
         return tagCampoHeader;
     }
 
+    /**
+     * Asigna el TAG del CampoHeader
+     * @param tagCampoHeader    TAG del CampoHeader
+     */
     public void setTagCampoHeader(String tagCampoHeader) {
         this.tagCampoHeader = tagCampoHeader;
     }
 
+    /**
+     * Obtiene el ID del tipo de archivo de carga
+     * @return  Integer     ID tipo de archivo de carga
+     */
     public Integer getIdTipoArchivoCarga() {
         return idTipoArchivoCarga;
     }
 
+    /**
+     * Asigna el ID del tipo de archivo de carga
+     * @param idTipoArchivoCarga    ID tipo de archivo de carga
+     */
     public void setIdTipoArchivoCarga(Integer idTipoArchivoCarga) {
         this.idTipoArchivoCarga = idTipoArchivoCarga;
     }
-    
+
+    /**
+     * Obtiene el validador de si un campo es pivote o no
+     * @return  boolean     Valor del validador
+     */
     public boolean isPivote() {
         return pivote;
     }
 
+    /**
+     * Asigna el validador de si un campo es pivote o no
+     * @param pivote    Valor del validador
+     */
     public void setPivote(boolean pivote) {
         this.pivote = pivote;
     }
 
+    /**
+     * Obtiene el número de fila donde esta ubicado el header
+     * @return  Integer     Número de fila del header
+     */
     public Integer getNroFilaHeader() {
         return nroFilaHeader;
     }
 
+    /**
+     * Asigna el número de fila donde esta ubicado el header
+     * @param nroFilaHeader     Número de fila del header
+     */
     public void setNroFilaHeader(Integer nroFilaHeader) {
         this.nroFilaHeader = nroFilaHeader;
     }
 
+    /**
+     * Obtiene el texto separador asignado
+     * @return  String      Texto separador
+     */
     public String getSeparador() {
         return separador;
     }
 
+    /**
+     * Asigna el texto separador
+     * @param separador     Texto separador
+     */
     public void setSeparador(String separador) {
         this.separador = separador;
     }
 
+    /**
+     * Obtiene el TAG del número de registros
+     * @return  String  
+     */
     public String getTagNroRegistros() {
         return tagNroRegistros;
     }
 
+    /**
+     * Asigna el TAG del número de registros
+     * @param tagNroRegistros
+     */
     public void setTagNroRegistros(String tagNroRegistros) {
         this.tagNroRegistros = tagNroRegistros;
     }

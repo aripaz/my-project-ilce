@@ -30,22 +30,41 @@ class DaemonCarga extends Thread {
     private AdmImportDB admImport;
     private String display;
 
+    /**
+     * Obtiene el tipo de despliegue que debe utilizarce como salida
+     * @return  String      Texto con el despliegue a usar
+     */
     public String getDisplay() {
         return display;
     }
 
+    /**
+     * Asigna el tipo de despliegue que debe utilizarce como salida
+     * @param display       Texto con el despliegue a usar
+     */
     public void setDisplay(String display) {
         this.display = display;
     }
 
+    /**
+     * Obtiene el objeto AdmImportDB
+     * @return  AdmImportDB     Objeto AdmImportDB
+     */
     public AdmImportDB getAdmImport() {
         return admImport;
     }
 
+    /**
+     * Asigna el objeto AdmImportDB
+     * @param admImport     Objeto AdmImportDB
+     */
     public void setAdmImport(AdmImportDB admImport) {
         this.admImport = admImport;
     }
 
+    /**
+     * Método que activa la ejeción del Daemon
+     */
     public void run(){
 
         try {

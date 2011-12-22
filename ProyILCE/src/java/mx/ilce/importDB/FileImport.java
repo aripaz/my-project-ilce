@@ -63,80 +63,152 @@ class FileImport {
 
     private static Integer PIVOTECUENTA = 1;
 
+    /**
+     * Obtiene el valor de validación para incluir el Header del archivo o no en la operación
+     * @return  boolean     Valor de validación
+     */
     public boolean isIncludeHeader() {
         return includeHeader;
     }
 
+    /**
+     * Asigna el valor de validación para incluir el Header del archivo o no en la operación
+     * @param includeHeader     Valor de validación
+     */
     public void setIncludeHeader(boolean includeHeader) {
         this.includeHeader = includeHeader;
     }
 
+    /**
+     * Obtiene el listado de datos asociados al separador
+     * @return  List    Listado de datos
+     */
     public List getListSeparador() {
         return listSeparador;
     }
 
+    /**
+     * Asigna el listado de datos asociados al separador
+     * @param listSeparador     Listado de datos
+     */
     public void setListSeparador(List listSeparador) {
         this.listSeparador = listSeparador;
     }
 
+    /**
+     * Obtiene el listado de datos asociados al Header
+     * @return  List    Listado de datos
+     */
     public List getListHeaders() {
         return listHeaders;
     }
 
+    /**
+     * Asigna el listado de datos asociados al Header
+     * @param listHeaders   Listado de datos
+     */
     private void setListHeaders(List listHeaders) {
         this.listHeaders = listHeaders;
     }
 
+    /**
+     * Obtiene el validador de si se debe usar la operación de cálculo de totales
+     * @return  boolean     Valor de validación
+     */
     public boolean isUseTotal() {
         return useTotal;
     }
 
+    /**
+     * Asigna el validador de si se debe usar la operación de cálculo de totales
+     * @param useTotal  Valor de validación
+     */
     public void setUseTotal(boolean useTotal) {
         this.useTotal = useTotal;
     }
 
+    /**
+     * Obtiene el texto del header de archivo
+     * @return  String      Texto con el header
+     */
     public String getStrHeader() {
         return ((strHeader==null)?"":strHeader);
     }
 
+    /**
+     * Asigna el texto del header de archivo
+     * @param strHeader     Texto con el header
+     */
     public void setStrHeader(String strHeader) {
         this.strHeader = strHeader;
     }
 
+    /**
+     * Obtiene un objeto HashMap con los campos que resultaron inválidos al validarlos
+     * @return  HashMap     Listado de campos inválidos
+     */
     public HashMap getCamposInvalidos() {
         return camposInvalidos;
     }
 
+    /**
+     * Asigna un objeto HashMap con los campos que resultaron inválidos al validarlos
+     * @param camposInvalidos   Listado de campos inválidos
+     */
     public void setCamposInvalidos(HashMap camposInvalidos) {
         this.camposInvalidos = camposInvalidos;
     }
 
+    /**
+     * Obtiene un texto con el header válido asignado
+     * @return  String      Texto con el header
+     */
     public String getHeaderValido() {
         return headerValido;
     }
 
+    /**
+     * Asigna un texto con el header válido asignado
+     * @param headerValido  Texto con el header
+     */
     public void setHeaderValido(String headerValido) {
         this.headerValido = headerValido;
     }
 
+    /**
+     * Obtiene un texto con los totales
+     * @return  String      Texto con los totales
+     */
     public String getFileTotales() {
         return fileTotales;
     }
 
+    /**
+     * Asigna un texto con los totales
+     * @param fileTotales   Texto con los totales
+     */
     public void setFileTotales(String fileTotales) {
         this.fileTotales = fileTotales;
     }
 
+    /**
+     * Obtiene un objeto HashMap con los campos válidos
+     * @return  HashMap     Listado de campos válidos
+     */
     public HashMap getCamposValidos() {
         return camposValidos;
     }
 
+    /**
+     * Asigna un objeto HashMap con los campos válidos
+     * @param camposValidos     Listado de campos válidos
+     */
     public void setCamposValidos(HashMap camposValidos) {
         this.camposValidos = camposValidos;
     }
 
     /**
-     * Obtiene el texto de error asignado al objeto. Si es null devuelve ""
+     * Obtiene el texto de error asignado al objeto. Si es NULL devuelve ""
      * @return  String  Texto de error
      */
     public String getTextError() {
@@ -151,39 +223,73 @@ class FileImport {
         this.textError = textError;
     }
 
+    /**
+     * Constructor de la clase. Inicializa el HashMap de totales en un Hash Vacio
+     */
     public FileImport() {
         hsTotales = new HashMap();
     }
 
+    /**
+     * Obtiene el objeto HashMap con los totales del archivo
+     * @return  HashMap     Listado con los totales del archivo
+     */
     public HashMap getHsTotales() {
         return hsTotales;
     }
 
+    /**
+     * Asigna el objeto HashMap con los totales del archivo
+     * @param hsTotales     Listado con los totales del archivo
+     */
     public void setHsTotales(HashMap hsTotales) {
         this.hsTotales = hsTotales;
     }
 
-
+    /**
+     * Obtiene el texto con el body de un archivo
+     * @return  String      Texto con el body del archivo
+     */
     public String getFileBody() {
         return fileBody;
     }
 
+    /**
+     * Asigna el texto con el body de un archivo
+     * @param fileBody  Texto con el body del archivo
+     */
     public void setFileBody(String fileBody) {
         this.fileBody = fileBody;
     }
 
+    /**
+     * Obtiene el header de un archivo
+     * @return  String      Texto con header del archivo
+     */
     public String getFileHeader() {
         return fileHeader;
     }
 
+    /**
+     * Asigna el header de un archivo
+     * @param fileHeader    Texto con header del archivo
+     */
     public void setFileHeader(String fileHeader) {
         this.fileHeader = fileHeader;
     }
 
+    /**
+     * Obtiene el nombre del archivo que se va a procesar
+     * @return  String  Archivo a procesar
+     */
     public String getFileProcess() {
         return fileProcess;
     }
 
+    /**
+     * Asigna el nombre del archivo que se va a procesar
+     * @param fileProcess   Archivo a procesar
+     */
     public void setFileProcess(String fileProcess) {
         this.fileProcess = fileProcess;
     }
@@ -1305,6 +1411,14 @@ class FileImport {
         return sld;
     }
 
+    /**
+     * Método que revisa y transforma el dato de una celda, según la
+     * configuración que le corresponde por su ubicación en el archivo
+     * @param fila      Fila de la celda
+     * @param dato      Dato a operar
+     * @param caG       Configuración de la celda
+     * @return  String  Dato obtenido tras la operación
+     */
     private String getDataCell(String fila, String dato, CargaArchivo caG){
         String filaCSV = null;
         if (dato==null){
@@ -1353,7 +1467,7 @@ class FileImport {
     /**
      * Método que entrega en un String, el listado de campos inválidos encontrados
      * en la revisión del Header
-     * @return
+     * @return  String  Texto con campos inválidos
      */
     private String getStringCamposInvalidos(){
         String sld = "";
@@ -1375,7 +1489,7 @@ class FileImport {
 
     /**
      * Método que entrega en un String un dato limpio de caracteres en blanco
-     * y en el caso de los numéricos, con un formato capas de ser procesado por
+     * y en el caso de los numéricos, con un formato capaz de ser procesado por
      * la aplicación
      * @param dato  String con el dato a validar
      * @param caG   Objeto con la configuración del campo
@@ -1511,10 +1625,10 @@ class FileImport {
     }
 
     /**
-     * Método para transformar de un formato numerico cualquiera a uno que puede
-     * manejar la aplicacion. En Java los numeros decimales se manejan con una
+     * Método para transformar de un formato numérico cualquiera a uno que puede
+     * manejar la aplicación. En Java los números decimales se manejan con una
      * estructura #.#, donde el punto es la separación del decimal. Si en la
-     * parte entera existen comas u otro simbolo, este es eliminado para poder
+     * parte entera existen comas u otro símbolo, este es eliminado para poder
      * dejarlo en una estructura que pueden reconocer los constructores numéricos
      * de Java.
      * @param strData   Número a transformar
@@ -1543,7 +1657,7 @@ class FileImport {
     /**
      * Método que determina si un dato debe ser considerado en la sumatoria
      * para validar el monto de los datos sumables y el monto total declarado
-     * en el archivo, validandolo medisnte el calculo del pivote correspondiente
+     * en el archivo, validándolo mediante el cálculo del pivote correspondiente
      * @param pivote            Texto con el pivote a analizar
      * @param pivoteAnterior    Texto con el pivote utilizado anteriormente
      * @return  boolean     Resultado con la operación
@@ -1705,7 +1819,7 @@ class FileImport {
     }
 
     /**
-     * Método que escribe en un archivo los totales de un CSV, este archivo sera
+     * Método que escribe en un archivo los totales de un CSV, este archivo será
      * usado para validar el total de los registros
      * @param strHeader     String con el Header de campos del archivo
      * @param strTotales    String con los totales del archivo
@@ -1762,9 +1876,9 @@ class FileImport {
     }
 
     /**
-     * Método para la obtencion de un substring, el cual validara las situaciones
-     * donde se entreguen valores null, el substring es sobrepasa al largo del
-     * string o se intenten dar valores negativos.
+     * Método para la obtención de un substring, el cual validara las situaciones
+     * donde se entreguen valores null, el substring sobrepasa al largo del
+     * String o se intenten dar valores negativos.
      * @param dato          String del sual obtener el subString
      * @param posInicio     Posicion de inicio desde donde parte el subString
      * @param largo         Largo del subString que se quiere obtener
