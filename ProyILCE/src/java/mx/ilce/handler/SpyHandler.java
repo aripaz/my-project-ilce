@@ -40,14 +40,26 @@ public class SpyHandler {
     private StringBuffer xmlSld;
     private String rutaFile;
 
+    /**
+     * Obtiene el Servlet de la operación
+     * @return  String  Nombre del Servlet
+     */
     private String getServlet() {
         return servlet;
     }
 
+    /**
+     * Asigna el Servlet de la operación
+     * @param servlet   Nombre del Servlet
+     */
     private void setServlet(String servlet) {
         this.servlet = servlet;
     }
 
+    /**
+     * Constructor de la clase. Inicializa la fecha y hora de activación, además
+     * de otras variables
+     */
     public SpyHandler() {
         UtilDate utDate = new UtilDate();
         this.timeIni = utDate.getFechaHMS();
@@ -57,46 +69,91 @@ public class SpyHandler {
         this.rutaFile = "c:/log/";
     }
 
+    /**
+     * Obtiene la fecha para el archivo de salida
+     * @return  String  Fecha del archivo
+     */
     private String getDateFile() {
         return dateFile;
     }
 
+    /**
+     * Asigna la fecha para el archivo de salida
+     * @param dateFile  Fecha del archivo
+     */
     private void setDateFile(String dateFile) {
         this.dateFile = dateFile;
     }
 
+    /**
+     * Obtiene la ruta del archivo de salida
+     * @return  String  Ruta del archivo
+     */
     private String getRutaFile() {
         return rutaFile;
     }
 
+    /**
+     * Asigna la ruta del archivo de salida
+     * @param rutaFile  Ruta del archivo
+     */
     private void setRutaFile(String rutaFile) {
         this.rutaFile = rutaFile;
     }
 
+    /**
+     * Obtiene el HashMap con las variables capturadas
+     * @return  HashMap     Variables capturadas
+     */
     private HashMap getHsForm() {
         return hsForm;
     }
 
+    /**
+     * Asigna el HashMap con las variables capturadas
+     * @param hsForm    Variables capturadas
+     */
     public void setHsForm(HashMap hsForm) {
         this.hsForm = hsForm;
     }
 
+    /**
+     * Obtiene la hora de inicio de la operación
+     * @return  String      Texto con la hora
+     */
     private String getTimeIni() {
         return timeIni;
     }
 
+    /**
+     * Asigna la hora de inicio de la operación
+     * @param timeIni   Texto con la hora
+     */
     private void setTimeIni(String timeIni) {
         this.timeIni = timeIni;
     }
 
+    /**
+     * Obtiene el XML de salida
+     * @return  StringBuffer    XML de salida
+     */
     private StringBuffer getXmlSld() {
         return xmlSld;
     }
 
+    /**
+     * Asigna el XML de salida
+     * @param xmlSld    XML de salida
+     */
     public void setXmlSld(StringBuffer xmlSld) {
         this.xmlSld = xmlSld;
     }
-    
+
+    /**
+     * Método que convierte el contenido de un HashMap en un Texto, donde se
+     * indica el nombre del dato y su valor
+     * @return  String  Texto con el contenido del HashMap
+     */
     private String convertHashToString(){
         StringBuilder str = new StringBuilder("");
         HashMap hsMap = this.getHsForm();
@@ -111,6 +168,11 @@ public class SpyHandler {
         return str.toString();
     }
 
+    /**
+     * Método que activa la escritura en archivo de la data capturada. El nombre
+     * entregado se usa para darle nombre al archivo.
+     * @param nameServlet
+     */
     public void SpyData(String nameServlet){
         this.setServlet(nameServlet);
         if (aplySpy()){
@@ -118,6 +180,10 @@ public class SpyHandler {
         }
     }
 
+    /**
+     * Método que valida si esta activo o no la operación de captura de data
+     * @return  boolean     Resultado de la validación
+     */
     private boolean aplySpy(){
         boolean sld = false;
 
@@ -144,7 +210,10 @@ public class SpyHandler {
         return sld;
     }
 
-
+    /**
+     * Método que realiza la escritura a un archivo de la ruta capturada
+     * @return  boolean     Resultado de la operación de escritura
+     */
     private boolean writeToFile(){
         boolean sld = true;
         String strNameFile = "";
@@ -170,11 +239,18 @@ public class SpyHandler {
                 sld = guardarArchivo(strTexto, strNameFile);
             }
         }catch(Exception e){
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return sld;
     }
 
+    /**
+     * Método que escribe en un archivo la data entregada
+     * @param strEntrada    Data entregada
+     * @param nameFile      Nombre del archivo
+     * @return  boolean     Resultado de la operación de escritura
+     * @throws IOException
+     */
     private boolean guardarArchivo(StringBuffer strEntrada, String nameFile) throws IOException{
         boolean sld = true;
         FileWriter w = null;
@@ -182,10 +258,8 @@ public class SpyHandler {
             w = new FileWriter(rutaFile + "/" + nameFile, true);
             w.append(strEntrada.toString());
         }catch (IOException eFile){
-            //eFile.printStackTrace();
             sld = false;
         }catch(Exception e){
-            //e.printStackTrace();
             sld = false;
         }finally{
             if (w!=null){

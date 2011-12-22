@@ -78,7 +78,7 @@ public class ExecutionHandler implements Serializable{
 
     /**
      * Indica si la ejecución se realizo de manera correcta (TRUE) o no (FALSE)
-     * @return  Boolean     Valor TRUE O FALSE de la validación
+     * @return  boolean     Valor TRUE O FALSE de la validación
      */
     public boolean isExecutionOK() {
         return executionOK;
