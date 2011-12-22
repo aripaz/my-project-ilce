@@ -44,7 +44,7 @@ public class UtilDate{
 
     /**
      * Constructor donde se inicializan los parámetros con los datos del cálculo
-     * del momento (dia y hora) en que se recibe la solicitud
+     * del momento (día y hora) en que se recibe la solicitud
      */
     public UtilDate() {
         java.util.Calendar now = java.util.Calendar.getInstance();
@@ -155,7 +155,7 @@ public class UtilDate{
     /**
      * Constructor donde se inicializa con los parámetros de entrada, los datos
      * de la clase
-     * @param dia    Dato con el dia a asignar
+     * @param dia    Dato con el día a asignar
      * @param mes    Dato con el mes a asignar
      * @param anio   Dato con el año a asignar
      */
@@ -187,7 +187,7 @@ public class UtilDate{
     /**
      * Constructor donde se inicializa con los parámetros de entrada los datos
      * de la clase
-     * @param dia    Dato con el dia a asignar
+     * @param dia    Dato con el día a asignar
      * @param mes    Dato con el mes a asignar
      * @param anio   Dato con el año a asignar
      * @param hour   Dato con la hora a asignar
@@ -459,8 +459,8 @@ public class UtilDate{
 
     /**
      * Método que traduce los meses de un formato de nombre a uno numérico,
-     * tanto en ingles como en español. Los nombres de los meses deben ser
-     * nombres completos (Ej:ENERO o JANUARY).
+     * tanto en inglés como en español. Los nombres de los meses deben ser
+     * nombres completos (Ej.: ENERO o JANUARY).
      * @param strFecha
      * @return
      */

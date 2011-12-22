@@ -80,7 +80,7 @@ public class Validation {
 
     /**
      * Método para ejecutar el despliegue de error para cuando se validó que
-     * un formulario no esta completo en la data exigida
+     * un formulario no está completo en la data exigida
      * @param lstVal    Data enviada
      * @param clase     Clase donde se produjo el error
      * @param request   Request de la Session HTML
@@ -141,7 +141,7 @@ public class Validation {
 
     /**
      * Método utilizado para ejecutar el despliegue de error cuando se atrapo una
-     * Excepcion del tipo ExceptionHandler
+     * excepción del tipo ExceptionHandler
      * @param eh    ExceptionHandler atrapada
      * @param request   Request de la Session HTML
      * @param response  Response de la Session HTML
@@ -163,7 +163,7 @@ public class Validation {
 
     /**
      * Método utilizado para ejecutar el despliegue de error cuando se atrapo una
-     * Excepcion del tipo Exception
+     * excepción del tipo Exception
      * @param es    Exception atrapada
      * @param request   Request de la session HTML
      * @param response  Response de la session HTML
@@ -212,7 +212,7 @@ public class Validation {
     }
 
     /**
-     * Método que valida que esten en memoria el User y el Perfil del usuario conectado
+     * Método que valida que estén en memoria el User y el Perfil del usuario conectado
      * @param request   Request de la Session HTML
      * @return  boolean     Validador
      * @throws ServletException
@@ -235,7 +235,7 @@ public class Validation {
 
     /**
      * Método que se utiliza para ejecutar el despliegue de error para cuando
-     * se validó que un usuario no esta correctamente conectado.
+     * se validó que un usuario no está correctamente conectado.
      * @param clase     Clase donde se produjo el error
      * @param request   Request de la Session HTML
      * @param response  Response de la Session HTML
