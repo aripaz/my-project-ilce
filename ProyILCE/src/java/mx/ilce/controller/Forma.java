@@ -838,7 +838,8 @@ public class Forma extends Entidad{
                                 boolean isString = false;
                                 if (("java.lang.String".equals(cmpHS.getTypeDataAPL())) ||
                                     ("mx.ilce.bean.Text".equals(cmpHS.getTypeDataAPL())) ||
-                                    ("java.sql.Date".equals(cmpHS.getTypeDataAPL()))
+                                    ("java.sql.Date".equals(cmpHS.getTypeDataAPL())) ||
+                                    ("mx.ilce.bean.SmallDateTime".equals(cmpHS.getTypeDataAPL()))
                                    ){
                                     isString = true;
                                 }
