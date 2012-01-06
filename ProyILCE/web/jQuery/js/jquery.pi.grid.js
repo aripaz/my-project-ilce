@@ -217,13 +217,20 @@
                     footerrow: true,
                     userDataOnFooter: true */,
                     gridComplete:function(){
-                            
+                        
+                        /* Quita eventos anteriores */
+                        $(".gridlink").unbind("click");
+                        
                         /* Establece eventos a los link del interior del grid*/ 
                         $(".gridlink").click(function(e, data) {
-                            var nApp=this.id.split("_")[1];
-                            var nEntidad=this.id.split("_")[2];
-                            var nPK=this.id.split("_")[3];
-                            var sW=this.id.split("_")[4];
+                            var nApp=this.id.split("-")[1];
+                            var nEntidad=this.id.split("-")[2];
+                            var nPK=this.id.split("-")[3];
+                            var sW=this.id.split("-")[4];
+                            
+                            if (sW=undefined)
+                                sW="";
+                            
                             var sModo="";
                             
                             if (nPK=="0") 
@@ -237,8 +244,8 @@
                                 datestamp:oGrid.attr("datestamp"),
                                 modo:sModo,
                                 columnas:1,
-                                pk:0,
-                                filtroForaneo:"",
+                                pk:nPK,
+                                filtroForaneo:sW,
                                 height:"500",
                                 width:"80%",
                                 originatingObject:oGrid.id,
