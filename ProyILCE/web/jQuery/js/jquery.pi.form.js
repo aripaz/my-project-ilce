@@ -386,18 +386,24 @@
                     }
                         
                 });
-            
+                
+                location.href=location.href+"#top";
+                
                 //Se crea el diálogo con el HTML completo
                 $("#dlgModal_"+ formSuffix).dialog({
                     modal: true,
                     title: sTitulo,    
                     /*height:$.fn.form.options.height, */
-                    top:$.fn.form.options.top,
+                    top:document.body.scrollTop+350,
                     width:$.fn.form.options.width,
+                    open: function(event, ui) { 
+                       $(this).dialog( "option", "position","center" ); 
+                    },
                     close: function(event, ui) {
                         $(this).dialog("destroy");
                         $(this).remove();
                     }
+                    
                 });
             
                 //Se crean los tabs
@@ -565,7 +571,7 @@
                     var error = $(xmlResult).find("error");
                     
                     if (error.length>0) {
-                            $.fn.form.options.error+="Ocurrió un problema al guardar el registro (" + 
+                            $.fn.form.options.error="Ocurrió un problema al guardar el registro (" + 
                                  error.find("general").text() + ". " +  
                                  error.find("descripcion").text() + ")";
                                 
@@ -575,6 +581,14 @@
                                 
                                 $("#tdEstatus_" +formSuffix).html($.fn.form.options.error);
                                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.form.options.error);
+                                
+                            if (error.find("descripcion").text()=='La suma de las suficiencias rebasa el techo presupuestal, solicite una extensión.') {
+                                if (confirm('La suma de las suficiencias rebasa el techo presupuestal, ¿desea enviar una solicitud de extensión de techo presupuestal en este momento?')) {
+                                    //Manda a llamar a webservice para actualizar estatus de proyecto 
+                                    postConfig = "$ca=51&$cf=72&$ta=update&$pk="+$("#clave_proyecto").val()+"&clave_estatus_proyecto=3";
+                                    $.post("srvFormaInsert",postConfig);
+                                }
+                            }   
                             return false;    
                    }      
                     
@@ -650,6 +664,7 @@
         var oCampos= $(xml).find("registro").children();
         var tabIndex=1;
         bVDS=$("#formTab" + sSuffix).attr("security").indexOf("5")!=-1?true:false;
+        sInvisibleInputs="";
         var bAutoIncrement=false;
         oCampos.each(function(){
             sValorPredeterminado="";
@@ -672,7 +687,16 @@
             
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
-
+            if (bVisible=='0') {
+                sInvisibleInputs+='<input type="hidden" ' + 'id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" value=="'
+                if ($.fn.form.options.modo=='insert')
+                   sInvisibleInputs+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
+                else 
+                   sInvisibleInputs+=oCampo[0].childNodes[0].data;
+               
+                return true;
+            }
+                
             sRenglon += '<td id="td_' +oCampo[0].nodeName + '" ';
             sRenglon += ' class="etiqueta_forma1' 
             if (bVisible=='0')
@@ -915,6 +939,7 @@
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' method='POST' ><table class='forma'>" + sForm + "</table>"+
+               sInvisibleInputs +
               "<input type='hidden' id='$ta' name='$ta' value='" + $.fn.form.options.modo + "' />" +
               "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
               "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
