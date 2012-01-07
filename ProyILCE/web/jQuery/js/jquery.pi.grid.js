@@ -228,7 +228,7 @@
                             var nPK=this.id.split("-")[3];
                             var sW=this.id.split("-")[4];
                             
-                            if (sW=undefined)
+                            if (sW==undefined)
                                 sW="";
                             
                             var sModo="";
