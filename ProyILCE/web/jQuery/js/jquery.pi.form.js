@@ -449,7 +449,7 @@
                 });
 
                 //Se ocultan los campos con clase invisible
-                $(".invisible").hide().next().hide();
+                //$(".invisible").hide().next().hide();
              
                 $(".fecha").datepicker({
                     dateFormat: 'dd/mm/yy',
@@ -688,12 +688,13 @@
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
             if (bVisible=='0') {
-                sInvisibleInputs+='<input type="hidden" ' + 'id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" value=="'
+                sInvisibleInputs+='<input type="hidden" ' + 'id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" value="'
                 if ($.fn.form.options.modo=='insert')
                    sInvisibleInputs+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
                 else 
                    sInvisibleInputs+=oCampo[0].childNodes[0].data;
                
+                sInvisibleInputs+='" />';
                 return true;
             }
                 
