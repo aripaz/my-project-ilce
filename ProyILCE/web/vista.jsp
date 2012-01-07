@@ -75,6 +75,7 @@
         <script type="text/javascript"
                 src="http://jqueryui.com/themeroller/themeswitchertool/">
         </script>
+        <a name="top"></a>
         <div id="banner">
             <div style="float: left; position: relative; "><img src="img/logo ilce.jpg" />
             <img src="img/logo_plataforma.png" class="logo_plataforma"/></div>
@@ -384,7 +385,7 @@
                                                 </dl>
                                             </dt>
                                         </dl>
-                                    </li>
+                                    </dt>
                                     <dt class="instrucciones"><a id="mapLink-tabAplicaciones" class="maplink" href="#">Aplicaciones</a>
                                         <dl id="app_menu_in_map">
                                         </dl>
@@ -406,7 +407,6 @@
             </div>
             <div id="tabBusqueda">
             </div>                 
-        </div>
     </div>
     <input type="hidden" name="_ce_" id="_ce_" value="<%=user.getClaveEmpleado()%>" />
     <input type="hidden" name="_cp_" id="_cp_" value="<%=user.getClavePerfil()%>" />
