@@ -13,7 +13,7 @@ $(document).ready(function() {
             autoOpen: true,
             closeOnEscape:false
     });
-    
+        
     $('#switcher').themeswitcher(); 
     //Crea menú de aplicaciones de acuerdo al perfil
     $("#menu_apps").appmenu();

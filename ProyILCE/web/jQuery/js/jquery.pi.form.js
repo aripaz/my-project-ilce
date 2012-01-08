@@ -226,10 +226,25 @@
                     if ($.fn.form.options.modo=='update')
                         sTitulo="Edición de "+sAliasLog.split(' ')[1];
                 }
-            
+                
                 //Se genera el HTML de la forma general
                 $("#divFormGeneral_" + formSuffix).html($.fn.form.handleForm(xml));
                 
+                //Se extrae posibles escenarios que se podrían disparar al guardar la forma, 
+                //dependiendo del valor del campo de seguimiento
+                var sEscenario="";
+                actores= $(xml).find("fd_actores");
+                $.each(actores, function(){
+                    sEscenario+=$(this).find('fd_email_responsable').text()+
+                                '|'+$(this).find('fd_responsable').text()+
+                                '|'+$(this).find('fd_flujo_dato').text()+
+                                '|'+$(this).find('fd_proceso').text()+
+                                '|'+$(this).find('fd_campo_seguimiento').text()+
+                                '|'+$(this).find('fd_secuencia').text()+
+                                '|'+$(this).find('fd_notificacion').text()+"#";
+                });
+                
+                $("#_e").val(sEscenario);
                 //Aplica el codigo proveniente del XML y que aplica en la forma
                 evento=$(xml).find('configuracion_forma').find('evento').text();
                 if (evento!="")
@@ -387,7 +402,8 @@
                         
                 });
                 
-                location.href=location.href+"#top";
+                //Fuerza a que se haga scroll a la página
+                location.href=location.href.replace(location.hash,"#top");
                 
                 //Se crea el diálogo con el HTML completo
                 $("#dlgModal_"+ formSuffix).dialog({
@@ -567,7 +583,7 @@
                     else {
                         xmlResult = data;
                     }
-                    
+
                     var error = $(xmlResult).find("error");
                     
                     if (error.length>0) {
@@ -592,11 +608,26 @@
                             return false;    
                    }      
                     
+                    
                     var nApp=$("#formTab_" + formSuffix).attr("app")
                     var nForma=$("#formTab_" + formSuffix).attr("forma");
                     var nPK=$("#formTab_" + formSuffix).attr("pk")
                     
                     sResultado=$(xmlResult).find("resultado").text();
+                    
+                    //Verifica el flujo de datos
+                    if ($("#_e").val()!="") {
+                        aEscenarios=$("#_e").val().split("#");
+                        for (var i=0; i<aEscenarios.length; i++) {
+               
+                            //Si el valor de campo de seguimiento es igual, se desencadena la notificación
+                            if ($("#" + aEscenarios[i].split("|")[4]).val()== aEscenarios[i].split("|")[5]) {
+                                postConfig="from=plataforma@ilce.edu.mx&to=" + aEscenarios[i].split("|")[0] + "&subject=" + aEscenarios[i].split("|")[2] +
+                                "&message=" + aEscenarios[i].split("|")[6];
+                                $.post("srvSendMail",postConfig);
+                            }
+                        }
+                    }
                     
                     //Verifica el tipo de control por actualizar
                     sControl=$("#formTab_" + formSuffix).attr("updateControl");
@@ -941,6 +972,7 @@
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' method='POST' ><table class='forma'>" + sForm + "</table>"+
                sInvisibleInputs +
+              "<input type='hidden' id='_e' name='_e' value='' />" +
               "<input type='hidden' id='$ta' name='$ta' value='" + $.fn.form.options.modo + "' />" +
               "<input type='hidden' id='$ca' name='$ca' value='" + $.fn.form.options.app+ "' />" +
               "<input type='hidden' id='$cf' name='$cf' value='" + $.fn.form.options.forma+ "' />" +
@@ -948,5 +980,5 @@
 
         return sForm;
     }
-
+   
 })(jQuery);

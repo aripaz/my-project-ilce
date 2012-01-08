@@ -1627,9 +1627,9 @@ class ConQuery {
             }
         }catch(Exception e){
             ExceptionHandler eh = new ExceptionHandler(e,this.getClass(),
-                                                "Problemas para obtener Query por su ID");
+                                                "Problemas para obtener consulta por clave");
             eh.setStrQuery(query.toString());
-            eh.setDataToXML("ID QUERY", idQuery);
+            eh.setDataToXML("Clave consulta", idQuery);
             eh.setStringData(eh.getDataToXML());
             eh.setSeeStringData(true);
             throw eh;
@@ -1902,6 +1902,20 @@ class ConQuery {
                 sld = "SELECT clave_aplicacion, clave_forma, forma "
                         + "FROM forma "
                         + "WHERE clave_forma_padre= %1";
+                break;
+            case -13: //DISPARANOTIFICACION 
+                 sld = "SELECT email as email_responsable," +
+                      " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable," +
+                      " (SELECT flujo FROM flujo_datos WHERE clave_flujo=flujo_datos_forma.clave_flujo) as flujo_dato,"+   
+                      " flujo_datos_forma.proceso," + 
+                      " flujo_datos_forma.secuencia," +
+                      " flujo_datos_forma.notificacion," +
+                      " flujo_datos_forma.campo_seguimiento" +
+                      " FROM flujo_datos_forma, flujo_datos_empleado, empleado " +
+                      " WHERE flujo_datos_forma.clave_flujo=flujo_datos_empleado.clave_flujo" +
+                      " AND flujo_datos_forma.clave_forma=%1" + 
+                      " AND flujo_datos_empleado.clave_empleado_asignado=empleado.clave_empleado" +
+                      " AND flujo_datos_forma.enviar_notificacion=1";
                 break;
             default:
                 sld = "";
