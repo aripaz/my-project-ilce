@@ -599,15 +599,26 @@
                                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html($.fn.form.options.error);
                                 
                             if (error.find("descripcion").text()=='La suma de las suficiencias rebasa el techo presupuestal, solicite una extensión.') {
-                                if (confirm('La suma de las suficiencias rebasa el techo presupuestal, ¿desea enviar una solicitud de extensión de techo presupuestal en este momento?')) {
+                                if (confirm('La suma de las suficiencias rebasa el techo presupuestal, ¿desea elaborar una solicitud de extensión de techo presupuestal en este momento?')) {
                                     //Manda a llamar a webservice para actualizar estatus de proyecto 
-                                    postConfig = "$ca=51&$cf=72&$ta=update&$pk="+$("#clave_proyecto").val()+"&clave_estatus_proyecto=3";
-                                    $.post("srvFormaInsert",postConfig);
+                                    //postConfig = "$ca=51&$cf=72&$ta=update&$pk="+$("#clave_proyecto").val()+"&clave_estatus_proyecto=3";
+                                    //$.post("srvFormaInsert",postConfig);
+                                    $("body").formqueue({
+                                        app: 1,
+                                        forma:222,
+                                        datestamp:$.fn.form.options.datestamp,
+                                        modo:"update",
+                                        pk:$("#clave_proyecto").val(),
+                                        filtroForaneo:"2=clave_aplicacion=1",
+                                        height:"500",
+                                        width:"500",
+                                        originatingObject:"",
+                                        showRelationships:false                        
+                                    });                                    
                                 }
                             }   
                             return false;    
                    }      
-                    
                     
                     var nApp=$("#formTab_" + formSuffix).attr("app")
                     var nForma=$("#formTab_" + formSuffix).attr("forma");
