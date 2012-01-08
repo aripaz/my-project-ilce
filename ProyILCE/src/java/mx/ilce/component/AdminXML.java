@@ -328,7 +328,6 @@ public class AdminXML {
             strForma.append(getEventoForma(idForma));
             strForma.append("</configuracion_grid>\n");
             str.append(strForma);
-
             str.append("<column_definition>\n");
             for(int i=0; i<lstCmp.size();i++){
                 cmp = (Campo) lstCmp.get(i) ;
@@ -552,9 +551,16 @@ public class AdminXML {
                 str.append("</permisos>\n");
             }
             StringBuffer strForma = new StringBuffer();
+            
             strForma.append("<configuracion_forma>\n");
             strForma.append(getEventoForma(idForma));
             strForma.append("</configuracion_forma>\n");
+            /* Implementado el 2012 01 06 por Daniel Martínez */ 
+            strForma.append("<por_notificar>\n");
+            strForma.append(getNotificacionesFlujoDatos(idForma));
+            strForma.append("</por_notificar>\n");            
+            /* Fin de cambios */
+            
             StringBuffer strCampos = new StringBuffer();
             for(int i=0;i<hsDat.size();i++){
                 ArrayList arr = (ArrayList) hsDat.get(Integer.valueOf(i));
@@ -772,6 +778,11 @@ public class AdminXML {
             strForma.append("<configuracion_forma>\n");
             strForma.append(getEventoForma(idForma));
             strForma.append("</configuracion_forma>\n");
+            /* Implementado el 2012 01 06 por Daniel Martínez */ 
+            strForma.append("<por_notificar>\n");
+            strForma.append(getNotificacionesFlujoDatos(idForma));
+            strForma.append("</por_notificar>\n");            
+            /* Fin de cambios */            
             StringBuffer strCampos = new StringBuffer();
             for(int i=0;i<1;i++){
                 strCampos.append(("<registro id='"+String.valueOf(i)+"'>\n"));
@@ -1106,6 +1117,104 @@ public class AdminXML {
         return strSld;
     }
 
+          /**
+     * Método que trae la sección de XML asociada al Evento de una Forma
+     * @param claveForma    Clave de la forma a buscar
+     * @return  StringBuffer    Sección de XML con los datos de Evento
+     * @throws ExceptionHandler
+     */
+    private StringBuffer getNotificacionesFlujoDatos(Integer claveForma) throws ExceptionHandler{
+        StringBuffer strSld = new StringBuffer();
+        try{
+            ConEntidad conE = new ConEntidad();
+            conE.setBitacora(this.getBitacora());
+            DataTransfer dataTransfer = new DataTransfer();
+            dataTransfer.setIdQuery(Integer.valueOf(AdminFile.getKey(AdminFile.leerIdQuery(),AdminFile.DISPARANOTIFICACION)));
+            String[] arrData = new String[1];
+            arrData[0] = claveForma.toString();
+            dataTransfer.setArrData(arrData);
+
+            HashCampo hsCmp = conE.getDataByIdQuery(dataTransfer);
+            /*HashMap hsMp = hsCmp.getListData();*/
+            if (!hsCmp.getListData().isEmpty()){
+                for (int k=0;k<hsCmp.getListData().size();k++){
+                    
+                    List lstData = (ArrayList) hsCmp.getListData().get(Integer.valueOf(k));; 
+                    /*List lst = (List) hsCmp.get(0);*/
+                    String strEmail = "";
+                    String strResponsable = "";
+                    String strFlujoDato = "";
+                    String strProceso="";
+                    String strSecuencia="";
+                    String strNotificacion="";
+                    String strCampoSeguimiento="";
+                                    
+                    for (int i=0;i<lstData.size();i++){
+                        Campo cmp = (Campo) lstData.get(i);
+                        if ("email_responsable".equals(cmp.getNombreDB())){
+                            strEmail = cmp.getValor();
+                        }
+                        if ("responsable".equals(cmp.getNombreDB())){
+                            strResponsable = cmp.getValor();
+                        }
+                        if ("flujo_dato".equals(cmp.getNombreDB())){
+                            strFlujoDato = cmp.getValor();
+                        }
+                        if ("proceso".equals(cmp.getNombreDB())){
+                            strProceso = cmp.getValor();
+                        }
+                        if ("campo_seguimiento".equals(cmp.getNombreDB())){
+                            strCampoSeguimiento = cmp.getValor();
+                        }
+                        if ("secuencia".equals(cmp.getNombreDB())){
+                            strSecuencia = cmp.getValor();
+                        }
+                        if ("notificacion".equals(cmp.getNombreDB())){
+                            strNotificacion = cmp.getValor();
+                        }
+
+                    }
+                    strSld.append("<fd_actores>\n");
+                    strSld.append("\t<fd_email_responsable><![CDATA[");
+                    strSld.append(castNULL(strEmail));
+                    strSld.append("]]></fd_email_responsable>\n");
+
+                    strSld.append("\t<fd_responsable><![CDATA[");
+                    strSld.append(castNULL(strResponsable));
+                    strSld.append("]]></fd_responsable>\n");
+
+                    strSld.append("\t<fd_flujo_dato><![CDATA[");
+                    strSld.append(castNULL(strFlujoDato));
+                    strSld.append("]]></fd_flujo_dato>\n"); 
+                    
+                    strSld.append("\t<fd_proceso><![CDATA[");
+                    strSld.append(castNULL(strProceso));
+                    strSld.append("]]></fd_proceso>\n"); 
+
+                    strSld.append("\t<fd_campo_seguimiento><![CDATA[");
+                    strSld.append(castNULL(strCampoSeguimiento));
+                    strSld.append("]]></fd_campo_seguimiento>\n"); 
+                    
+                    strSld.append("\t<fd_secuencia><![CDATA[");
+                    strSld.append(castNULL(strSecuencia));
+                    strSld.append("]]></fd_secuencia>\n"); 
+
+                    strSld.append("\t<fd_notificacion><![CDATA[");
+                    strSld.append(castNULL(strNotificacion));
+                    strSld.append("]]></fd_notificacion>\n");                    
+                    strSld.append("</fd_actores>\n");
+                }
+            }
+        }catch(Exception ex){
+            ExceptionHandler eh = new ExceptionHandler(ex,this.getClass(),
+                                                "Problemas para obtener a los responsables del flujo de datos de la forma");
+            eh.setDataToXML("CLAVE FORMA",claveForma);
+            eh.setStringData(eh.getDataToXML());
+            eh.setSeeStringData(true);
+            throw eh;
+        }
+        return strSld;
+    }
     /**
      * Método que permite crear la sección de un XML a partir de la forma que
      * se está entregando en la data

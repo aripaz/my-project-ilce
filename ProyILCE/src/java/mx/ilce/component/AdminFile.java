@@ -86,6 +86,11 @@ public class AdminFile {
      * Query para manejo de formas foráneas
      */
     public static String FORMASFORANEAS="FORMASFORANEAS";
+
+    /*
+     * Query para manejo de flujo de datos
+     */
+    public static String DISPARANOTIFICACION="DISPARANOTIFICACION";    
     /**
      * Número con el tamaño máximo de un archivo en Bytes
      */
