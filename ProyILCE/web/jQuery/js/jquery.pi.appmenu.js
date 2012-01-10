@@ -207,7 +207,9 @@
                                     height:"70%",
                                     leyendas:[sLeyendaNuevoRegistro, sLeyendaEditaRegistro],
                                     openKardex:true,
-                                    originatingObject:obj[0].id
+                                    originatingObject:obj[0].id,
+                                    getLog:true,
+                                    getFilters:true
                                 });
 
 
@@ -384,8 +386,8 @@
                     $(this).parent().parent().remove();
                 });
                 
-                if (bGetLog==1)
-                    $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,bGetLog);
+                //if (bGetLog==1)
+                //    $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,bGetLog);
 
             },
             error:function(xhr,err){
@@ -397,7 +399,7 @@
         $("#bitacora_"+sDivSuffix).html("");
         $.ajax(
         {
-            url: "srvBitacora?$cf=91&$ta=select&$w=" + escape("ba.clave_forma=" +nForma),
+            url: "srvBitacora?$cf="+nForma+"&$ta=log",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -411,46 +413,46 @@
                 else 
                     xmlLog = data;
                 
-                
-                $(xmlLog).find("registro").each( function(){
+                oRegistros=$(xmlLog).find("registro");
+                $.each(oRegistros, function(i, oRegistro){
                     sHtml="";
-                    nClave=$(this).find("clave_bitacora")[0].firstChild.data;
-                    dFecha=$(this).find("fecha_bitacora")[0].firstChild.data;
-                    sFoto=$(this).find("foto")[0].firstChild.data.toLowerCase();
-                    sNombre=$(this).find("nombre")[0].firstChild.data;
-                    sTipoEvento=$(this).find("clave_tipo_evento")[0].firstChild.data;
-                    sForma=$(this).find("consulta")[0].firstChild.data;
-                    sBitacora=$(this).find("bitacora")[0].firstChild.data;
-                    nAplicacion=$(this).find("clave_aplicacion")[0].firstChild.data;
-                    nForma=$(this).find("clave_forma")[0].firstChild.data;
-                    nRegistro=$(this).find("clave_registro")[0].firstChild.data;
-                    if (nClave!="") 
-                        sHtml="<div class='bitacora'>" +
-                        sFoto +
-                        sNombre + " " + sTipoEvento + " " + sForma + " " + 
-                        "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "'>"+
-                        sBitacora  + "</a> a las " + dFecha +
-                        "</div>"
+                    dFecha=$(oRegistro).find("fecha_bitacora")[0].firstChild.data;
+                    sFoto=$(oRegistro).find("foto")[0].firstChild.data.toLowerCase();
+                    sNombre=$(oRegistro).find("nombre")[0].firstChild.data;
+                    sTipoEvento=$(oRegistro).find("clave_tipo_evento")[0].firstChild.data;
+                    sForma=$(oRegistro).find("entidad")[0].firstChild.data;
+                    sBitacora=$(oRegistro).find("registro")[0].firstChild.data
+                    nForma=$(oRegistro).find("clave_forma")[0].firstChild.data;
+                    nRegistro=$(oRegistro).find("clave_registro")[0].firstChild.data;
+                   
+                    sHtml="<div class='bitacora'>" +
+                    sFoto +
+                    sNombre + " " + sTipoEvento + " " + sForma + " " + 
+                    "<a href='#' id='lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro + "' class='lnkBitacora'>"+
+                    sBitacora  + "</a> - " + dFecha +
+                    "</div>";
+                
                     $("#bitacora_"+sDivSuffix).append(sHtml);
                     //Hace bind del liga del búsqueda
-                    if (nAplicacion!="")
-                        $("#lnkBitacora_" + nAplicacion + "_" + nForma + "_" + nRegistro).click(function(){
-                            $("body").form({
-                                app: this.id.split("_")[1],
-                                forma:this.id.split("_")[2],
-                                pk:this.id.split("_")[3],
-                                datestamp:$(this).attr("datestamp"),
-                                modo:"update",
-                                titulo: "Edita " + sForma.split(" ")[1],
-                                columnas:1,
-                                filtroForaneo:"2=clave_aplicacion=" + nApp,
-                                height:400,
-                                width:550,
-                                originatingObject:"#lnkBitacora_" + nApp + "_" + nForma + "_" + nRegistro
-                            });
-                        }); 
-                    
+ 
                 });
+                
+                //Le asigna el evento clic a todos los links de la bitacora
+                $(".lnkBitacora").click(function(){
+                    $("body").form({
+                        app: this.id.split("_")[1],
+                        forma:this.id.split("_")[2],
+                        pk:this.id.split("_")[3],
+                        datestamp:$(this).attr("datestamp"),
+                        modo:"update",
+                        titulo: "Edita " + sForma.split(" ")[1],
+                        columnas:1,
+                        filtroForaneo:"2=clave_aplicacion=" + nApp,
+                        height:400,
+                        width:550,
+                        originatingObject:"#lnkBitacora_" + nApp + "_" + nForma + "_" + nRegistro
+                    });
+                }); 
                 if (bGetAccordion==1 && $("#accordion_"+sDivSuffix).attr("role")!='tablist') 
                     $("#accordion_"+sDivSuffix).accordion({
                         active: false,

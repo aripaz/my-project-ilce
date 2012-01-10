@@ -232,6 +232,9 @@
                 
                 //Se extrae posibles escenarios que se podrían disparar al guardar la forma, 
                 //dependiendo del valor del campo de seguimiento
+                // Esto sólo aplica cuando el modo de la forma es Insert o Update
+                if ($("#formTab_" + formSuffix).attr("modo")!="lookup") {
+            
                 var sEscenario="";
                 actores= $(xml).find("fd_actores");
                 $.each(actores, function(){
@@ -244,7 +247,8 @@
                                 '|'+$(this).find('fd_notificacion').text()+"#";
                 });
                 
-                $("#_e").val(sEscenario);
+                     $("#_e").val(sEscenario);
+                }
                 //Aplica el codigo proveniente del XML y que aplica en la forma
                 evento=$(xml).find('configuracion_forma').find('evento').text();
                 if (evento!="")

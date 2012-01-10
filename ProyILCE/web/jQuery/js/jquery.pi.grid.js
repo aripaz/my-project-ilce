@@ -257,6 +257,10 @@
                         $(this).progressbar({value: $(this).attr("avance")});
                     });
                     
+                    //Presenta bitacora
+                    
+                    //Presenta filtros
+                    
                     // Presenta la forma de búsqueda si el parametro es verdero y no hay un filtro
                     if ($("#grid"+suffix).attr("requeriesFilter")==1 && $("#lnkRemoveFilter_grid"+suffix).length==0) {
                             $("body").form({
