@@ -13,6 +13,7 @@ function openpop(sPagina, nWidth,nLenght) {
 	window.open(sPagina,'saraPop',"location=0,status=0,scrollbars=yes,width=" + nWidth + ",height=" + nLenght);
 }
 
+
 function check_date(field){
 var checkstr = "0123456789";
 var DateField = field;
