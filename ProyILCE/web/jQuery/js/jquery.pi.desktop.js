@@ -142,7 +142,71 @@
                 control_set_2: "numbered_buttons"
             });   
             
-            $("#tabs").tabs( "select", "#tabMapaDelSitio" );
+            $("#tabs").tabs( "select", "#tabAyuda" );
+
+            $("#divCarouselAyuda").agile_carousel({
+                carousel_data: [{
+                                "content": $("#ayudaIndice").html(),
+                                "content_button": ""
+                                }, {
+                                "content": $("#ayudaVistazo").html(),
+                                "content_button": ""
+                                }, {
+                                "content": $("#ayudaInicio").html(),
+                                "content_button": ""
+                                },{
+                                "content": $($($($("#divCarouselMisFavoritos").children()[0]).children()[0]).children()[0]).html(),
+                                "content_button": ""
+                                }, {
+                                "content": $($($($("#divCarouselMisFavoritos").children()[0]).children()[0]).children()[1]).html(),
+                                "content_button": ""
+                                },{
+                                "content": $("#ayudaAplicacion").html(),
+                                "content_button": ""
+                                },{ //ayudaComoUsarMisAplicacionesBis
+                                "content": $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[0]).html(),
+                                "content_button": ""
+                                }, { //ayudaComoAgregarUnRegistro
+                                "content": $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[1]).html(),
+                                "content_button": ""
+                                }, { //ayudaComoEditarUnRegistro
+                                "content": $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[2]).html(),
+                                "content_button": ""
+                                },{ //ayudaComoEliminarUnRegistro
+                                "content": $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[3]).html(),
+                                "content_button": ""
+                                },{ //ayudaComoFiltrarRegistros
+                                "content": $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[4]).html(),
+                                "content_button": ""
+                                },{ //ayudaComoAgregarCatalogoAFavoritos
+                                "content":  $($($($("#divCarouselMisAplicaciones").children()[0]).children()[0]).children()[5]).html(),
+                                "content_button": ""
+                                },{ //ayudaComoEliminarCatalogoDeFavoritos
+                                "content":  $($($($("#divCarouselMisFavoritos").children()[0]).children()[0]).children()[1]).html(),
+                                "content_button": ""
+                                },{
+                                "content": $("#ayudaMapa").html(),
+                                "content_button": ""
+                                }
+                                
+                            ],
+                carousel_outer_height: $("#divCarouselAyuda").height(),
+                carousel_height: $("#divCarouselAyuda").height(),
+                slide_height: $("#divCarouselAyuda").height()+2,
+                carousel_outer_width: $("#divCarouselAyuda").width(),
+                slide_width: $("#divCarouselAyuda").width(), 
+                transition_time: 300,
+                continuous_scrolling: false,
+                number_slides_visible: 1,
+                control_set_1: "previous_button,next_button",
+                control_set_2: "numbered_buttons"
+            });   
+            
+            //Activa los links de la ayuda
+            $(".lnkAyuda").click(function() { 
+                nSlide=this.id.split("-")[1];
+                $($("#divCarouselAyuda").find(".slide_number_"+nSlide)).trigger( $.Event('click') );
+            });
             
             //Activa los tooltips de los links con clase tooltipLink
             $(".tooltipLink").tooltip({

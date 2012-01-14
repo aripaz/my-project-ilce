@@ -159,8 +159,8 @@ div.user_avatar>img {
 
 .gridForeignContainer {
     float: left;
-    width: 450px;
-    height: 400px;
+    width: 100%;
+    height: 100%;
 }
 
 .desktopGridContainer {
@@ -534,6 +534,66 @@ background-image: url("../img/sprite_ac_hover.png");
     width: 16px;
 }
 
+#divCarouselAyuda .numbered_button  {
+    background-color: transparent;
+    background-image: url("../img/sprite_ac_normal.png");
+    background-position: -95px 0;
+    color: #000000;
+    font-size: 12px;
+    height: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    padding: 0 2px;
+    text-indent: 1000px;
+    width: 10px;
+}
+
+#divCarouselAyuda .control_set_1 .ac_disabled {
+    background-image: url("../img/sprite_ac_disabled.png");
+}
+#divCarouselAyuda .control_set_1 {
+    float: right;
+    margin: 4px 6px 0;
+    position: relative;
+}
+
+#divCarouselAyuda .control_set_2 {
+    float: right;
+    margin: 8px 0 0;
+    position: relative;
+}
+
+#divCarouselAyuda  .ac_selected {
+background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselAyuda .slide_button {
+    float: left;
+}
+
+#divCarouselAyuda .previous_button {
+    background-position: 4px 3px;
+}
+
+#divCarouselAyuda .next_button {
+    background-position: -44px 3px;
+}
+
+#divCarouselAyuda .numbered_button_container .ac_selected, #divCarouselMisAplicaciones .numbered_button:hover  {
+    background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselAyuda .previous_next_button {
+    background-color: #FFFFFF;
+    background-image: url("../img/sprite_ac_normal.png");
+    border: 1px solid #CFCECE;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px #DFDFDF;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 1000px;
+    width: 16px;
+}
 /*------------------**/
 
 #divCarouselMapa .numbered_button  {
@@ -644,4 +704,14 @@ background-image: url("../img/sprite_ac_hover.png");
 .ui-tabs .ui-tabs-panel {
     height: 100% !important;
     overflow:visible;
+}
+
+#tooltip.pretty {
+	font-family: Arial;
+	border: none;
+	width: 210px;
+	padding:20px;
+	height: 135px;
+	opacity: 0.8;
+	background: url('shadow.png');
 }

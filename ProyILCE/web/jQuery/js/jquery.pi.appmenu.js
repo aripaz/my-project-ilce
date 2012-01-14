@@ -212,8 +212,7 @@
                                     getFilters:true
                                 });
 
-
-                                $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
+                                //$.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
                             
                             }
                         }    
@@ -254,7 +253,7 @@
         });
     };
     
-    $.fn.appmenu.setGridFilter = function (sGridIdSuffix,nApp, nEntidad,data ) {
+    $.fn.appmenu.setGridFilter = function (sGridIdSuffix,nApp, nEntidad,data) {
         //Recarga el grid por si tiene algún filtro
         if (data==undefined){
             data="";
@@ -296,10 +295,10 @@
     };
 
     $.fn.appmenu.getFullMenu = function (sDivSuffix, nApp, nForma) {
-        $.fn.appmenu.getSearchs(sDivSuffix, nApp, nForma,1)
+        $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,1);
     };
     
-    $.fn.appmenu.getSearchs = function(sDivSuffix, nApp, nForma, bGetLog) {
+    $.fn.appmenu.getSearchs = function(sDivSuffix, nApp, nForma,bGetAccordion) {
         $("#filtros_"+sDivSuffix).html("");
         $.ajax(
         {
@@ -377,8 +376,10 @@
                         $(this).parent().removeClass('ui-state-default');
                         $(this).parent().removeClass('ui-corner-all');
                     }
-                    );
-
+                );
+                
+                //Hace un unbind
+                $(".closeLnkFiltro").unbind("click");
                 //Hace bind del botón de búsqueda
                 $(".closeLnkFiltro").click(function(){
                     if (!confirm('¿Desea borrar el filtro seleccionado?')) return false;
@@ -387,7 +388,18 @@
                 });
                 
                 //if (bGetLog==1)
-                //    $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,bGetLog);
+               //     $.fn.appmenu.getLog(sDivSuffix,nApp,nForma,bGetLog);
+                
+                if (bGetAccordion==1 && $("#accordion_"+sDivSuffix).attr("role")!='tablist') 
+                    $("#accordion_"+sDivSuffix).accordion({
+                        active: false,
+                        /*fillSpace:true, */
+                        autoHeight: false,
+                        collapsible: true,
+                        change: function() {
+                            $(this).find('h3').blur();
+                        }
+                    });
 
             },
             error:function(xhr,err){
@@ -395,11 +407,11 @@
         });
     }
     
-    $.fn.appmenu.getLog = function(sDivSuffix,nApp,nForma,bGetAccordion) {
+    $.fn.appmenu.getLog = function(sDivSuffix,nApp,nForma, bGetSearchs) {
         $("#bitacora_"+sDivSuffix).html("");
         $.ajax(
         {
-            url: "srvBitacora?$cf="+nForma+"&$ta=log",
+            url: "srvFormaSearch?$cf="+nForma+"&$ta=log",
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  function(data){
                 if (typeof data == "string") {
@@ -413,17 +425,16 @@
                 else 
                     xmlLog = data;
                 
-                oRegistros=$(xmlLog).find("registro");
-                $.each(oRegistros, function(i, oRegistro){
+                $(xmlLog).find("registro").each( function(){
                     sHtml="";
-                    dFecha=$(oRegistro).find("fecha_bitacora")[0].firstChild.data;
-                    sFoto=$(oRegistro).find("foto")[0].firstChild.data.toLowerCase();
-                    sNombre=$(oRegistro).find("nombre")[0].firstChild.data;
-                    sTipoEvento=$(oRegistro).find("clave_tipo_evento")[0].firstChild.data;
-                    sForma=$(oRegistro).find("entidad")[0].firstChild.data;
-                    sBitacora=$(oRegistro).find("registro")[0].firstChild.data
-                    nForma=$(oRegistro).find("clave_forma")[0].firstChild.data;
-                    nRegistro=$(oRegistro).find("clave_registro")[0].firstChild.data;
+                    dFecha=$(this).find("fecha_bitacora")[0].firstChild.data;
+                    sFoto=$(this).find("foto")[0].firstChild.data.toLowerCase();
+                    sNombre=$(this).find("nombre")[0].firstChild.data;
+                    sTipoEvento=$(this).find("clave_tipo_evento")[0].firstChild.data;
+                    sForma=$(this).find("entidad")[0].firstChild.data;
+                    sBitacora=$(this).find("descripcion_entidad")[0].firstChild.data
+                    nForma=$(this).find("clave_forma")[0].firstChild.data;
+                    nRegistro=$(this).find("clave_registro")[0].firstChild.data;
                    
                     sHtml="<div class='bitacora'>" +
                     sFoto +
@@ -437,6 +448,9 @@
  
                 });
                 
+                // Quita los eventos asignados anteriormente
+                $(".lnkBitacora").unbind("click");
+                
                 //Le asigna el evento clic a todos los links de la bitacora
                 $(".lnkBitacora").click(function(){
                     $("body").form({
@@ -448,22 +462,15 @@
                         titulo: "Edita " + sForma.split(" ")[1],
                         columnas:1,
                         filtroForaneo:"2=clave_aplicacion=" + nApp,
-                        height:400,
-                        width:550,
+                        height:"500",
+                        width:"80%",
                         originatingObject:"#lnkBitacora_" + nApp + "_" + nForma + "_" + nRegistro
                     });
                 }); 
-                if (bGetAccordion==1 && $("#accordion_"+sDivSuffix).attr("role")!='tablist') 
-                    $("#accordion_"+sDivSuffix).accordion({
-                        active: false,
-                        /*fillSpace:true, */
-                        autoHeight: false,
-                        collapsible: true,
-                        change: function() {
-                            $(this).find('h3').blur();
-                        }
-                    }
-                    );
+               
+               if (bGetSearchs==1)
+                    $.fn.appmenu.getSearchs(sDivSuffix, nApp, nForma,1);
+                
             },
             error:function(xhr,err){
                 alert("Error al recuperar bitácora: "+xhr.readyState+"\nstatus: "+xhr.status + "\responseText:"+ xhr.responseText);
@@ -477,6 +484,10 @@
 
         $(xml).find("registro").each(function(){
             nAplicacion=$(this).find("clave_aplicacion").text();
+            
+            if ($("#_cp_").val()!=1 && (nAplicacion==1 || nAplicacion==2))
+                return true;
+                    
             sTituloAplicacion=$(this).find("aplicacion").text()
             nEntidad=$(this).find("clave_forma").text();
             sAliasNuevaEntidad=$(this).find("alias_menu_nueva_entidad").text();

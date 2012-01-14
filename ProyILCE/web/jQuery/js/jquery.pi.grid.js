@@ -223,14 +223,21 @@
                         
                         /* Establece eventos a los link del interior del grid*/ 
                         $(".gridlink").click(function(e, data) {
-                            var nApp=this.id.split("-")[1];
-                            var nEntidad=this.id.split("-")[2];
-                            var nPK=this.id.split("-")[3];
-                            var sW=this.id.split("-")[4];
+                            var cmdWS=this.id.split("#")[0];
+                            var relaciones=this.id.split("#")[1];
+                            var nApp=cmdWS.split("-")[1];
+                            var nEntidad=cmdWS.split("-")[2];
+                            var nPK=cmdWS.split("-")[3];
+                            var sW=cmdWS.split("-")[4];
                             
                             if (sW==undefined)
                                 sW="";
-
+                            
+                            if (relaciones==undefined)
+                                sShowRelationships="false"
+                            else
+                                sShowRelationships="true";
+                            
                             var sModo="";
                             
                             if (nPK=="0") 
@@ -249,9 +256,12 @@
                                 height:"500",
                                 width:"80%",
                                 originatingObject:oGrid.id,
-                                updateControl:""
+                                updateControl:"",
+                                showRelationships:sShowRelationships
                             });
                     });
+                    
+                    $.fn.appmenu.getFullMenu(nApp + "_" + nEntidad+"_0",nApp,nEntidad,1); 
                     
                     $(".progressbar").each( function(){
                         $(this).progressbar({value: $(this).attr("avance")});
