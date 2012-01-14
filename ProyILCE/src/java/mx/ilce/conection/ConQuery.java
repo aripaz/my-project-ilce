@@ -1910,7 +1910,7 @@ class ConQuery {
                       " flujo_datos_forma.proceso," + 
                       " flujo_datos_forma.secuencia," +
                       " flujo_datos_forma.notificacion," +
-                      " flujo_datos_forma.campo_seguimiento" +
+                      " flujo_datos_forma.campo_seguimiento_estatus" +
                       " FROM flujo_datos_forma, flujo_datos_empleado, empleado " +
                       " WHERE flujo_datos_forma.clave_flujo=flujo_datos_empleado.clave_flujo" +
                       " AND flujo_datos_forma.clave_forma=%1" + 

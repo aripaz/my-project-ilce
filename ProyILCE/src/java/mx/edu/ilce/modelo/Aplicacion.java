@@ -72,4 +72,10 @@ public class Aplicacion {
     public void popForma(int i) {
         this.formas.remove(i);
     }
+
+    @Override
+    public String toString() {
+        return "Aplicacion{" + "claveAplicacion=" + claveAplicacion + ", aplicacion=" + aplicacion + ", aliasMenuNuevaEntidad=" + aliasMenuNuevaEntidad + ", aliasMenuMuestraEntidad=" + aliasMenuMuestraEntidad + ", claveFormaPrincipal=" + claveFormaPrincipal + ", formas=" + formas + '}';
+    }
+    
 }

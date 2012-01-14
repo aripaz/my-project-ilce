@@ -1163,7 +1163,7 @@ public class AdminXML {
                         if ("proceso".equals(cmp.getNombreDB())){
                             strProceso = cmp.getValor();
                         }
-                        if ("campo_seguimiento".equals(cmp.getNombreDB())){
+                        if ("campo_seguimiento_estatus".equals(cmp.getNombreDB())){
                             strCampoSeguimiento = cmp.getValor();
                         }
                         if ("secuencia".equals(cmp.getNombreDB())){
@@ -1191,9 +1191,9 @@ public class AdminXML {
                     strSld.append(castNULL(strProceso));
                     strSld.append("]]></fd_proceso>\n"); 
 
-                    strSld.append("\t<fd_campo_seguimiento><![CDATA[");
+                    strSld.append("\t<fd_campo_seguimiento_estatus><![CDATA[");
                     strSld.append(castNULL(strCampoSeguimiento));
-                    strSld.append("]]></fd_campo_seguimiento>\n"); 
+                    strSld.append("]]></fd_campo_seguimiento_estatus>\n"); 
                     
                     strSld.append("\t<fd_secuencia><![CDATA[");
                     strSld.append(castNULL(strSecuencia));

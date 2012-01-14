@@ -131,7 +131,7 @@
                                         <table >
                                             <tr>
                                                 <td colspan='2'>
-                                                    <h3>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h3>
+                                                    <h2>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h2>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -154,7 +154,7 @@
                                         <table >
                                             <tr>
                                                 <td colspan='2'>
-                                                    <h3>Elimina los favoritos que ya no utilizas</h3>
+                                                    <h2>Elimina los favoritos que ya no utilizas</h2>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -216,7 +216,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Comienza a usar tus aplicaciones</h3>
+                                            <h2>Comienza a usar tus aplicaciones</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -238,7 +238,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Agrega un registro nuevo al catálogo</h3>
+                                            <h2>Agrega un registro nuevo al catálogo</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -263,7 +263,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Edita un registro del catálogo</h3>
+                                            <h2>Edita un registro del catálogo</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -289,7 +289,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Elimina un registro del catálogo</h3>
+                                            <h2>Elimina un registro del catálogo</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -314,7 +314,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Filtra los registros del catálogo</h3>
+                                            <h2>Filtra los registros del catálogo</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -340,7 +340,7 @@
                                 <table >
                                     <tr>
                                         <td colspan='2'>
-                                            <h3>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h3>
+                                            <h2>Agrega a tus favoritos los catálogos que utilizas más frecuentemente</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -369,12 +369,12 @@
                     <table>
                         <tr>
                             <td>
-                                <h3 class="instrucciones">Mapa del sitio</h3>
+                                <h2 class="instrucciones">Mapa del sitio</h2>
                             </td>
                         </tr>
                         <tr>
                             <td class="instrucciones">
-                                <p class="instrucciones">Aquí se muestran todas y cada una de las partes que componen al sistema para el perfil actual, seleccione la liga correspondiente para acceder al componente deseado.</p>
+                                <p class="instrucciones">Aquí se muestran todas y cada una de las partes que componen al sistema para el perfil actual, selecciona la liga correspondiente para acceder al componente deseado.</p>
                                 <dl>
                                     <dt class="instrucciones" ><a id="mapLink-tabInicio" class="maplink" href="#">Inicio</a>
                                         <dl class="instrucciones">
@@ -402,8 +402,155 @@
                 </div>
             </div>
             <div id="tabAyuda">
+                <div id="divCarouselAyuda">
+                    <div id="ayudaIndice">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2 class="instrucciones">Indice de temas de ayuda</h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="instrucciones">
+                                    <div style="text-align: center;">
+                                        <table style="margin: 0 auto;text-align: left;">
+                                            <tr>
+                                                <td style="vertical-align:top;  text-align: left; width:450px">
+                                                    <p class="instrucciones">
+                                                        <ol> 
+                                                            <li><a href="#" class="lnkAyuda" id="ayuda-2">Vistazo general al sistema</a></li>
+                                                            <li><a href="#" class="lnkAyuda" id="ayuda-3">Inicio</a></li>
+                                                            <li><a href="#" class="lnkAyuda" id="ayuda-4">Aplicaciones</a></li>
+                                                            <li><a href="#" class="lnkAyuda" id="ayuda-14">Mapa del sitio</a></li>
+                                                        </ol>            
+                                                    </p> 
+                                                </td>
+                                                <td>
+                                                    <img src='img/portada_ayuda.png' style='border: 1px'  class='helpScreen'></img>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>                                    
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="ayudaVistazo">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2 class="instrucciones">Vistazo general al sistema</h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="instrucciones">
+                                    <p class="instrucciones">
+                                        La plataforma cuenta con 5 partes principales: <br />
+                                        <ul>
+                                            <li>Inicio: en donde se encuentran las pestañas "Pendientes" y "Favoritos".
+                                                <ul>
+                                                    <li>En "Pendientes" puedes ver y atender tus actividades</li>
+                                                    <li>En "Favoritos" puedes tener los catálogos que uses con mayor frecuencia a la mano</li>
+                                                </ul>
+                                            </li>
+                                            <li>Aplicaciones: aquí encontrarás los módulos que conforman la plataforma. Cada aplicación cuenta con un catálogo principal y del cual se desprenden otros catálogos relacionados en forma de kardex.</li>
+                                            <li>Mapa del sitio: es el listado con las ligas hacia todos las partes de la plataforma.</li>
+                                            <li>Ayuda: contiene el índice del manual en línea.</li>
+                                            <li>Contacto: aquí se presenta la información para contactar al administrador de la plataforma.</li>
+                                        </ul>
+                                    </p>
+                                    <p class="instrucciones">
+                                        Por otra parte, los catálogos se presentan en una cuadrícula y dependiendo de los permisos de tu perfil se mostrarán botones para insertar <span class='ui-icon ui-icon-plus' style='display:inline-block'></span> , editar <span class='ui-icon ui-icon-pencil' style='display:inline-block'></span>, eliminar<span class='ui-icon ui-icon-trash' style='display:inline-block'></span>, hacer búsquedas de registros<span class='ui-icon ui-icon-search' style='display:inline-block'></span>, asi como abrir el kardex<span class='ui-icon ui-icon-newwin' style='display:inline-block'></span> con los catálogos relacionados al registro seleccionado.
+                                    </p>
+                                </td>                                    
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="ayudaInicio">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2 class="instrucciones">Inicio</h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="instrucciones">
+                                    <p class="instrucciones">
+                                        Dentro de la pestaña "Inicio"  hay otras dos pestañas: "Pendientes" y "Favoritos". <br />
+                                        En "Pendientes" puedes ver las actividades por realizar así como la liga para ingresar los datos propios del pendiente; cada perfil tiene sus propios pendientes, y son configurados por el administrador del sistema. <br /><br/>
+                                        En "Favoritos" podrás acceder a catálogos que marcaste como favoritos, evitando navegar en las aplicaciones.
+                                    </p>
+                                    <p class="instrucciones">
+                                        <strong>Temas relacionados</strong>
+                                        <ul>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-4">Agrega a tus favoritos los catálogos que más utilizas </a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-5">Elimina los favoritos que ya no utilizas</a></li>
+                                        </ul>
+                                    </p> 
+                                </td>                                    
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="ayudaAplicacion">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2 class="instrucciones">Aplicaciones</h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="instrucciones">
+                                    <p class="instrucciones">
+                                        <ul>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-7">Comienza a usar tus aplicaciones</a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-8">Agrega un registro nuevo al catálogo</a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-9">Edita un registro del catálogo</a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-10">Elimina un registro del catálogo</a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-11">Filtra los registros del catálogo</a></li>
+                                            <li><a href="#" class="lnkAyuda" id="ayuda-12">Agrega a tus favoritos los catálogos que utilizas más frecuentemente</a></li>
+                                        </ul>
+                                    </p> 
+                                </td>                                    
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="ayudaMapa">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2 class="instrucciones">Mapa del sitio</h2>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="instrucciones">
+                                    <p class="instrucciones">
+                                        Aquí se muestran todas y cada una de las partes que componen al sistema para el perfil actual, selecciona la liga correspondiente para acceder al componente deseado.
+                                    </p> 
+                                </td>                                    
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div id="tabContacto">
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                <h2>Contacto</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="instrucciones">Envíanos tus sugerencias, comentarios, solicitudes y reportes de errores a nuestro correo electrónico.</p>
+                                <h3>Administrador del sistema</h3>
+                                <p class="instrucciones"><span class='ui-icon ui-icon-mail-closed' style='display:inline-block'></span>                                    
+                                    <a href="mailto:plataforma@ilce.edu.mx">plataforma@ilce.edu.mx</a>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div id="tabBusqueda">
             </div>                 

@@ -100,17 +100,19 @@
                     else {
                         xmlRelation = data;
                     }
-                               
-                    $(xmlRelation).find("registro").each(function() {
-                        $(this).find("clave_forma").each(function() {
+                    
+                    oTabs= $(xmlRelation).find("registro"); 
+                     $.each(oTabs, function(i, oTab){
+                        $(oTab).find("clave_forma").each(function() {
                             formaForanea=$(this).text().split("\n")[0];
-                            nombreForma=$($(xmlRelation).find("registro").find("forma")[$(this).index()]).text().split("\n")[0];
+                            nombreForma=$($(oTabs[i]).find("forma")[$(this).index()]).text().split("\n")[0];
                             sUlTabs+="<li><a href='#formTab_" + $.fn.form.options.app +"_"+ formaForanea +"'>"+ nombreForma + "</a></li>";
                             sDivTabs+="<div id='formTab_" + $.fn.form.options.app +"_"+ formaForanea+"'>"+
                             "<div id='formGrid_"+ $.fn.form.options.app+"_"+formaForanea+
                             "' app='" + $.fn.form.options.app +
                             "' forma='" + formaForanea +
                             "' titulo='" + nombreForma +
+                            "' leyendas='" + 
                             "' align='center' class='queued_grids'>"+
                             "<br /><br />Cargando informaci&oacute;n... <br /> <br />"+
                             "<img src='img/loading.gif' />"+
@@ -242,7 +244,7 @@
                                 '|'+$(this).find('fd_responsable').text()+
                                 '|'+$(this).find('fd_flujo_dato').text()+
                                 '|'+$(this).find('fd_proceso').text()+
-                                '|'+$(this).find('fd_campo_seguimiento').text()+
+                                '|'+$(this).find('fd_campo_seguimiento_estatus').text()+
                                 '|'+$(this).find('fd_secuencia').text()+
                                 '|'+$(this).find('fd_notificacion').text()+"#";
                 });
@@ -263,11 +265,20 @@
                 //Establece atributo de seguridad
                 $("#formTab_" + formSuffix).attr("security",sPermiso);
                 
-                //Borra la leyenda del grid
-                
+                //Borra la leyenda del grid                
                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html("");
                 var oForm=$("#form_" + formSuffix);
 
+                //Activa los tooltips para ayuda 
+                $(".tooltipField").tooltip({
+                    bodyHandler: function() {
+                            return $(this).attr("ayuda");
+                    },
+                    showURL: false,
+                    extraClass: "pretty", 
+                    fixPNG: true
+                });
+                
                 //Se asigna evento a botón de guardar
                 $("#btnGuardar_"+ formSuffix).button().click(function() {
                     nApp=this.id.split("_")[1];
@@ -407,7 +418,7 @@
                 });
                 
                 //Fuerza a que se haga scroll a la página
-                location.href=location.href.replace(location.hash,"#top");
+                location.href=location.href.replace(location.hash,"") +"#top";
                 
                 //Se crea el diálogo con el HTML completo
                 $("#dlgModal_"+ formSuffix).dialog({
@@ -430,16 +441,24 @@
                 $("#formTab_" + formSuffix).tabs();
             
                 //Se llama a cola de grids
-                if ($(".queued_grids:first").length>0) {
+                for (i=0; i<$(".queued_grids").length;i++) {
                 
                     //Entrega los valores del formulario
                     //para establecer posible relación de forma y grid
                     sWSParameters="";
                     aWSParameters=$("#form_" + formSuffix).serialize().split("&");
-                    for (i=0; i<aWSParameters.length;i++) {
-                        sWSParameters+=(i+4)+"="+aWSParameters[i].replace("_"+formSuffix,"")+"&";
+                    for (k=0; k<aWSParameters.length;k++) {
+                        sWSParameters+=(k+4)+"="+aWSParameters[k].replace("_"+formSuffix,"")+"&";
                     }
+                    
+                    $("#formTab_" + formSuffix).tabs('select',i+1);
+                   
+                   //Se agrega la leyenda en la etiqueta del grid                   
                     oGrid=$(".queued_grids:first")[0]; 
+                    
+                    $(oGrid).attr("leyendas","Nuev@ " + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+","+
+                    "Edición de " + sTitulo.substring(0,sTitulo.length-1).toLowerCase());
+                
                     $(oGrid).removeClass('queued_grids').addClass('gridForeignContainer');
                     sTitulo=$(oGrid).attr("titulo");
                     gridId=oGrid.id;
@@ -451,7 +470,6 @@
                     'wsParameters:"' +$.fn.form.options.pk_name+"="+$.fn.form.options.pk+'&'+sWSParameters+'",'+
                     'titulo:"'+sTitulo+'",'+
                     'height:"250",'+
-                    'width:"100",'+
                     'leyendas:["Nuev@ ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'",'+
                     '"Edición de ' + sTitulo.substring(0,sTitulo.length-1).toLowerCase()+'"],'+
                     'openKardex:false,'+
@@ -461,8 +479,9 @@
                     setTimeout(sGridDef,1000);
                 }
                 //nWidth=$("#divFormProfiles_" + suffix).width();
-
-
+                
+                //Reestablece la pestaña general
+                $("#formTab_" + formSuffix).tabs('select',0);
                 // Se ocultan los mensajes de validación
                 oForm.find('.obligatorio').each(function() {
                     $("#msgvalida_" + this.name).hide();
@@ -730,6 +749,7 @@
             sValorPredeterminado=oCampo.find('valor_predeterminado').text();
             bVisible=oCampo.find('visible').text();
             bNoPermitirValorForaneoNulo=oCampo.find('no_permitir_valor_foraneo_nulo').text();
+            sAyuda=oCampo.find('ayuda').text();
             
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
@@ -754,8 +774,13 @@
             if (sAlias!='') {
                if ($("#_cp_").val()=="1") 
                    sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='Haga clic aqui para abrir su definición en el diccionario de datos'>"+sAlias+"</a>"
-               else    
-                   sRenglon+=sAlias;
+               else{    
+                                   //Establece la seudoclase para mostrar la ayuda
+                   if (sAyuda!="")
+                       sRenglon+="<a class='tooltipField' ayuda='" +sAyuda+ "' href='#'>"+ sAlias+"</a>";
+                   else    
+                       sRenglon+=sAlias;
+               }    
             }
             else {
                 sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='El campo no cuenta con alias, haga clic aqui para abrir su definición en el diccionario de datos'>"+oCampo[0].nodeName+"</a>";
@@ -793,7 +818,6 @@
                 else {
                     sRenglon+='" '
                 }
-
 
                 //sRenglon+='id="' + oCampo[0].nodeName + sSuffix + '" name="' + oCampo[0].nodeName + sSuffix + '" >';
                 sRenglon+='id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" >';
