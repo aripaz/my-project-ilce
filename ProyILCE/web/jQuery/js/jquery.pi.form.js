@@ -674,7 +674,7 @@
                             if (aEscenarios[i].split("|")[4]!=undefined) {
                                 if ($("#" + aEscenarios[i].split("|")[4]).val()== aEscenarios[i].split("|")[5]) {
                                     postConfig="from=plataforma@ilce.edu.mx&to=" + aEscenarios[i].split("|")[0] + "&subject=" + aEscenarios[i].split("|")[6] +
-                                    "&message=Estimad@ " + aEscenarios[i].split("|")[1].split(" ")[0] + '\n'+ aEscenarios[i].split("|")[7];
+                                    "&message=Estimad@ " + aEscenarios[i].split("|")[1].split(" ")[0] + '\n\n'+ aEscenarios[i].split("|")[7];
                                     $.post("srvSendMail",postConfig);
                                 }
                             }
