@@ -816,7 +816,7 @@
                 sRenglon+='<td class="etiqueta_forma_control1"><select tipo_dato="' + sTipoCampo + '" tabindex="' + tabIndex + '" ';
                 
                 if (bActivo!="1") 
-                    sRenglon+=' readonly="readonly" ';
+                    sRenglon+=' disabled="disabled" ';
                  
                 if ($.fn.form.options.modo!="lookup" && nEditaForaneos=="true") {
                     sRenglon+='class="inputWidgeted1'
