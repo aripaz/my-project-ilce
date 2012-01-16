@@ -1908,6 +1908,7 @@ class ConQuery {
                       " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable," +
                       " (SELECT flujo FROM flujo_datos WHERE clave_flujo=flujo_datos_forma.clave_flujo) as flujo_dato,"+   
                       " flujo_datos_forma.proceso," + 
+                      " flujo_datos_forma.asunto," + 
                       " flujo_datos_forma.secuencia," +
                       " flujo_datos_forma.notificacion," +
                       " flujo_datos_forma.campo_seguimiento_estatus" +

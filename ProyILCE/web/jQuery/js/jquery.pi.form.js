@@ -246,6 +246,7 @@
                                 '|'+$(this).find('fd_proceso').text()+
                                 '|'+$(this).find('fd_campo_seguimiento_estatus').text()+
                                 '|'+$(this).find('fd_secuencia').text()+
+                                '|'+$(this).find('fd_asunto').text() +
                                 '|'+$(this).find('fd_notificacion').text()+"#";
                 });
                 
@@ -670,10 +671,12 @@
                         for (var i=0; i<aEscenarios.length; i++) {
                
                             //Si el valor de campo de seguimiento es igual, se desencadena la notificación
-                            if ($("#" + aEscenarios[i].split("|")[4]).val()== aEscenarios[i].split("|")[5]) {
-                                postConfig="from=plataforma@ilce.edu.mx&to=" + aEscenarios[i].split("|")[0] + "&subject=" + aEscenarios[i].split("|")[2] +
-                                "&message=" + aEscenarios[i].split("|")[6];
-                                $.post("srvSendMail",postConfig);
+                            if (aEscenarios[i].split("|")[4]!=undefined) {
+                                if ($("#" + aEscenarios[i].split("|")[4]).val()== aEscenarios[i].split("|")[5]) {
+                                    postConfig="from=plataforma@ilce.edu.mx&to=" + aEscenarios[i].split("|")[0] + "&subject=" + aEscenarios[i].split("|")[6] +
+                                    "&message=Estimad@ " + aEscenarios[i].split("|")[1].split(" ")[0] + '\n'+ aEscenarios[i].split("|")[7];
+                                    $.post("srvSendMail",postConfig);
+                                }
                             }
                         }
                     }
