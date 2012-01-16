@@ -1147,6 +1147,7 @@ public class AdminXML {
                     String strProceso="";
                     String strSecuencia="";
                     String strNotificacion="";
+                    String strAsunto="";
                     String strCampoSeguimiento="";
                                     
                     for (int i=0;i<lstData.size();i++){
@@ -1168,6 +1169,9 @@ public class AdminXML {
                         }
                         if ("secuencia".equals(cmp.getNombreDB())){
                             strSecuencia = cmp.getValor();
+                        }
+                        if ("asunto".equals(cmp.getNombreDB())){
+                            strAsunto = cmp.getValor();
                         }
                         if ("notificacion".equals(cmp.getNombreDB())){
                             strNotificacion = cmp.getValor();
@@ -1199,6 +1203,10 @@ public class AdminXML {
                     strSld.append(castNULL(strSecuencia));
                     strSld.append("]]></fd_secuencia>\n"); 
 
+                    strSld.append("\t<fd_asunto><![CDATA[");
+                    strSld.append(castNULL(strAsunto));
+                    strSld.append("]]></fd_asunto>\n"); 
+                    
                     strSld.append("\t<fd_notificacion><![CDATA[");
                     strSld.append(castNULL(strNotificacion));
                     strSld.append("]]></fd_notificacion>\n");                    
