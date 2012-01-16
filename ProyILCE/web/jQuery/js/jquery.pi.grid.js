@@ -229,6 +229,7 @@
                             var nEntidad=cmdWS.split("-")[2];
                             var nPK=cmdWS.split("-")[3];
                             var sW=cmdWS.split("-")[4];
+                            var actividad=$(this).attr("actividad");
                             
                             if (sW==undefined)
                                 sW="";
@@ -255,21 +256,17 @@
                                 filtroForaneo:sW,
                                 height:"500",
                                 width:"80%",
-                                originatingObject:oGrid.id,
+                                originatingObject:oGrid[0].id + "_"+ actividad,
                                 updateControl:"",
                                 showRelationships:sShowRelationships
                             });
                     });
                     
-                    $.fn.appmenu.getFullMenu(nApp + "_" + nEntidad+"_0",nApp,nEntidad,1); 
+                    //$.fn.appmenu.getFullMenu(nApp + "_" + nEntidad+"_0",nApp,nEntidad,1); 
                     
                     $(".progressbar").each( function(){
                         $(this).progressbar({value: $(this).attr("avance")});
                     });
-                    
-                    //Presenta bitacora
-                    
-                    //Presenta filtros
                     
                     // Presenta la forma de búsqueda si el parametro es verdero y no hay un filtro
                     if ($("#grid"+suffix).attr("requeriesFilter")==1 && $("#lnkRemoveFilter_grid"+suffix).length==0) {

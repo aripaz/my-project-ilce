@@ -649,6 +649,21 @@
                     
                     sResultado=$(xmlResult).find("resultado").text();
                     
+                    //Si la forma viene de la tabla de Mis pendientes, entonces se debe marcar la actividad como
+                    //atendida
+                    originatingObject=$("#formTab_" + formSuffix).attr("originatingObject")
+                    if (originatingObject.split('_')[0] =='grid' && 
+                        originatingObject.split('_')[1] =='1' &&
+                        originatingObject.split('_')[2] =='101') {
+                        nPKActividad=originatingObject.split('_')[4];
+                        
+                        postConfig = "$cf=101&$ta=update&$pk="+nPKActividad+
+                                    "&clave_estatus=1";                            
+
+                       $.post("srvFormaInsert",postConfig);
+                    }
+                        
+                        
                     //Verifica el flujo de datos
                     if ($("#_e").val()!="") {
                         aEscenarios=$("#_e").val().split("#");
@@ -755,7 +770,7 @@
             if (bDatoSensible=="1" && !bVDS) return true;
             if (bVisible=='0') {
                 sInvisibleInputs+='<input type="hidden" ' + 'id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" value="'
-                if ($.fn.form.options.modo=='insert')
+                if ($.fn.form.options.modo=='insert') 
                    sInvisibleInputs+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
                 else 
                    sInvisibleInputs+=oCampo[0].childNodes[0].data;
