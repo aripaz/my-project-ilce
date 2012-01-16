@@ -649,7 +649,7 @@
                     
                     sResultado=$(xmlResult).find("resultado").text();
                     
-                    //Si la forma viene de la tabla de Mis pendientes, entonces se debe marcar la actividad como
+                    /*Si la forma viene de la tabla de Mis pendientes, entonces se debe marcar la actividad como
                     //atendida
                     originatingObject=$("#formTab_" + formSuffix).attr("originatingObject")
                     if (originatingObject.split('_')[0] =='grid' && 
@@ -662,7 +662,7 @@
 
                        $.post("srvFormaInsert",postConfig);
                     }
-                        
+                    */    
                         
                     //Verifica el flujo de datos
                     if ($("#_e").val()!="") {
