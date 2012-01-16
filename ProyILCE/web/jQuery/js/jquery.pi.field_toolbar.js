@@ -3,6 +3,33 @@
  * 
  */
 ( function($) {
+    
+    //Liz    
+    $("#td_motivo_cancelacion").parent().hide();
+
+    $('#clave_estatus_proyecto').change(function() {
+    if ($("#clave_estatus_proyecto").val()==6) { 
+           $("#motivo_cancelacion").addClass("obligatorio");
+           $("#td_motivo_cancelacion").parent().show();  }
+   else {
+           $("#td_motivo_cancelacion").parent().hide() }
+    });
+    
+    //Dirección general
+    $("#td_motivo_cancelacion").parent().hide();
+
+    $('#clave_estatus_proyecto').change(function() {
+    if ($("#clave_estatus_proyecto").val()==6) { 
+           $("#motivo_cancelacion").addClass("obligatorio");
+           $("#td_motivo_cancelacion").parent().show();  }
+    else {
+           if ($("#clave_estatus_proyecto").val()==10) {
+           $("#td_motivo_cancelacion").parent().show();  
+            }
+           else
+           $("#td_motivo_cancelacion").parent().hide() }
+    });  
+    
     $.fn.fieldtoolbar = function(opc){
 
         $.fn.fieldtoolbar.settings = {

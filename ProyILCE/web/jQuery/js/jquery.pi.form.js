@@ -663,7 +663,7 @@
                        $.post("srvFormaInsert",postConfig);
                     }
                     */    
-                        
+    
                     //Verifica el flujo de datos
                     if ($("#_e").val()!="") {
                         aEscenarios=$("#_e").val().split("#");
@@ -677,6 +677,7 @@
                             }
                         }
                     }
+                    
                     
                     //Verifica el tipo de control por actualizar
                     sControl=$("#formTab_" + formSuffix).attr("updateControl");
