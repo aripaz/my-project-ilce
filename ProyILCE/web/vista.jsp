@@ -43,6 +43,13 @@
         <!-- Tooltip -->
         <script src="jQuery/js/jquery.tooltip.min.js" type="text/javascript"></script>
         
+        <!-- Gráficas -->
+        <script language="javascript" type="text/javascript" src="jQuery/jqPlot/jquery.jqplot.min.js"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.barRenderer.min.js"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.pointLabels.min.js"></script>
+        <link rel="stylesheet" type="text/css" hrf="jQuery/jqPlot/jquery.jqplot.min.css" />
+        
         <!-- form plugin para considerar uploads  -->
         <script type="text/javascript" src="jQuery/js/jquery.form.js"></script>
 
@@ -107,7 +114,7 @@
                     <li><a href="#tabAyuda">Ayuda</a></li>
                     <li><a href="#tabContacto">Contacto</a></li>
                 </ul>
-                <div style="padding-right: 5px; float: right; padding-top: 3px; position: relative; top: -30px; width:300px"><input id='txtBusquedaGlobal' type='text' style="clear:none; float:left"/>
+                <div style="padding-right: 5px; float: right; padding-top: 3px; position: relative; top: -30px; width:300px"><!--<input id='txtBusquedaGlobal' type='text' style="clear:none; float:left"/>-->
                     <div id="switcher"  style="float:right"></div></div>
                 <div id="tabInicio">
                     <div id="tabUser">    

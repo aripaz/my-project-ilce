@@ -49,7 +49,7 @@
                     xml = data;}
                 obj.html($.fn.sessionmenu.handleSession(xml));
 
-                $("#lnkConfiguracion").click(function() {
+                /* $("#lnkConfiguracion").click(function() {
 
                     //Crea el control del tab para la colección principal
                     var $tabs = $('#tabs').tabs({
@@ -76,7 +76,7 @@
                                               leyendas:["Nuevo par&aacute;metro", "Edición de par&aacute;metro"]});
                     }
                     
-                });
+                }); */
                 
                 //Crea snowfall
                 /*$("#avatar").click(function() {
@@ -131,7 +131,6 @@
                   '<td class="session_menu">'+
                   '<div align="right"  class="ui-widget">'+
                   '<span id="_un_" class="ui-state-default session_menu"><strong>Bienvenid@ ' + $.fn.sessionmenu.options.nombre + ' ' + $.fn.sessionmenu.options.apellido_paterno + '</strong></span><br />' +
-                  '<a class="ui-state-default session_menu" href="#" id="lnkConfiguracion">Configuraci&oacute;n</a><br />' +
                   '<a class="ui-state-default session_menu" href="srvLogout" id="lnkCerrarSesion">Cerrar sesi&oacute;n </a>'+
                   '</div></td>' +
                   '</tr>'+
