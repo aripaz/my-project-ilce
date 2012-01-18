@@ -179,7 +179,15 @@
                                     "       </div>"+
                                     "   </div>"+
                                     "   <div id='rigthPane_"+ nAplicacion + "_" + nEntidad + "_0' class='rigthPane'>"+
-                                    "       <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
+                                    "       <div id='entityCarrousel_" + nAplicacion+ "_" + nEntidad+"_0' class='entityCarrousel'>" +
+                                    "           <div id='gridCarrousel_" + "_" + nEntidad+"_0' >" +
+                                    "               <div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer'/>"+
+                                    "           </div>" + 
+                                    "           <div id='chartCarrousel_" + nAplicacion + "_" + nEntidad + "_0'>" +
+                                    "               <div id='chartIngresosProyectos_" + nAplicacion + "_" + nEntidad + "'></div>"+
+                                    "               <div id='chartEngresosProyectos_" + nAplicacion + "_" + nEntidad + "></div>"+
+                                    "               <div id='chartNetoProyecto_" + nAplicacion + "_" + nEntidad + "'></div>"+
+                                    "           </div>" +
                                     "   </div>"+
                                     "</div>");
 
@@ -196,7 +204,31 @@
 
                                 var sLeyendaNuevoRegistro=$(this).attr("nueva_entidad");
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
-
+                                
+                                //Se crea el carrusel
+                                $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").agile_carousel({
+                                    carousel_data: [{
+                                                    "content": "<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer' />",
+                                                    "content_button": ""
+                                                    }, {
+                                                    "content": "<div id='chartCarrousel_" + nAplicacion + "_" + nEntidad + "_0'>" +
+                                                                    "<div id='chartIngresosProyectos_" + nAplicacion + "_" + nEntidad + "'></div>"+
+                                                                    "<div id='chartEngresosProyectos_" + nAplicacion + "_" + nEntidad + "'></div>"+
+                                                                    "<div id='chartNetoProyecto_" + nAplicacion + "_" + nEntidad + "'></div>"+
+                                                               "</div>",
+                                                    "content_button": ""       
+                                                    }],
+                                    carousel_outer_height: $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").height(),
+                                    carousel_height: $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").height(),
+                                    slide_height: $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").height()+2,
+                                    carousel_outer_width: $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").width(),
+                                    slide_width: $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").width(), 
+                                    transition_time: 300,
+                                    continuous_scrolling: false,
+                                    control_set_1: "previous_button,next_button",
+                                    control_set_2: "numbered_buttons"
+                                });
+                                
                                 $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
                                     app: nAplicacion,
                                     entidad: nEntidad,
@@ -212,7 +244,7 @@
                                     getFilters:true
                                 });
 
-                                //$.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
+                                $.fn.appmenu.getFullMenu(nAplicacion + "_" + nEntidad+"_0",nAplicacion,nEntidad,1);                                
                             
                             }
                         }    

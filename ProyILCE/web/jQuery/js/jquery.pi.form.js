@@ -665,7 +665,7 @@
                     }
                     */    
     
-                    //Verifica el flujo de datos
+                    //Verifica el flujo de datos                    
                     if ($("#_e").val()!="") {
                         aEscenarios=$("#_e").val().split("#");
                         for (var i=0; i<aEscenarios.length; i++) {
@@ -769,6 +769,7 @@
             bVisible=oCampo.find('visible').text();
             bNoPermitirValorForaneoNulo=oCampo.find('no_permitir_valor_foraneo_nulo').text();
             sAyuda=oCampo.find('ayuda').text();
+            nObligatorio=oCampo.find('obligatorio').text();
             
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
@@ -794,7 +795,7 @@
                if ($("#_cp_").val()=="1") 
                    sRenglon+="<a id='lnkEditFieldDef-1-13-"+nClave_campo+"-2=clave_aplicacion="+$.fn.form.options.app+"3=clave_forma=" + $.fn.form.options.forma +"' href='#' class='edit_field' title='Haga clic aqui para abrir su definición en el diccionario de datos'>"+sAlias+"</a>"
                else{    
-                                   //Establece la seudoclase para mostrar la ayuda
+                   //Establece la seudoclase para mostrar la ayuda
                    if (sAyuda!="")
                        sRenglon+="<a class='tooltipField' ayuda='" +sAyuda+ "' href='#'>"+ sAlias+"</a>";
                    else    
@@ -806,7 +807,7 @@
             }
 
             //Verifica si el campo es obligatorio para incluir la leyenda en el alias
-            if ($.fn.form.options.modo!="lookup" && oCampo.find('obligatorio').text()=="1")  {
+            if ($.fn.form.options.modo!="lookup" && nObligatorio=="1")  {
                 sRenglon += ' (<span id="msgvalida_' + oCampo[0].nodeName + '">Obligatorio</span>*)</td>'
             }
             else {

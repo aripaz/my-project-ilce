@@ -262,7 +262,6 @@
                             });
                     });
                     
-                    //$.fn.appmenu.getFullMenu(nApp + "_" + nEntidad+"_0",nApp,nEntidad,1); 
                     
                     $(".progressbar").each( function(){
                         $(this).progressbar({value: $(this).attr("avance")});
@@ -284,6 +283,92 @@
                         });
                     }
                     
+                    //Carga los datos para crear la gráfica de la segunda página
+                    sGraficaId="chartCarrousel_" + nApp + "_" + nEntidad+ "_0";
+                    if ($("#"+sGraficaId).length>0) {
+                        $.ajax(
+                        {
+                            url: "srvFormaSearch?$cf=229&$ta=report&$w1=" + $.fn.appgrid.options.wsParameters & "",
+                            dataType: ($.browser.msie) ? "text" : "xml",
+                            success:function(data){
+
+                                if (typeof data == "string") {
+                                    xmlEntidad = new ActiveXObject("Microsoft.XMLDOM");
+                                    xmlEntidad.async = false;
+                                    xmlEntidad.validateOnParse="true";
+                                    xmlEntidad.loadXML(data);
+                                    if (xmlEntidad.parseError.errorCode>0) {
+                                        alert("Error de compilación xml:" + xmlEntidad.parseError.errorCode +"\nParse reason:" + xmlEntidad.parseError.reason + "\nLinea:" + xmlEntidad.parseError.line);
+                                    }
+                                }
+                                else {
+                                    xmlEntidad = data;
+                                }
+
+                                var ticks=[];
+                                var series="";
+
+                                oEntidades=$(xmlEntidad).find("proyecto").children();
+
+                                oEntidades.each(function(){
+                                    var i=0;
+                                    ticks[i]=oEntidades.find("proyecto").text();
+                                    series+=oEntidades.find("ingreso_planeado").text()+","+
+                                              oEntidades.find("ingreso_real").text()+","+
+                                              oEntidades.find("egreso_planeado").text()+","+
+                                              oEntidades.find("egreso_real").text()+","+
+                                              oEntidades.find("neto_planeado").text()+","+
+                                              oEntidades.find("neto_real").text() + "#"
+                                });
+                                
+                                aSeries=series.split("#");
+                                for (k=0;k<aSeries.length;k++) {
+                                    aSeries[k]=aSeries[k].split[","];
+                                }
+                                
+                                plot2 = $.jqplot(sGraficaId, aSeries, {
+                                    label: sReporte,
+                                    seriesDefaults: {
+                                        renderer:$.jqplot.BarRenderer,
+                                        pointLabels: { show: true }
+                                    },
+                                    axes: {
+                                        xaxis: {
+                                            renderer: $.jqplot.CategoryAxisRenderer,
+                                            ticks: ticks
+                                        }
+                                    }
+                                });
+
+                            }  , 
+                            error:function(xhr,err){
+                                sTipoError='Problemas al recuperar datos de la gráfica.\n';
+                                if (xhr.responseText.indexOf('NullPointerException')>-1)
+                                    sTipoError+='Problemas de conexión a la base de datos, verifique la conexión a la red.'
+                                else
+                                    sTipoError+=xhr.responseText;
+
+                                suffix=obj.children()[1].id.replace("pager","");
+                                $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+                                    "<div class='ui-widget'>"+
+                                    "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
+                                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
+                                    sTipoError+"</p>"+
+                                    "</div></div>");
+                            }
+                        });
+                    }
+                   /* $('#'+sGraficaId).bind('jqplotDataHighlight', 
+                        function (ev, seriesIndex, pointIndex, data) {
+                            $('#info2').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+                        }
+                    );
+
+                    $('#'+sGraficaId).bind('jqplotDataUnhighlight', 
+                        function (ev) {
+                            $('#info2').html('Nothing');
+                        }
+                    );*/
                     //oGrid.setGridWidth(oGrid.parent().width(),true);
 
                 }});
