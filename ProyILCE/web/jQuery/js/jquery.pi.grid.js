@@ -288,7 +288,7 @@
                     if ($("#"+sGraficaId).length>0) {
                         $.ajax(
                         {
-                            url: "srvFormaSearch?$cf=229&$ta=report&$w1=" + $.fn.appgrid.options.wsParameters & "",
+                            url: "srvFormaSearch?$cf=229&$ta=select&$w1=" + $.fn.appgrid.options.wsParameters,
                             dataType: ($.browser.msie) ? "text" : "xml",
                             success:function(data){
 
@@ -305,56 +305,64 @@
                                     xmlEntidad = data;
                                 }
 
-                                var ticks=[];
+                                var aTicks=[];
                                 var series="";
 
-                                oEntidades=$(xmlEntidad).find("proyecto").children();
-
+                                oEntidades=$(xmlEntidad).find("registro");
+                                var i=0;
+                                sReporte="Ingresos vs egresos"
                                 oEntidades.each(function(){
-                                    var i=0;
-                                    ticks[i]=oEntidades.find("proyecto").text();
-                                    series+=oEntidades.find("ingreso_planeado").text()+","+
-                                              oEntidades.find("ingreso_real").text()+","+
-                                              oEntidades.find("egreso_planeado").text()+","+
-                                              oEntidades.find("egreso_real").text()+","+
-                                              oEntidades.find("neto_planeado").text()+","+
-                                              oEntidades.find("neto_real").text() + "#"
+                                    
+                                    aTicks[i]=oEntidades.find("proyecto")[0].childNodes[0].data;
+                                    series+=oEntidades.find("ingreso_planeado")[0].childNodes[0].data+","+
+                                            oEntidades.find("ingreso_real")[0].childNodes[0].data+","+
+                                            oEntidades.find("egreso_planeado")[0].childNodes[0].data+","+
+                                            oEntidades.find("egreso_real")[0].childNodes[0].data+","+
+                                            oEntidades.find("neto_planeado")[0].childNodes[0].data+","+
+                                            oEntidades.find("neto_real")[0].childNodes[0].data + "#"
+                                    i++;
                                 });
-                                
+
                                 aSeries=series.split("#");
-                                for (k=0;k<aSeries.length;k++) {
-                                    aSeries[k]=aSeries[k].split[","];
+                                for (k=0;k<aSeries.length-1;k++) {
+                                    aSeries[k]=aSeries[k].split(",");
                                 }
                                 
-                                plot2 = $.jqplot(sGraficaId, aSeries, {
+                                aSeries.splice(aSeries.length-1,1);
+                                
+                                plot2 = $.jqplot(sGraficaId, [], {
                                     label: sReporte,
                                     seriesDefaults: {
                                         renderer:$.jqplot.BarRenderer,
                                         pointLabels: { show: true }
                                     },
+                                    series:[
+                                        {label:'Ingreso planeado'},
+                                        {label:'Ingreso real'},
+                                        {label:'Egreso planeado'},
+                                        {label:'Egreso real'},
+                                        {label:'Neto planeado'},
+                                        {label:'Neto real'}
+                                    ],
+                                    legend: {
+                                        show: true,
+                                        placement: 'outsideGrid'
+                                    },
                                     axes: {
                                         xaxis: {
                                             renderer: $.jqplot.CategoryAxisRenderer,
-                                            ticks: ticks
+                                            ticks: aTicks
+                                        },
+                                        yaxis: {
+                                            pad: 1.05,
+                                            tickOptions: {formatString: '$%d'}
                                         }
                                     }
                                 });
 
-                            }  , 
+                            }, 
                             error:function(xhr,err){
-                                sTipoError='Problemas al recuperar datos de la gráfica.\n';
-                                if (xhr.responseText.indexOf('NullPointerException')>-1)
-                                    sTipoError+='Problemas de conexión a la base de datos, verifique la conexión a la red.'
-                                else
-                                    sTipoError+=xhr.responseText;
 
-                                suffix=obj.children()[1].id.replace("pager","");
-                                $("#loader"+suffix).html("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-                                    "<div class='ui-widget'>"+
-                                    "<div style='padding: 0 .7em; width: 80%' class='ui-state-error ui-corner-all'>"+
-                                    "<p class='app_error'><span style='float: left; margin-right: .3em;' class='ui-icon ui-icon-alert'></span>"+
-                                    sTipoError+"</p>"+
-                                    "</div></div>");
                             }
                         });
                     }
