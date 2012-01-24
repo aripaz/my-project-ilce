@@ -206,6 +206,7 @@
                                 var sLeyendaEditaRegistro="Edita " + sLeyendaNuevoRegistro.split(" ")[1];
                                 
                                 //Se crea el carrusel
+                                /*
                                 $("#entityCarrousel_" + nAplicacion + "_" + nEntidad+ "_0").agile_carousel({
                                     carousel_data: [{
                                                     "content": "<div id='grid_"+nAplicacion + "_" + nEntidad+"_0' class='gridContainer' />",
@@ -228,7 +229,8 @@
                                     control_set_1: "previous_button,next_button",
                                     control_set_2: "numbered_buttons"
                                 });
-                                
+                                */
+                               
                                 $("#grid_"+nAplicacion + "_" + nEntidad+"_0").appgrid({
                                     app: nAplicacion,
                                     entidad: nEntidad,
