@@ -284,6 +284,7 @@
                     }
                     
                     //Carga los datos para crear la gráfica de la segunda página
+                    /*
                     sGraficaId="chartCarrousel_" + nApp + "_" + nEntidad+ "_0";
                     if ($("#"+sGraficaId).length>0) {
                         $.ajax(
@@ -312,7 +313,13 @@
                                 var i=0;
                                 sReporte="Ingresos vs egresos"
                                 oEntidades.each(function(){
-                                    
+                                    /*[[oEntidades.find("ingreso_planeado")[0].childNodes[0].data, oEntidades.find("ingreso_planeado").find("alias_campo").text()],
+                                     [oEntidades.find("ingreso_real")[0].childNodes[0].data, oEntidades.find("ingreso_real").find("alias_campo").text()],
+                                     [oEntidades.find("egreso_planeado")[0].childNodes[0].data, oEntidades.find("egreso_planeado").find("alias_campo").text()],
+                                     [oEntidades.find("egreso_real")[0].childNodes[0].data, oEntidades.find("egreso_real").find("alias_campo").text()],
+                                     [oEntidades.find("neto_planeado")[0].childNodes[0].data, oEntidades.find("neto_planeado").find("alias_campo").text()],
+                                     [oEntidades.find("neto_real")[0].childNodes[0].data, oEntidades.find("neto_real").find("alias_campo").text()]
+                                 ] 
                                     aTicks[i]=oEntidades.find("proyecto")[0].childNodes[0].data;
                                     series+=oEntidades.find("ingreso_planeado")[0].childNodes[0].data+","+
                                             oEntidades.find("ingreso_real")[0].childNodes[0].data+","+
@@ -330,8 +337,8 @@
                                 
                                 aSeries.splice(aSeries.length-1,1);
                                 
-                                plot2 = $.jqplot(sGraficaId, [], {
-                                    label: sReporte,
+                                plot2 = $.jqplot(sGraficaId, 
+                                    [[10530.00,0.00,1000.00,0.00,9530.00,10530.00]], {
                                     seriesDefaults: {
                                         renderer:$.jqplot.BarRenderer,
                                         pointLabels: { show: true }
@@ -351,7 +358,7 @@
                                     axes: {
                                         xaxis: {
                                             renderer: $.jqplot.CategoryAxisRenderer,
-                                            ticks: aTicks
+                                            ticks: ['Ingreso planeado','Ingreso real','Egreso planeado','Egreso real','Neto planeado','Neto real']
                                         },
                                         yaxis: {
                                             pad: 1.05,
@@ -366,6 +373,7 @@
                             }
                         });
                     }
+                    */
                    /* $('#'+sGraficaId).bind('jqplotDataHighlight', 
                         function (ev, seriesIndex, pointIndex, data) {
                             $('#info2').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
