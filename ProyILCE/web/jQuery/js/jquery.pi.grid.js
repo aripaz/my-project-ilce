@@ -891,7 +891,7 @@
                 "                   <div id='tvApp_" + nApp + "_" + nEntidad + "_" + id + "_" + sDateStamp + "' class='treeContainer' behaviour='kardex'></div>" +
                 "               <h3>&nbsp;Actividad reciente</h3>" +
                 "                   <div id='bitacora_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
-                "               <h3>&nbsp;Mis filtros</h3>" +
+                "               <h3>&nbsp;Mis reportes</h3>" +
                 "                   <div id='filtros_"+nApp + "_" + nEntidad+"_" + id + "_" + sDateStamp + "'></div>"+
                 "       </div>"+                
                 "   </div>"+

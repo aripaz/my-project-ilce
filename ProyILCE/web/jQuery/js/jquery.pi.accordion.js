@@ -218,7 +218,7 @@
                     sSuffix =nAplicacion + "_" + nForma + "_" + nClave;
                     sBusquedas="<div class='link_toolbar'>"+
                                "<a class='appMenu' href='#' id='lnkBusqueda_" + sSuffix  + "' data='" +sValor+ "' forma='" + nForma + "' pk='" + nClave + "' >" + sEtiqueta + "</a>"+
-                               "<div style='float:right'><div title='Eliminar filtro' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
+                               "<div style='float:right'><div title='Eliminar reporte' style='cursor: pointer; float: right' class='closeLnkFiltro ui-icon ui-icon-close' pk='" + nClave + "' forma='" + nForma + "'></div></div>" +
                                "</div>";
 
                     $("#appQries_"+nAplicacion).append(sBusquedas);
@@ -263,7 +263,7 @@
 
                 //Hace bind del botón de búsqueda
                 $(".closeLnkFiltro").click(function(){
-                    if (!confirm('¿Desea borrar el filtro seleccionado?')) return false;
+                    if (!confirm('¿Desea borrar el reporte seleccionado?')) return false;
                       $.post("srvFormaDelete","$cf=1&$pk=" + $(this).attr("pk"));
                       $(this).parent().parent().remove();
                 });
@@ -294,7 +294,7 @@
             //if (nMostrar=="1")
                    sHtml+="<div class='appMenu'><a href='#' class='appMenu' id='showEntity_" + nAplicacion + "_" + nEntidad + "' >"+sAliasMostrarEntidad+"</a></div>";
 
-            sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis filtros>></span><br /></div></div>";
+            sHtml+="<div id='appQries_" + nAplicacion + "'><br><span class='app_search_title'>Mis reportes>></span><br /></div></div>";
 
         })
 

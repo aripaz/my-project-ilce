@@ -142,8 +142,10 @@ public class srvSendMail extends HttpServlet {
                     }else{
                         Transport.send(message, message.getAllRecipients());
                     }
+                    
                     String strMAILPK = (String) request.getSession().getAttribute("MAILPK");
                     String strMAILBITAC = (String) request.getSession().getAttribute("MAILBITAC");
+                    
                     // Cierre.
                     cleanMemory(request);
 

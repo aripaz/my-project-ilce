@@ -348,7 +348,7 @@
                         else {
                             sData=sData.substring(0,sData.length-1).replace("&"," AND ");
                             oGridHeader=$("#grid_"+gridSuffix).parent().parent().parent().find("span.ui-jqgrid-title");
-                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().prev().prev().children().children();
+                            oMenuAccordion=$("#grid_"+gridSuffix).parent().parent().parent().parent().parent().parent().parent().parent().prev().prev().children().children();
                             sBitacoraId=oMenuAccordion[1].id;
                             sBusquedasId=oMenuAccordion[3].id;
                             nAplicacion=oGridHeader[0].parentNode.parentNode.parentNode.id.split("_")[2];
@@ -555,7 +555,9 @@
                             width:"80%",
                             originatingObject: obj.id,
                             updateControl:obj.id
-                        });                         
+                        });       
+                        
+                        return;
                 }
                 
                 function validateForm(formData, jqForm, options) { 

@@ -174,7 +174,7 @@
                                     "       <div id='accordion_"+nAplicacion + "_" + nEntidad+"_0' class='accordionContainer'>"+
                                     "           <h3>&nbsp;Actividad reciente</h3>" +
                                     "           <div id='bitacora_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
-                                    "           <h3>&nbsp;Mis filtros</h3>" +
+                                    "           <h3>&nbsp;Mis reportes</h3>" +
                                     "           <div id='filtros_"+nAplicacion + "_" + nEntidad+"_0'></div>"+
                                     "       </div>"+
                                     "   </div>"+
