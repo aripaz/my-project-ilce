@@ -1,4 +1,4 @@
-<%--
+ <%--
     Document   : login
     Created on : 13/12/2010, 09:32:14 AM
     Author     : Administrador
@@ -38,8 +38,13 @@
                 <td>
                     <br /><br />
                     <div align="center">
-                        <img src="img/logo ilce.jpg" />
-                        <img src="img/logo_plataforma.png"  />
+                        <table style="width:600px">
+                            <tr>
+                                <td><img src="img/logo sicap1.png" /></td>
+                                <td style="width:1000px">&nbsp;</td>
+                                <td><img src="img/logo ilce.jpg" /></td>
+                            </tr>
+                        </table>
                     </div>
                     <br /><br/>
                 </td>

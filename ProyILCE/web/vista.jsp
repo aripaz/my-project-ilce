@@ -8,7 +8,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <title>plataforma ILCE</title>
 
         <!-- librerias para cargar dialogo  -->
@@ -85,7 +85,7 @@
         <a name="top"></a>
         <div id="banner">
             <div style="float: left; position: relative; "><img src="img/logo ilce.jpg" />
-            <img src="img/logo_plataforma.png" class="logo_plataforma"/></div>
+            <img src="img/logo sicap1.png" class="logo_plataforma"/></div>
             <div id="session_menu" style="float: right; position: relative; "></div>
         </div>
         <!-- 
