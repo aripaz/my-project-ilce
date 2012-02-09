@@ -700,7 +700,7 @@
                             });                            
                         else    
                             $(sGridId).jqGrid('setGridParam',{
-                                url:"srvGrid?$cf=" + nForma + "&$dp=body"
+                                url:"srvControl?$cmd=grid&$cf=" + nForma + "&ta=select&$dp=body"
                             }).trigger("reloadGrid")
                     });
                 }

@@ -1912,10 +1912,11 @@ class ConQuery {
                       " flujo_datos_forma.secuencia," +
                       " flujo_datos_forma.notificacion," +
                       " flujo_datos_forma.campo_seguimiento_estatus" +
-                      " FROM flujo_datos_forma, flujo_datos_empleado, empleado " +
-                      " WHERE flujo_datos_forma.clave_flujo_forma=flujo_datos_empleado.clave_flujo_forma" +
+                      " FROM flujo_datos_forma, flujo_datos_rol,empleado_proyecto, empleado " +
+                      " WHERE flujo_datos_forma.clave_flujo_forma=flujo_datos_rol.clave_flujo_forma" +
                       " AND flujo_datos_forma.clave_forma=%1" + 
-                      " AND flujo_datos_empleado.clave_empleado_asignado=empleado.clave_empleado" +
+                      " AND flujo_datos_rol.clave_rol_asignado=empleado_proyecto.clave_rol" +
+                      " AND empleado_proyecto.clave_empleado=empleado.clave_empleado" +
                       " AND flujo_datos_forma.enviar_notificacion=1";
                 break;
             default:
