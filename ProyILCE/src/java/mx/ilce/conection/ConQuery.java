@@ -1903,21 +1903,38 @@ class ConQuery {
                         + "FROM forma "
                         + "WHERE clave_forma_padre= %1";
                 break;
-            case -13: //DISPARANOTIFICACION 
-                 sld = "SELECT email as email_responsable," +
-                      " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable," +
-                      " (SELECT flujo FROM flujo_datos WHERE clave_flujo=flujo_datos_forma.clave_flujo) as flujo_dato,"+   
-                      " flujo_datos_forma.proceso," + 
-                      " flujo_datos_forma.asunto," + 
-                      " flujo_datos_forma.secuencia," +
-                      " flujo_datos_forma.notificacion," +
-                      " flujo_datos_forma.campo_seguimiento_estatus" +
-                      " FROM flujo_datos_forma, flujo_datos_rol,empleado_proyecto, empleado " +
-                      " WHERE flujo_datos_forma.clave_flujo_forma=flujo_datos_rol.clave_flujo_forma" +
-                      " AND flujo_datos_forma.clave_forma=%1" + 
-                      " AND flujo_datos_rol.clave_rol_asignado=empleado_proyecto.clave_rol" +
-                      " AND empleado_proyecto.clave_empleado=empleado.clave_empleado" +
-                      " AND flujo_datos_forma.enviar_notificacion=1";
+            case -13: //DISPARANOTIFICACION             
+                sld ="SELECT DISTINCT email as email_responsable,"+
+                     " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable,"+
+                     " (SELECT flujo FROM flujo_datos WHERE clave_flujo=flujo_datos_forma.clave_flujo) as flujo_dato,"+
+                     " flujo_datos_forma.proceso,"+
+                     " flujo_datos_forma.asunto,"+
+                     " flujo_datos_forma.secuencia,"+
+                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion),"+
+                     " flujo_datos_forma.campo_seguimiento_estatus"+
+                     " FROM flujo_datos_forma, responsable_flujo_datos,empleado_proyecto, empleado "+
+                     " WHERE flujo_datos_forma.clave_flujo_forma=responsable_flujo_datos.clave_flujo_forma" +
+                     " AND flujo_datos_forma.clave_forma=%1"+
+                     " AND responsable_flujo_datos.clave_responsable_asignado=empleado_proyecto.clave_rol"+
+                     " AND empleado_proyecto.clave_empleado=empleado.clave_empleado"+
+                     " AND flujo_datos_forma.enviar_notificacion=1"+
+                     " AND clave_tipo_responsable=0"+
+                     " UNION " +
+                     " SELECT DISTINCT email as email_responsable," +
+                     " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable,"+
+                     " (SELECT flujo FROM flujo_datos WHERE clave_flujo=flujo_datos_forma.clave_flujo) as flujo_dato,"+
+                     " flujo_datos_forma.proceso," +
+                     " flujo_datos_forma.asunto,"+
+                     " flujo_datos_forma.secuencia,"+
+                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion), " +
+                     " flujo_datos_forma.campo_seguimiento_estatus "+
+                     " FROM flujo_datos_forma, responsable_flujo_datos, empleado " +
+                     " WHERE flujo_datos_forma.clave_flujo_forma=responsable_flujo_datos.clave_flujo_forma " +
+                     " AND flujo_datos_forma.clave_forma=%1 " +
+                     " AND responsable_flujo_datos.clave_responsable_asignado=empleado.clave_empleado " +
+                     " AND flujo_datos_forma.enviar_notificacion=1"+
+                     " AND clave_tipo_responsable=1";
+        
                 break;
             default:
                 sld = "";
