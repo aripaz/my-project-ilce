@@ -650,7 +650,7 @@
                     var nForma=$("#formTab_" + formSuffix).attr("forma");
                     var nPK=$("#formTab_" + formSuffix).attr("pk")
                     
-                    sResultado=$(xmlResult).find("resultado").text();
+                    sResultado=$(xmlResult).find("pk").text();
                     
                     /*Si la forma viene de la tabla de Mis pendientes, entonces se debe marcar la actividad como
                     //atendida
@@ -727,7 +727,7 @@
                         pk:sResultado,
                         filtroForaneo:$.fn.form.options.filtroForaneo,
                         height:"500",
-                        width:"500",
+                        width:"80%",
                         originatingObject: $.fn.form.options.originatingObject,
                         showRelationships: $.fn.form.options.showRelationships
                     }); 

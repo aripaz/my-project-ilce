@@ -552,6 +552,11 @@ else
 $("#total_"+sFormSuffix).val(nSubtotal+(nSubtotal*nIVA));
 }
 
+$("#cantidad,#precio_unitario,#iva").change( function() { 
+var IVA = parseFloat($("#iva option:selected").html().split("-")[1])/100;
+var total=parseFloat($("#cantidad").val())*parseFloat($("#precio_unitario").val())*(1+IVA/100);
+$("#total").val(total);
+});
 function calcula_total(sFormSuffix){ 
 nCantidad=parseFloat($("#cantidad_"+sFormSuffix).val());
 nPrecio=parseFloat($("#precio_unitario_"+sFormSuffix).val());
