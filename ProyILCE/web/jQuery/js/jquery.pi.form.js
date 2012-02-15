@@ -262,7 +262,7 @@
                     if ($.fn.form.options.events[i]!=undefined && $.fn.form.options.events[i]!="" )
                         $.globalEval($.fn.form.options.events[i]);
                 }
-                var importe=$("#costo_directo").val()+$("#costo_indirecto").val() * (1+parseInt($("#factor_recuperacion")/100)) * (1+parseInt($("#factor_costo_operacion")/100)) * (1+parseInt($("#factor_riesgo")/100)) * $("#cantidad").val() * $("tipo_cambio").val();
+                
                 //Establece atributo de seguridad
                 $("#formTab_" + formSuffix).attr("security",sPermiso);
                 
@@ -446,10 +446,10 @@
                 
                     //Entrega los valores del formulario
                     //para establecer posible relación de forma y grid
-                    sWSParameters="";
+                    sWSParameters="&4=" + $.fn.form.options.pk_name+"="+$.fn.form.options.pk+"&";
                     aWSParameters=$("#form_" + formSuffix).serialize().split("&");
                     for (k=0; k<aWSParameters.length;k++) {
-                        sWSParameters+=(k+4)+"="+aWSParameters[k].replace("_"+formSuffix,"")+"&";
+                        sWSParameters+=(k+5)+"="+aWSParameters[k].replace("_"+formSuffix,"")+"&";
                     }
                     
                     $("#formTab_" + formSuffix).tabs('select',i+1);
