@@ -1015,9 +1015,9 @@ class ConQuery {
                     }
                 }
                 query = UtilValue.castAcent(query);
-                if (this.getMaxRows()!=null){
+                /*if (this.getMaxRows()!=null){
                     ps.setMaxRows(this.getMaxRows().intValue());
-                }
+                }*/
                 rs = ps.executeQuery(query);
                 ResultSetMetaData rstm = rs.getMetaData();
 
