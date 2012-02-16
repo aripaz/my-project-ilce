@@ -228,10 +228,16 @@
                             var nApp=cmdWS.split("-")[1];
                             var nEntidad=cmdWS.split("-")[2];
                             var nPK=cmdWS.split("-")[3];
-                            var sW=cmdWS.split("-")[4];
+                            aCmdWS=cmdWS.split("-");
+                            var sW="";
+                            if (aCmdWS.length>4) {
+                                for (i=4; i<aCmdWS.length;i++)
+                                    sW+=aCmdWS[i]+"&";
+                            }
+                            
                             var actividad=$(this).attr("actividad");
                             
-                            if (sW==undefined)
+                            if (sW=="")
                                 sW="";
                             
                             if (relaciones==undefined)
