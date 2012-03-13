@@ -257,11 +257,11 @@ public class AdmBitacora {
         StringBuilder strConexion = new StringBuilder();
         try {
             if (this.getProp()!=null){
-                String server = getKey(this.getProp(),"SERVER");
-                String base = getKey(this.getProp(),"BASE");
-                String port = getKey(this.getProp(),"PORT");
-                String user = getKey(this.getProp(),"USR");
-                String psw = getKey(this.getProp(),"PSW");
+                String server = "DANIEL-PC\\SQLEXPRESS2005";//getKey(this.getProp(),"SERVER");
+                String base = "ILCE_frmwrk";//getKey(this.getProp(),"BASE");
+                String port = "58873"; //getKey(this.getProp(),"PORT");
+                String user = "sa"; //getKey(this.getProp(),"USR");
+                String psw = "ikaro75"; //getKey(this.getProp(),"PSW");
 
                 strConexion.append("jdbc:sqlserver://");
                 strConexion.append(server);

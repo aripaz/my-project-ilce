@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-        <title>plataforma ILCE</title>
+        <title>Sistema de Administración de Proyectos / SIAP2.0</title>
 
         <!-- librerias para cargar dialogo  -->
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
@@ -184,7 +184,7 @@
                     <div class="portlet">
                         <div class="portlet-header">Avisos</div>
                         <div class="portlet-content">
-                            <p>Bienvenid@ a la plataforma ILCE, esperamos que esta herramienta sea de su utilidad</p>
+                            <p>Bienvenid@ SIAP2.0, esperamos que esta herramienta sea de su utilidad</p>
                         </div>
                     </div>
                     <div class="portlet">
