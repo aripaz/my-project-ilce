@@ -140,7 +140,7 @@ class ConQuery {
             Properties prop = AdminFile.leerConfig();
 
             String server = AdminFile.getKey(prop,"SERVER");
-            String base = AdminFile.getKey(prop,"BASE");
+            String base =AdminFile.getKey(prop,"BASE");
             String port = AdminFile.getKey(prop,"PORT");
             String user = AdminFile.getKey(prop,"USR");
             String psw = AdminFile.getKey(prop,"PSW");
@@ -758,7 +758,7 @@ class ConQuery {
                 bitacoraS.setEvento(AdmBitacora.CONSULTAR);
 
                 admBit.setBitacora(bitacoraS);
-                admBit.addBitacora();
+                //admBit.addBitacora();
                 this.getBitacora().cleanDataQuery();
             }
         }catch(SQLException e){

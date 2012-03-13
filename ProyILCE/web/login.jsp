@@ -21,7 +21,7 @@
         <script type="text/javascript" src="jQuery/js/jquery-1.4.4.min.js"></script>
         <script type="text/javascript" src="jQuery/js/login.js"></script>
         <script type="text/javascript" src="jQuery/js/agile_carousel.alpha.js"></script>
-        <title> plataforma ILCE / Iniciar sesión</title>
+        <title> SIAP2.0 / Iniciar sesión</title>
         <style>
             .agile_carousel .numbered_button {
                float:none !important;
