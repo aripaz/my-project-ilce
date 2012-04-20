@@ -1918,7 +1918,7 @@ class ConQuery {
                      " AND responsable_flujo_datos.clave_responsable_asignado=empleado_proyecto.clave_rol"+
                      " AND empleado_proyecto.clave_empleado=empleado.clave_empleado"+
                      " AND flujo_datos_forma.enviar_notificacion=1"+
-                     " AND clave_tipo_responsable=0"+
+                     " AND clave_tipo_responsable=1"+
                      " UNION " +
                      " SELECT DISTINCT email as email_responsable," +
                      " nombre + ' ' + apellido_paterno + ' ' + isnull(apellido_materno,'') as responsable,"+
@@ -1933,7 +1933,7 @@ class ConQuery {
                      " AND flujo_datos_forma.clave_forma=%1 " +
                      " AND responsable_flujo_datos.clave_responsable_asignado=empleado.clave_empleado " +
                      " AND flujo_datos_forma.enviar_notificacion=1"+
-                     " AND clave_tipo_responsable=1";
+                     " AND clave_tipo_responsable=2";
         
                 break;
             default:

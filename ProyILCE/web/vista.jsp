@@ -115,7 +115,8 @@
                     <li><a href="#tabContacto">Contacto</a></li>
                 </ul>
                 <div style="padding-right: 5px; float: right; padding-top: 3px; position: relative; top: -30px; width:300px"><!--<input id='txtBusquedaGlobal' type='text' style="clear:none; float:left"/>-->
-                    <div id="switcher"  style="float:right"></div></div>
+                    <div id="switcher"  style="float:right; height: 15px"></div>
+                </div>
                 <div id="tabInicio">
                     <div id="tabUser">    
                         <ul>
@@ -549,11 +550,8 @@
                         </tr>
                         <tr>
                             <td>
-                                <p class="instrucciones">Envíanos tus sugerencias, comentarios, solicitudes y reportes de errores a nuestro correo electrónico.</p>
-                                <h3>Administrador del sistema</h3>
-                                <p class="instrucciones"><span class='ui-icon ui-icon-mail-closed' style='display:inline-block'></span>                                    
-                                    <a href="mailto:plataforma@ilce.edu.mx">plataforma@ilce.edu.mx</a>
-                                </p>
+                                <p class="instrucciones">Envíenos un ticket con sus sugerencias, comentarios, solicitudes y reportes de errores</p>
+                                <div id="grid_99_252_0" class="queued_grids" app="9" form="252" wsParameters="" titulo="Tickets de soporte técnico" leyendas="Nuevo ticket, Editar ticket" inDesktop="false" openKardex="true" ></div>
                             </td>
                         </tr>
                     </table>

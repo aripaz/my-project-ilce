@@ -830,7 +830,7 @@ public class Forma extends Entidad{
                     // si es autoIncremental, no se necesita enviar
                     // fix : deja pasar campos de tipo bit no definidos en el request
                     // para evitarlo se verifica si el campo viene en nulo en hsForm
-                    if (!cmpHS.getIsIncrement() && hsForm.get(cmpFL.getCampo())!=null ){
+                    if (!cmpHS.getIsIncrement() ){
                         String[] arrVariablesI = new String[4];
                         AdminForm admForm = new AdminForm();
                         valor = admForm.getDefaultValueByClass(cmpHS.getTypeDataAPL(), valor);
