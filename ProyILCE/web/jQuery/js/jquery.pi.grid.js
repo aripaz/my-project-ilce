@@ -251,6 +251,16 @@
                                 sModo="insert";
                             else
                                 sModo="update";
+
+                            $("#divwait")
+                            .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Generando forma...</p>")
+                            .attr('title','Espere un momento por favor') 
+                            .dialog({
+                                    height: 140,
+                                    modal: true,
+                                    autoOpen: true,
+                                    closeOnEscape:false
+                            });
                             
                             $("body").form({
                                 app: nApp,
@@ -425,6 +435,17 @@
                             sUpdateControl="";
                             if ($(this).attr("updateTreeAfterPost")=="true") 
                                     sUpdateControl=oGrid.attr("originatingObject");
+
+                            $("#divwait")
+                            .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Generando forma...</p>")
+                            .attr('title','Espere un momento por favor') 
+                            .dialog({
+                                    height: 140,
+                                    modal: true,
+                                    autoOpen: true,
+                                    closeOnEscape:false
+                            });
+                                
                                 
                             $("body").form({
                                 app: nApp,
@@ -469,6 +490,16 @@
                                 sUpdateControl="";
                                 if ($(this).attr("updateTreeAfterPost")=="true")
                                     sUpdateControl=oGrid.attr("originatingObject");
+
+                                $("#divwait")
+                                .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Generando forma...</p>")
+                                .attr('title','Espere un momento por favor') 
+                                .dialog({
+                                        height: 140,
+                                        modal: true,
+                                        autoOpen: true,
+                                        closeOnEscape:false
+                                });
                                             
                                 $("body").form({
                                     app: nApp,

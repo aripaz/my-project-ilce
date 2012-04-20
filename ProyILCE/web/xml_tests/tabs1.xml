@@ -1,29 +1,147 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<qry source="select clave_forma,alias_tab, orden_tab from forma where clave_aplicacion=1 and clave_forma=1 union
-select clave_forma,alias_tab, orden_tab from forma where clave_aplicacion=1 and clave_forma_padre=1 order by orden_tab">
-    <registro id="1">
-        <clave_forma tipo_dato="integer"><![CDATA[2]]></clave_forma>
-        <alias_tab tipo_dato="string"><![CDATA[Aplicaci&oacute;n]]></alias_tab>
-        <orden_tab tipo_dato="integer">1</orden_tab>
-    </registro>
-    <registro id="2">
-        <clave_forma tipo_dato="integer"><![CDATA[3]]></clave_forma>
-        <alias_tab tipo_dato="string"><![CDATA[Formas]]></alias_tab>
-        <orden_tab tipo_dato="integer">2</orden_tab>
-    </registro>
-    <registro id="3">
-        <clave_forma tipo_dato="integer"><![CDATA[4]]></clave_forma>
-        <alias_tab tipo_dato="string"><![CDATA[Men&uacute;s]]></alias_tab>
-        <orden_tab tipo_dato="integer">3</orden_tab>
-    </registro>
-    <registro id="4">
-        <clave_forma tipo_dato="integer"><![CDATA[5]]></clave_forma>
-        <alias_tab tipo_dato="string"><![CDATA[Perfiles de seguridad]]></alias_tab>
-        <orden_tab tipo_dato="integer">4</orden_tab>
-    </registro>
-    <registro id="5">
-        <clave_forma tipo_dato="integer"><![CDATA[6]]></clave_forma>
-        <alias_tab tipo_dato="string"><![CDATA[Usuarios]]></alias_tab>
-        <orden_tab tipo_dato="integer">5</orden_tab>
-    </registro>
-</qry>
+
+<form class='forma' id='form_1_234_7' name='form_1_234_7' method='POST' >
+    <table class='forma'>
+        <tr >
+            <td id="td_clave_orden_cabecera"  class="etiqueta_forma1">Orden de compra</td>
+            <td class="etiqueta_forma_control1">
+                <select tipo_dato="integer" tabindex="1" class="inputWidgeted1" id="clave_orden_cabecera" name="clave_orden_cabecera" >
+                    <option  value='25' >1403</option>
+                    <option selected='selected' value='26' >1403</option>
+                    <option  value='27' >1403</option>
+                    <option  value='28' >1403</option>
+                </select>
+                <div class='widgetbutton' tipo='foreign_toolbar' control='clave_orden_cabecera' forma='233' titulo_agregar='Nuevo orden de compra' titulo_editar='Editar orden de compra' ></div>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_partida"  class="etiqueta_forma1">Consecutivo</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="integer" id="partida" name="partida" tabindex="2"  readonly="readonly" class="singleInput" type="text" value="1"  onBlur='javascript:check_number(this)' /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_cantidad"  class="etiqueta_forma1">Cantidad</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="integer" id="cantidad" name="cantidad" tabindex="3"  readonly="readonly" class="singleInput" type="text" value="2"  onBlur='javascript:check_number(this)' /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_clave_unidad"  class="etiqueta_forma1">&nbsp;</td>
+            <td class="etiqueta_forma_control1">
+                <select tipo_dato="integer" tabindex="4"  disabled="disabled" class="inputWidgeted1" id="clave_unidad" name="clave_unidad" >
+                    <option ></option>
+                    <option  value='1' >Kg(s)</option>
+                    <option  value='2' >Lt(s)</option>
+                    <option selected='selected' value='3' >Pza(s)</option>
+                    <option  value='4' >Caja(s)</option>
+                    <option  value='5' >Gr(s)</option>
+                    <option  value='6' >Boleto (s)</option>
+                    <option  value='7' >Minuto(s)</option>
+                    <option  value='8' >Hora(s)</option>
+                    <option  value='9' >D&iacute;as(s)</option>
+                </select>
+                <div class='widgetbutton' tipo='foreign_toolbar' control='clave_unidad' forma='96' titulo_agregar='Nuevo &nbsp;' titulo_editar='Editar &nbsp;' ></div>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_clave_impuesto"  class="etiqueta_forma1">IVA (
+                <span id="msgvalida_clave_impuesto">Obligatorio</span>*)
+            </td>
+            <td class="etiqueta_forma_control1">
+                <select tipo_dato="integer" tabindex="5" class="inputWidgeted1 obligatorio" id="clave_impuesto" name="clave_impuesto" >
+                    <option  value='1' >Excento de IVA</option>
+                    <option selected='selected' value='2' >IVA</option>
+                    <option  value='3' >IVA en zona fronteriza</option>
+                </select>
+                <div class='widgetbutton' tipo='foreign_toolbar' control='clave_impuesto' forma='95' titulo_agregar='Nuevo iva' titulo_editar='Editar iva' ></div>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_precio_unitario"  class="etiqueta_forma1">Precio unitario (
+                <span id="msgvalida_precio_unitario">Obligatorio</span>*)
+            </td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="money" id="precio_unitario" name="precio_unitario" tabindex="6" class="inputWidgeted1 obligatorio money" type="text" value="12000.0000"  />
+                <div class="widgetbutton" tipo="calculator_button" control="precio_unitario"></div> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_total"  class="etiqueta_forma1">Total</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="money" id="total" name="total" tabindex="7"  readonly="readonly" class="singleInput" type="text" value="27840.0000"  /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_descripcion"  class="etiqueta_forma1">Descripci&oacute;n</td>
+            <td class="etiqueta_forma_control1">
+                <textarea tabindex="8" rows="10"  readonly="readonly" class="singleInput" id="descripcion" name="descripcion" >Laptop DELL srs premium sound</textarea>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_forma_pago"  class="etiqueta_forma1">Forma de pago (
+                <span id="msgvalida_forma_pago">Obligatorio</span>*)
+            </td>
+            <td class="etiqueta_forma_control1">
+                <textarea tabindex="9" rows="10" class="singleInput obligatorio" id="forma_pago" name="forma_pago" ></textarea>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_clave_proveedor"  class="etiqueta_forma1">Proveedor (
+                <span id="msgvalida_clave_proveedor">Obligatorio</span>*)
+            </td>
+            <td class="etiqueta_forma_control1">
+                <select tipo_dato="integer" tabindex="10" class="inputWidgeted1 obligatorio" id="clave_proveedor" name="clave_proveedor" >
+                    <option ></option>
+                </select>
+                <div class='widgetbutton' tipo='foreign_toolbar' control='clave_proveedor' forma='237' titulo_agregar='Nuevo proveedor' titulo_editar='Editar proveedor' ></div>
+            </td>
+        </tr>
+        <tr >
+            <td id="td_fecha_compra"  class="etiqueta_forma1">Fecha compra (
+                <span id="msgvalida_fecha_compra">Obligatorio</span>*)
+            </td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="smalldatetime" id="fecha_compra" name="fecha_compra" tabindex="11" class="singleInput obligatorio fecha" type="text" value=""  /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_fecha_autorizacion"  class="etiqueta_forma1">Fecha autorizacion</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="smalldatetime" id="fecha_autorizacion" name="fecha_autorizacion" tabindex="12"  readonly="readonly" class="singleInput" type="text" value=""  /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_numero_pagos"  class="etiqueta_forma1">N&uacute;mero de pagos</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="integer" id="numero_pagos" name="numero_pagos" tabindex="13" class="singleInput" type="text" value=""  onBlur='javascript:check_number(this)' /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_periodicidad_pagos"  class="etiqueta_forma1">los pagos se realizar&aacute;n cada</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="integer" id="periodicidad_pagos" name="periodicidad_pagos" tabindex="14" class="singleInput" type="text" value=""  onBlur='javascript:check_number(this)' /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_unidad_tiempo"  class="etiqueta_forma1">
+                <a id='lnkEditFieldDef-1-13--2=clave_aplicacion=13=clave_forma=234' href='#' class='edit_field' title='El campo no cuenta con alias, haga clic aqui para abrir su definición en el diccionario de datos'>unidad_tiempo</a>
+            </td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="integer" id="unidad_tiempo" name="unidad_tiempo" tabindex="15"  readonly="readonly" class="singleInput" type="text" value=""  onBlur='javascript:check_number(this)' /> 
+            </td>
+        </tr>
+        <tr >
+            <td id="td_fecha_entrega"  class="etiqueta_forma1">Fecha de entrega</td>
+            <td class="etiqueta_forma_control1">
+                <input tipo_dato="smalldatetime" id="fecha_entrega" name="fecha_entrega" tabindex="16" class="singleInput fecha" type="text" value=""  /> 
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="clave_estatus" name="clave_estatus" value="1" />
+    <input type="hidden" id="clave_estatus" name="clave_estatus" value="1" />
+    <input type='hidden' id='_e' name='_e' value='' />
+    <input type='hidden' id='$ta' name='$ta' value='update' />
+    <input type='hidden' id='$ca' name='$ca' value='1' />
+    <input type='hidden' id='$cf' name='$cf' value='234' />
+    <input type='hidden' id='$pk' name='$pk' value='7' />
+</form>"

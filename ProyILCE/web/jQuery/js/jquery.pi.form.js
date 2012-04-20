@@ -189,6 +189,8 @@
                             });
                     else
                         alert(sDescripcionError);
+                    
+                    $("#divwait").dialog( "close" );                 
                     return false;
                 }
             
@@ -522,7 +524,7 @@
                     app:$.fn.form.options.app
                 });
                 
-                //Se activan el click de las liga orientadas a editar definicones de campo
+                //Se activan el click de las liga orientadas a editar definiciones de campo
                 if ($("#_cp_").val()=="1") {
                      $(".edit_field").die("click", edita_diccionario)
                      $(".edit_field").live("click", edita_diccionario)
@@ -733,10 +735,18 @@
                     }); 
                 }
                 
+                //Cierra el dialogo de espera
+                $("#divwait").dialog( "close" );                
+
+                
             },
             error:function(xhr,err){
                 $("#grid_"+gridSuffix+"_toppager_right").children(0).html("Error al recuperar la forma");
                 $("#dlgModal_"+ formSuffix).remove();
+                
+                //Cierra el dialogo de espera
+                $("#divwait").dialog( "close" );                
+
                 alert("Error al recuperar forma: "+xhr.readyState+"\nstatus: "+xhr.status + "\responseText:"+ xhr.responseText);          
             }
         });
@@ -775,7 +785,7 @@
             
             if (bAutoIncrement) return true;
             if (bDatoSensible=="1" && !bVDS) return true;
-            if (bVisible=='0') {
+            if (bVisible=='0' || bVisible=='') {
                 sInvisibleInputs+='<input type="hidden" ' + 'id="' + oCampo[0].nodeName + '" name="' + oCampo[0].nodeName + '" value="'
                 if ($.fn.form.options.modo=='insert') 
                    sInvisibleInputs+=(sValorPredeterminado!="")?eval(sValorPredeterminado):"";
@@ -1029,6 +1039,7 @@
                 sForm+="<tr >"+aRowsWithTextAreas[i].replace(/class="etiqueta_forma_control1"/g,'class="etiqueta_forma_control'+nCols+'" colspan="4"').replace(/etiqueta_forma1/g,"etiqueta_forma"+nCols).replace(/inputWidgeted1/g,"inputWidgeted"+nCols)+"</tr>";
             }
         }
+        
         //Llena la primer pestaña con la forma de la entidad principal
         var formSuffix =$.fn.form.options.app + "_" + $.fn.form.options.forma + "_" + $.fn.form.options.pk;
         sForm="<form class='forma' id='form_" + formSuffix + "' name='form_"  + formSuffix + "' method='POST' ><table class='forma'>" + sForm + "</table>"+
