@@ -1910,7 +1910,7 @@ class ConQuery {
                      " flujo_datos_forma.proceso,"+
                      " flujo_datos_forma.asunto,"+
                      " flujo_datos_forma.secuencia,"+
-                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion),"+
+                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion) as notificacion,"+
                      " flujo_datos_forma.campo_seguimiento_estatus"+
                      " FROM flujo_datos_forma, responsable_flujo_datos,empleado_proyecto, empleado "+
                      " WHERE flujo_datos_forma.clave_flujo_forma=responsable_flujo_datos.clave_flujo_forma" +
@@ -1926,7 +1926,7 @@ class ConQuery {
                      " flujo_datos_forma.proceso," +
                      " flujo_datos_forma.asunto,"+
                      " flujo_datos_forma.secuencia,"+
-                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion), " +
+                     " CONVERT(varchar(8000),flujo_datos_forma.notificacion) as notificacion, " +
                      " flujo_datos_forma.campo_seguimiento_estatus "+
                      " FROM flujo_datos_forma, responsable_flujo_datos, empleado " +
                      " WHERE flujo_datos_forma.clave_flujo_forma=responsable_flujo_datos.clave_flujo_forma " +
